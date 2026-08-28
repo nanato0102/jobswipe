@@ -1,0 +1,114 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum UserType {
+  STUDENT
+  COMPANY
+  ADMIN
+}
+
+enum OfferStatus {
+  SENT
+  ACCEPTED
+  DECLINED
+}
+
+model User {
+  id               String          @id @default(cuid())
+  email            String          @unique
+  password         String          // ハッシュ化されたパスワード
+  userType         UserType
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  studentProfile   StudentProfile?
+  companyProfile   CompanyProfile?
+  sentOffers       Offer[]         @relation("CompanySender")
+  receivedOffers   Offer[]         @relation("StudentReceiver")
+  sentMessages     Message[]       @relation("Sender")
+  receivedMessages Message[]       @relation("Receiver")
+  likes            Like[]
+}
+
+model StudentProfile {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fullName       String?
+  university     String?
+  graduationYear Int?
+  bio            String?  @db.Text
+  skills         String?  @db.Text
+  experience     String?  @db.Text
+
+  videos         Video[]
+  receivedLikes  Like[]
+}
+
+model CompanyProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyName String?
+  industry    String?
+  websiteUrl  String?
+  description String?  @db.Text
+}
+
+model Video {
+  id           String         @id @default(cuid())
+  studentId    String
+  student      StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  videoUrl     String         // 動画URL
+  thumbnailUrl String?
+  title        String
+  description  String?        @db.Text
+  tags         String?        // カンマ区切りのタグ文字列 (例: "笑顔, 英語対応可, コミュニケーション")
+  uploadedAt   DateTime       @default(now())
+}
+
+model Like {
+  id        String         @id @default(cuid())
+  companyId String
+  company   User           @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  studentId String
+  student   StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  createdAt DateTime       @default(now())
+
+  @@unique([companyId, studentId])
+}
+
+model Offer {
+  id        String      @id @default(cuid())
+  companyId String
+  company   User        @relation("CompanySender", fields: [companyId], references: [id], onDelete: Cascade)
+  studentId String
+  student   User        @relation("StudentReceiver", fields: [studentId], references: [id], onDelete: Cascade)
+  message   String      @db.Text
+  status    OfferStatus @default(SENT)
+  createdAt DateTime    @default(now())
+
+  messages  Message[]
+}
+
+model Message {
+  id         String   @id @default(cuid())
+  offerId    String
+  offer      Offer    @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  senderId   String
+  sender     User     @relation("Sender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId String
+  receiver   User     @relation("Receiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  content    String   @db.Text
+  sentAt     DateTime @default(now())
+}
