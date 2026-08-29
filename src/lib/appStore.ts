@@ -60,6 +60,13 @@ export interface CompanyUsageStats {
   nextResetDate: string;
 }
 
+export interface StudentVideoStats {
+  totalViews: number;
+  totalLikes: number;
+  totalOffers: number;
+  completionRate: string;
+}
+
 const DEFAULT_OFFERS: StoredOffer[] = [
   {
     id: "off-1",
@@ -396,6 +403,21 @@ export const appStore = {
       acceptedOffersCount: acceptedCount,
       acceptanceRate: rate,
       nextResetDate: "2026/09/01",
+    };
+  },
+
+  // 学生向けPR動画の視聴数・反響アナリティクス統計
+  getStudentVideoStats: (): StudentVideoStats => {
+    const offers = appStore.getOffers();
+    const offersCount = offers.length;
+    const likesCount = 18;
+    const totalViews = 142;
+
+    return {
+      totalViews,
+      totalLikes: likesCount,
+      totalOffers: offersCount,
+      completionRate: "84%",
     };
   },
 };

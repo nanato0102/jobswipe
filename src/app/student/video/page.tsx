@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import RoleGuard from "@/components/RoleGuard";
 import StudentMobileTabs from "@/components/StudentMobileTabs";
+import { appStore, StudentVideoStats } from "@/lib/appStore";
 import {
   Film,
   UploadCloud,
@@ -14,6 +15,11 @@ import {
   Trash2,
   Calendar,
   X,
+  Eye,
+  Heart,
+  TrendingUp,
+  BarChart3,
+  Send,
 } from "lucide-react";
 
 interface UploadedVideoItem {
@@ -23,9 +29,13 @@ interface UploadedVideoItem {
   tags: string[];
   videoUrl: string;
   uploadedAt: string;
+  viewsCount?: number;
+  likesCount?: number;
+  offersCount?: number;
 }
 
 export default function StudentVideoUploadPage() {
+  const [stats, setStats] = useState<StudentVideoStats | null>(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState<string[]>([]);
@@ -45,8 +55,15 @@ export default function StudentVideoUploadPage() {
       tags: ["リーダーシップ", "体育会", "チーム推進力"],
       videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
       uploadedAt: "2026年8月29日 12:00",
+      viewsCount: 142,
+      likesCount: 18,
+      offersCount: 3,
     },
   ]);
+
+  useEffect(() => {
+    setStats(appStore.getStudentVideoStats());
+  }, []);
 
   const [previewModalVideo, setPreviewModalVideo] = useState<string | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
@@ -134,9 +151,77 @@ export default function StudentVideoUploadPage() {
   return (
     <RoleGuard allowedRoles={["STUDENT", "ADMIN"]}>
       <StudentMobileTabs>
-        <div className="flex-1 py-6 px-4 sm:px-6 max-w-4xl mx-auto w-full space-y-8">
-        {/* ================= 上部: 新規動画投稿フォーム ================= */}
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 sm:p-8 space-y-6">
+        <div className="flex-1 py-6 px-4 sm:px-6 max-w-4xl mx-auto w-full space-y-6 sm:space-y-8">
+          {/* ================= 動画反響・視聴実績アナリティクス ================= */}
+          {stats && (
+            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="flex items-center gap-2">
+                  <BarChart3 className="w-5 h-5 text-emerald-700" />
+                  <h2 className="text-base font-bold text-slate-900">自己PR動画の反響・視聴実績</h2>
+                </div>
+                <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+                  リアルタイム集計中
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 pt-1">
+                {/* 1. 総視聴回数 */}
+                <div className="bg-slate-900 border border-slate-800 text-white rounded-2xl p-4 sm:p-5 shadow-sm space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-300">総視聴回数</span>
+                    <Eye className="w-4 h-4 text-emerald-400" />
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-2xl sm:text-3xl font-black text-white">{stats.totalViews}</span>
+                    <span className="text-xs text-slate-300 font-bold">回</span>
+                  </div>
+                  <p className="text-[10px] text-slate-400">企業が動画を再生した回数</p>
+                </div>
+
+                {/* 2. 気になる追加数 */}
+                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-2xs space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-600">気になる獲得</span>
+                    <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-2xl sm:text-3xl font-black text-slate-900">{stats.totalLikes}</span>
+                    <span className="text-xs text-slate-400 font-bold">社</span>
+                  </div>
+                  <p className="text-[10px] text-slate-400">興味を持った企業数</p>
+                </div>
+
+                {/* 3. 届いたオファー */}
+                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-2xs space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-600">届いたオファー</span>
+                    <Send className="w-4 h-4 text-emerald-700" />
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-2xl sm:text-3xl font-black text-emerald-700">{stats.totalOffers}</span>
+                    <span className="text-xs text-slate-400 font-bold">社</span>
+                  </div>
+                  <p className="text-[10px] text-slate-400">直接スカウトに発展</p>
+                </div>
+
+                {/* 4. 平均視聴完了率 */}
+                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-2xs space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-600">平均視聴完了率</span>
+                    <TrendingUp className="w-4 h-4 text-blue-600" />
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-2xl sm:text-3xl font-black text-slate-900">{stats.completionRate}</span>
+                  </div>
+                  <p className="text-[10px] text-slate-400">60秒の視聴維持率</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ================= 新規動画投稿フォーム ================= */}
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 sm:p-8 space-y-6">
           <div className="border-b border-slate-100 pb-4">
             <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[11px] font-bold border border-emerald-200 mb-1.5">
               <Sparkles className="w-3.5 h-3.5" />
@@ -354,7 +439,23 @@ export default function StudentVideoUploadPage() {
                   <h3 className="text-sm font-bold text-slate-900">{item.title}</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">{item.description}</p>
 
-                  <div className="flex flex-wrap gap-1 pt-1">
+                  {/* 動画アナリティクスバッジ */}
+                  <div className="flex flex-wrap items-center gap-2 pt-1">
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-xl bg-slate-900 text-white shadow-2xs">
+                      <Eye className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>{item.viewsCount ?? 142}回 視聴</span>
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 shadow-2xs">
+                      <Heart className="w-3.5 h-3.5 fill-rose-500 text-rose-500" />
+                      <span>{item.likesCount ?? 18}社 気になる</span>
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 shadow-2xs">
+                      <Send className="w-3.5 h-3.5 text-emerald-700" />
+                      <span>{item.offersCount ?? 3}社 オファー</span>
+                    </span>
+                  </div>
+
+                  <div className="flex flex-wrap gap-1 pt-0.5">
                     {item.tags.map((t) => (
                       <span
                         key={t}
