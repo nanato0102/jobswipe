@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import RoleGuard from "@/components/RoleGuard";
+import StudentMobileTabs from "@/components/StudentMobileTabs";
+import CompanyMobileTabs from "@/components/CompanyMobileTabs";
 import {
   Settings,
   User,
@@ -100,11 +102,17 @@ export default function SettingsPage() {
 
   const isStudent = session?.userType === "STUDENT";
   const isCompany = session?.userType === "COMPANY";
+  const TabsWrapper = isCompany
+    ? CompanyMobileTabs
+    : isStudent
+    ? StudentMobileTabs
+    : ({ children }: { children?: React.ReactNode }) => <>{children}</>;
 
   return (
     <RoleGuard allowedRoles={["STUDENT", "COMPANY", "ADMIN"]}>
-      <div className="min-h-screen bg-slate-50 py-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto space-y-6">
+      <TabsWrapper>
+        <div className="min-h-screen bg-slate-50 py-8 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mx-auto space-y-6">
           {/* ページヘッダー */}
           <div className="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-xs flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-slate-100 text-slate-800">
@@ -426,6 +434,7 @@ export default function SettingsPage() {
           </div>
         )}
       </div>
-    </RoleGuard>
-  );
+    </TabsWrapper>
+  </RoleGuard>
+);
 }

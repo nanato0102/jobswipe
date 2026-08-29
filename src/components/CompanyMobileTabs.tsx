@@ -3,14 +3,14 @@
 import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Sparkles, Search, Heart, MessageSquare, Bell } from "lucide-react";
+import { Sparkles, BarChart3, Heart, MessageSquare, Bell } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { appStore } from "@/lib/appStore";
 
-// 企業側の5つのタブ並び順: スワイプ ➔ 検索 ➔ 気になる ➔ チャット ➔ 通知
+// 企業側の5つのタブ並び順: スワイプ ➔ 利用状況 ➔ 気になる ➔ チャット ➔ 通知
 const TABS = [
   { path: "/swipe", label: "スワイプ", icon: Sparkles },
-  { path: "/company/search", label: "検索", icon: Search },
+  { path: "/company/usage", label: "利用状況", icon: BarChart3 },
   { path: "/company/likes", label: "気になる", icon: Heart },
   { path: "/company/chat", label: "チャット", icon: MessageSquare },
   { path: "/company/notifications", label: "通知", icon: Bell },

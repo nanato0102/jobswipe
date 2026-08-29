@@ -134,6 +134,18 @@ export default function Navbar() {
                 </Link>
 
                 <Link
+                  href="/company/chat"
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors ${
+                    pathname.startsWith("/company/chat")
+                      ? "bg-emerald-50 text-emerald-800 font-bold"
+                      : "hover:bg-slate-100 hover:text-slate-900"
+                  }`}
+                >
+                  <MessageSquare className="h-4 w-4 text-emerald-700" />
+                  <span>チャット</span>
+                </Link>
+
+                <Link
                   href="/student/notifications"
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors relative ${
                     pathname.startsWith("/student/notifications")
