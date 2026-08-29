@@ -696,6 +696,9 @@ export default function HomePage() {
               <Link href="/company/login" className="hover:text-emerald-400 transition-colors">
                 採用担当の方はこちら
               </Link>
+              <Link href="/contact" className="hover:text-emerald-400 transition-colors">
+                お問い合わせ・導入相談
+              </Link>
               <Link href="/login" className="hover:text-white transition-colors">
                 ログイン
               </Link>

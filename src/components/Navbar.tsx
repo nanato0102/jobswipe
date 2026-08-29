@@ -323,6 +323,15 @@ export default function Navbar() {
 
               {/* 認証ボタン群 */}
               <div className="flex items-center gap-2 sm:gap-3">
+                {/* お問い合わせ・導入相談 */}
+                <Link
+                  href="/contact"
+                  className="text-xs font-semibold text-slate-600 hover:text-emerald-800 px-2 py-1.5 transition-colors hidden md:flex items-center gap-1"
+                >
+                  <MessageSquare className="w-3.5 h-3.5 text-slate-500" />
+                  <span>お問い合わせ</span>
+                </Link>
+
                 {/* PC用 採用担当の方はこちら */}
                 <Link
                   href="/company/login"
