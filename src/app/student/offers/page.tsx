@@ -93,7 +93,7 @@ export default function StudentOffersPage() {
 
                     {offer.status === "ACCEPTED" && (
                       <Link
-                        href="/company/chat"
+                        href={`/company/chat?threadId=thread-${offer.companyId}`}
                         className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold text-white bg-emerald-700 hover:bg-emerald-600 rounded-xl shadow-sm transition-colors"
                       >
                         <MessageSquare className="w-3.5 h-3.5" />
