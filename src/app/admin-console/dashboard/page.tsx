@@ -63,6 +63,7 @@ export default function AdminConsoleDashboardPage() {
   const [inquiries, setInquiries] = useState<StoredInquiry[]>([]);
   const [inquirySearch, setInquirySearch] = useState("");
   const [inquiryStatusFilter, setInquiryStatusFilter] = useState<"ALL" | "UNTOUCHED" | "IN_PROGRESS" | "RESOLVED">("ALL");
+  const [inquiryTypeFilter, setInquiryTypeFilter] = useState<"ALL" | "student" | "company">("ALL");
 
   useEffect(() => {
     setInquiries(appStore.getInquiries());
@@ -138,6 +139,8 @@ export default function AdminConsoleDashboardPage() {
       status: "ACTIVE",
     },
   ]);
+  const [userSearch, setUserSearch] = useState("");
+  const [userTypeFilter, setUserTypeFilter] = useState<"ALL" | "STUDENT" | "COMPANY">("ALL");
 
   const [previewVideo, setPreviewVideo] = useState<string | null>(null);
 
@@ -163,7 +166,7 @@ export default function AdminConsoleDashboardPage() {
       "対応ステータス",
     ];
 
-    const rows = inquiries.map((item) => [
+    const rows = filteredInquiries.map((item) => [
       `"${item.receiptNumber}"`,
       `"${item.createdAt}"`,
       `"${item.userType === "company" ? "企業" : "学生"}"`,
@@ -199,7 +202,23 @@ export default function AdminConsoleDashboardPage() {
     const matchStatus =
       inquiryStatusFilter === "ALL" || item.status === inquiryStatusFilter;
 
-    return matchSearch && matchStatus;
+    const matchType =
+      inquiryTypeFilter === "ALL" || item.userType === inquiryTypeFilter;
+
+    return matchSearch && matchStatus && matchType;
+  });
+
+  // フィルタリングされたユーザー一覧
+  const filteredUsers = userList.filter((u) => {
+    const matchSearch =
+      u.name.toLowerCase().includes(userSearch.toLowerCase()) ||
+      u.email.toLowerCase().includes(userSearch.toLowerCase()) ||
+      u.detail.toLowerCase().includes(userSearch.toLowerCase());
+
+    const matchType =
+      userTypeFilter === "ALL" || u.type === userTypeFilter;
+
+    return matchSearch && matchType;
   });
 
   return (
@@ -281,33 +300,72 @@ export default function AdminConsoleDashboardPage() {
         {activeTab === "inquiries" && (
           <div className="space-y-6">
             {/* ツールバー */}
-            <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-4 sm:p-5 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
               {/* 検索・フィルター */}
-              <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-                <div className="relative w-full sm:w-72">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 flex-1">
+                <div className="relative w-full sm:w-64">
                   <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
                     value={inquirySearch}
                     onChange={(e) => setInquirySearch(e.target.value)}
-                    placeholder="送信元名・メール・受付番号で検索..."
+                    placeholder="送信元・メール・番号で検索..."
                     className="w-full text-xs border border-slate-300 rounded-lg pl-8 pr-3 py-1.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
                   />
                 </div>
 
-                <div className="flex items-center gap-1.5 w-full sm:w-auto">
+                {/* 企業 / 学生 フィルター */}
+                <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-lg">
+                  <button
+                    type="button"
+                    onClick={() => setInquiryTypeFilter("ALL")}
+                    className={`px-2.5 py-1 rounded-md text-xs font-bold transition-colors ${
+                      inquiryTypeFilter === "ALL"
+                        ? "bg-white text-slate-900 shadow-2xs"
+                        : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    すべて
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setInquiryTypeFilter("student")}
+                    className={`px-2.5 py-1 rounded-md text-xs font-bold transition-colors ${
+                      inquiryTypeFilter === "student"
+                        ? "bg-emerald-600 text-white shadow-2xs"
+                        : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    学生
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setInquiryTypeFilter("company")}
+                    className={`px-2.5 py-1 rounded-md text-xs font-bold transition-colors ${
+                      inquiryTypeFilter === "company"
+                        ? "bg-blue-600 text-white shadow-2xs"
+                        : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    企業
+                  </button>
+                </div>
+
+                {/* ステータスフィルター */}
+                <div className="flex items-center gap-1 overflow-x-auto">
                   {(["ALL", "UNTOUCHED", "IN_PROGRESS", "RESOLVED"] as const).map((st) => (
                     <button
                       key={st}
+                      type="button"
                       onClick={() => setInquiryStatusFilter(st)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${
+                      className={`px-2.5 py-1 rounded-lg text-xs font-bold whitespace-nowrap transition-colors ${
                         inquiryStatusFilter === st
                           ? "bg-slate-900 text-white"
                           : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                       }`}
                     >
                       {st === "ALL"
-                        ? "すべて"
+                        ? "全対応"
                         : st === "UNTOUCHED"
                         ? "未対応"
                         : st === "IN_PROGRESS"
@@ -319,13 +377,14 @@ export default function AdminConsoleDashboardPage() {
               </div>
 
               {/* Googleスプレッドシート連携 / CSVエクスポート */}
-              <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+              <div className="flex items-center gap-2 w-full lg:w-auto justify-end flex-shrink-0">
                 <button
+                  type="button"
                   onClick={handleExportCSV}
-                  className="px-3.5 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold rounded-lg flex items-center gap-2 transition-all shadow-2xs active:scale-95"
+                  className="w-full lg:w-auto px-3.5 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold rounded-lg flex items-center justify-center gap-2 transition-all shadow-2xs active:scale-95"
                 >
                   <FileSpreadsheet className="w-4 h-4" />
-                  <span>Googleスプレッドシート用 CSV出力</span>
+                  <span>CSV出力 ({filteredInquiries.length}件)</span>
                   <Download className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -513,10 +572,72 @@ export default function AdminConsoleDashboardPage() {
 
         {/* ================= 4. ユーザー管理タブ ================= */}
         {activeTab === "users" && (
-          <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-6 space-y-4">
-            <h2 className="text-base font-bold text-slate-900">登録アカウント一覧</h2>
+          <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-6 space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+              <div>
+                <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                  <Users className="w-4 h-4 text-slate-700" />
+                  <span>登録アカウント管理 ({filteredUsers.length}件)</span>
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  学生・企業アカウントの検索、詳細確認、利用停止などのアカウント管理を行います
+                </p>
+              </div>
+
+              {/* 検索 ＆ フィルター */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <div className="relative w-full sm:w-60">
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={userSearch}
+                    onChange={(e) => setUserSearch(e.target.value)}
+                    placeholder="氏名・企業名・メールで検索..."
+                    className="w-full text-xs border border-slate-300 rounded-lg pl-8 pr-3 py-1.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                  />
+                </div>
+
+                {/* 企業 / 学生 フィルター */}
+                <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-lg">
+                  <button
+                    type="button"
+                    onClick={() => setUserTypeFilter("ALL")}
+                    className={`px-3 py-1 rounded-md text-xs font-bold transition-colors ${
+                      userTypeFilter === "ALL"
+                        ? "bg-white text-slate-900 shadow-2xs"
+                        : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    すべて ({userList.length})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setUserTypeFilter("STUDENT")}
+                    className={`px-3 py-1 rounded-md text-xs font-bold transition-colors ${
+                      userTypeFilter === "STUDENT"
+                        ? "bg-emerald-600 text-white shadow-2xs"
+                        : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    学生 ({userList.filter((u) => u.type === "STUDENT").length})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setUserTypeFilter("COMPANY")}
+                    className={`px-3 py-1 rounded-md text-xs font-bold transition-colors ${
+                      userTypeFilter === "COMPANY"
+                        ? "bg-blue-600 text-white shadow-2xs"
+                        : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    企業 ({userList.filter((u) => u.type === "COMPANY").length})
+                  </button>
+                </div>
+              </div>
+            </div>
+
             <div className="divide-y divide-slate-100">
-              {userList.map((u) => (
+              {filteredUsers.map((u) => (
                 <div key={u.id} className="py-4 flex items-center justify-between gap-4 text-xs">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
@@ -524,11 +645,20 @@ export default function AdminConsoleDashboardPage() {
                       <span
                         className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
                           u.type === "STUDENT"
-                            ? "bg-emerald-50 text-emerald-800"
-                            : "bg-blue-50 text-blue-800"
+                            ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                            : "bg-blue-50 text-blue-800 border border-blue-200"
                         }`}
                       >
                         {u.type === "STUDENT" ? "学生" : "企業"}
+                      </span>
+                      <span
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
+                          u.status === "ACTIVE"
+                            ? "bg-slate-100 text-slate-600"
+                            : "bg-rose-50 text-rose-700 border border-rose-200"
+                        }`}
+                      >
+                        {u.status === "ACTIVE" ? "正常" : "アカウント停止中"}
                       </span>
                     </div>
                     <p className="text-slate-600">{u.detail}</p>
@@ -537,6 +667,7 @@ export default function AdminConsoleDashboardPage() {
 
                   <div>
                     <button
+                      type="button"
                       onClick={() =>
                         setUserList(
                           userList.map((item) =>
@@ -551,8 +682,8 @@ export default function AdminConsoleDashboardPage() {
                       }
                       className={`px-3 py-1.5 rounded-lg font-bold transition-colors ${
                         u.status === "ACTIVE"
-                          ? "bg-slate-100 text-slate-700 hover:bg-rose-50 hover:text-rose-700"
-                          : "bg-rose-100 text-rose-800"
+                          ? "bg-slate-100 text-slate-700 hover:bg-rose-50 hover:text-rose-700 border border-slate-200"
+                          : "bg-rose-100 text-rose-800 hover:bg-rose-200"
                       }`}
                     >
                       {u.status === "ACTIVE" ? "アカウント停止" : "停止中 (解除)"}
@@ -560,6 +691,12 @@ export default function AdminConsoleDashboardPage() {
                   </div>
                 </div>
               ))}
+
+              {filteredUsers.length === 0 && (
+                <div className="py-12 text-center text-slate-400 text-xs">
+                  該当する登録アカウントは見つかりませんでした。
+                </div>
+              )}
             </div>
           </div>
         )}
