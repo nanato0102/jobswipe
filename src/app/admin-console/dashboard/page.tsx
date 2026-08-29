@@ -220,15 +220,6 @@ export default function AdminConsoleDashboardPage() {
                 お問い合わせの確認、Googleスプレッドシート連携、主要KPI、動画監視、ユーザー管理を行います
               </p>
             </div>
-
-            <div className="flex items-center gap-2">
-              <Link
-                href="/swipe"
-                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition-colors"
-              >
-                スワイプ画面を確認
-              </Link>
-            </div>
           </div>
 
           {/* 管理タブ切り替え */}

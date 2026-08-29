@@ -213,14 +213,6 @@ export default function Navbar() {
                   <ShieldCheck className="h-4 w-4 text-rose-600" />
                   <span>管理コンソール</span>
                 </Link>
-
-                <Link
-                  href="/swipe"
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors hover:bg-slate-100 hover:text-slate-900"
-                >
-                  <Sparkles className="h-4 w-4 text-emerald-600" />
-                  <span>動画スワイプ</span>
-                </Link>
               </>
             )}
           </nav>
