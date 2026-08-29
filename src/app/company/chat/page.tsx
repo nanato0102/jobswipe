@@ -204,20 +204,20 @@ function ChatContent() {
             {/* 右側: チャットタイムライン（スマホではスレッド選択時に全画面表示） */}
             {/* ========================================================================= */}
             <div
-              className={`flex-1 flex flex-col bg-slate-50/40 ${
+              className={`flex-1 min-w-0 flex flex-col bg-slate-50/40 w-full overflow-hidden ${
                 !selectedThreadId ? "hidden md:flex" : "flex"
               }`}
             >
               {currentThread ? (
                 <>
                   {/* チャットヘッダー */}
-                  <div className="p-3.5 px-4 border-b border-slate-200 flex items-center justify-between bg-white shadow-2xs">
-                    <div className="flex items-center gap-3">
+                  <div className="p-3 sm:p-4 border-b border-slate-200 flex items-center justify-between bg-white shadow-2xs gap-2 min-w-0 w-full">
+                    <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
                       {/* スマホ用: スレッド一覧に戻るボタン */}
                       <button
                         type="button"
                         onClick={() => setSelectedThreadId("")}
-                        className="p-1.5 -ml-1 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors md:hidden"
+                        className="p-1.5 -ml-1 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors md:hidden flex-shrink-0"
                         title="一覧に戻る"
                       >
                         <ArrowLeft className="w-5 h-5" />
@@ -237,35 +237,37 @@ function ChatContent() {
                         )}
                       </div>
 
-                      <div>
-                        <h2 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
-                          <span>{currentThread.partnerName}</span>
+                      <div className="min-w-0 flex-1">
+                        <h2 className="text-xs sm:text-sm font-bold text-slate-900 truncate">
+                          {currentThread.partnerName}
                         </h2>
-                        <p className="text-[11px] text-slate-500">{currentThread.partnerSub}</p>
+                        <p className="text-[10px] sm:text-[11px] text-slate-500 truncate">
+                          {currentThread.partnerSub}
+                        </p>
                       </div>
                     </div>
 
-                    <span className="text-[11px] bg-emerald-50 text-emerald-800 px-2.5 py-0.5 rounded-md font-bold border border-emerald-200 flex items-center gap-1">
+                    <span className="text-[10px] sm:text-[11px] bg-emerald-50 text-emerald-800 px-2 sm:px-2.5 py-0.5 rounded-md font-bold border border-emerald-200 flex items-center gap-1 flex-shrink-0">
                       <CheckCheck className="w-3.5 h-3.5 text-emerald-600" />
-                      <span>マッチング成立</span>
+                      <span className="hidden xs:inline">成立</span>
                     </span>
                   </div>
 
                   {/* メッセージタイムライン（縦スクロール） */}
-                  <div className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-4">
+                  <div className="flex-1 min-w-0 p-3 sm:p-6 overflow-y-auto space-y-4 w-full">
                     {/* オファーメッセージ固定ピン留めカード */}
                     {currentOffer && (
-                      <div className="p-4 bg-white rounded-lg border border-emerald-200 shadow-2xs space-y-2">
-                        <div className="flex items-center justify-between border-b border-emerald-100 pb-2">
-                          <span className="text-xs font-bold text-emerald-900 flex items-center gap-1.5">
-                            <Sparkles className="w-4 h-4 text-emerald-700" />
-                            <span>届いたオファー内容（スカウトメッセージ）</span>
+                      <div className="p-3.5 sm:p-4 bg-white rounded-lg border border-emerald-200 shadow-2xs space-y-2 min-w-0 w-full">
+                        <div className="flex items-center justify-between border-b border-emerald-100 pb-2 gap-2">
+                          <span className="text-xs font-bold text-emerald-900 flex items-center gap-1.5 truncate">
+                            <Sparkles className="w-4 h-4 text-emerald-700 flex-shrink-0" />
+                            <span className="truncate">届いたオファー内容</span>
                           </span>
-                          <span className="text-[10px] text-slate-400">
-                            受信日時: {currentOffer.createdAt}
+                          <span className="text-[10px] text-slate-400 whitespace-nowrap flex-shrink-0">
+                            {currentOffer.createdAt}
                           </span>
                         </div>
-                        <p className="text-xs sm:text-sm text-slate-800 whitespace-pre-wrap leading-relaxed">
+                        <p className="text-xs sm:text-sm text-slate-800 whitespace-pre-wrap leading-relaxed break-words">
                           {currentOffer.message}
                         </p>
                       </div>
@@ -281,18 +283,18 @@ function ChatContent() {
                       return (
                         <div
                           key={m.id}
-                          className={`flex flex-col ${isMe ? "items-end" : "items-start"}`}
+                          className={`flex flex-col min-w-0 w-full ${isMe ? "items-end" : "items-start"}`}
                         >
                           <div className="flex items-center gap-1.5 mb-1 px-1 text-[10px] text-slate-400 font-medium">
-                            <span>{m.senderName}</span>
-                            <span>• {m.sentAt}</span>
+                            <span className="truncate max-w-[150px]">{m.senderName}</span>
+                            <span className="whitespace-nowrap">• {m.sentAt}</span>
                           </div>
 
                           <div
-                            className={`max-w-[85%] sm:max-w-md p-3.5 rounded-lg text-xs sm:text-sm leading-relaxed whitespace-pre-wrap ${
+                            className={`max-w-[85%] sm:max-w-md p-3 sm:p-3.5 rounded-lg text-xs sm:text-sm leading-relaxed whitespace-pre-wrap break-words shadow-2xs ${
                               isMe
-                                ? "bg-slate-900 text-white shadow-2xs"
-                                : "bg-white text-slate-900 border border-slate-200 shadow-2xs"
+                                ? "bg-slate-900 text-white"
+                                : "bg-white text-slate-900 border border-slate-200"
                             }`}
                           >
                             {m.content}
@@ -306,11 +308,11 @@ function ChatContent() {
                   {/* ========================================================================= */}
                   {/* 下部: 定型文チップ ＆ 複数行テキストエリア入力フォーム */}
                   {/* ========================================================================= */}
-                  <div className="border-t border-slate-200 bg-white p-3 sm:p-4 space-y-2.5">
+                  <div className="border-t border-slate-200 bg-white p-2.5 sm:p-4 space-y-2 min-w-0 w-full">
                     {/* クイック定型文テンプレートチップ */}
-                    <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-                      <span className="text-[11px] font-bold text-slate-400 whitespace-nowrap">
-                        定型文を挿入:
+                    <div className="w-full min-w-0 flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+                      <span className="text-[10px] sm:text-[11px] font-bold text-slate-400 whitespace-nowrap flex-shrink-0">
+                        定型文:
                       </span>
                       <button
                         type="button"
@@ -321,7 +323,7 @@ function ChatContent() {
                               : "動画を拝見し、明るく前向きな人柄に大変惹かれました！ぜひ一度15分〜30分程度、オンラインでカジュアルにお話ししませんか？ご都合のよろしい日程をいくつか教えていただけますと幸いです。"
                           )
                         }
-                        className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium whitespace-nowrap transition-colors text-xs"
+                        className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium whitespace-nowrap transition-colors text-[11px] sm:text-xs flex-shrink-0"
                       >
                         ご挨拶・承諾
                       </button>
@@ -335,7 +337,7 @@ function ChatContent() {
                               : "以下の日程枠でオンラインカジュアル面談を実施可能です。ご都合の良い日時をお選びいただけますでしょうか？\n\n1. 〇月〇日(火) 14:00〜\n2. 〇月〇日(木) 16:00〜\n3. 〇月〇日(金) 11:00〜\n\nご返信お待ちしております。"
                           )
                         }
-                        className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-md font-bold whitespace-nowrap transition-colors text-xs"
+                        className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-md font-bold whitespace-nowrap transition-colors text-[11px] sm:text-xs flex-shrink-0"
                       >
                         📅 日程候補の提示（編集可能）
                       </button>
@@ -349,22 +351,22 @@ function ChatContent() {
                               : "本日はカジュアル面談にご参加いただきありがとうございました！ぜひ次の選考ステップに進んでいただきたく存じます。"
                           )
                         }
-                        className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium whitespace-nowrap transition-colors text-xs"
+                        className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium whitespace-nowrap transition-colors text-[11px] sm:text-xs flex-shrink-0"
                       >
                         面談のお礼
                       </button>
                     </div>
 
                     {/* 複数行テキストエリア入力フォーム */}
-                    <form onSubmit={handleSend} className="flex flex-col sm:flex-row gap-2 items-end">
-                      <div className="w-full relative">
+                    <form onSubmit={handleSend} className="w-full min-w-0 flex flex-col sm:flex-row gap-2 items-stretch sm:items-end">
+                      <div className="w-full min-w-0 relative flex-1">
                         <textarea
                           rows={3}
                           value={inputText}
                           onChange={(e) => setInputText(e.target.value)}
                           onKeyDown={handleKeyDown}
-                          placeholder={`${currentThread.partnerName} へのメッセージを入力... (Ctrl+Enter / Cmd+Enter で送信)`}
-                          className="w-full text-xs sm:text-sm border border-slate-300 rounded-lg p-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 leading-relaxed resize-none"
+                          placeholder={`${currentThread.partnerName} へのメッセージを入力... (Ctrl+Enter で送信)`}
+                          className="w-full text-xs sm:text-sm border border-slate-300 rounded-lg p-2.5 sm:p-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 leading-relaxed resize-none break-words"
                         />
                         <span className="text-[10px] text-slate-400 absolute right-2.5 bottom-2 hidden sm:inline">
                           Shift+Enter で改行
@@ -374,7 +376,7 @@ function ChatContent() {
                       <button
                         type="submit"
                         disabled={!inputText.trim()}
-                        className="w-full sm:w-auto px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold rounded-lg flex items-center justify-center gap-1.5 transition-colors disabled:opacity-50 shadow-xs flex-shrink-0"
+                        className="w-full sm:w-auto px-5 py-2.5 sm:py-3 bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold rounded-lg flex items-center justify-center gap-1.5 transition-colors disabled:opacity-50 shadow-xs flex-shrink-0"
                       >
                         <Send className="w-4 h-4" />
                         <span>送信</span>
