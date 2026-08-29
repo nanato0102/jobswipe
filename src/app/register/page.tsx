@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
-import { UserPlus, User, Building2, AlertCircle, CheckCircle, GraduationCap, ArrowRight } from "lucide-react";
+import { UserPlus, AlertCircle, CheckCircle } from "lucide-react";
 
 export default function RegisterPage() {
   const { login } = useAuth();
@@ -67,7 +67,7 @@ export default function RegisterPage() {
               priority
             />
           </div>
-          <h1 className="text-xl font-bold text-slate-900">学生 新規登録</h1>
+          <h1 className="text-xl font-bold text-slate-900">新規登録</h1>
           <p className="text-xs text-slate-500 mt-1">動画を投稿して企業からスカウトを受け取ろう</p>
         </div>
 
@@ -159,24 +159,13 @@ export default function RegisterPage() {
           </button>
         </form>
 
-        <div className="mt-6 pt-6 border-t border-slate-100 space-y-3 text-center text-xs">
+        <div className="mt-6 pt-6 border-t border-slate-100 text-center text-xs">
           <p className="text-slate-500">
             既にアカウントをお持ちですか？{" "}
             <Link href="/login" className="font-bold text-emerald-800 hover:underline">
               ログイン
             </Link>
           </p>
-
-          <div className="pt-2 border-t border-slate-100">
-            <Link
-              href="/company/register"
-              className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-900 font-semibold"
-            >
-              <Building2 className="w-3.5 h-3.5 text-slate-400" />
-              <span>採用担当・企業の方の登録はこちら</span>
-              <ArrowRight className="w-3 h-3" />
-            </Link>
-          </div>
         </div>
       </div>
     </div>

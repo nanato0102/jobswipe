@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
-import { LogIn, AlertCircle, Building2, User, Sparkles, ArrowRight } from "lucide-react";
+import { LogIn, AlertCircle, Building2, Sparkles, UserPlus } from "lucide-react";
 
 export default function CompanyLoginPage() {
   const { login, demoLogin } = useAuth();
@@ -137,24 +137,13 @@ export default function CompanyLoginPage() {
           </button>
         </form>
 
-        <div className="mt-6 pt-6 border-t border-slate-100 space-y-3 text-center text-xs">
+        <div className="mt-6 pt-6 border-t border-slate-100 text-center text-xs">
           <p className="text-slate-500">
-            企業アカウントをお持ちでないですか？{" "}
+            まだ企業アカウントをお持ちでないですか？{" "}
             <Link href="/company/register" className="font-bold text-slate-900 hover:underline">
-              企業アカウント登録
+              企業アカウント新規登録
             </Link>
           </p>
-
-          <div className="pt-2 border-t border-slate-100">
-            <Link
-              href="/login"
-              className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-emerald-800 font-semibold"
-            >
-              <User className="w-3.5 h-3.5 text-slate-400" />
-              <span>学生・求職者の方はこちら</span>
-              <ArrowRight className="w-3 h-3" />
-            </Link>
-          </div>
         </div>
       </div>
     </div>

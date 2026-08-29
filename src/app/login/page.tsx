@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
-import { LogIn, AlertCircle, User, Building2, Sparkles, ArrowRight } from "lucide-react";
+import { LogIn, AlertCircle, User, Sparkles } from "lucide-react";
 
 export default function LoginPage() {
   const { login, demoLogin } = useAuth();
@@ -67,8 +67,8 @@ export default function LoginPage() {
               priority
             />
           </div>
-          <h1 className="text-xl font-bold text-slate-900">学生ログイン</h1>
-          <p className="text-xs text-slate-500 mt-1">動画投稿・オファー確認マイページへログイン</p>
+          <h1 className="text-xl font-bold text-slate-900">ログイン</h1>
+          <p className="text-xs text-slate-500 mt-1">マイページへログイン</p>
         </div>
 
         {/* ワンクリック・デモログイン（学生用） */}
@@ -133,24 +133,13 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div className="mt-6 pt-6 border-t border-slate-100 space-y-3 text-center text-xs">
+        <div className="mt-6 pt-6 border-t border-slate-100 text-center text-xs">
           <p className="text-slate-500">
             アカウントをお持ちでないですか？{" "}
             <Link href="/register" className="font-bold text-emerald-800 hover:underline">
               新規登録（無料）
             </Link>
           </p>
-
-          <div className="pt-2 border-t border-slate-100">
-            <Link
-              href="/company/login"
-              className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-900 font-semibold"
-            >
-              <Building2 className="w-3.5 h-3.5 text-slate-400" />
-              <span>採用担当・企業の方はこちら</span>
-              <ArrowRight className="w-3 h-3" />
-            </Link>
-          </div>
         </div>
       </div>
     </div>
