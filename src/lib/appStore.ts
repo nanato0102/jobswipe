@@ -296,6 +296,33 @@ export const appStore = {
     };
     const updated = [newOffer, ...current];
     localStorage.setItem("jobswipe_offers", JSON.stringify(updated));
+
+    // チャットスレッド＆最初のオファーメッセージを自動生成
+    if (typeof window !== "undefined") {
+      const studentThreadId = `thread-${offer.companyId || "c1"}`;
+      const companyThreadId = `thread-${offer.studentId || "s1"}`;
+
+      // メッセージに追加
+      const allMessages = appStore.getMessages();
+      const offerMsg: StoredMessage = {
+        id: "m-" + Date.now(),
+        threadId: studentThreadId,
+        senderRole: "COMPANY",
+        senderName: offer.companyName,
+        content: `【オファーメッセージ】\n${offer.message}`,
+        sentAt: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      };
+      const offerMsgCompany: StoredMessage = {
+        id: "m-c-" + Date.now(),
+        threadId: companyThreadId,
+        senderRole: "COMPANY",
+        senderName: offer.companyName,
+        content: `【オファーメッセージ】\n${offer.message}`,
+        sentAt: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      };
+      localStorage.setItem("jobswipe_chat_messages", JSON.stringify([...allMessages, offerMsg, offerMsgCompany]));
+    }
+
     return newOffer;
   },
 
@@ -304,6 +331,19 @@ export const appStore = {
     const updated = current.map((o) => (o.id === id ? { ...o, status } : o));
     localStorage.setItem("jobswipe_offers", JSON.stringify(updated));
     return updated;
+  },
+
+  // スレッドに紐づくオファー情報を取得
+  getOfferForThread: (threadId: string): StoredOffer | null => {
+    const offers = appStore.getOffers();
+    // threadId が thread-c1 / thread-s1 などの形式
+    const matched = offers.find((o) => 
+      threadId === `thread-${o.companyId}` || 
+      threadId === `thread-${o.studentId}` ||
+      threadId.includes(o.companyId) ||
+      threadId.includes(o.studentId)
+    );
+    return matched || (offers.length > 0 ? offers[0] : null);
   },
 
   // 気になる関連
