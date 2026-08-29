@@ -388,7 +388,7 @@ export default function StudentVideoUploadPage() {
                   onChange={(e) => setTagInput(e.target.value)}
                   onKeyDown={handleTagKeyDown}
                   placeholder={tags.length === 0 ? "タグを入力してEnter（例: 笑顔, 英語対応可）" : "追加してEnter"}
-                  className="flex-1 bg-transparent text-xs sm:text-sm text-slate-900 outline-none min-w-[140px] px-2 py-1"
+                  className="flex-1 bg-transparent text-xs sm:text-sm text-slate-900 outline-none min-w-[80px] px-2 py-1"
                 />
               </div>
             </div>

@@ -304,11 +304,11 @@ export default function StudentProfilePage() {
           </div>
 
           {/* タブナビゲーション */}
-          <div className="flex border-b border-slate-200 gap-6">
+          <div className="flex border-b border-slate-200 gap-3 sm:gap-6 overflow-x-auto no-scrollbar">
             <button
               type="button"
               onClick={() => setActiveTab("basic")}
-              className={`pb-3 text-xs sm:text-sm font-bold flex items-center gap-2 border-b-2 transition-colors ${
+              className={`pb-3 text-xs sm:text-sm font-bold flex items-center gap-1.5 border-b-2 whitespace-nowrap transition-colors ${
                 activeTab === "basic"
                   ? "border-emerald-700 text-emerald-800"
                   : "border-transparent text-slate-400 hover:text-slate-700"
@@ -321,14 +321,14 @@ export default function StudentProfilePage() {
             <button
               type="button"
               onClick={() => setActiveTab("tags")}
-              className={`pb-3 text-xs sm:text-sm font-bold flex items-center gap-2 border-b-2 transition-colors ${
+              className={`pb-3 text-xs sm:text-sm font-bold flex items-center gap-1.5 border-b-2 whitespace-nowrap transition-colors ${
                 activeTab === "tags"
                   ? "border-emerald-700 text-emerald-800"
                   : "border-transparent text-slate-400 hover:text-slate-700"
               }`}
             >
               <Compass className="w-4 h-4" />
-              <span>2. 人柄タグ ＆ 興味のある業界</span>
+              <span>2. 人柄タグ ＆ 希望業界</span>
             </button>
           </div>
 

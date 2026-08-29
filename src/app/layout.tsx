@@ -14,11 +14,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ja">
-      <body className="min-h-screen bg-slate-50 text-slate-900 flex flex-col antialiased">
+    <html lang="ja" className="overflow-x-hidden max-w-full">
+      <body className="min-h-screen bg-slate-50 text-slate-900 flex flex-col antialiased overflow-x-hidden w-full max-w-full">
         <AuthProvider>
           <Navbar />
-          <main className="flex-1 flex flex-col">{children}</main>
+          <main className="flex-1 flex flex-col w-full max-w-full overflow-x-hidden">{children}</main>
           <footer className="hidden md:block border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500">
             <div className="max-w-7xl mx-auto px-4">
               <p>&copy; {new Date().getFullYear()} JobSwipe. All rights reserved.</p>

@@ -102,7 +102,7 @@ function ChatContent() {
   return (
     <RoleGuard allowedRoles={["COMPANY", "STUDENT", "ADMIN"]}>
       <TabsWrapper>
-        <div className="flex-1 py-3 sm:py-6 px-2 sm:px-6 max-w-6xl mx-auto w-full flex flex-col h-[calc(100vh-5rem)] min-h-[620px]">
+        <div className="flex-1 py-1.5 sm:py-6 px-1 sm:px-6 max-w-6xl mx-auto w-full flex flex-col h-[calc(100dvh-5.5rem)] sm:h-[calc(100vh-5rem)] min-h-0 sm:min-h-[620px] overflow-x-hidden">
           <div className="bg-white rounded-xl border border-slate-200 shadow-xs flex-1 flex overflow-hidden">
             {/* ========================================================================= */}
             {/* 左サイドバー: スレッド一覧（スマホではスレッド未選択時に表示） */}

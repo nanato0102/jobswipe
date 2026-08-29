@@ -209,32 +209,32 @@ export default function HomePage() {
 
           {/* 切り替えタブ */}
           <FadeInView delay={100}>
-            <div className="flex justify-center mb-8">
-              <div className="inline-flex p-1 bg-[#141B2D] rounded-2xl border border-slate-700/60 shadow-lg">
+            <div className="flex justify-center mb-8 px-2">
+              <div className="w-full max-w-sm sm:max-w-md grid grid-cols-2 p-1 bg-[#141B2D] rounded-xl border border-slate-700/60 shadow-lg">
                 <button
                   type="button"
                   onClick={() => setActiveTab("student")}
-                  className={`px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 ${
+                  className={`py-2.5 px-2 rounded-lg text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 ${
                     activeTab === "student"
                       ? "bg-emerald-600 text-white shadow-md"
                       : "text-slate-400 hover:text-white"
                   }`}
                 >
-                  <User className="w-4 h-4" />
-                  <span>学生視点（動画でアピール）</span>
+                  <User className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span className="truncate">学生（動画投稿）</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setActiveTab("company")}
-                  className={`px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 ${
+                  className={`py-2.5 px-2 rounded-lg text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 ${
                     activeTab === "company"
                       ? "bg-emerald-600 text-white shadow-md"
                       : "text-slate-400 hover:text-white"
                   }`}
                 >
-                  <Building2 className="w-4 h-4" />
-                  <span>企業視点（スワイプで発掘）</span>
+                  <Building2 className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span className="truncate">企業（スワイプ）</span>
                 </button>
               </div>
             </div>
