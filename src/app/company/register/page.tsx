@@ -119,11 +119,19 @@ export default function CompanyRegisterPage() {
               className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 bg-white font-medium"
             >
               <option value="IT / Webサービス">IT / Webサービス</option>
-              <option value="コンサルティング">コンサルティング</option>
-              <option value="メーカー / 製造">メーカー / 製造</option>
-              <option value="広告 / マスコミ">広告 / マスコミ</option>
-              <option value="金融 / 不動産">金融 / 不動産</option>
-              <option value="人材 / 教育">人材 / 教育</option>
+              <option value="ベンチャー / スタートアップ">ベンチャー / スタートアップ</option>
+              <option value="美容 / コスメ / ヘルスケア">美容 / コスメ / ヘルスケア</option>
+              <option value="アパレル / ファッション">アパレル / ファッション</option>
+              <option value="広告 / PR / マスコミ">広告 / PR / マスコミ</option>
+              <option value="人材 / 教育 / コンサルティング">人材 / 教育 / コンサルティング</option>
+              <option value="不動産 / 建設 / 住宅">不動産 / 建設 / 住宅</option>
+              <option value="総合商社 / 専門商社">総合商社 / 専門商社</option>
+              <option value="飲食 / フードサービス">飲食 / フードサービス</option>
+              <option value="ブライダル / ホテル / 観光">ブライダル / ホテル / 観光</option>
+              <option value="エンタメ / イベント / 音楽">エンタメ / イベント / 音楽</option>
+              <option value="メーカー / 製造 / 日用品">メーカー / 製造 / 日用品</option>
+              <option value="金融 / 保険">金融 / 保険</option>
+              <option value="その他">その他</option>
             </select>
           </div>
 

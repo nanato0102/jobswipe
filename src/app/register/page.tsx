@@ -107,12 +107,12 @@ export default function RegisterPage() {
 
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">大学・学部</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">大学名</label>
               <input
                 type="text"
                 value={university}
                 onChange={(e) => setUniversity(e.target.value)}
-                placeholder="早稲田大学 商学部"
+                placeholder="早稲田大学"
                 className="w-full text-sm border border-slate-300 rounded-2xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 font-medium"
               />
             </div>
