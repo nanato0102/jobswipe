@@ -72,25 +72,25 @@ export default function HomePage() {
   return (
     <div className="flex-1 flex flex-col min-h-screen bg-[#0B0F19] text-white overflow-x-hidden selection:bg-emerald-500 selection:text-white">
       {/* ========================================================================= */}
-      {/* 1. ヒーローセクション（エメラルドグリーン × ディープトーン × スマートタイポグラフィ） */}
+      {/* 1. ヒーローセクション（エメラルドグリーン × ディープトーン × 入場アニメーション） */}
       {/* ========================================================================= */}
       <section className="relative overflow-hidden border-b border-slate-800/80 py-20 sm:py-28 lg:py-36">
-        {/* 上質なエメラルドグローの環境光 */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] sm:w-[900px] h-[450px] bg-emerald-600/10 blur-[140px] pointer-events-none rounded-full" />
-        <div className="absolute top-0 right-1/4 w-80 h-80 bg-teal-500/10 blur-[120px] pointer-events-none" />
+        {/* 上質なエメラルドグローの環境光（呼吸アニメーション） */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] sm:w-[900px] h-[450px] bg-emerald-600/15 blur-[140px] pointer-events-none rounded-full animate-pulse-slow" />
+        <div className="absolute top-0 right-1/4 w-80 h-80 bg-teal-500/10 blur-[120px] pointer-events-none animate-pulse-slow delay-300" />
 
         <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center space-y-8">
-          {/* ブランド公式バッジ */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs sm:text-sm font-bold tracking-wide shadow-sm mx-auto">
-            <Sparkles className="h-4 w-4 text-emerald-400 flex-shrink-0" />
+          {/* ブランド公式バッジ (Delay 0ms) */}
+          <div className="animate-fade-in-up inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs sm:text-sm font-bold tracking-wide shadow-sm mx-auto hover:bg-emerald-500/20 transition-colors">
+            <Sparkles className="h-4 w-4 text-emerald-400 flex-shrink-0 animate-pulse" />
             <span className="inline-block">人柄が採用の基準になる社会をつくる</span>
           </div>
 
-          {/* メインヘッドライン */}
-          <div className="space-y-4 max-w-4xl mx-auto">
+          {/* メインヘッドライン (Delay 100ms) */}
+          <div className="animate-fade-in-up delay-100 space-y-4 max-w-4xl mx-auto">
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.15] text-white">
               <span className="inline-block">履歴書を、</span><br className="hidden sm:inline" />
-              <span className="text-emerald-400 inline-block">
+              <span className="text-emerald-400 inline-block drop-shadow-[0_0_30px_rgba(52,211,153,0.35)]">
                 スワイプする時代へ。
               </span>
             </h1>
@@ -106,11 +106,11 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* デュアルCTAボタン */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+          {/* デュアルCTAボタン (Delay 300ms) */}
+          <div className="animate-fade-in-up delay-300 flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <Link
               href="/register"
-              className="w-full sm:w-auto px-9 py-4 text-base font-bold text-white bg-emerald-600 hover:bg-emerald-500 active:scale-95 rounded-2xl transition-all shadow-[0_10px_25px_rgba(5,150,105,0.3)] flex items-center justify-center gap-2 group"
+              className="w-full sm:w-auto px-9 py-4 text-base font-bold text-white bg-emerald-600 hover:bg-emerald-500 active:scale-95 rounded-2xl transition-all shadow-[0_10px_25px_rgba(5,150,105,0.3)] hover:shadow-[0_15px_35px_rgba(5,150,105,0.5)] hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
             >
               <User className="h-5 w-5 flex-shrink-0" />
               <span>[学生] 無料でスカウトを受け取る</span>
@@ -119,24 +119,24 @@ export default function HomePage() {
 
             <Link
               href="/company/login"
-              className="w-full sm:w-auto px-8 py-4 text-base font-bold text-slate-200 bg-[#141B2D] hover:bg-[#1D263F] hover:text-white border border-slate-700/80 hover:border-emerald-500/50 rounded-2xl transition-all flex items-center justify-center gap-2 shadow-sm"
+              className="w-full sm:w-auto px-8 py-4 text-base font-bold text-slate-200 bg-[#141B2D] hover:bg-[#1D263F] hover:text-white border border-slate-700/80 hover:border-emerald-500/50 hover:-translate-y-0.5 rounded-2xl transition-all flex items-center justify-center gap-2 shadow-sm"
             >
               <Building2 className="h-5 w-5 text-emerald-400 flex-shrink-0" />
               <span>[企業] 候補者をスワイプする</span>
             </Link>
           </div>
 
-          {/* 特徴チェックバッジ */}
-          <div className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs sm:text-sm text-slate-300 font-semibold">
-            <div className="flex items-center gap-2">
+          {/* 特徴チェックバッジ (Delay 400ms) */}
+          <div className="animate-fade-in-up delay-400 pt-6 flex flex-wrap items-center justify-center gap-6 text-xs sm:text-sm text-slate-300 font-semibold">
+            <div className="flex items-center gap-2 hover:text-emerald-300 transition-colors">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
               <span>ES・志望動機一切不要</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 hover:text-emerald-300 transition-colors">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
               <span>自撮り短尺動画で即スタート</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 hover:text-emerald-300 transition-colors">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
               <span>厳選企業から直接スカウト</span>
             </div>
@@ -166,7 +166,7 @@ export default function HomePage() {
             <span className="inline-block">「会ってみたら思っていた雰囲気と違った」と</span>
             <span className="inline-block">落胆する採用に、何の価値があるのか。</span>
           </p>
-          <div className="p-6 sm:p-8 bg-[#141B2D] rounded-3xl border border-slate-700/60 max-w-3xl mx-auto text-xs sm:text-sm text-slate-300 leading-relaxed text-left space-y-3 shadow-xl">
+          <div className="p-6 sm:p-8 bg-[#141B2D] rounded-3xl border border-slate-700/60 hover:border-emerald-500/40 transition-all duration-300 max-w-3xl mx-auto text-xs sm:text-sm text-slate-300 leading-relaxed text-left space-y-3 shadow-xl hover:shadow-[0_15px_30px_rgba(5,150,105,0.15)]">
             <p>
               文字情報では、あなたの最高の笑顔も、場を和ませる空気感も、対人での魅力も絶対に伝わらない。
             </p>
@@ -198,7 +198,7 @@ export default function HomePage() {
 
           {/* 切り替えタブ */}
           <div className="flex justify-center mb-8">
-            <div className="inline-flex p-1 bg-[#141B2D] rounded-2xl border border-slate-700/60">
+            <div className="inline-flex p-1 bg-[#141B2D] rounded-2xl border border-slate-700/60 shadow-lg">
               <button
                 type="button"
                 onClick={() => setActiveTab("student")}
@@ -228,10 +228,10 @@ export default function HomePage() {
           </div>
 
           {/* 体感カード */}
-          <div className="max-w-lg mx-auto bg-[#141B2D] rounded-3xl border border-slate-700/80 p-6 sm:p-8 shadow-2xl space-y-6">
+          <div className="max-w-lg mx-auto bg-[#141B2D] rounded-3xl border border-slate-700/80 p-6 sm:p-8 shadow-2xl space-y-6 hover:border-emerald-500/50 hover:shadow-[0_20px_40px_rgba(5,150,105,0.2)] transition-all duration-300">
             {activeTab === "student" ? (
               <div className="space-y-5 text-center">
-                <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto border border-emerald-500/20">
+                <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto border border-emerald-500/20 shadow-inner">
                   <Camera className="w-8 h-8" />
                 </div>
                 <div className="space-y-2">
@@ -246,7 +246,7 @@ export default function HomePage() {
                 <div className="pt-2">
                   <Link
                     href="/register"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold shadow-md transition-colors"
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transition-all"
                   >
                     <span>無料でショート動画を投稿する</span>
                     <ArrowRight className="w-4 h-4" />
@@ -255,7 +255,7 @@ export default function HomePage() {
               </div>
             ) : (
               <div className="space-y-5 text-center">
-                <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto border border-emerald-500/20">
+                <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto border border-emerald-500/20 shadow-inner">
                   <Layers className="w-8 h-8" />
                 </div>
                 <div className="space-y-2">
@@ -270,7 +270,7 @@ export default function HomePage() {
                 <div className="pt-2">
                   <Link
                     href="/company/login"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold shadow-md transition-colors"
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transition-all"
                   >
                     <span>候補者をスワイプで探す</span>
                     <ArrowRight className="w-4 h-4" />
@@ -302,7 +302,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-[#141B2D] rounded-3xl border border-slate-700/60 p-6 sm:p-8 space-y-4 hover:border-emerald-500/40 transition-colors shadow-lg">
+            <div className="bg-[#141B2D] rounded-3xl border border-slate-700/60 p-6 sm:p-8 space-y-4 hover:border-emerald-500/50 hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(5,150,105,0.2)] transition-all duration-300 shadow-lg">
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
                 <Sparkles className="w-6 h-6" />
               </div>
@@ -312,7 +312,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="bg-[#141B2D] rounded-3xl border border-slate-700/60 p-6 sm:p-8 space-y-4 hover:border-emerald-500/40 transition-colors shadow-lg">
+            <div className="bg-[#141B2D] rounded-3xl border border-slate-700/60 p-6 sm:p-8 space-y-4 hover:border-emerald-500/50 hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(5,150,105,0.2)] transition-all duration-300 shadow-lg">
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
                 <Zap className="w-6 h-6" />
               </div>
@@ -322,7 +322,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="bg-[#141B2D] rounded-3xl border border-slate-700/60 p-6 sm:p-8 space-y-4 hover:border-emerald-500/40 transition-colors shadow-lg">
+            <div className="bg-[#141B2D] rounded-3xl border border-slate-700/60 p-6 sm:p-8 space-y-4 hover:border-emerald-500/50 hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(5,150,105,0.2)] transition-all duration-300 shadow-lg">
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
                 <ShieldCheck className="w-6 h-6" />
               </div>
@@ -355,7 +355,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-[#141B2D] rounded-3xl border border-slate-700/60 p-6 sm:p-8 space-y-4 hover:border-emerald-500/40 transition-colors shadow-lg">
+            <div className="bg-[#141B2D] rounded-3xl border border-slate-700/60 p-6 sm:p-8 space-y-4 hover:border-emerald-500/50 hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(5,150,105,0.2)] transition-all duration-300 shadow-lg">
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
                 <TrendingUp className="w-6 h-6" />
               </div>
@@ -365,7 +365,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="bg-[#141B2D] rounded-3xl border border-slate-700/60 p-6 sm:p-8 space-y-4 hover:border-emerald-500/40 transition-colors shadow-lg">
+            <div className="bg-[#141B2D] rounded-3xl border border-slate-700/60 p-6 sm:p-8 space-y-4 hover:border-emerald-500/50 hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(5,150,105,0.2)] transition-all duration-300 shadow-lg">
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
@@ -375,7 +375,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="bg-[#141B2D] rounded-3xl border border-slate-700/60 p-6 sm:p-8 space-y-4 hover:border-emerald-500/40 transition-colors shadow-lg">
+            <div className="bg-[#141B2D] rounded-3xl border border-slate-700/60 p-6 sm:p-8 space-y-4 hover:border-emerald-500/50 hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(5,150,105,0.2)] transition-all duration-300 shadow-lg">
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
                 <Flame className="w-6 h-6" />
               </div>
@@ -408,7 +408,7 @@ export default function HomePage() {
             {targetIndustries.map((ind) => (
               <span
                 key={ind}
-                className="text-xs sm:text-sm font-bold px-4 py-2.5 rounded-2xl bg-[#141B2D] border border-slate-700/80 text-slate-200 hover:border-emerald-500/60 hover:text-emerald-300 transition-colors shadow-sm"
+                className="text-xs sm:text-sm font-bold px-4 py-2.5 rounded-2xl bg-[#141B2D] border border-slate-700/80 text-slate-200 hover:border-emerald-500 hover:text-emerald-300 hover:scale-105 transition-all duration-200 shadow-sm cursor-default"
               >
                 #{ind}
               </span>
@@ -433,7 +433,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="p-6 sm:p-8 bg-[#141B2D] rounded-3xl border border-slate-700/60 space-y-3">
+            <div className="p-6 sm:p-8 bg-[#141B2D] rounded-3xl border border-slate-700/60 hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-300 space-y-3 shadow-lg">
               <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm sm:text-base">
                 <Lock className="w-5 h-5 flex-shrink-0" />
                 <span>審査制企業のみに限定公開</span>
@@ -443,7 +443,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="p-6 sm:p-8 bg-[#141B2D] rounded-3xl border border-slate-700/60 space-y-3">
+            <div className="p-6 sm:p-8 bg-[#141B2D] rounded-3xl border border-slate-700/60 hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-300 space-y-3 shadow-lg">
               <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm sm:text-base">
                 <Camera className="w-5 h-5 flex-shrink-0" />
                 <span>編集不要・お題テンプレート付き</span>
@@ -472,7 +472,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="p-6 sm:p-8 bg-[#141B2D] rounded-3xl border border-slate-700/60 space-y-3 relative">
+            <div className="p-6 sm:p-8 bg-[#141B2D] rounded-3xl border border-slate-700/60 hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-300 space-y-3 relative shadow-lg">
               <span className="text-4xl font-black text-emerald-400">
                 01
               </span>
@@ -482,7 +482,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="p-6 sm:p-8 bg-[#141B2D] rounded-3xl border border-slate-700/60 space-y-3 relative">
+            <div className="p-6 sm:p-8 bg-[#141B2D] rounded-3xl border border-slate-700/60 hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-300 space-y-3 relative shadow-lg">
               <span className="text-4xl font-black text-emerald-400">
                 02
               </span>
@@ -492,7 +492,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="p-6 sm:p-8 bg-[#141B2D] rounded-3xl border border-slate-700/60 space-y-3 relative">
+            <div className="p-6 sm:p-8 bg-[#141B2D] rounded-3xl border border-slate-700/60 hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-300 space-y-3 relative shadow-lg">
               <span className="text-4xl font-black text-emerald-400">
                 03
               </span>
@@ -519,7 +519,7 @@ export default function HomePage() {
             {faqs.map((faq, idx) => (
               <div
                 key={idx}
-                className="bg-[#141B2D] rounded-2xl border border-slate-700/60 overflow-hidden transition-all shadow-sm"
+                className="bg-[#141B2D] rounded-2xl border border-slate-700/60 overflow-hidden transition-all shadow-sm hover:border-slate-600"
               >
                 <button
                   type="button"
@@ -557,7 +557,7 @@ export default function HomePage() {
         <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 space-y-6">
           <h2 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
             <span className="inline-block">さあ、あなたの魅力を</span><br className="hidden sm:inline" />
-            <span className="text-emerald-400 inline-block">
+            <span className="text-emerald-400 inline-block drop-shadow-[0_0_30px_rgba(52,211,153,0.35)]">
               短尺動画に解き放とう。
             </span>
           </h2>
@@ -569,7 +569,7 @@ export default function HomePage() {
           <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/register"
-              className="w-full sm:w-auto px-9 py-4 bg-emerald-600 hover:bg-emerald-500 text-white text-base font-bold rounded-2xl shadow-[0_10px_25px_rgba(5,150,105,0.3)] transition-all active:scale-95 flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-9 py-4 bg-emerald-600 hover:bg-emerald-500 text-white text-base font-bold rounded-2xl shadow-[0_10px_25px_rgba(5,150,105,0.3)] hover:shadow-[0_15px_35px_rgba(5,150,105,0.5)] transition-all active:scale-95 hover:-translate-y-0.5 flex items-center justify-center gap-2"
             >
               <User className="w-5 h-5 flex-shrink-0" />
               <span>今すぐ学生新規登録（完全無料）</span>
@@ -578,7 +578,7 @@ export default function HomePage() {
 
             <Link
               href="/company/login"
-              className="w-full sm:w-auto px-8 py-4 bg-[#141B2D] hover:bg-[#1D263F] text-slate-200 border border-slate-700/80 rounded-2xl text-sm font-bold transition-all flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-8 py-4 bg-[#141B2D] hover:bg-[#1D263F] text-slate-200 border border-slate-700/80 hover:border-emerald-500/50 hover:-translate-y-0.5 rounded-2xl text-sm font-bold transition-all flex items-center justify-center gap-2"
             >
               <Building2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
               <span>採用企業様 ログイン・登録</span>
