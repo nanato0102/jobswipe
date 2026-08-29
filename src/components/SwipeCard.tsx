@@ -314,7 +314,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
             {/* 下部情報オーバーレイ */}
             <div
               onClick={(e) => e.stopPropagation()}
-              className="absolute left-0 right-16 bottom-0 p-5 bg-gradient-to-t from-black/95 via-black/60 to-transparent space-y-1.5 pointer-events-auto"
+              className="absolute left-0 right-16 bottom-0 p-4 sm:p-5 bg-black/75 backdrop-blur-xs rounded-t-2xl space-y-1.5 pointer-events-auto"
             >
               <div className="flex items-center gap-2">
                 <span className="text-base font-bold text-white flex items-center gap-1.5">

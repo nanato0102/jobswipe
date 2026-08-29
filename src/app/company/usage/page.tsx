@@ -74,18 +74,18 @@ export default function CompanyUsagePage() {
           {/* ================= 主要KPIカード 4連 ================= */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {/* 1. 残りオファー枠 */}
-            <div className="bg-gradient-to-br from-blue-900 to-slate-900 text-white rounded-3xl p-5 sm:p-6 shadow-md space-y-2 relative overflow-hidden">
+            <div className="bg-slate-900 border border-slate-800 text-white rounded-3xl p-5 sm:p-6 shadow-md space-y-2 relative overflow-hidden">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold text-blue-200">残りオファー枠</span>
+                <span className="text-xs font-bold text-slate-300">残りオファー枠</span>
                 <Send className="w-4 h-4 text-blue-400" />
               </div>
               <div className="flex items-baseline gap-1.5 pt-1">
                 <span className="text-3xl sm:text-4xl font-black text-white">
                   {stats.remainingQuota}
                 </span>
-                <span className="text-xs text-blue-200 font-bold">/ {stats.monthlyQuota}枠</span>
+                <span className="text-xs text-slate-300 font-bold">/ {stats.monthlyQuota}枠</span>
               </div>
-              <p className="text-[10px] text-blue-300">今月あと {stats.remainingQuota} 名に送信可能</p>
+              <p className="text-[11px] text-slate-400">今月あと {stats.remainingQuota} 名に送信可能</p>
             </div>
 
             {/* 2. 送信済みオファー */}

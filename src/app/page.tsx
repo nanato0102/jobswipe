@@ -440,9 +440,6 @@ export default function HomePage() {
 
         {/* 無限ループティッカー 1段目（左流動） */}
         <div className="relative w-full overflow-hidden py-2 mb-4">
-          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#0F1423] to-transparent z-10" />
-          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#0F1423] to-transparent z-10" />
-
           <div className="animate-marquee gap-3">
             {[...targetIndustriesRow1, ...targetIndustriesRow1, ...targetIndustriesRow1].map((ind, idx) => (
               <span
@@ -457,9 +454,6 @@ export default function HomePage() {
 
         {/* 無限ループティッカー 2段目（右流動） */}
         <div className="relative w-full overflow-hidden py-2">
-          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#0F1423] to-transparent z-10" />
-          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#0F1423] to-transparent z-10" />
-
           <div className="animate-marquee-reverse gap-3">
             {[...targetIndustriesRow2, ...targetIndustriesRow2, ...targetIndustriesRow2].map((ind, idx) => (
               <span
@@ -625,8 +619,7 @@ export default function HomePage() {
       {/* ========================================================================= */}
       {/* 10. ファイナルCTA（スクロール出現） */}
       {/* ========================================================================= */}
-      <section className="py-24 sm:py-32 bg-gradient-to-b from-[#0B0F19] via-[#141B2D] to-[#0B0F19] text-white text-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-emerald-600/10 via-transparent to-transparent blur-3xl pointer-events-none" />
+      <section className="py-24 sm:py-32 bg-[#0B0F19] border-t border-slate-800 text-white text-center relative overflow-hidden">
 
         <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 space-y-6">
           <FadeInView>
