@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import RoleGuard from "@/components/RoleGuard";
 import { appStore, StoredInquiry } from "@/lib/appStore";
+import { useToast } from "@/context/ToastContext";
 import {
   ShieldCheck,
   Users,
@@ -26,6 +27,9 @@ import {
   FileSpreadsheet,
   ArrowUpRight,
   Sparkles,
+  Eye,
+  EyeOff,
+  AlertOctagon,
 } from "lucide-react";
 
 interface AdminVideoItem {
@@ -36,6 +40,7 @@ interface AdminVideoItem {
   videoUrl: string;
   uploadedAt: string;
   reported: boolean;
+  status: "PUBLISHED" | "UNPUBLISHED";
 }
 
 interface AdminUserItem {
@@ -49,6 +54,7 @@ interface AdminUserItem {
 }
 
 export default function AdminConsoleDashboardPage() {
+  const { success, info, error } = useToast();
   const [activeTab, setActiveTab] = useState<"kpi" | "inquiries" | "videos" | "users">("inquiries");
 
   // KPIデータ
@@ -79,6 +85,7 @@ export default function AdminConsoleDashboardPage() {
       videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
       uploadedAt: "2026/08/29 12:00",
       reported: false,
+      status: "PUBLISHED",
     },
     {
       id: "v-2",
@@ -88,6 +95,7 @@ export default function AdminConsoleDashboardPage() {
       videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
       uploadedAt: "2026/08/28 17:30",
       reported: false,
+      status: "PUBLISHED",
     },
     {
       id: "v-3",
@@ -97,6 +105,7 @@ export default function AdminConsoleDashboardPage() {
       videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
       uploadedAt: "2026/08/27 15:45",
       reported: true,
+      status: "REPORTED" as any,
     },
   ]);
 
@@ -530,35 +539,122 @@ export default function AdminConsoleDashboardPage() {
         {/* ================= 3. 動画コンテンツ管理タブ ================= */}
         {activeTab === "videos" && (
           <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-6 space-y-4">
-            <h2 className="text-base font-bold text-slate-900">公開中PR動画の監視・モデレーション</h2>
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-base font-bold text-slate-900">公開中PR動画の監視・モデレーション</h2>
+                <p className="text-xs text-slate-500">不適切な動画や通報動画をワンクリックで非公開化・削除できます</p>
+              </div>
+              <span className="text-xs text-slate-500 font-bold">動画数: {videoList.length}本</span>
+            </div>
+
             <div className="divide-y divide-slate-100">
               {videoList.map((v) => (
-                <div key={v.id} className="py-4 flex items-center justify-between gap-4 text-xs">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
+                <div key={v.id} className="py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs">
+                  <div className="space-y-1.5 min-w-0 flex-1">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <span className="font-bold text-slate-900 text-sm">{v.studentName}</span>
                       <span className="text-slate-500">({v.university})</span>
+
+                      {/* ステータスバッジ */}
+                      {v.status === "UNPUBLISHED" ? (
+                        <span className="px-2 py-0.5 rounded-md bg-slate-200 text-slate-700 font-bold text-[10px] flex items-center gap-1">
+                          <EyeOff className="w-3 h-3" />
+                          非公開中
+                        </span>
+                      ) : (
+                        <span className="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-bold text-[10px] flex items-center gap-1">
+                          <Eye className="w-3 h-3" />
+                          公開中
+                        </span>
+                      )}
+
                       {v.reported && (
-                        <span className="px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 font-bold text-[10px]">
+                        <span className="px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 font-bold text-[10px] flex items-center gap-1">
+                          <AlertOctagon className="w-3 h-3" />
                           通報あり
                         </span>
                       )}
                     </div>
-                    <p className="text-slate-600">{v.title}</p>
-                    <span className="text-[11px] text-slate-400">{v.uploadedAt}</span>
+                    <p className="text-slate-700 font-medium">{v.title}</p>
+                    <span className="text-[11px] text-slate-400">投稿日時: {v.uploadedAt}</span>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  {/* モデレーション操作ボタングループ */}
+                  <div className="flex items-center gap-2 flex-shrink-0 flex-wrap">
+                    {/* 再生プレビュー */}
                     <button
+                      type="button"
                       onClick={() => setPreviewVideo(v.videoUrl)}
-                      className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-lg flex items-center gap-1"
+                      className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
+                      title="動画をプレビュー"
                     >
                       <Play className="w-3.5 h-3.5" />
                       <span>再生</span>
                     </button>
+
+                    {/* ワンクリック非公開化 / 公開復帰 */}
+                    {v.status === "UNPUBLISHED" ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setVideoList(
+                            videoList.map((item) =>
+                              item.id === v.id ? { ...item, status: "PUBLISHED", reported: false } : item
+                            )
+                          );
+                          success("動画を再公開しました", `${v.studentName} さんの動画を公開状態に戻しました。`);
+                        }}
+                        className="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold rounded-lg flex items-center gap-1 border border-emerald-200 transition-colors cursor-pointer"
+                        title="動画を公開に戻す"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                        <span>公開に戻す</span>
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setVideoList(
+                            videoList.map((item) =>
+                              item.id === v.id ? { ...item, status: "UNPUBLISHED" } : item
+                            )
+                          );
+                          info("動画を非公開に設定しました", `${v.studentName} さんの動画の公開を停止しました。`);
+                        }}
+                        className="px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 font-bold rounded-lg flex items-center gap-1 border border-amber-200 transition-colors cursor-pointer"
+                        title="動画を一時非公開にする"
+                      >
+                        <EyeOff className="w-3.5 h-3.5" />
+                        <span>非公開にする</span>
+                      </button>
+                    )}
+
+                    {/* 警告通知 */}
+                    {v.reported && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          info("警告メッセージを送信しました", `${v.studentName} さんに規約遵守の警告を送りました。`);
+                        }}
+                        className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-800 font-bold rounded-lg flex items-center gap-1 border border-rose-200 transition-colors cursor-pointer"
+                        title="投稿者に警告を送信"
+                      >
+                        <AlertTriangle className="w-3.5 h-3.5" />
+                        <span>警告送信</span>
+                      </button>
+                    )}
+
+                    {/* 削除 */}
                     <button
-                      onClick={() => setVideoList(videoList.filter((item) => item.id !== v.id))}
-                      className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-lg flex items-center gap-1 border border-rose-200"
+                      type="button"
+                      onClick={() => {
+                        if (confirm(`${v.studentName} さんの動画「${v.title}」を完全に削除しますか？`)) {
+                          setVideoList(videoList.filter((item) => item.id !== v.id));
+                          error("動画を削除しました", "データベースから完全に削除されました。");
+                        }
+                      }}
+                      className="px-3 py-1.5 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-700 font-bold rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
+                      title="動画を完全に削除"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                       <span>削除</span>

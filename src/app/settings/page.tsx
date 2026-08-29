@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { useToast } from "@/context/ToastContext";
 import RoleGuard from "@/components/RoleGuard";
 import StudentMobileTabs from "@/components/StudentMobileTabs";
 import CompanyMobileTabs from "@/components/CompanyMobileTabs";
@@ -25,6 +26,7 @@ import {
 
 export default function SettingsPage() {
   const { session, logout } = useAuth();
+  const { success, error: toastError } = useToast();
   const router = useRouter();
 
   // パスワード変更フォーム
@@ -71,6 +73,7 @@ export default function SettingsPage() {
     if (errors.length > 0) {
       setPasswordErrors(errors);
       setPasswordSuccess(false);
+      toastError("パスワードの変更に失敗しました", errors[0]);
       return;
     }
 
@@ -80,11 +83,13 @@ export default function SettingsPage() {
     setCurrentPassword("");
     setNewPassword("");
     setConfirmPassword("");
+    success("パスワードを変更しました", "新しいパスワードが安全に保存されました。");
     setTimeout(() => setPasswordSuccess(false), 4000);
   };
 
   const handleSaveNotifications = () => {
     setSettingsSaved(true);
+    success("通知設定を保存しました", "メール配信設定が更新されました。");
     setTimeout(() => setSettingsSaved(false), 3000);
   };
 

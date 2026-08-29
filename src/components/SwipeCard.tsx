@@ -1,8 +1,7 @@
-"use client";
-
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { appStore } from "@/lib/appStore";
+import { useToast } from "@/context/ToastContext";
 import {
   Heart,
   Send,
@@ -21,6 +20,7 @@ import {
   Award,
   Briefcase,
   Building2,
+  RotateCcw,
 } from "lucide-react";
 import type { VideoData } from "@/types";
 
@@ -32,11 +32,17 @@ interface SwipeCardProps {
 
 export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
   const { session } = useAuth();
+  const { success, info } = useToast();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [historyStack, setHistoryStack] = useState<number[]>([]);
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [offerMessage, setOfferMessage] = useState("");
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
+
+  // スワイプフィードバックスタンプ（LIKE / SKIP）
+  const [swipeFeedback, setSwipeFeedback] = useState<"LIKE" | "SKIP" | null>(null);
+  const [playFeedback, setPlayFeedback] = useState<"PLAY" | "PAUSE" | null>(null);
 
   // 動画再生・音声状態
   const [isPlaying, setIsPlaying] = useState(true);
@@ -45,7 +51,9 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const touchStartY = useRef<number | null>(null);
+  const touchStartX = useRef<number | null>(null);
   const touchEndY = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
 
   const currentVideo = videos && videos.length > 0 ? videos[currentIndex % videos.length] : null;
   const isLiked = currentVideo ? !!likedMap[currentVideo.id] : false;
@@ -54,15 +62,36 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
     ? currentVideo.tags.split(",").map((t) => t.trim()).filter(Boolean)
     : [];
 
-  const handleNext = useCallback(() => {
-    setStatusMessage(null);
-    setCurrentIndex((prev) => (prev + 1) % videos.length);
-  }, [videos.length]);
+  const triggerFeedback = (type: "LIKE" | "SKIP") => {
+    setSwipeFeedback(type);
+    setTimeout(() => {
+      setSwipeFeedback(null);
+    }, 600);
+  };
+
+  const handleNext = useCallback(
+    (action?: "LIKE" | "SKIP") => {
+      setStatusMessage(null);
+      if (action) triggerFeedback(action);
+      setHistoryStack((prev) => [...prev, currentIndex]);
+      setCurrentIndex((prev) => (prev + 1) % videos.length);
+    },
+    [currentIndex, videos.length]
+  );
 
   const handlePrev = useCallback(() => {
     setStatusMessage(null);
     setCurrentIndex((prev) => (prev - 1 + videos.length) % videos.length);
   }, [videos.length]);
+
+  // 1つ戻る（Undo / リワインド）
+  const handleUndo = () => {
+    if (historyStack.length === 0) return;
+    const prevIdx = historyStack[historyStack.length - 1];
+    setHistoryStack((prev) => prev.slice(0, prev.length - 1));
+    setCurrentIndex(prevIdx);
+    info("前の動画に戻りました");
+  };
 
   // キーボードショートカット（↑ / ↓ / Space）
   useEffect(() => {
@@ -160,9 +189,11 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
       onLike(currentVideo);
     }
 
+    const studentName = currentVideo.student?.fullName || "学生ユーザー";
+
     appStore.addLike({
       studentId: currentVideo.student?.id || currentVideo.studentId,
-      studentName: currentVideo.student?.fullName || "学生ユーザー",
+      studentName,
       university: currentVideo.student?.university || "大学情報なし",
       graduationYear: currentVideo.student?.graduationYear || 2026,
       bio: currentVideo.student?.bio || "",
@@ -172,8 +203,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
     });
 
     setLikedMap((prev) => ({ ...prev, [currentVideo.id]: true }));
-    setStatusMessage("「気になる」リストに追加しました！");
-    setTimeout(() => setStatusMessage(null), 1800);
+    success("気になる！に追加しました", `${studentName} さんの動画を保存しました。`);
   };
 
   // オファー送信を appStore に保存
@@ -184,22 +214,23 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
     }
 
     const companyName = session?.name || "自社採用担当";
+    const studentName = currentVideo.student?.fullName || "学生ユーザー";
+
     appStore.sendOffer({
       companyId: session?.id || "c1",
       companyName,
       industry: "IT / Webサービス",
       studentId: currentVideo.student?.id || currentVideo.studentId,
-      studentName: currentVideo.student?.fullName || "学生ユーザー",
+      studentName,
       message: offerMessage.trim(),
     });
 
     setIsOfferModalOpen(false);
     setOfferMessage("");
-    setStatusMessage("オファーを送信しました！");
+    success("スカウトオファーを送信しました！", `${studentName} さんに届きました。`);
     setTimeout(() => {
-      setStatusMessage(null);
       handleNext();
-    }, 1200);
+    }, 600);
   };
 
   return (
@@ -226,6 +257,25 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
             onClick={togglePlay}
             className="relative w-full h-full flex items-center justify-center bg-black cursor-pointer overflow-hidden"
           >
+            {/* スワイプフィードバックスタンプ（LIKE / SKIP） */}
+            {swipeFeedback === "LIKE" && (
+              <div className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none animate-scale-up">
+                <div className="px-6 py-3 rounded-2xl bg-rose-500/90 text-white font-black text-2xl tracking-widest border-2 border-white shadow-2xl flex items-center gap-2 rotate-[-12deg]">
+                  <Heart className="w-8 h-8 fill-white" />
+                  <span>LIKE!</span>
+                </div>
+              </div>
+            )}
+
+            {swipeFeedback === "SKIP" && (
+              <div className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none animate-scale-up">
+                <div className="px-6 py-3 rounded-2xl bg-slate-900/90 text-white font-black text-2xl tracking-widest border-2 border-slate-400 shadow-2xl flex items-center gap-2 rotate-[12deg]">
+                  <X className="w-8 h-8 text-slate-300" />
+                  <span>SKIP</span>
+                </div>
+              </div>
+            )}
+
             {currentVideo.videoUrl ? (
               <video
                 ref={videoRef}
@@ -247,67 +297,109 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
             {/* 一時停止アイコン */}
             {!isPlaying && (
               <div className="absolute inset-0 bg-black/40 flex items-center justify-center pointer-events-none">
-                <div className="w-16 h-16 rounded-full bg-slate-900/80 backdrop-blur flex items-center justify-center text-white shadow-xl">
+                <div className="w-16 h-16 rounded-full bg-slate-900/80 backdrop-blur flex items-center justify-center text-white shadow-xl animate-scale-up">
                   <Play className="w-8 h-8 ml-1 fill-white" />
                 </div>
               </div>
             )}
 
-            {/* ヘッダーオーバーレイ（インデックス & ミュートボタン） */}
-            <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-auto">
-              <div className="bg-black/60 backdrop-blur px-3 py-1 rounded-full text-xs font-semibold text-slate-200 border border-white/10">
-                {(currentIndex % videos.length) + 1} / {videos.length}
+            {/* ヘッダーオーバーレイ（ミュート、Undo、カウンター） */}
+            <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-auto z-20">
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={toggleMute}
+                  className="p-2 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-md text-white border border-white/20 transition-all cursor-pointer shadow-lg"
+                  title={isMuted ? "ミュート解除" : "ミュート"}
+                >
+                  {isMuted ? <VolumeX className="w-4 h-4 text-rose-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
+                </button>
+
+                {historyStack.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleUndo();
+                    }}
+                    className="px-2.5 py-1.5 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-md text-white text-[11px] font-bold border border-white/20 transition-all cursor-pointer shadow-lg flex items-center gap-1"
+                    title="1つ前の動画に戻る"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>戻る</span>
+                  </button>
+                )}
               </div>
 
-              <button
-                onClick={toggleMute}
-                className="w-9 h-9 rounded-full bg-black/60 backdrop-blur flex items-center justify-center text-white border border-white/10 hover:bg-black/80 transition-colors"
-                title={isMuted ? "ミュート解除" : "ミュート"}
-              >
-                {isMuted ? <VolumeX className="w-4 h-4 text-slate-300" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
-              </button>
+              <div className="bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-white border border-white/20 shadow-lg">
+                {(currentIndex % videos.length) + 1} / {videos.length}
+              </div>
             </div>
 
             {/* 右サイド縦型アクションバー */}
             <div
               onClick={(e) => e.stopPropagation()}
-              className="absolute right-3 bottom-24 z-20 flex flex-col items-center gap-4 pointer-events-auto"
+              className="absolute right-3 bottom-24 z-20 flex flex-col items-center gap-3.5 pointer-events-auto"
             >
-              {/* 気になるボタン */}
+              {/* 気になる (Like) ボタン */}
               <button
-                onClick={handleLike}
-                className="flex flex-col items-center gap-1 group"
+                type="button"
+                onClick={() => {
+                  handleLike();
+                  triggerFeedback("LIKE");
+                }}
+                className="flex flex-col items-center gap-1 group cursor-pointer"
+                title="気になる！"
               >
                 <div
-                  className={`w-12 h-12 rounded-full flex items-center justify-center transition-transform active:scale-90 shadow-lg ${
-                    isLiked ? "bg-rose-600 text-white" : "bg-black/60 backdrop-blur border border-white/20 text-white hover:bg-black/80"
+                  className={`w-12 h-12 rounded-full flex items-center justify-center transition-all active:scale-90 shadow-lg ${
+                    isLiked
+                      ? "bg-rose-600 text-white"
+                      : "bg-black/60 backdrop-blur border border-white/20 text-white hover:bg-rose-600 hover:text-white"
                   }`}
                 >
                   <Heart className={`w-6 h-6 ${isLiked ? "fill-white" : ""}`} />
                 </div>
-                <span className="text-[11px] font-semibold text-white drop-shadow">気になる</span>
+                <span className="text-[10px] font-bold text-white drop-shadow">Like</span>
               </button>
 
               {/* オファーボタン */}
               <button
+                type="button"
                 onClick={() => setIsOfferModalOpen(true)}
-                className="flex flex-col items-center gap-1 group"
+                className="flex flex-col items-center gap-1 group cursor-pointer"
+                title="オファーを送る"
               >
                 <div className="w-12 h-12 rounded-full bg-emerald-700 hover:bg-emerald-600 active:scale-90 text-white flex items-center justify-center shadow-lg transition-all">
                   <Send className="w-5 h-5 ml-0.5" />
                 </div>
-                <span className="text-[11px] font-semibold text-white drop-shadow">オファー</span>
+                <span className="text-[10px] font-bold text-white drop-shadow">オファー</span>
+              </button>
+
+              {/* スキップボタン */}
+              <button
+                type="button"
+                onClick={() => handleNext("SKIP")}
+                className="flex flex-col items-center gap-1 group cursor-pointer"
+                title="スキップして次へ"
+              >
+                <div className="w-10 h-10 rounded-full bg-black/60 backdrop-blur border border-white/20 hover:bg-black/80 active:scale-90 text-slate-300 hover:text-white flex items-center justify-center shadow-lg transition-all">
+                  <X className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] font-bold text-slate-300 drop-shadow">Skip</span>
               </button>
 
               {/* スマホ用詳細ボタン */}
               <button
+                type="button"
                 onClick={() => setIsProfileModalOpen(true)}
-                className="lg:hidden flex flex-col items-center gap-1 group"
+                className="lg:hidden flex flex-col items-center gap-1 group cursor-pointer"
+                title="プロフィール詳細"
               >
-                <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur border border-white/20 hover:bg-black/80 active:scale-90 text-white flex items-center justify-center shadow-lg transition-all">
-                  <Info className="w-5 h-5 text-slate-200" />
+                <div className="w-10 h-10 rounded-full bg-black/60 backdrop-blur border border-white/20 hover:bg-black/80 active:scale-90 text-white flex items-center justify-center shadow-lg transition-all">
+                  <Info className="w-4 h-4 text-slate-200" />
                 </div>
-                <span className="text-[11px] font-semibold text-white drop-shadow">詳細</span>
+                <span className="text-[10px] font-bold text-white drop-shadow">詳細</span>
               </button>
             </div>
 
@@ -364,8 +456,9 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                 <span>前へ</span>
               </button>
               <button
-                onClick={handleNext}
-                className="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-lg text-xs font-semibold flex items-center gap-1 shadow-sm"
+                type="button"
+                onClick={() => handleNext()}
+                className="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-lg text-xs font-semibold flex items-center gap-1 shadow-sm cursor-pointer"
                 title="次の動画 (↓)"
               >
                 <span>次へ</span>
