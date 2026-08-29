@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useAuthSession } from "@/lib/useAuthSession";
-import { Sparkles, Search, Heart, Building2, User, Film, ShieldCheck, Home, LogIn } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { Sparkles, Search, Heart, Building2, User, Film, ShieldCheck, Home, LogIn, MessageSquare } from "lucide-react";
 
 interface NavItem {
   href: string;
@@ -14,7 +14,7 @@ interface NavItem {
 
 export default function BottomNav() {
   const pathname = usePathname();
-  const { isStudent, isCompany, isAdmin, isLoggedIn } = useAuthSession();
+  const { isStudent, isCompany, isAdmin, isLoggedIn } = useAuth();
 
   // ログイン・登録画面では非表示
   if (pathname === "/login" || pathname === "/register") {
@@ -26,7 +26,6 @@ export default function BottomNav() {
   if (!isLoggedIn) {
     navItems = [
       { href: "/", label: "ホーム", icon: Home, active: pathname === "/" },
-      { href: "/swipe", label: "スワイプ", icon: Sparkles, active: pathname === "/swipe" },
       { href: "/login", label: "ログイン", icon: LogIn, active: pathname === "/login" },
     ];
   } else if (isStudent) {
@@ -34,19 +33,21 @@ export default function BottomNav() {
       { href: "/student/profile", label: "プロフィール", icon: User, active: pathname === "/student/profile" },
       { href: "/student/video", label: "動画投稿", icon: Film, active: pathname === "/student/video" },
       { href: "/student/offers", label: "オファー", icon: Building2, active: pathname === "/student/offers" },
-      { href: "/swipe", label: "スワイプ", icon: Sparkles, active: pathname === "/swipe" },
+      { href: "/company/chat", label: "チャット", icon: MessageSquare, active: pathname.startsWith("/company/chat") },
     ];
   } else if (isCompany) {
     navItems = [
       { href: "/swipe", label: "スワイプ", icon: Sparkles, active: pathname === "/swipe" },
       { href: "/company/search", label: "学生検索", icon: Search, active: pathname.startsWith("/company/search") },
       { href: "/company/likes", label: "気になる", icon: Heart, active: pathname.startsWith("/company/likes") },
-      { href: "/company/chat", label: "チャット", icon: Building2, active: pathname.startsWith("/company/chat") },
+      { href: "/company/chat", label: "チャット", icon: MessageSquare, active: pathname.startsWith("/company/chat") },
     ];
   } else if (isAdmin) {
     navItems = [
       { href: "/admin/dashboard", label: "管理", icon: ShieldCheck, active: pathname.startsWith("/admin") },
       { href: "/swipe", label: "スワイプ", icon: Sparkles, active: pathname === "/swipe" },
+      { href: "/company/search", label: "学生検索", icon: Search, active: pathname.startsWith("/company/search") },
+      { href: "/company/chat", label: "チャット", icon: MessageSquare, active: pathname.startsWith("/company/chat") },
     ];
   }
 

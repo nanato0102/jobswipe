@@ -1,16 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { useAuthSession } from "@/lib/useAuthSession";
+import { useAuth } from "@/context/AuthContext";
 import { LogIn, AlertCircle, User, Building2, ShieldCheck, Sparkles } from "lucide-react";
 import type { UserType } from "@/types";
 
 export default function LoginPage() {
-  const router = useRouter();
-  const { login, demoLogin } = useAuthSession();
+  const { login, demoLogin } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -18,11 +16,11 @@ export default function LoginPage() {
 
   const handleRedirect = (userType: UserType) => {
     if (userType === "STUDENT") {
-      router.push("/student/profile");
+      window.location.href = "/student/profile";
     } else if (userType === "COMPANY") {
-      router.push("/swipe");
+      window.location.href = "/swipe";
     } else {
-      router.push("/admin/dashboard");
+      window.location.href = "/admin/dashboard";
     }
   };
 
@@ -49,7 +47,6 @@ export default function LoginPage() {
         handleRedirect(data.user.userType);
       }
     } catch (err: any) {
-      // フォールバック: メールアドレスから簡易判定
       if (email.includes("admin")) {
         const u = demoLogin("ADMIN");
         handleRedirect(u.userType);
@@ -91,7 +88,7 @@ export default function LoginPage() {
           <p className="text-xs text-slate-500 mt-1">ログインした種別に応じて専用画面が表示されます</p>
         </div>
 
-        {/* ワンクリック・ロール切り替え（デモ用） */}
+        {/* ワンクリック・ロール切り替え（テスト・デモ用） */}
         <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl mb-6 space-y-2">
           <span className="text-[11px] font-bold text-slate-600 flex items-center gap-1">
             <Sparkles className="w-3.5 h-3.5 text-emerald-700" />
@@ -101,7 +98,7 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => handleQuickDemo("STUDENT")}
-              className="py-2 px-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 rounded-xl text-[11px] font-bold flex flex-col items-center gap-1 transition-colors"
+              className="py-2.5 px-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 rounded-xl text-[11px] font-bold flex flex-col items-center gap-1 transition-colors active:scale-95"
             >
               <User className="w-4 h-4 text-emerald-700" />
               <span>学生でログイン</span>
@@ -110,7 +107,7 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => handleQuickDemo("COMPANY")}
-              className="py-2 px-2 bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-200 rounded-xl text-[11px] font-bold flex flex-col items-center gap-1 transition-colors"
+              className="py-2.5 px-2 bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-200 rounded-xl text-[11px] font-bold flex flex-col items-center gap-1 transition-colors active:scale-95"
             >
               <Building2 className="w-4 h-4 text-blue-700" />
               <span>企業でログイン</span>
@@ -119,7 +116,7 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => handleQuickDemo("ADMIN")}
-              className="py-2 px-2 bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-300 rounded-xl text-[11px] font-bold flex flex-col items-center gap-1 transition-colors"
+              className="py-2.5 px-2 bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-300 rounded-xl text-[11px] font-bold flex flex-col items-center gap-1 transition-colors active:scale-95"
             >
               <ShieldCheck className="w-4 h-4 text-slate-700" />
               <span>管理者で試す</span>
@@ -172,7 +169,7 @@ export default function LoginPage() {
         <div className="mt-6 pt-6 border-t border-slate-100 text-center text-xs text-slate-500">
           アカウントをお持ちでないですか？{" "}
           <Link href="/register" className="font-semibold text-emerald-800 hover:underline">
-            新規登録（無料）
+            新規登録
           </Link>
         </div>
       </div>

@@ -4,11 +4,13 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { useAuth } from "@/context/AuthContext";
 import { UserPlus, User, Building2, AlertCircle, CheckCircle } from "lucide-react";
 import type { UserType } from "@/types";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { login } = useAuth();
   const [userType, setUserType] = useState<UserType>("STUDENT");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,14 +36,22 @@ export default function RegisterPage() {
         throw new Error(data.message || "登録に失敗しました");
       }
 
+      const dummyUser = {
+        id: "u-" + Date.now(),
+        email,
+        userType,
+        name,
+      };
+      login(dummyUser);
+
       setSuccess(true);
       setTimeout(() => {
         if (userType === "STUDENT") {
-          router.push("/student/profile");
+          window.location.href = "/student/profile";
         } else {
-          router.push("/swipe");
+          window.location.href = "/swipe";
         }
-      }, 1200);
+      }, 1000);
     } catch (err: any) {
       setError(err.message || "登録処理中にエラーが発生しました");
     } finally {
@@ -51,7 +61,7 @@ export default function RegisterPage() {
 
   return (
     <div className="flex-1 flex items-center justify-center p-4 py-12">
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 max-w-md w-full">
+      <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 sm:p-8 max-w-md w-full">
         <div className="text-center mb-6 flex flex-col items-center">
           <div className="w-16 h-16 rounded-2xl bg-white p-1 shadow-md mb-3 flex items-center justify-center border border-slate-100">
             <Image
@@ -64,20 +74,20 @@ export default function RegisterPage() {
             />
           </div>
           <h1 className="text-xl font-bold text-slate-900">JobSwipe 新規登録</h1>
-          <p className="text-xs text-slate-500 mt-1">学生または企業のアカウントを無料作成</p>
+          <p className="text-xs text-slate-500 mt-1">学生または企業のアカウントを登録</p>
         </div>
 
         {error && (
-          <div className="mb-4 p-3 bg-rose-50 border border-rose-200 rounded-lg text-rose-700 text-xs flex items-center gap-2">
+          <div className="mb-4 p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 text-xs flex items-center gap-2">
             <AlertCircle className="w-4 h-4 flex-shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         {success && (
-          <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-700 text-xs flex items-center gap-2">
+          <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs flex items-center gap-2">
             <CheckCircle className="w-4 h-4 flex-shrink-0" />
-            <span>登録が完了しました！マイページへ移動します...</span>
+            <span>登録が完了しました！専用画面へ移動します...</span>
           </div>
         )}
 
@@ -89,9 +99,9 @@ export default function RegisterPage() {
               <button
                 type="button"
                 onClick={() => setUserType("STUDENT")}
-                className={`py-2.5 px-3 rounded-lg border text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
+                className={`py-2.5 px-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
                   userType === "STUDENT"
-                    ? "border-slate-900 bg-slate-900 text-white"
+                    ? "border-emerald-700 bg-emerald-700 text-white shadow-sm"
                     : "border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100"
                 }`}
               >
@@ -102,9 +112,9 @@ export default function RegisterPage() {
               <button
                 type="button"
                 onClick={() => setUserType("COMPANY")}
-                className={`py-2.5 px-3 rounded-lg border text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
+                className={`py-2.5 px-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
                   userType === "COMPANY"
-                    ? "border-slate-900 bg-slate-900 text-white"
+                    ? "border-slate-900 bg-slate-900 text-white shadow-sm"
                     : "border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100"
                 }`}
               >
@@ -124,7 +134,7 @@ export default function RegisterPage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={userType === "STUDENT" ? "山田 太郎" : "株式会社サンプル"}
-              className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
+              className="w-full text-sm border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
             />
           </div>
 
@@ -136,7 +146,7 @@ export default function RegisterPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="user@example.com"
-              className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
+              className="w-full text-sm border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
             />
           </div>
 
@@ -149,22 +159,22 @@ export default function RegisterPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="6文字以上の英数字"
-              className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
+              className="w-full text-sm border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50"
+            className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50 shadow-sm"
           >
-            {loading ? "登録中..." : "利用規約に同意して登録"}
+            {loading ? "登録中..." : "新規登録する"}
           </button>
         </form>
 
         <div className="mt-6 pt-6 border-t border-slate-100 text-center text-xs text-slate-500">
           既にアカウントをお持ちですか？{" "}
-          <Link href="/login" className="font-semibold text-slate-900 hover:underline">
+          <Link href="/login" className="font-semibold text-emerald-800 hover:underline">
             ログイン
           </Link>
         </div>
