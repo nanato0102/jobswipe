@@ -138,6 +138,39 @@ body {
   animation: marqueeReverse 35s linear infinite;
 }
 
+/* ========================================================================= */
+/* モバイル・スワイプ時の滑らかなスライドトランジション */
+/* ========================================================================= */
+@keyframes slideInFromRight {
+  0% {
+    opacity: 0.6;
+    transform: translateX(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    opacity: 0.6;
+    transform: translateX(-40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-right {
+  animation: slideInFromRight 0.28s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.animate-slide-in-left {
+  animation: slideInFromLeft 0.28s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
 .animate-marquee:hover,
 .animate-marquee-reverse:hover {
   animation-play-state: paused;
