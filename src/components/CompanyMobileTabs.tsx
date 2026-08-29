@@ -148,11 +148,6 @@ export default function CompanyMobileTabs({ children }: CompanyMobileTabsProps) 
                     : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
                 }`}
               >
-                {/* アクティブ時の上部インジケータードット */}
-                {isActive && (
-                  <span className="absolute top-1 w-1.5 h-1.5 rounded-full bg-blue-700 shadow-xs animate-pulse" />
-                )}
-
                 <div className="relative mt-0.5">
                   <Icon
                     className={`w-4 h-4 transition-transform duration-200 ${
