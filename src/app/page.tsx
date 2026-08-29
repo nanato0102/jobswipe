@@ -553,7 +553,7 @@ export default function HomePage() {
                 <span className="text-4xl font-black text-emerald-400">
                   02
                 </span>
-                <h3 className="text-base font-bold text-white">企業からスカウトが届く</h3>
+                <h3 className="text-base font-bold text-white">企業からオファーが届く</h3>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
                   あなたの動画を見た企業の採用担当者からオファーが届きます。メッセージを確認して承諾。
                 </p>

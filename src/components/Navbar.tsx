@@ -84,18 +84,6 @@ export default function Navbar() {
             {isStudent && (
               <>
                 <Link
-                  href="/student/video"
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors ${
-                    pathname === "/student/video"
-                      ? "bg-emerald-50 text-emerald-800 font-bold"
-                      : "hover:bg-slate-100 hover:text-slate-900"
-                  }`}
-                >
-                  <Film className="h-4 w-4 text-emerald-700" />
-                  <span>動画を投稿・管理</span>
-                </Link>
-
-                <Link
                   href="/student/profile"
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors ${
                     pathname === "/student/profile"
@@ -108,6 +96,18 @@ export default function Navbar() {
                 </Link>
 
                 <Link
+                  href="/student/video"
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors ${
+                    pathname === "/student/video"
+                      ? "bg-emerald-50 text-emerald-800 font-bold"
+                      : "hover:bg-slate-100 hover:text-slate-900"
+                  }`}
+                >
+                  <Film className="h-4 w-4 text-emerald-700" />
+                  <span>動画投稿</span>
+                </Link>
+
+                <Link
                   href="/student/offers"
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors ${
                     pathname.startsWith("/student/offers")
@@ -116,7 +116,7 @@ export default function Navbar() {
                   }`}
                 >
                   <Sparkles className="h-4 w-4 text-emerald-700" />
-                  <span>届いたオファー</span>
+                  <span>オファー</span>
                 </Link>
 
                 <Link
@@ -193,7 +193,7 @@ export default function Navbar() {
                   }`}
                 >
                   <Building2 className="h-4 w-4" />
-                  <span>企業情報編集</span>
+                  <span>企業情報</span>
                 </Link>
               </>
             )}
@@ -218,7 +218,7 @@ export default function Navbar() {
                   className="flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors hover:bg-slate-100 hover:text-slate-900"
                 >
                   <Sparkles className="h-4 w-4 text-emerald-600" />
-                  <span>スワイプ閲覧</span>
+                  <span>動画スワイプ</span>
                 </Link>
               </>
             )}
@@ -270,7 +270,7 @@ export default function Navbar() {
                     <p className="text-[11px] text-slate-500 truncate">{session?.email}</p>
                   </div>
 
-                  {/* マイページ・主要リンク（スマホ用にも便利） */}
+                  {/* マイページ・主要リンク */}
                   {isStudent && (
                     <>
                       <Link
@@ -279,7 +279,7 @@ export default function Navbar() {
                         className="flex items-center gap-2.5 px-3.5 py-2.5 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-900 rounded-xl transition-colors font-medium"
                       >
                         <User className="w-4 h-4 text-emerald-700" />
-                        <span>プロフィール設定</span>
+                        <span>プロフィール</span>
                       </Link>
                       <Link
                         href="/student/video"
@@ -287,7 +287,7 @@ export default function Navbar() {
                         className="flex items-center gap-2.5 px-3.5 py-2.5 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-900 rounded-xl transition-colors font-medium"
                       >
                         <Film className="w-4 h-4 text-emerald-700" />
-                        <span>動画を投稿・管理</span>
+                        <span>動画投稿</span>
                       </Link>
                       <Link
                         href="/student/offers"
@@ -295,7 +295,7 @@ export default function Navbar() {
                         className="flex items-center gap-2.5 px-3.5 py-2.5 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-900 rounded-xl transition-colors font-medium"
                       >
                         <Sparkles className="w-4 h-4 text-emerald-700" />
-                        <span>届いたオファー</span>
+                        <span>オファー</span>
                       </Link>
                       <Link
                         href="/company/chat"
@@ -303,7 +303,7 @@ export default function Navbar() {
                         className="flex items-center gap-2.5 px-3.5 py-2.5 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-900 rounded-xl transition-colors font-medium"
                       >
                         <MessageSquare className="w-4 h-4 text-emerald-700" />
-                        <span>チャット面談</span>
+                        <span>チャット</span>
                       </Link>
                     </>
                   )}
@@ -335,12 +335,20 @@ export default function Navbar() {
                         <span>気になる一覧</span>
                       </Link>
                       <Link
+                        href="/company/chat"
+                        onClick={() => setMenuOpen(false)}
+                        className="flex items-center gap-2.5 px-3.5 py-2.5 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-900 rounded-xl transition-colors font-medium"
+                      >
+                        <MessageSquare className="w-4 h-4 text-blue-700" />
+                        <span>チャット</span>
+                      </Link>
+                      <Link
                         href="/company/profile"
                         onClick={() => setMenuOpen(false)}
                         className="flex items-center gap-2.5 px-3.5 py-2.5 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-900 rounded-xl transition-colors font-medium"
                       >
                         <Building2 className="w-4 h-4 text-blue-700" />
-                        <span>企業情報編集</span>
+                        <span>企業情報</span>
                       </Link>
                     </>
                   )}

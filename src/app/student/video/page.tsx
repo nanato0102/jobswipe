@@ -136,7 +136,7 @@ export default function StudentVideoUploadPage() {
             </div>
             <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
               <Film className="h-5 w-5 text-emerald-700" />
-              <span>PR動画の投稿・更新</span>
+              <span>動画投稿</span>
             </h1>
             <p className="text-xs text-slate-500 mt-1">
               スマートフォンで撮影した60秒以内の縦型自己PR動画を投稿してください

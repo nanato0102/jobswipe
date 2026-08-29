@@ -246,7 +246,7 @@ export default function StudentProfilePage() {
             <div>
               <h1 className="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2">
                 <User className="w-6 h-6 text-emerald-700" />
-                <span>プロフィール設定</span>
+                <span>プロフィール</span>
               </h1>
               <p className="text-xs text-slate-500 mt-1">
                 長文のESや自己PRは一切不要です。基本情報と人柄タグを設定してください。
@@ -259,7 +259,7 @@ export default function StudentProfilePage() {
                 className="flex items-center gap-1.5 px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold rounded-xl border border-emerald-200 transition-colors"
               >
                 <Video className="w-4 h-4 text-emerald-700" />
-                <span>動画を管理する</span>
+                <span>動画投稿へ</span>
               </Link>
 
               <button
@@ -277,7 +277,7 @@ export default function StudentProfilePage() {
           {saved && (
             <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 text-xs font-bold flex items-center gap-2 animate-fade-in shadow-sm">
               <CheckCircle className="w-4 h-4 flex-shrink-0 text-emerald-700" />
-              <span>プロフィールを保存しました！動画を投稿してスカウトを待ちましょう。</span>
+              <span>プロフィールを保存しました！動画を投稿してオファーを待ちましょう。</span>
             </div>
           )}
 
@@ -290,7 +290,7 @@ export default function StudentProfilePage() {
               <div>
                 <p className="text-xs font-bold text-white">あなたの最大の武器は「短尺動画」です</p>
                 <p className="text-[11px] text-slate-300">
-                  スマホで自撮りした動画を1本置くだけで、企業から直接スカウトが届きます。
+                  スマホで自撮りした動画を1本置くだけで、企業から直接オファーが届きます。
                 </p>
               </div>
             </div>

@@ -72,10 +72,10 @@ export default function CompanyProfilePage() {
             <div>
               <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-blue-50 text-blue-800 text-[11px] font-bold border border-blue-200 mb-1.5">
                 <Building2 className="w-3.5 h-3.5" />
-                <span>企業情報管理</span>
+                <span>企業情報</span>
               </div>
               <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                <span>企業プロフィール編集</span>
+                <span>企業情報設定</span>
               </h1>
               <p className="text-xs text-slate-500 mt-1">
                 学生へオファーを送る際や、チャット画面で公開される自社の企業情報を登録してください

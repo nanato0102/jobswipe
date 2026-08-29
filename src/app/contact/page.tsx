@@ -63,9 +63,9 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen bg-[#0B0F19] text-white selection:bg-emerald-500 selection:text-white py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
+    <div className="flex-1 flex flex-col min-h-screen bg-[#0B0F19] text-white selection:bg-emerald-500 selection:text-white py-12 sm:py-20 px-4 sm:px-6 lg:px-8 overflow-x-hidden relative w-full">
       {/* 背景の環境光 */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-emerald-600/10 blur-[130px] pointer-events-none rounded-full" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[600px] h-[400px] bg-emerald-600/10 blur-[130px] pointer-events-none rounded-full" />
 
       <div className="relative mx-auto max-w-4xl w-full space-y-10">
         {/* ヘッダー */}

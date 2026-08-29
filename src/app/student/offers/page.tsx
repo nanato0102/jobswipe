@@ -26,10 +26,10 @@ export default function StudentOffersPage() {
         <div className="mb-6">
           <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
             <Building2 className="w-5 h-5 text-emerald-700" />
-            <span>届いたオファー一覧</span>
+            <span>オファー一覧</span>
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            企業からあなたの自己PR動画を見て届いたスカウトオファーです（学生専用）
+            企業からあなたの自己PR動画を見て届いたオファーです（学生専用）
           </p>
         </div>
 
@@ -37,7 +37,7 @@ export default function StudentOffersPage() {
           <div className="bg-white p-12 rounded-3xl border border-slate-200 text-center text-slate-500 text-sm shadow-sm space-y-2">
             <Sparkles className="w-10 h-10 text-slate-400 mx-auto" />
             <p className="font-bold text-slate-700">まだオファーは届いていません</p>
-            <p className="text-xs text-slate-400">自己PR動画を投稿すると、企業からスカウトが届きます。</p>
+            <p className="text-xs text-slate-400">自己PR動画を投稿すると、企業からオファーが届きます。</p>
           </div>
         ) : (
           <div className="space-y-4">

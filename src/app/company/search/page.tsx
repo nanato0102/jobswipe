@@ -208,7 +208,7 @@ export default function CompanySearchPage() {
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-blue-50 text-blue-800 text-[11px] font-bold border border-blue-200 mb-1.5">
               <Search className="w-3.5 h-3.5" />
-              <span>学生検索 ＆ スカウト</span>
+              <span>学生検索</span>
             </div>
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900">学生絞り込み検索</h1>
             <p className="text-xs text-slate-500 mt-1">
@@ -452,8 +452,8 @@ export default function CompanySearchPage() {
             <div className="bg-white rounded-3xl border border-slate-200 max-w-md w-full p-6 shadow-2xl space-y-4 animate-fade-in">
               <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div className="flex items-center gap-2">
-                  <Send className="w-4 h-4 text-blue-700" />
-                  <span className="font-bold text-sm text-slate-900">スカウトオファーを送信</span>
+                  <Send className="w-4 h-4 text-emerald-700" />
+                  <span className="font-bold text-sm text-slate-900">オファーを送信</span>
                 </div>
                 <button
                   onClick={() => setOfferTarget(null)}
@@ -480,7 +480,7 @@ export default function CompanySearchPage() {
 
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1">
-                      スカウトメッセージ <span className="text-rose-500">*</span>
+                      オファーメッセージ <span className="text-rose-500">*</span>
                     </label>
                     <textarea
                       rows={5}

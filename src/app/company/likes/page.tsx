@@ -121,7 +121,7 @@ export default function CompanyLikesPage() {
                     className="w-full py-2.5 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 transition-colors shadow-sm"
                   >
                     <Send className="w-3.5 h-3.5" />
-                    <span>スカウトオファーを送る</span>
+                    <span>オファーを送る</span>
                   </button>
                 </div>
               </div>
@@ -152,7 +152,7 @@ export default function CompanyLikesPage() {
               ) : (
                 <>
                   <p className="text-xs text-slate-600 mb-3">
-                    スカウト理由や、面談・選考のご案内メッセージを入力してください。
+                    オファー理由や、面談のご案内メッセージを入力してください。
                   </p>
 
                   <textarea

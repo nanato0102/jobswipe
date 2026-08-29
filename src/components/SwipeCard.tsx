@@ -195,7 +195,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
 
     setIsOfferModalOpen(false);
     setOfferMessage("");
-    setStatusMessage("スカウトオファーを送信しました！");
+    setStatusMessage("オファーを送信しました！");
     setTimeout(() => {
       setStatusMessage(null);
       handleNext();
@@ -458,7 +458,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
               className="w-full py-3 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold rounded-2xl flex items-center justify-center gap-2 transition-colors shadow-md"
             >
               <Send className="w-4 h-4" />
-              <span>この学生にスカウトオファーを送る</span>
+              <span>この学生にオファーを送る</span>
             </button>
           </div>
         </div>

@@ -102,7 +102,7 @@ function ChatContent() {
               <div className="flex items-center justify-between">
                 <h1 className="text-base font-black text-slate-900 flex items-center gap-2">
                   <MessageSquare className="w-5 h-5 text-emerald-700" />
-                  <span>メッセージ</span>
+                  <span>チャット</span>
                 </h1>
                 <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
                   {threads.length}件のマッチング
