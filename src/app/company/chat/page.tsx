@@ -314,47 +314,96 @@ function ChatContent() {
                       <span className="text-[10px] sm:text-[11px] font-bold text-slate-400 whitespace-nowrap flex-shrink-0">
                         定型文:
                       </span>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          insertTemplate(
-                            isStudent
-                              ? "オファーいただき誠にありがとうございます！ぜひ一度オンラインでお話しさせていただけますと幸いです。平日の17時以降であれば調整可能です。"
-                              : "動画を拝見し、明るく前向きな人柄に大変惹かれました！ぜひ一度15分〜30分程度、オンラインでカジュアルにお話ししませんか？ご都合のよろしい日程をいくつか教えていただけますと幸いです。"
-                          )
-                        }
-                        className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium whitespace-nowrap transition-colors text-[11px] sm:text-xs flex-shrink-0"
-                      >
-                        ご挨拶・承諾
-                      </button>
 
-                      <button
-                        type="button"
-                        onClick={() =>
-                          insertTemplate(
-                            isStudent
-                              ? "ご案内ありがとうございます！面談の日程について、以下で調整可能でしょうか？\n\n・第1希望: 〇月〇日(〇) 14:00〜\n・第2希望: 〇月〇日(〇) 16:00〜\n・第3希望: 〇月〇日(〇) 18:00〜\n\nご確認のほどよろしくお願いいたします。"
-                              : "以下の日程枠でオンラインカジュアル面談を実施可能です。ご都合の良い日時をお選びいただけますでしょうか？\n\n1. 〇月〇日(火) 14:00〜\n2. 〇月〇日(木) 16:00〜\n3. 〇月〇日(金) 11:00〜\n\nご返信お待ちしております。"
-                          )
-                        }
-                        className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-md font-bold whitespace-nowrap transition-colors text-[11px] sm:text-xs flex-shrink-0"
-                      >
-                        📅 日程候補の提示（編集可能）
-                      </button>
+                      {isStudent ? (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              insertTemplate(
+                                "オファーいただき誠にありがとうございます！自己PR動画を見ていただけて大変光栄です。ぜひ一度オンラインでお話しさせていただけますと幸いです。"
+                              )
+                            }
+                            className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium whitespace-nowrap transition-colors text-[11px] sm:text-xs flex-shrink-0"
+                          >
+                            オファー承諾・挨拶
+                          </button>
 
-                      <button
-                        type="button"
-                        onClick={() =>
-                          insertTemplate(
-                            isStudent
-                              ? "本日は貴重なお時間をいただき誠にありがとうございました！貴社の雰囲気がよくわかり大変魅力的に感じました。今後ともよろしくお願いいたします。"
-                              : "本日はカジュアル面談にご参加いただきありがとうございました！ぜひ次の選考ステップに進んでいただきたく存じます。"
-                          )
-                        }
-                        className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium whitespace-nowrap transition-colors text-[11px] sm:text-xs flex-shrink-0"
-                      >
-                        面談のお礼
-                      </button>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              insertTemplate(
+                                "ご案内ありがとうございます！面談の日程について、以下の候補日はいかがでしょうか？\n\n・第1希望: \n・第2希望: \n・第3希望: \n\n※所要時間は30分程度を想定しております。ご確認のほどよろしくお願いいたします。"
+                              )
+                            }
+                            className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium whitespace-nowrap transition-colors text-[11px] sm:text-xs flex-shrink-0"
+                          >
+                            日程候補の提示
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() =>
+                              insertTemplate(
+                                "日程のご調整ありがとうございます！それでは以下の日時にてよろしくお願いいたします。\n\n【日時】\n\n当日お話しできることを楽しみにしております。"
+                              )
+                            }
+                            className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium whitespace-nowrap transition-colors text-[11px] sm:text-xs flex-shrink-0"
+                          >
+                            日程の確定・お礼
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() =>
+                              insertTemplate(
+                                "本日は貴重なお時間をいただき誠にありがとうございました！事業内容やチームの雰囲気がよく理解でき、大変魅力に感じました。ぜひ次の選考ステップにも挑戦させていただきたく存じます。"
+                              )
+                            }
+                            className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium whitespace-nowrap transition-colors text-[11px] sm:text-xs flex-shrink-0"
+                          >
+                            面談後のお礼
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              insertTemplate(
+                                "オファーをご快諾いただきありがとうございます！動画を拝見し、ぜひ一度カジュアルにお話ししたいと思いご連絡いたしました。\n\n以下の日程枠で15〜30分程度のオンライン面談を実施可能です。ご都合の良い日時をお知らせいただけますでしょうか？\n\n1. \n2. \n3. \n\n上記以外でも調整可能ですのでお気軽にご相談ください。"
+                              )
+                            }
+                            className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium whitespace-nowrap transition-colors text-[11px] sm:text-xs flex-shrink-0"
+                          >
+                            承諾感謝・日程提示
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() =>
+                              insertTemplate(
+                                "日程のご連絡ありがとうございます！それでは以下の日程・URLにて実施させていただきます。\n\n【日時】\n【面談URL】\n【所要時間】約30分\n\n私服でリラックスしてご参加ください。当日お話しできることを楽しみにしております！"
+                              )
+                            }
+                            className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium whitespace-nowrap transition-colors text-[11px] sm:text-xs flex-shrink-0"
+                          >
+                            面談URLのご案内
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() =>
+                              insertTemplate(
+                                "本日はカジュアル面談にご参加いただき誠にありがとうございました！熱意やお人柄がよく伝わる大変有意義な時間となりました。\n\nぜひ次の選考ステップに進んでいただきたく存じます。詳細なご案内を改めてお送りいたします。"
+                              )
+                            }
+                            className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium whitespace-nowrap transition-colors text-[11px] sm:text-xs flex-shrink-0"
+                          >
+                            面談後のお礼・次回案内
+                          </button>
+                        </>
+                      )}
                     </div>
 
                     {/* 複数行テキストエリア入力フォーム */}
