@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import SwipeCard from "@/components/SwipeCard";
 import RoleGuard from "@/components/RoleGuard";
+import CompanyMobileTabs from "@/components/CompanyMobileTabs";
 import type { VideoData } from "@/types";
 
 export default function SwipePage() {
@@ -55,23 +56,25 @@ export default function SwipePage() {
 
   return (
     <RoleGuard allowedRoles={["COMPANY", "ADMIN"]}>
-      <div className="flex-1 flex flex-col justify-center items-center p-3 sm:p-6 w-full max-w-4xl mx-auto">
-        <div className="text-center mb-3">
-          <h1 className="text-lg font-bold text-slate-900">学生PR動画スワイプ</h1>
-          <p className="text-xs text-slate-500">
-            上下スワイプで学生の自己PR動画を閲覧し、気になるリストへの追加やオファーを送信できます（企業専用）
-          </p>
-        </div>
-
-        {loading ? (
-          <div className="flex flex-col items-center justify-center p-12 bg-white rounded-3xl border border-slate-200 shadow-sm">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-700 mb-3"></div>
-            <p className="text-xs text-slate-500">学生のPR動画を読み込み中...</p>
+      <CompanyMobileTabs>
+        <div className="flex-1 flex flex-col justify-center items-center p-3 sm:p-6 w-full max-w-4xl mx-auto">
+          <div className="text-center mb-3">
+            <h1 className="text-lg font-bold text-slate-900">学生自己PR動画スワイプ</h1>
+            <p className="text-xs text-slate-500">
+              上下スワイプで学生の自己PR動画を閲覧し、気になるへの追加やオファーを送信できます（企業専用）
+            </p>
           </div>
-        ) : (
-          <SwipeCard videos={videos} onLike={handleLike} onOffer={handleOffer} />
-        )}
-      </div>
+
+          {loading ? (
+            <div className="flex flex-col items-center justify-center p-12 bg-white rounded-3xl border border-slate-200 shadow-sm">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-700 mb-3"></div>
+              <p className="text-xs text-slate-500">学生の自己PR動画を読み込み中...</p>
+            </div>
+          ) : (
+            <SwipeCard videos={videos} onLike={handleLike} onOffer={handleOffer} />
+          )}
+        </div>
+      </CompanyMobileTabs>
     </RoleGuard>
   );
 }

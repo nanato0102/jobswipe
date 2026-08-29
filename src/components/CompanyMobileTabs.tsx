@@ -22,7 +22,7 @@ interface CompanyMobileTabsProps {
 export default function CompanyMobileTabs({ children }: CompanyMobileTabsProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const { isCompany } = useAuth();
+  const { isCompany, isStudent, isAdmin } = useAuth();
 
   const [slideDirection, setSlideDirection] = useState<"right" | "left" | null>(null);
   const [touchOffset, setTouchOffset] = useState<number>(0);
@@ -42,7 +42,9 @@ export default function CompanyMobileTabs({ children }: CompanyMobileTabsProps) 
     return () => clearTimeout(timer);
   }, [pathname]);
 
-  if (!isCompany) {
+  // 学生モードでなく、企業ルートまたは/swipeの場合は確実に企業ボトムタブを表示
+  const isCompanyRoute = pathname.startsWith("/company") || pathname === "/swipe";
+  if (isStudent || !isCompanyRoute) {
     return <>{children}</>;
   }
 
