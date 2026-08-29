@@ -25,6 +25,7 @@ export async function POST(req: Request) {
 
     const email = sanitizeString(result.data.email).toLowerCase();
     const { password, userType, name } = result.data;
+    const sanitizedName = sanitizeString(name);
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -46,7 +47,7 @@ export async function POST(req: Request) {
             userType === "STUDENT"
               ? {
                   create: {
-                    fullName: sanitizeString(name),
+                    fullName: sanitizedName,
                   },
                 }
               : undefined,
@@ -54,7 +55,7 @@ export async function POST(req: Request) {
             userType === "COMPANY"
               ? {
                   create: {
-                    companyName: sanitizeString(name),
+                    companyName: sanitizedName,
                   },
                 }
               : undefined,
@@ -63,14 +64,24 @@ export async function POST(req: Request) {
 
       return NextResponse.json({
         success: true,
-        user: { id: user.id, email: user.email, userType: user.userType },
+        user: {
+          id: user.id,
+          email: user.email,
+          userType: user.userType,
+          name: sanitizedName,
+        },
       });
     } catch (dbError) {
       console.warn("DB operation warning:", dbError);
       return NextResponse.json({
         success: true,
         demoMode: true,
-        user: { id: "demo-id", email, userType },
+        user: {
+          id: "user-" + Date.now(),
+          email,
+          userType,
+          name: sanitizedName,
+        },
       });
     }
   } catch (error) {

@@ -15,6 +15,10 @@ export async function POST(req: Request) {
     try {
       const user = await prisma.user.findUnique({
         where: { email: cleanEmail },
+        include: {
+          studentProfile: true,
+          companyProfile: true,
+        },
       });
 
       if (!user) {
@@ -26,16 +30,31 @@ export async function POST(req: Request) {
         return NextResponse.json({ message: "メールアドレスまたはパスワードが正しくありません" }, { status: 401 });
       }
 
+      const name =
+        user.studentProfile?.fullName ||
+        user.companyProfile?.companyName ||
+        (user.userType === "STUDENT" ? "学生ユーザー" : user.userType === "COMPANY" ? "企業担当者" : "管理者");
+
       return NextResponse.json({
         success: true,
-        user: { id: user.id, email: user.email, userType: user.userType },
+        user: {
+          id: user.id,
+          email: user.email,
+          userType: user.userType,
+          name,
+        },
       });
     } catch (dbError) {
       console.warn("DB operation warning:", dbError);
       return NextResponse.json({
         success: true,
         demoMode: true,
-        user: { id: "demo-user", email: cleanEmail, userType: "COMPANY" },
+        user: {
+          id: "user-" + Date.now(),
+          email: cleanEmail,
+          userType: cleanEmail.includes("company") ? "COMPANY" : "STUDENT",
+          name: cleanEmail.includes("company") ? "企業担当者" : "学生ユーザー",
+        },
       });
     }
   } catch (error) {
