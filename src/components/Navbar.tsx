@@ -55,7 +55,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/95 backdrop-blur">
+    <header className="fixed top-0 left-0 right-0 z-50 w-full border-b border-slate-200/90 bg-white/95 backdrop-blur-md shadow-2xs">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 h-16 relative">
         {/* ================= 左側: 公式ロゴ（スマホ・PC共通でホームへ） ================= */}
         <Link
