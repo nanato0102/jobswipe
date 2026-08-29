@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, KeyboardEvent } from "react";
 import RoleGuard from "@/components/RoleGuard";
 import { useAuth } from "@/context/AuthContext";
 import {
@@ -15,8 +15,126 @@ import {
   MapPin,
   Globe,
   Tag,
-  Calendar,
+  Plus,
+  X,
 } from "lucide-react";
+
+// 47都道府県マスターデータ
+const PREFECTURE_GROUPS = [
+  {
+    region: "特別",
+    prefs: ["リモートワーク可", "こだわらない / 全国"],
+  },
+  {
+    region: "関東",
+    prefs: ["東京都", "神奈川県", "埼玉県", "千葉県", "茨城県", "栃木県", "群馬県"],
+  },
+  {
+    region: "関西",
+    prefs: ["大阪府", "京都府", "兵庫県", "奈良県", "滋賀県", "和歌山県"],
+  },
+  {
+    region: "東海",
+    prefs: ["愛知県", "静岡県", "岐阜県", "三重県"],
+  },
+  {
+    region: "北海道・東北",
+    prefs: ["北海道", "青森県", "岩手県", "宮城県", "秋田県", "山形県", "福島県"],
+  },
+  {
+    region: "甲信越・北陸",
+    prefs: ["新潟県", "富山県", "石川県", "福井県", "山梨県", "長野県"],
+  },
+  {
+    region: "中国・四国",
+    prefs: ["鳥取県", "島根県", "岡山県", "広島県", "山口県", "徳島県", "香川県", "愛媛県", "高知県"],
+  },
+  {
+    region: "九州・沖縄",
+    prefs: ["福岡県", "佐賀県", "長崎県", "熊本県", "大分県", "宮崎県", "鹿児島県", "沖縄県"],
+  },
+];
+
+// タグ入力ボックス用サブコンポーネント
+interface TagInputProps {
+  label: string;
+  placeholder: string;
+  tags: string[];
+  setTags: (tags: string[]) => void;
+  helperText?: string;
+}
+
+function TagInput({ label, placeholder, tags, setTags, helperText }: TagInputProps) {
+  const [inputVal, setInputVal] = useState("");
+
+  const handleAdd = () => {
+    const trimmed = inputVal.trim();
+    if (trimmed && !tags.includes(trimmed)) {
+      setTags([...tags, trimmed]);
+      setInputVal("");
+    }
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleAdd();
+    }
+  };
+
+  const handleRemove = (indexToRemove: number) => {
+    setTags(tags.filter((_, idx) => idx !== indexToRemove));
+  };
+
+  return (
+    <div>
+      <label className="block text-xs font-bold text-slate-700 mb-1">{label}</label>
+      
+      {/* 独立した箱（バッジ）一覧 */}
+      <div className="flex flex-wrap gap-1.5 mb-2 min-h-[28px]">
+        {tags.map((tag, idx) => (
+          <span
+            key={idx}
+            className="inline-flex items-center gap-1 px-3 py-1 bg-emerald-50 text-emerald-900 border border-emerald-200 rounded-full text-xs font-semibold shadow-sm animate-fade-in"
+          >
+            <span>{tag}</span>
+            <button
+              type="button"
+              onClick={() => handleRemove(idx)}
+              className="text-emerald-600 hover:text-emerald-950 p-0.5 rounded-full hover:bg-emerald-200 transition-colors"
+            >
+              <X className="w-3 h-3" />
+            </button>
+          </span>
+        ))}
+        {tags.length === 0 && (
+          <span className="text-xs text-slate-400 py-1">未登録です。キーワードを入力してEnterを押してください</span>
+        )}
+      </div>
+
+      {/* 入力フィールド */}
+      <div className="flex gap-2">
+        <input
+          type="text"
+          value={inputVal}
+          onChange={(e) => setInputVal(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder={placeholder}
+          className="flex-1 text-sm border border-slate-300 rounded-2xl px-4 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+        />
+        <button
+          type="button"
+          onClick={handleAdd}
+          className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-2xl transition-colors border border-slate-300 flex items-center gap-1 flex-shrink-0"
+        >
+          <Plus className="w-3.5 h-3.5" />
+          <span>追加</span>
+        </button>
+      </div>
+      {helperText && <p className="text-[11px] text-slate-500 mt-1">{helperText}</p>}
+    </div>
+  );
+}
 
 export default function StudentProfilePage() {
   const { session, login } = useAuth();
@@ -42,15 +160,15 @@ export default function StudentProfilePage() {
   const [experience, setExperience] = useState(
     "大学4年間、体育会サッカー部にて活動。主将としてチーム目標の設定とモチベーション管理を担当しました。また、スターバックスでのアルバイトリーダーとして新人教育や売上改善施策も主導しました。"
   );
-  const [tags, setTags] = useState("リーダーシップ, 粘り強さ, 組織マネジメント, 行動力, 体育会");
+  const [tags, setTags] = useState<string[]>(["リーダーシップ", "粘り強さ", "組織マネジメント", "行動力", "体育会"]);
 
   // 希望条件・スキル・資格
-  const [desiredIndustry, setDesiredIndustry] = useState("IT / Webサービス, コンサルティング, 総合商社");
-  const [desiredJob, setDesiredJob] = useState("新規事業企画, 営業・事業開発, プロダクトマネージャー");
-  const [desiredLocation, setDesiredLocation] = useState("東京都内, リモートワーク可");
-  const [languageSkills, setLanguageSkills] = useState("TOEIC 850点 / 英語ビジネス日常会話");
-  const [certifications, setCertifications] = useState("普通自動車第一種運転免許, 基本情報技術者試験");
-  const [techSkills, setTechSkills] = useState("Excel, Notion, Python(基礎), SQL");
+  const [industries, setIndustries] = useState<string[]>(["IT / Webサービス", "コンサルティング", "総合商社"]);
+  const [jobTypes, setJobTypes] = useState<string[]>(["新規事業企画", "営業・事業開発", "プロダクトマネージャー"]);
+  const [selectedLocations, setSelectedLocations] = useState<string[]>(["東京都", "神奈川県", "リモートワーク可"]);
+  const [englishLevel, setEnglishLevel] = useState<string>("日常会話レベル");
+  const [certifications, setCertifications] = useState<string[]>(["普通自動車第一種運転免許", "基本情報技術者試験"]);
+  const [skills, setSkills] = useState<string[]>(["Excel", "Notion", "Python(基礎)", "SQL"]);
 
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -60,6 +178,14 @@ export default function StudentProfilePage() {
       setFullName(session.name);
     }
   }, [session]);
+
+  const toggleLocation = (pref: string) => {
+    if (selectedLocations.includes(pref)) {
+      setSelectedLocations(selectedLocations.filter((p) => p !== pref));
+    } else {
+      setSelectedLocations([...selectedLocations, pref]);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,7 +201,7 @@ export default function StudentProfilePage() {
           university: `${university} ${faculty} ${department}`,
           graduationYear,
           bio,
-          skills: `${tags}, ${languageSkills}`,
+          skills: `${tags.join(", ")}, 英語: ${englishLevel}, スキル: ${skills.join(", ")}`,
           experience,
         }),
       });
@@ -338,131 +464,190 @@ export default function StudentProfilePage() {
                   <p className="text-[11px] text-slate-500 mt-1">動画一覧やオファー画面で最も目立つ見出しとなります</p>
                 </div>
 
+                {/* 自己PR（300文字程度） */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">自己PR本文 / 人柄サマリー</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-xs font-bold text-slate-700">自己PR（300文字程度）</label>
+                    <span
+                      className={`text-[11px] font-semibold ${
+                        bio.length >= 250 && bio.length <= 350
+                          ? "text-emerald-700"
+                          : bio.length > 350
+                          ? "text-amber-600"
+                          : "text-slate-400"
+                      }`}
+                    >
+                      {bio.length} / 300文字程度
+                    </span>
+                  </div>
                   <textarea
                     rows={4}
                     value={bio}
                     onChange={(e) => setBio(e.target.value)}
-                    placeholder="あなたの人柄、価値観、強みや大切にしている考え方を記載してください"
+                    placeholder="あなたの人柄、価値観、強みや大切にしている考え方を300文字程度で記載してください"
                     className="w-full text-sm border border-slate-300 rounded-2xl p-4 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 leading-relaxed"
                   />
                 </div>
 
+                {/* 学生時代に力を入れたこと（300文字程度） */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">
-                    学生時代に力を入れたこと（ガクチカ・部活動・サークル・インターン等）
-                  </label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-xs font-bold text-slate-700">
+                      学生時代に力を入れたこと（300文字程度）
+                    </label>
+                    <span
+                      className={`text-[11px] font-semibold ${
+                        experience.length >= 250 && experience.length <= 350
+                          ? "text-emerald-700"
+                          : experience.length > 350
+                          ? "text-amber-600"
+                          : "text-slate-400"
+                      }`}
+                    >
+                      {experience.length} / 300文字程度
+                    </span>
+                  </div>
                   <textarea
                     rows={4}
                     value={experience}
                     onChange={(e) => setExperience(e.target.value)}
-                    placeholder="具体的なエピソード、直面した課題、工夫した点、得られた成果を記載してください"
+                    placeholder="具体的なエピソード、直面した課題、工夫した点、得られた成果を300文字程度で記載してください"
                     className="w-full text-sm border border-slate-300 rounded-2xl p-4 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 leading-relaxed"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
-                    <Tag className="w-3.5 h-3.5 text-emerald-700" />
-                    <span>特徴・強みタグ（カンマ区切りで検索対象になります）</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={tags}
-                    onChange={(e) => setTags(e.target.value)}
-                    placeholder="リーダーシップ, 粘り強さ, 組織マネジメント, 笑顔, 体育会"
-                    className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
-                  />
-                </div>
+                {/* 特徴・強み（Enterで独立するタグ入力UI） */}
+                <TagInput
+                  label="特徴・強み（Enterで追加）"
+                  placeholder="例: リーダーシップ, 粘り強さ, 笑顔, 体育会 (入力後Enter)"
+                  tags={tags}
+                  setTags={setTags}
+                  helperText="入力してEnterキーまたは追加ボタンを押すと独立した箱として登録されます"
+                />
               </div>
             )}
 
             {/* タブ3: 希望条件・スキル */}
             {activeTab === "preferences" && (
-              <div className="space-y-5 animate-fade-in">
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
-                    <Briefcase className="w-3.5 h-3.5 text-emerald-700" />
-                    <span>志望業界（複数可）</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={desiredIndustry}
-                    onChange={(e) => setDesiredIndustry(e.target.value)}
-                    placeholder="IT / Webサービス, コンサルティング, 総合商社, メーカー"
-                    className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
-                  />
-                </div>
+              <div className="space-y-6 animate-fade-in">
+                {/* 志望業界（Enterで独立するタグ入力UI） */}
+                <TagInput
+                  label="志望業界（Enterで追加）"
+                  placeholder="例: IT / Webサービス, コンサルティング, 総合商社 (入力後Enter)"
+                  tags={industries}
+                  setTags={setIndustries}
+                  helperText="興味のある業界を入力してEnterを押してください"
+                />
 
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
-                    <User className="w-3.5 h-3.5 text-emerald-700" />
-                    <span>志望職種（複数可）</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={desiredJob}
-                    onChange={(e) => setDesiredJob(e.target.value)}
-                    placeholder="新規事業企画, 営業・事業開発, プロダクトマネージャー, 総合職"
-                    className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
-                  />
-                </div>
+                {/* 志望職種（Enterで独立するタグ入力UI） */}
+                <TagInput
+                  label="志望職種（Enterで追加）"
+                  placeholder="例: 新規事業企画, 営業・事業開発, プロダクトマネージャー (入力後Enter)"
+                  tags={jobTypes}
+                  setTags={setJobTypes}
+                  helperText="希望する職種を入力してEnterを押してください"
+                />
 
+                {/* 希望勤務地（47都道府県から複数選択） */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
-                    <MapPin className="w-3.5 h-3.5 text-emerald-700" />
-                    <span>希望勤務地</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={desiredLocation}
-                    onChange={(e) => setDesiredLocation(e.target.value)}
-                    placeholder="東京都内, 大阪, リモートワーク可, 全国"
-                    className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
-                  />
-                </div>
-
-                <div className="grid sm:grid-cols-2 gap-4 pt-2 border-t border-slate-100">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
-                      <Globe className="w-3.5 h-3.5 text-emerald-700" />
-                      <span>語学力・留学経験</span>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="block text-xs font-bold text-slate-700 flex items-center gap-1">
+                      <MapPin className="w-3.5 h-3.5 text-emerald-700" />
+                      <span>希望勤務地（47都道府県から複数選択）</span>
                     </label>
-                    <input
-                      type="text"
-                      value={languageSkills}
-                      onChange={(e) => setLanguageSkills(e.target.value)}
-                      placeholder="TOEIC 850点, カナダ留学1年"
-                      className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
-                    />
+                    <span className="text-[11px] text-emerald-800 font-bold">
+                      {selectedLocations.length} 箇所選択中
+                    </span>
                   </div>
 
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
-                      <Award className="w-3.5 h-3.5 text-emerald-700" />
-                      <span>保有資格・免許</span>
-                    </label>
-                    <input
-                      type="text"
-                      value={certifications}
-                      onChange={(e) => setCertifications(e.target.value)}
-                      placeholder="普通自動車免許, 基本情報技術者"
-                      className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
-                    />
+                  {/* 選択済みバッジ一覧 */}
+                  <div className="flex flex-wrap gap-1 mb-3 p-2 bg-slate-50 border border-slate-200 rounded-2xl min-h-[36px]">
+                    {selectedLocations.map((loc) => (
+                      <span
+                        key={loc}
+                        className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-emerald-700 text-white rounded-full text-[11px] font-semibold"
+                      >
+                        <span>{loc}</span>
+                        <button
+                          type="button"
+                          onClick={() => toggleLocation(loc)}
+                          className="hover:text-emerald-200"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </span>
+                    ))}
+                    {selectedLocations.length === 0 && (
+                      <span className="text-xs text-slate-400 py-0.5 px-1">下記のリストから選択してください</span>
+                    )}
+                  </div>
+
+                  {/* 地方別47都道府県ピッカー */}
+                  <div className="space-y-3 p-3 bg-white border border-slate-200 rounded-2xl max-h-60 overflow-y-auto">
+                    {PREFECTURE_GROUPS.map((group) => (
+                      <div key={group.region} className="space-y-1.5">
+                        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
+                          {group.region}
+                        </span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {group.prefs.map((pref) => {
+                            const isSelected = selectedLocations.includes(pref);
+                            return (
+                              <button
+                                key={pref}
+                                type="button"
+                                onClick={() => toggleLocation(pref)}
+                                className={`text-xs px-2.5 py-1 rounded-xl font-medium transition-all ${
+                                  isSelected
+                                    ? "bg-emerald-700 text-white shadow-sm font-bold"
+                                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                                }`}
+                              >
+                                {pref}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">IT・プログラミング・その他スキル</label>
-                  <input
-                    type="text"
-                    value={techSkills}
-                    onChange={(e) => setTechSkills(e.target.value)}
-                    placeholder="Excel, Notion, Python, Figma, 動画編集"
-                    className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
-                  />
+                {/* 英語力（4段階選択） */}
+                <div className="pt-3 border-t border-slate-100">
+                  <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
+                    <Globe className="w-3.5 h-3.5 text-emerald-700" />
+                    <span>英語力</span>
+                  </label>
+                  <select
+                    value={englishLevel}
+                    onChange={(e) => setEnglishLevel(e.target.value)}
+                    className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 bg-white"
+                  >
+                    <option value="挨拶レベル">挨拶レベル</option>
+                    <option value="日常会話レベル">日常会話レベル</option>
+                    <option value="ビジネス中級レベル">ビジネス中級レベル</option>
+                    <option value="ビジネス上級レベル">ビジネス上級レベル</option>
+                  </select>
                 </div>
+
+                {/* 保有資格（Enterで独立するタグ入力UI） */}
+                <TagInput
+                  label="保有資格（Enterで追加）"
+                  placeholder="例: 普通自動車第一種運転免許, 基本情報技術者試験, TOEIC 800点 (入力後Enter)"
+                  tags={certifications}
+                  setTags={setCertifications}
+                  helperText="保有している資格や免許を入力してEnterを押してください"
+                />
+
+                {/* その他スキル（Enterで独立するタグ入力UI） */}
+                <TagInput
+                  label="その他スキル（Enterで追加）"
+                  placeholder="例: Excel, Notion, Python, Figma, 動画編集 (入力後Enter)"
+                  tags={skills}
+                  setTags={setSkills}
+                  helperText="得意なツールやPCスキルを入力してEnterを押してください"
+                />
               </div>
             )}
 
