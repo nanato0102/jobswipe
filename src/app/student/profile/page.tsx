@@ -42,12 +42,12 @@ export default function StudentProfilePage() {
   };
 
   return (
-    <div className="flex-1 py-8 px-4 sm:px-6 max-w-3xl mx-auto w-full">
+    <div className="flex-1 py-6 px-4 sm:px-6 max-w-3xl mx-auto w-full">
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
         <div className="flex items-center justify-between pb-6 mb-6 border-b border-slate-100">
           <div>
             <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-              <User className="w-5 h-5" />
+              <User className="w-5 h-5 text-emerald-700" />
               <span>学生プロフィール編集</span>
             </h1>
             <p className="text-xs text-slate-500 mt-1">
@@ -57,7 +57,7 @@ export default function StudentProfilePage() {
         </div>
 
         {saved && (
-          <div className="mb-6 p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-700 text-xs flex items-center gap-2">
+          <div className="mb-6 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs flex items-center gap-2">
             <CheckCircle className="w-4 h-4" />
             <span>プロフィール情報を保存しました</span>
           </div>
@@ -72,7 +72,7 @@ export default function StudentProfilePage() {
                 required
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
+                className="w-full text-sm border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
               />
             </div>
 
@@ -83,20 +83,20 @@ export default function StudentProfilePage() {
                 value={university}
                 onChange={(e) => setUniversity(e.target.value)}
                 placeholder="〇〇大学 〇〇学部"
-                className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
+                className="w-full text-sm border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
               />
             </div>
           </div>
 
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1">
-              <GraduationCap className="w-3.5 h-3.5" />
+              <GraduationCap className="w-3.5 h-3.5 text-emerald-700" />
               <span>卒業予定年</span>
             </label>
             <select
               value={graduationYear}
               onChange={(e) => setGraduationYear(Number(e.target.value))}
-              className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 bg-white"
+              className="w-full text-sm border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 bg-white"
             >
               <option value={2025}>2025年卒</option>
               <option value={2026}>2026年卒</option>
@@ -112,13 +112,13 @@ export default function StudentProfilePage() {
               value={bio}
               onChange={(e) => setBio(e.target.value)}
               placeholder="あなたの人柄や強みを端的に記載してください"
-              className="w-full text-sm border border-slate-300 rounded-lg p-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
+              className="w-full text-sm border border-slate-300 rounded-xl p-3.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
             />
           </div>
 
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1">
-              <Award className="w-3.5 h-3.5" />
+              <Award className="w-3.5 h-3.5 text-emerald-700" />
               <span>スキル・語学力・強み（カンマ区切り）</span>
             </label>
             <input
@@ -126,13 +126,13 @@ export default function StudentProfilePage() {
               value={skills}
               onChange={(e) => setSkills(e.target.value)}
               placeholder="リーダーシップ, 英語日常会話, 接客経験"
-              className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
+              className="w-full text-sm border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
             />
           </div>
 
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1">
-              <Briefcase className="w-3.5 h-3.5" />
+              <Briefcase className="w-3.5 h-3.5 text-emerald-700" />
               <span>学生時代の経験・活動（部活動、アルバイト、留学、インターン等）</span>
             </label>
             <textarea
@@ -140,7 +140,7 @@ export default function StudentProfilePage() {
               value={experience}
               onChange={(e) => setExperience(e.target.value)}
               placeholder="具体的な活動内容や学んだことを記載してください"
-              className="w-full text-sm border border-slate-300 rounded-lg p-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
+              className="w-full text-sm border border-slate-300 rounded-xl p-3.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
             />
           </div>
 
@@ -148,7 +148,7 @@ export default function StudentProfilePage() {
             <button
               type="submit"
               disabled={loading}
-              className="flex items-center gap-2 px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-6 py-2.5 bg-emerald-700 hover:bg-emerald-600 text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50 shadow-sm"
             >
               <Save className="w-4 h-4" />
               <span>{loading ? "保存中..." : "保存する"}</span>

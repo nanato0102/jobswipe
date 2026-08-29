@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Heart, X, Send, User, GraduationCap, Sparkles, Check } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Heart, Send, User, GraduationCap, Sparkles, Check, Volume2, VolumeX, Play, Pause, ChevronUp, ChevronDown, Info, X } from "lucide-react";
 import type { VideoData } from "@/types";
 
 interface SwipeCardProps {
@@ -13,12 +13,39 @@ interface SwipeCardProps {
 export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [offerMessage, setOfferMessage] = useState("");
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
-  if (!videos || videos.length === 0) {
+  // 動画再生・音声状態
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
+  const [likedMap, setLikedMap] = useState<Record<string, boolean>>({});
+
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const touchStartY = useRef<number | null>(null);
+  const touchEndY = useRef<number | null>(null);
+
+  const currentVideo = videos && videos.length > 0 ? videos[currentIndex % videos.length] : null;
+  const isLiked = currentVideo ? !!likedMap[currentVideo.id] : false;
+
+  const tagsList = currentVideo?.tags
+    ? currentVideo.tags.split(",").map((t) => t.trim()).filter(Boolean)
+    : [];
+
+  // インデックス変更時に動画を再ロード・再生
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      if (isPlaying) {
+        videoRef.current.play().catch(() => {});
+      }
+    }
+  }, [currentIndex]);
+
+  if (!videos || videos.length === 0 || !currentVideo) {
     return (
-      <div className="flex flex-col items-center justify-center p-12 bg-white border border-slate-200 rounded-2xl shadow-sm text-center max-w-md mx-auto">
+      <div className="flex flex-col items-center justify-center p-12 bg-white border border-slate-200 rounded-2xl shadow-sm text-center max-w-md mx-auto my-8">
         <div className="w-14 h-14 bg-slate-100 rounded-full flex items-center justify-center mb-4 text-slate-400">
           <Sparkles className="w-7 h-7" />
         </div>
@@ -28,28 +55,75 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
     );
   }
 
-  const currentVideo = videos[currentIndex % videos.length];
-  const tagsList = currentVideo.tags ? currentVideo.tags.split(",").map((t) => t.trim()).filter(Boolean) : [];
-
   const handleNext = () => {
     setStatusMessage(null);
     setCurrentIndex((prev) => (prev + 1) % videos.length);
   };
 
-  const handleLike = async () => {
+  const handlePrev = () => {
+    setStatusMessage(null);
+    setCurrentIndex((prev) => (prev - 1 + videos.length) % videos.length);
+  };
+
+  // タッチスワイプ（フリック）制御
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartY.current = e.targetTouches[0].clientY;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndY.current = e.targetTouches[0].clientY;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartY.current || !touchEndY.current) return;
+    const distance = touchStartY.current - touchEndY.current;
+    const minSwipeDistance = 50;
+
+    if (distance > minSwipeDistance) {
+      // 上スワイプ -> 次の動画
+      handleNext();
+    } else if (distance < -minSwipeDistance) {
+      // 下スワイプ -> 前の動画
+      handlePrev();
+    }
+
+    touchStartY.current = null;
+    touchEndY.current = null;
+  };
+
+  // タップで再生 / 一時停止
+  const togglePlay = () => {
+    if (!videoRef.current) return;
+    if (isPlaying) {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      videoRef.current.play().catch(() => {});
+      setIsPlaying(true);
+    }
+  };
+
+  // ミュート切り替え
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!videoRef.current) return;
+    const newMuted = !isMuted;
+    videoRef.current.muted = newMuted;
+    setIsMuted(newMuted);
+  };
+
+  // いいね（気になる）
+  const handleLike = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
     if (onLike) {
       onLike(currentVideo);
     }
-    setStatusMessage("「気になる」に追加しました");
-    setTimeout(() => {
-      handleNext();
-    }, 600);
+    setLikedMap((prev) => ({ ...prev, [currentVideo.id]: true }));
+    setStatusMessage("「気になる」リストに追加しました");
+    setTimeout(() => setStatusMessage(null), 1800);
   };
 
-  const handleSkip = () => {
-    handleNext();
-  };
-
+  // オファー送信完了
   const handleSendOffer = () => {
     if (!offerMessage.trim()) return;
     if (onOffer) {
@@ -59,32 +133,43 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
     setOfferMessage("");
     setStatusMessage("スカウトオファーを送信しました");
     setTimeout(() => {
+      setStatusMessage(null);
       handleNext();
-    }, 800);
+    }, 1200);
   };
 
   return (
-    <div className="relative w-full max-w-md mx-auto flex flex-col items-center">
-      {/* ステータス通知 */}
+    <div className="relative w-full max-w-md mx-auto flex flex-col items-center select-none">
+      {/* ステータス通知トースト */}
       {statusMessage && (
-        <div className="absolute top-4 z-30 bg-slate-900 text-white text-xs px-4 py-2 rounded-full shadow-lg flex items-center gap-1.5 animate-fade-in">
+        <div className="fixed top-20 z-50 bg-slate-900/95 text-white text-xs px-4 py-2.5 rounded-full shadow-2xl flex items-center gap-2 border border-slate-700 animate-fade-in backdrop-blur">
           <Check className="w-4 h-4 text-emerald-400" />
-          <span>{statusMessage}</span>
+          <span className="font-medium">{statusMessage}</span>
         </div>
       )}
 
-      {/* メインカード */}
-      <div className="w-full bg-slate-900 text-white rounded-2xl overflow-hidden shadow-xl border border-slate-800 flex flex-col h-[620px] relative">
+      {/* TikTok風メインカードコンテナ */}
+      <div
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        className="w-full bg-black text-white rounded-3xl overflow-hidden shadow-2xl border border-slate-800 flex flex-col h-[74vh] min-h-[580px] max-h-[720px] relative"
+      >
         {/* 動画表示エリア */}
-        <div className="relative flex-1 bg-black flex items-center justify-center overflow-hidden">
-          {currentVideo.videoUrl.endsWith(".mp4") || currentVideo.videoUrl.startsWith("http") ? (
+        <div
+          onClick={togglePlay}
+          className="relative w-full h-full flex items-center justify-center bg-black cursor-pointer overflow-hidden"
+        >
+          {currentVideo.videoUrl ? (
             <video
+              ref={videoRef}
               key={currentVideo.id}
               src={currentVideo.videoUrl}
               className="w-full h-full object-cover"
-              controls
               playsInline
               loop
+              autoPlay
+              muted={isMuted}
             />
           ) : (
             <div className="flex flex-col items-center justify-center text-slate-500 p-6 text-center">
@@ -93,85 +178,216 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
             </div>
           )}
 
-          {/* 右上インデックス表示 */}
-          <div className="absolute top-4 right-4 bg-black/60 backdrop-blur px-2.5 py-1 rounded-full text-xs font-medium text-slate-300">
-            {(currentIndex % videos.length) + 1} / {videos.length}
-          </div>
-        </div>
-
-        {/* 下部情報オーバーレイ */}
-        <div className="p-5 bg-slate-900 border-t border-slate-800 space-y-3">
-          <div>
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                <User className="w-4 h-4 text-slate-400" />
-                {currentVideo.student?.fullName || "学生ユーザー"}
-              </h2>
-              {currentVideo.student?.graduationYear && (
-                <span className="text-xs text-slate-400 flex items-center gap-1">
-                  <GraduationCap className="w-3.5 h-3.5" />
-                  {currentVideo.student.graduationYear}年卒
-                </span>
-              )}
-            </div>
-            {currentVideo.student?.university && (
-              <p className="text-xs text-slate-400 mt-0.5">{currentVideo.student.university}</p>
-            )}
-          </div>
-
-          <div>
-            <h3 className="text-sm font-semibold text-slate-200">{currentVideo.title}</h3>
-            {currentVideo.description && (
-              <p className="text-xs text-slate-400 line-clamp-2 mt-1">{currentVideo.description}</p>
-            )}
-          </div>
-
-          {/* タグ一覧 */}
-          {tagsList.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 pt-1">
-              {tagsList.map((tag, idx) => (
-                <span
-                  key={idx}
-                  className="text-[11px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700 font-medium"
-                >
-                  #{tag}
-                </span>
-              ))}
+          {/* 一時停止アイコン（停止時のみ中央表示） */}
+          {!isPlaying && (
+            <div className="absolute inset-0 bg-black/40 flex items-center justify-center pointer-events-none">
+              <div className="w-16 h-16 rounded-full bg-slate-900/80 backdrop-blur flex items-center justify-center text-white shadow-xl">
+                <Play className="w-8 h-8 ml-1 fill-white" />
+              </div>
             </div>
           )}
 
-          {/* 操作アクションボタン */}
-          <div className="flex items-center justify-between pt-2">
-            <button
-              onClick={handleSkip}
-              className="flex-1 mr-2 flex items-center justify-center gap-1.5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-medium rounded-xl border border-slate-700 transition-colors"
-            >
-              <X className="w-4 h-4" />
-              <span>スキップ</span>
-            </button>
+          {/* ヘッダーオーバーレイ（インデックス & ミュートボタン） */}
+          <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-auto">
+            <div className="bg-black/60 backdrop-blur px-3 py-1 rounded-full text-xs font-semibold text-slate-200 border border-white/10">
+              {(currentIndex % videos.length) + 1} / {videos.length}
+            </div>
 
+            <button
+              onClick={toggleMute}
+              className="w-9 h-9 rounded-full bg-black/60 backdrop-blur flex items-center justify-center text-white border border-white/10 hover:bg-black/80 transition-colors"
+              title={isMuted ? "ミュート解除" : "ミュート"}
+            >
+              {isMuted ? <VolumeX className="w-4 h-4 text-slate-300" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
+            </button>
+          </div>
+
+          {/* 右サイド縦型アクションバー（TikTok風） */}
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="absolute right-3 bottom-28 z-20 flex flex-col items-center gap-4 pointer-events-auto"
+          >
+            {/* 気になる（Like）ボタン */}
             <button
               onClick={handleLike}
-              className="flex-1 mr-2 flex items-center justify-center gap-1.5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm"
+              className="flex flex-col items-center gap-1 group"
             >
-              <Heart className="w-4 h-4 fill-white" />
-              <span>気になる</span>
+              <div
+                className={`w-12 h-12 rounded-full flex items-center justify-center transition-transform active:scale-90 shadow-lg ${
+                  isLiked ? "bg-rose-600 text-white" : "bg-black/60 backdrop-blur border border-white/20 text-white hover:bg-black/80"
+                }`}
+              >
+                <Heart className={`w-6 h-6 ${isLiked ? "fill-white" : ""}`} />
+              </div>
+              <span className="text-[11px] font-semibold text-white drop-shadow">気になる</span>
             </button>
 
+            {/* スカウトオファーボタン */}
             <button
               onClick={() => setIsOfferModalOpen(true)}
-              className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm"
+              className="flex flex-col items-center gap-1 group"
             >
-              <Send className="w-4 h-4" />
-              <span>オファー</span>
+              <div className="w-12 h-12 rounded-full bg-emerald-600 hover:bg-emerald-700 active:scale-90 text-white flex items-center justify-center shadow-lg transition-all">
+                <Send className="w-5 h-5 ml-0.5" />
+              </div>
+              <span className="text-[11px] font-semibold text-white drop-shadow">オファー</span>
+            </button>
+
+            {/* 詳細プロフィールボタン */}
+            <button
+              onClick={() => setIsProfileModalOpen(true)}
+              className="flex flex-col items-center gap-1 group"
+            >
+              <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur border border-white/20 hover:bg-black/80 active:scale-90 text-white flex items-center justify-center shadow-lg transition-all">
+                <Info className="w-5 h-5 text-slate-200" />
+              </div>
+              <span className="text-[11px] font-semibold text-white drop-shadow">詳細</span>
+            </button>
+          </div>
+
+          {/* 下部情報オーバーレイ */}
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="absolute left-0 right-16 bottom-0 p-5 bg-gradient-to-t from-black/90 via-black/50 to-transparent space-y-2 pointer-events-auto"
+          >
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-base font-bold text-white flex items-center gap-1.5">
+                  <User className="w-4 h-4 text-emerald-400" />
+                  {currentVideo.student?.fullName || "学生ユーザー"}
+                </span>
+                {currentVideo.student?.graduationYear && (
+                  <span className="text-[11px] bg-white/20 text-slate-200 px-2 py-0.5 rounded-full font-medium flex items-center gap-1">
+                    <GraduationCap className="w-3 h-3" />
+                    {currentVideo.student.graduationYear}卒
+                  </span>
+                )}
+              </div>
+              {currentVideo.student?.university && (
+                <p className="text-xs text-slate-300 mt-0.5">{currentVideo.student.university}</p>
+              )}
+            </div>
+
+            <div>
+              <h3 className="text-xs font-semibold text-slate-100 line-clamp-1">{currentVideo.title}</h3>
+              {currentVideo.description && (
+                <p className="text-[11px] text-slate-300 line-clamp-2 mt-0.5 leading-relaxed">{currentVideo.description}</p>
+              )}
+            </div>
+
+            {/* タグ一覧 */}
+            {tagsList.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 pt-0.5">
+                {tagsList.map((tag, idx) => (
+                  <span
+                    key={idx}
+                    className="text-[10px] bg-black/50 text-emerald-300 px-2 py-0.5 rounded-md border border-emerald-500/30 font-medium"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* 上下送りナビゲーションバー（PCおよび補助用） */}
+        <div className="bg-slate-900 border-t border-slate-800 p-2.5 flex items-center justify-between px-4">
+          <span className="text-xs text-slate-400">上下スワイプまたはボタンで移動</span>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handlePrev}
+              className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs flex items-center gap-1 border border-slate-700"
+              title="前の動画"
+            >
+              <ChevronUp className="w-4 h-4" />
+              <span>前へ</span>
+            </button>
+            <button
+              onClick={handleNext}
+              className="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-lg text-xs font-semibold flex items-center gap-1 shadow-sm"
+              title="次の動画"
+            >
+              <span>次へ</span>
+              <ChevronDown className="w-4 h-4" />
             </button>
           </div>
         </div>
       </div>
 
-      {/* オファー送信モーダル */}
+      {/* 学生詳細プロフィールモーダル */}
+      {isProfileModalOpen && currentVideo.student && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl border border-slate-200 max-h-[85vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+              <div>
+                <h3 className="text-base font-bold text-slate-900">{currentVideo.student.fullName} さんの詳細</h3>
+                <p className="text-xs text-slate-500">{currentVideo.student.university} / {currentVideo.student.graduationYear}年卒</p>
+              </div>
+              <button
+                onClick={() => setIsProfileModalOpen(false)}
+                className="text-slate-400 hover:text-slate-600 p-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4 text-xs text-slate-700">
+              <div>
+                <span className="font-semibold text-slate-900 block mb-1">人柄・自己PRサマリー</span>
+                <p className="p-3 bg-slate-50 rounded-xl border border-slate-100 leading-relaxed">
+                  {currentVideo.student.bio || "自己PR情報は登録されていません。"}
+                </p>
+              </div>
+
+              {currentVideo.student.skills && (
+                <div>
+                  <span className="font-semibold text-slate-900 block mb-1">スキル・強み</span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {currentVideo.student.skills.split(",").map((s, idx) => (
+                      <span key={idx} className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-1 rounded-md font-medium">
+                        {s.trim()}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {currentVideo.student.experience && (
+                <div>
+                  <span className="font-semibold text-slate-900 block mb-1">学生時代の経験・活動</span>
+                  <p className="p-3 bg-slate-50 rounded-xl border border-slate-100 leading-relaxed">
+                    {currentVideo.student.experience}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-slate-100 flex gap-2 justify-end">
+              <button
+                onClick={() => setIsProfileModalOpen(false)}
+                className="px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 rounded-lg"
+              >
+                閉じる
+              </button>
+              <button
+                onClick={() => {
+                  setIsProfileModalOpen(false);
+                  setIsOfferModalOpen(true);
+                }}
+                className="px-4 py-2 text-xs font-semibold bg-emerald-700 text-white rounded-lg hover:bg-emerald-600 flex items-center gap-1.5"
+              >
+                <Send className="w-3.5 h-3.5" />
+                <span>オファーを送る</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* スカウトオファー送信モーダル */}
       {isOfferModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border border-slate-200">
             <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
               <h3 className="text-base font-bold text-slate-900">
@@ -194,7 +410,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
               onChange={(e) => setOfferMessage(e.target.value)}
               placeholder="例: 自己PR動画を拝見し、明るく主体的な人柄に非常に惹かれました。ぜひ一度オンラインでお話ししませんか？"
               rows={4}
-              className="w-full text-sm border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent text-slate-900"
+              className="w-full text-sm border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent text-slate-900"
             />
 
             <div className="mt-4 flex gap-2 justify-end">
@@ -207,9 +423,10 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
               <button
                 onClick={handleSendOffer}
                 disabled={!offerMessage.trim()}
-                className="px-4 py-2 text-xs font-semibold bg-slate-900 text-white rounded-lg hover:bg-slate-800 disabled:opacity-50"
+                className="px-4 py-2 text-xs font-semibold bg-emerald-700 text-white rounded-lg hover:bg-emerald-600 disabled:opacity-50 flex items-center gap-1.5 shadow-sm"
               >
-                送信する
+                <Send className="w-3.5 h-3.5" />
+                <span>送信する</span>
               </button>
             </div>
           </div>

@@ -42,10 +42,10 @@ export default function StudentOffersPage() {
   };
 
   return (
-    <div className="flex-1 py-8 px-4 sm:px-6 max-w-4xl mx-auto w-full">
+    <div className="flex-1 py-6 px-4 sm:px-6 max-w-4xl mx-auto w-full">
       <div className="mb-6">
         <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-          <Building2 className="w-5 h-5" />
+          <Building2 className="w-5 h-5 text-emerald-700" />
           <span>届いたオファー一覧</span>
         </h1>
         <p className="text-xs text-slate-500 mt-1">
@@ -57,7 +57,7 @@ export default function StudentOffersPage() {
         {offers.map((offer) => (
           <div
             key={offer.id}
-            className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 flex flex-col gap-4"
+            className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-col gap-4 hover:shadow-md transition-shadow"
           >
             <div className="flex items-start justify-between">
               <div>
@@ -66,12 +66,12 @@ export default function StudentOffersPage() {
               </div>
 
               <span
-                className={`text-xs px-2.5 py-1 rounded-full font-semibold flex items-center gap-1 ${
+                className={`text-xs px-3 py-1 rounded-full font-semibold flex items-center gap-1 ${
                   offer.status === "ACCEPTED"
-                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                    ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
                     : offer.status === "DECLINED"
                     ? "bg-slate-100 text-slate-500"
-                    : "bg-amber-50 text-amber-700 border border-amber-200"
+                    : "bg-amber-50 text-amber-800 border border-amber-200"
                 }`}
               >
                 {offer.status === "ACCEPTED" && <Check className="w-3.5 h-3.5" />}
@@ -81,11 +81,11 @@ export default function StudentOffersPage() {
               </span>
             </div>
 
-            <p className="text-sm text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-100">
+            <p className="text-sm text-slate-700 bg-slate-50 p-3.5 rounded-xl border border-slate-100 leading-relaxed">
               {offer.message}
             </p>
 
-            <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+            <div className="flex items-center justify-between pt-3 border-t border-slate-100">
               <span className="text-xs text-slate-400">受信日: {offer.date}</span>
 
               <div className="flex items-center gap-2">
@@ -93,13 +93,13 @@ export default function StudentOffersPage() {
                   <>
                     <button
                       onClick={() => handleStatusChange(offer.id, "DECLINED")}
-                      className="px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-lg border border-slate-200"
+                      className="px-3.5 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-xl border border-slate-200 transition-colors"
                     >
                       辞退
                     </button>
                     <button
                       onClick={() => handleStatusChange(offer.id, "ACCEPTED")}
-                      className="px-3.5 py-1.5 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-lg"
+                      className="px-4 py-1.5 text-xs font-semibold text-white bg-emerald-700 hover:bg-emerald-600 rounded-xl shadow-sm transition-colors"
                     >
                       承諾する
                     </button>
@@ -109,7 +109,7 @@ export default function StudentOffersPage() {
                 {offer.status === "ACCEPTED" && (
                   <Link
                     href="/company/chat"
-                    className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg"
+                    className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold text-white bg-emerald-700 hover:bg-emerald-600 rounded-xl shadow-sm transition-colors"
                   >
                     <MessageSquare className="w-3.5 h-3.5" />
                     <span>チャットを開く</span>
