@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import RoleGuard from "@/components/RoleGuard";
+import StudentMobileTabs from "@/components/StudentMobileTabs";
 import {
   Film,
   UploadCloud,
@@ -124,7 +125,8 @@ export default function StudentVideoUploadPage() {
 
   return (
     <RoleGuard allowedRoles={["STUDENT", "ADMIN"]}>
-      <div className="flex-1 py-6 px-4 sm:px-6 max-w-4xl mx-auto w-full space-y-8">
+      <StudentMobileTabs>
+        <div className="flex-1 py-6 px-4 sm:px-6 max-w-4xl mx-auto w-full space-y-8">
         {/* ================= 上部: 新規動画投稿フォーム ================= */}
         <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 sm:p-8 space-y-6">
           <div className="border-b border-slate-100 pb-4">
@@ -433,6 +435,7 @@ export default function StudentVideoUploadPage() {
           </div>
         )}
       </div>
-    </RoleGuard>
-  );
+    </StudentMobileTabs>
+  </RoleGuard>
+);
 }

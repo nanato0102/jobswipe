@@ -18,6 +18,7 @@ import {
   Calendar,
   Clock,
 } from "lucide-react";
+import StudentMobileTabs from "@/components/StudentMobileTabs";
 
 function ChatContent() {
   const { session, isStudent, isCompany } = useAuth();
@@ -37,9 +38,15 @@ function ChatContent() {
     setThreads(list);
 
     if (initialThreadId && list.some((t) => t.id === initialThreadId)) {
+      // 特定のthreadIdがURLクエリで指定されている場合のみ個別チャットを開く
       setSelectedThreadId(initialThreadId);
-    } else if (list.length > 0) {
-      setSelectedThreadId(list[0].id);
+    } else {
+      // クエリ指定がない場合: PCでは1件目を選択、スマホではスレッド一覧（全体）を表示
+      if (typeof window !== "undefined" && window.innerWidth >= 768 && list.length > 0) {
+        setSelectedThreadId(list[0].id);
+      } else {
+        setSelectedThreadId("");
+      }
     }
   }, [isStudent, initialThreadId]);
 
@@ -58,7 +65,7 @@ function ChatContent() {
     scrollToBottom();
   }, [messages]);
 
-  const currentThread = threads.find((t) => t.id === selectedThreadId) || threads[0];
+  const currentThread = threads.find((t) => t.id === selectedThreadId);
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,7 +86,8 @@ function ChatContent() {
 
   return (
     <RoleGuard allowedRoles={["COMPANY", "STUDENT", "ADMIN"]}>
-      <div className="flex-1 py-4 sm:py-6 px-3 sm:px-6 max-w-6xl mx-auto w-full flex flex-col h-[calc(100vh-6rem)] min-h-[600px]">
+      <StudentMobileTabs>
+        <div className="flex-1 py-4 sm:py-6 px-3 sm:px-6 max-w-6xl mx-auto w-full flex flex-col h-[calc(100vh-6rem)] min-h-[600px]">
         <div className="bg-white rounded-3xl border border-slate-200 shadow-xl flex-1 flex overflow-hidden">
           {/* ========================================================================= */}
           {/* 左サイドバー: スレッド一覧（スマホではスレッド未選択時または一覧表示時） */}
@@ -345,7 +353,8 @@ function ChatContent() {
             )}
           </div>
         </div>
-      </div>
+        </div>
+      </StudentMobileTabs>
     </RoleGuard>
   );
 }

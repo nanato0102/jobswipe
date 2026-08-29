@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import RoleGuard from "@/components/RoleGuard";
+import StudentMobileTabs from "@/components/StudentMobileTabs";
 import { appStore, StoredOffer } from "@/lib/appStore";
 import { Building2, MessageSquare, Check, X, Clock, Sparkles } from "lucide-react";
 
@@ -20,7 +21,8 @@ export default function StudentOffersPage() {
 
   return (
     <RoleGuard allowedRoles={["STUDENT", "ADMIN"]}>
-      <div className="flex-1 py-6 px-4 sm:px-6 max-w-4xl mx-auto w-full">
+      <StudentMobileTabs>
+        <div className="flex-1 py-6 px-4 sm:px-6 max-w-4xl mx-auto w-full">
         <div className="mb-6">
           <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
             <Building2 className="w-5 h-5 text-emerald-700" />
@@ -106,7 +108,8 @@ export default function StudentOffersPage() {
             ))}
           </div>
         )}
-      </div>
+        </div>
+      </StudentMobileTabs>
     </RoleGuard>
   );
 }

@@ -4,6 +4,7 @@ import React, { useState, useEffect, KeyboardEvent } from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import RoleGuard from "@/components/RoleGuard";
+import StudentMobileTabs from "@/components/StudentMobileTabs";
 import {
   User,
   GraduationCap,
@@ -237,7 +238,8 @@ export default function StudentProfilePage() {
 
   return (
     <RoleGuard allowedRoles={["STUDENT", "ADMIN"]}>
-      <div className="flex-1 py-6 sm:py-10 px-4 sm:px-6 max-w-3xl mx-auto w-full">
+      <StudentMobileTabs>
+        <div className="flex-1 py-6 sm:py-10 px-4 sm:px-6 max-w-3xl mx-auto w-full">
         <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 sm:p-8 space-y-6">
           {/* ヘッダー */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
@@ -473,7 +475,8 @@ export default function StudentProfilePage() {
             </div>
           </form>
         </div>
-      </div>
+        </div>
+      </StudentMobileTabs>
     </RoleGuard>
   );
 }
