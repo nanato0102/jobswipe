@@ -483,19 +483,19 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
 
             <div className="space-y-4 text-xs text-slate-700">
               <div>
-                <span className="font-semibold text-slate-900 block mb-1">人柄・自己PRサマリー</span>
-                <p className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 leading-relaxed">
-                  {currentVideo.student.bio || "自己PR情報は登録されていません。"}
+                <span className="font-bold text-slate-900 block mb-1">ひとことスローガン</span>
+                <p className="p-3.5 bg-emerald-50/60 text-emerald-950 rounded-2xl border border-emerald-100 font-bold leading-relaxed">
+                  {currentVideo.student.bio || "笑顔と前向きな姿勢でチームに貢献します！"}
                 </p>
               </div>
 
               {currentVideo.student.skills && (
                 <div>
-                  <span className="font-semibold text-slate-900 block mb-1">スキル・強み</span>
+                  <span className="font-bold text-slate-900 block mb-1">人柄・強みタグ</span>
                   <div className="flex flex-wrap gap-1.5">
                     {currentVideo.student.skills.split(",").map((s, idx) => (
-                      <span key={idx} className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-1 rounded-md font-medium">
-                        {s.trim()}
+                      <span key={idx} className="bg-emerald-50 text-emerald-900 border border-emerald-200 px-3 py-1 rounded-full font-bold shadow-sm">
+                        #{s.trim()}
                       </span>
                     ))}
                   </div>
@@ -504,10 +504,14 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
 
               {currentVideo.student.experience && (
                 <div>
-                  <span className="font-semibold text-slate-900 block mb-1">学生時代の経験・活動</span>
-                  <p className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 leading-relaxed">
-                    {currentVideo.student.experience}
-                  </p>
+                  <span className="font-bold text-slate-900 block mb-1">興味のある業界</span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {currentVideo.student.experience.split(",").map((ind, idx) => (
+                      <span key={idx} className="bg-slate-100 text-slate-700 border border-slate-200 px-3 py-1 rounded-full font-semibold">
+                        {ind.trim()}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>

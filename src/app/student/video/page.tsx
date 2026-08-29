@@ -141,22 +141,47 @@ export default function StudentVideoUploadPage() {
             </p>
           </div>
 
-          {status && (
-            <div
-              className={`p-3.5 rounded-2xl flex items-center gap-2 text-xs font-semibold ${
-                status.type === "success"
-                  ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
-                  : "bg-rose-50 text-rose-800 border border-rose-200"
-              }`}
-            >
-              {status.type === "success" ? (
-                <CheckCircle className="h-4 w-4 text-emerald-600 flex-shrink-0" />
-              ) : (
-                <AlertCircle className="h-4 w-4 text-rose-600 flex-shrink-0" />
-              )}
-              <span>{status.message}</span>
+          {/* 💡 安心の60秒お題カンペガイド */}
+          <div className="p-5 bg-emerald-50/70 border border-emerald-200 rounded-3xl space-y-3 shadow-sm">
+            <div className="flex items-center gap-2 text-emerald-900 font-bold text-xs sm:text-sm">
+              <Sparkles className="w-4 h-4 text-emerald-700 flex-shrink-0" />
+              <span>何を話せばいいか迷ったら？ 60秒お題カンペガイド</span>
             </div>
-          )}
+            <p className="text-[11px] sm:text-xs text-emerald-900/80 leading-relaxed">
+              立派なスピーチや志望動機は不要です！スマホで自撮りしながら、以下の3つの順に普段のあなたの自然なトーンで話すだけでOKです。
+            </p>
+            <div className="grid sm:grid-cols-3 gap-2.5 pt-1">
+              <div className="p-3 bg-white/90 rounded-2xl border border-emerald-200/80 shadow-2xs space-y-1">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800">
+                  01. 挨拶 (約5秒)
+                </span>
+                <p className="text-[11px] font-semibold text-slate-800">
+                  「〇〇大学〇年の〇〇です！」
+                </p>
+                <p className="text-[10px] text-slate-500">笑顔で明るくスタート</p>
+              </div>
+
+              <div className="p-3 bg-white/90 rounded-2xl border border-emerald-200/80 shadow-2xs space-y-1">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800">
+                  02. 人柄・熱量 (約35秒)
+                </span>
+                <p className="text-[11px] font-semibold text-slate-800">
+                  「周囲からはよく〇〇と言われます」
+                </p>
+                <p className="text-[10px] text-slate-500">性格や最近夢中なことを1つ</p>
+              </div>
+
+              <div className="p-3 bg-white/90 rounded-2xl border border-emerald-200/80 shadow-2xs space-y-1">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800">
+                  03. 意気込み (約20秒)
+                </span>
+                <p className="text-[11px] font-semibold text-slate-800">
+                  「こんなチームで挑戦したいです！」
+                </p>
+                <p className="text-[10px] text-slate-500">興味のある分野や会いたい企業像</p>
+              </div>
+            </div>
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* 動画ファイルアップロードエリア */}

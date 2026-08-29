@@ -118,6 +118,52 @@ export default function ChatPage() {
             <div ref={messagesEndRef} />
           </div>
 
+          {/* クイック面談日程調整・定型文テンプレート */}
+          <div className="px-4 py-2 bg-slate-50 border-t border-slate-100 flex items-center gap-1.5 overflow-x-auto text-xs">
+            <span className="text-[11px] font-bold text-slate-500 whitespace-nowrap">定型文:</span>
+            <button
+              type="button"
+              onClick={() =>
+                setInputText(
+                  isStudent
+                    ? "オファーありがとうございます！ぜひ一度オンラインでお話しさせていただけますと幸いです。平日の17時以降であれば調整可能です。"
+                    : "動画を拝見し、明るく前向きな人柄に大変惹かれました！ぜひ一度15分〜30分程度、オンラインでカジュアルにお話ししませんか？ご都合のよろしい日程をいくつか教えていただけますと幸いです。"
+                )
+              }
+              className="px-3 py-1 bg-white hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 rounded-full font-medium whitespace-nowrap transition-colors shadow-2xs"
+            >
+              📅 面談日程の調整
+            </button>
+
+            <button
+              type="button"
+              onClick={() =>
+                setInputText(
+                  isStudent
+                    ? "ご案内ありがとうございます！面談の日程について、以下で調整可能でしょうか？\n・第1希望: 〇月〇日 14:00〜\n・第2希望: 〇月〇日 16:00〜"
+                    : "以下の日程枠でオンラインカジュアル面談を実施可能です。ご希望の日時をお選びいただけますでしょうか？\n1. 来週火曜日 14:00〜\n2. 来週木曜日 16:00〜\n3. 来週金曜日 11:00〜"
+                )
+              }
+              className="px-3 py-1 bg-white hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 rounded-full font-medium whitespace-nowrap transition-colors shadow-2xs"
+            >
+              🕒 日程候補の提示
+            </button>
+
+            <button
+              type="button"
+              onClick={() =>
+                setInputText(
+                  isStudent
+                    ? "本日は貴重なお時間をいただき誠にありがとうございました！貴社の雰囲気がよくわかり大変魅力的に感じました。"
+                    : "本日はカジュアル面談にご参加いただきありがとうございました！ぜひ次の選考ステップに進んでいただきたく存じます。"
+                )
+              }
+              className="px-3 py-1 bg-white hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 rounded-full font-medium whitespace-nowrap transition-colors shadow-2xs"
+            >
+              ✨ 面談のお礼
+            </button>
+          </div>
+
           {/* 入力フォーム */}
           <form onSubmit={handleSend} className="p-3 border-t border-slate-100 bg-white flex gap-2">
             <input

@@ -19,6 +19,7 @@ import {
   Video,
   User,
   Building2,
+  Briefcase,
 } from "lucide-react";
 
 interface StudentCandidate {
@@ -36,6 +37,7 @@ interface StudentCandidate {
   englishLevel: string;
   videoUrl: string;
   videoTitle: string;
+  desiredIndustries?: string[];
 }
 
 const CANDIDATES_DATA: StudentCandidate[] = [
@@ -331,41 +333,37 @@ export default function CompanySearchPage() {
                       </span>
                     </div>
 
-                    <div className="text-xs text-slate-600 font-medium">
-                      <span>{candidate.university}</span> <span className="text-slate-400">/</span>{" "}
-                      <span>{candidate.faculty}</span>
+                    <div className="text-xs text-slate-700 font-bold">
+                      <span>{candidate.university}</span>
                     </div>
 
-                    {/* キャッチコピー */}
-                    <div className="p-3 bg-slate-50 border border-slate-100 rounded-2xl">
-                      <p className="text-xs font-bold text-slate-800 leading-relaxed">
+                    {/* ひとことスローガン */}
+                    <div className="p-3 bg-emerald-50/60 border border-emerald-100 rounded-2xl">
+                      <p className="text-xs font-bold text-emerald-950 leading-relaxed">
                         「{candidate.catchphrase}」
                       </p>
                     </div>
 
-                    {/* 自己PR本文サマリー */}
-                    <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">{candidate.bio}</p>
-
-                    {/* タグ一覧 */}
+                    {/* 人柄・強みタグ一覧 */}
                     <div className="flex flex-wrap gap-1.5 pt-1">
                       {candidate.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200"
+                          className="text-[10px] px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-900 font-bold border border-emerald-200 shadow-sm"
                         >
                           #{tag}
                         </span>
                       ))}
                     </div>
 
-                    {/* 英語力 & 勤務地 */}
-                    <div className="flex flex-wrap gap-4 text-[11px] text-slate-500 pt-2 border-t border-slate-100">
-                      <span className="flex items-center gap-1">
-                        <Globe className="w-3.5 h-3.5 text-slate-400" />
-                        <span>{candidate.englishLevel}</span>
+                    {/* 興味のある業界 & 勤務地 */}
+                    <div className="flex flex-wrap gap-3 text-[11px] text-slate-500 pt-2 border-t border-slate-100">
+                      <span className="flex items-center gap-1 text-slate-600 font-medium">
+                        <Briefcase className="w-3.5 h-3.5 text-emerald-700" />
+                        <span>{candidate.desiredIndustries?.join(", ") || "IT・Web、ベンチャー"}</span>
                       </span>
-                      <span className="flex items-center gap-1">
-                        <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                      <span className="flex items-center gap-1 text-slate-600 font-medium">
+                        <MapPin className="w-3.5 h-3.5 text-emerald-700" />
                         <span>{candidate.locations.join(", ")}</span>
                       </span>
                     </div>
@@ -476,7 +474,7 @@ export default function CompanySearchPage() {
                   <div className="p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs space-y-1">
                     <span className="text-slate-400">送信先候補者:</span>
                     <p className="font-bold text-slate-900">
-                      {offerTarget.name} ({offerTarget.university} {offerTarget.faculty})
+                      {offerTarget.name} ({offerTarget.university} / {offerTarget.graduationYear}年卒)
                     </p>
                   </div>
 
