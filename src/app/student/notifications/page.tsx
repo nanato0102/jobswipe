@@ -172,10 +172,10 @@ export default function StudentNotificationsPage() {
               </button>
             </div>
 
-            {/* 通知カード一覧 */}
-            <div className="space-y-3">
+            {/* コンパクト統合通知リスト一覧 */}
+            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
               {filteredNotifications.length === 0 ? (
-                <div className="text-center py-16 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-3">
+                <div className="text-center py-16 px-4 space-y-3">
                   <div className="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
                     <Bell className="w-6 h-6" />
                   </div>
@@ -185,53 +185,53 @@ export default function StudentNotificationsPage() {
                   </p>
                 </div>
               ) : (
-                filteredNotifications.map((item) => (
-                  <div
-                    key={item.id}
-                    onClick={() => handleCardClick(item)}
-                    className={`p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer flex items-start justify-between gap-4 group ${
-                      !item.isRead
-                        ? "bg-white border-emerald-300 shadow-xs hover:border-emerald-500 hover:shadow-md"
-                        : "bg-white/70 border-slate-200 hover:bg-white hover:border-slate-300"
-                    }`}
-                  >
-                    <div className="flex items-start gap-3 min-w-0">
-                      <div className="flex-shrink-0 mt-0.5">
-                        {getIcon(item.type)}
-                      </div>
-
-                      <div className="space-y-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          {!item.isRead && (
-                            <span className="w-2 h-2 rounded-full bg-rose-500 flex-shrink-0" />
-                          )}
-                          <h4
-                            className={`text-xs sm:text-sm font-bold truncate ${
-                              !item.isRead ? "text-slate-950" : "text-slate-700"
-                            }`}
-                          >
-                            {item.title}
-                          </h4>
+                <div className="divide-y divide-slate-100">
+                  {filteredNotifications.map((item) => (
+                    <div
+                      key={item.id}
+                      onClick={() => handleCardClick(item)}
+                      className={`px-4 py-3.5 sm:px-5 sm:py-3.5 transition-all cursor-pointer flex items-center justify-between gap-3 group relative ${
+                        !item.isRead
+                          ? "bg-emerald-50/25 hover:bg-emerald-50/40 border-l-4 border-l-emerald-600"
+                          : "hover:bg-slate-50/80 border-l-4 border-l-transparent"
+                      }`}
+                    >
+                      <div className="flex items-start gap-3 min-w-0 flex-1">
+                        <div className="flex-shrink-0 mt-0.5">
+                          {getIcon(item.type)}
                         </div>
 
-                        <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
-                          {item.content}
-                        </p>
+                        <div className="min-w-0 flex-1 space-y-0.5">
+                          {/* 1行目: タイトルと日時 */}
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="flex items-center gap-1.5 min-w-0">
+                              {!item.isRead && (
+                                <span className="w-2 h-2 rounded-full bg-rose-500 flex-shrink-0" />
+                              )}
+                              <h4
+                                className={`text-xs sm:text-sm font-bold truncate ${
+                                  !item.isRead ? "text-slate-950" : "text-slate-700"
+                                }`}
+                              >
+                                {item.title}
+                              </h4>
+                            </div>
+                            <span className="text-[11px] text-slate-400 whitespace-nowrap flex-shrink-0">
+                              {item.createdAt}
+                            </span>
+                          </div>
 
-                        <div className="flex items-center gap-3 pt-1 text-[11px] text-slate-400">
-                          <span>{item.createdAt}</span>
-                          {!item.isRead ? (
-                            <span className="font-bold text-emerald-800">未読</span>
-                          ) : (
-                            <span>既読</span>
-                          )}
+                          {/* 2行目: 本文プレビュー */}
+                          <p className="text-xs text-slate-500 truncate leading-relaxed">
+                            {item.content}
+                          </p>
                         </div>
                       </div>
+
+                      <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-emerald-700 group-hover:translate-x-0.5 transition-all flex-shrink-0" />
                     </div>
-
-                    <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-700 group-hover:translate-x-0.5 transition-all flex-shrink-0 mt-3" />
-                  </div>
-                ))
+                  ))}
+                </div>
               )}
             </div>
           </div>
