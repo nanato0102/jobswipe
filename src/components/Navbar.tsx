@@ -19,6 +19,7 @@ import {
   LogOut,
   Menu,
   X,
+  Sliders,
 } from "lucide-react";
 
 export default function Navbar() {
@@ -34,7 +35,6 @@ export default function Navbar() {
 
   const closeDrawer = () => setDrawerOpen(false);
 
-  // ログイン後のメインルート
   const homeRoute = isStudent ? "/student/profile" : isCompany ? "/swipe" : isAdmin ? "/admin/dashboard" : "/";
 
   return (
@@ -213,6 +213,18 @@ export default function Navbar() {
                       >
                         <MessageSquare className="h-4 w-4" />
                         <span>チャット</span>
+                      </Link>
+
+                      <Link
+                        href="/company/profile"
+                        className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors ${
+                          pathname.startsWith("/company/profile")
+                            ? "bg-blue-50 text-blue-900 font-bold"
+                            : "hover:bg-slate-100 hover:text-slate-900"
+                        }`}
+                      >
+                        <Building2 className="h-4 w-4" />
+                        <span>企業情報編集</span>
                       </Link>
                     </>
                   )}
@@ -513,6 +525,19 @@ export default function Navbar() {
                     >
                       <MessageSquare className="w-4 h-4 text-blue-700" />
                       <span>チャット</span>
+                    </Link>
+
+                    <Link
+                      href="/company/profile"
+                      onClick={closeDrawer}
+                      className={`flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold transition-colors ${
+                        pathname.startsWith("/company/profile")
+                          ? "bg-blue-50 text-blue-900 font-bold"
+                          : "text-slate-700 hover:bg-slate-100"
+                      }`}
+                    >
+                      <Building2 className="w-4 h-4 text-blue-700" />
+                      <span>企業情報編集</span>
                     </Link>
                   </>
                 )}

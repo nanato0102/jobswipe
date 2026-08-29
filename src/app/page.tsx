@@ -379,9 +379,14 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-400">
             <p>© 2026 JobSwipe. All rights reserved.</p>
             <div className="flex gap-4">
-              <span>利用規約</span>
-              <span>プライバシーポリシー</span>
-              <span>セキュリティ方針</span>
+              <Link href="/terms" className="hover:text-slate-700 transition-colors">
+                利用規約
+              </Link>
+              <Link href="/privacy" className="hover:text-slate-700 transition-colors">
+                プライバシーポリシー
+              </Link>
+              <span className="text-slate-300">|</span>
+              <span className="text-slate-500">IPA安全なウェブサイト運用準拠</span>
             </div>
           </div>
         </div>
