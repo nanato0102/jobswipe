@@ -76,23 +76,27 @@ export default function HomePage() {
         <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center space-y-8">
           {/* ブランド公式バッジ */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs sm:text-sm font-bold tracking-wide shadow-sm mx-auto">
-            <Sparkles className="h-4 w-4 text-emerald-400" />
-            <span>人柄が採用の基準になる社会をつくる</span>
+            <Sparkles className="h-4 w-4 text-emerald-400 flex-shrink-0" />
+            <span className="inline-block">人柄が採用の基準になる社会をつくる</span>
           </div>
 
           {/* メインヘッドライン */}
           <div className="space-y-4 max-w-4xl mx-auto">
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.15] text-white">
-              履歴書を、<br />
-              <span className="text-emerald-400">
+              <span className="inline-block">履歴書を、</span><br className="hidden sm:inline" />
+              <span className="text-emerald-400 inline-block">
                 スワイプする時代へ。
               </span>
             </h1>
             <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-200 pt-2">
-              数秒で伝わる、人柄でつながる。
+              <span className="inline-block">数秒で伝わる、</span>
+              <span className="inline-block">人柄でつながる。</span>
             </p>
             <p className="text-sm sm:text-base text-slate-400 max-w-2xl mx-auto leading-relaxed pt-2">
-              文章力で落とされる就活は、もう終わり。自撮り感覚のショート動画を投稿するだけで、あなたの「雰囲気」や「熱量」に惚れ込んだ企業から直接スカウトが届く。
+              <span className="inline-block">文章力で落とされる就活は、もう終わり。</span>
+              <span className="inline-block">自撮り感覚のショート動画を投稿するだけで、</span>
+              <span className="inline-block">あなたの「雰囲気」や「熱量」に惚れ込んだ企業から</span>
+              <span className="inline-block">直接スカウトが届く。</span>
             </p>
           </div>
 
@@ -102,16 +106,16 @@ export default function HomePage() {
               href="/register"
               className="w-full sm:w-auto px-9 py-4 text-base font-bold text-white bg-emerald-600 hover:bg-emerald-500 active:scale-95 rounded-2xl transition-all shadow-[0_10px_25px_rgba(5,150,105,0.3)] flex items-center justify-center gap-2 group"
             >
-              <User className="h-5 w-5" />
+              <User className="h-5 w-5 flex-shrink-0" />
               <span>[学生] 無料でスカウトを受け取る</span>
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 flex-shrink-0" />
             </Link>
 
             <Link
               href="/company/login"
               className="w-full sm:w-auto px-8 py-4 text-base font-bold text-slate-200 bg-[#141B2D] hover:bg-[#1D263F] hover:text-white border border-slate-700/80 hover:border-emerald-500/50 rounded-2xl transition-all flex items-center justify-center gap-2 shadow-sm"
             >
-              <Building2 className="h-5 w-5 text-emerald-400" />
+              <Building2 className="h-5 w-5 text-emerald-400 flex-shrink-0" />
               <span>[企業] 候補者をスワイプする</span>
             </Link>
           </div>
@@ -119,15 +123,15 @@ export default function HomePage() {
           {/* 特徴チェックバッジ */}
           <div className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs sm:text-sm text-slate-300 font-semibold">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
               <span>ES・志望動機一切不要</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
               <span>自撮り短尺動画で即スタート</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
               <span>厳選企業から直接スカウト</span>
             </div>
           </div>
@@ -143,14 +147,18 @@ export default function HomePage() {
             Manifesto
           </span>
           <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
-            ESという名の「作文コンテスト」を、<br />
-            <span className="text-emerald-400">
+            <span className="inline-block">ESという名の</span>
+            <span className="inline-block">「作文コンテスト」を、</span><br className="hidden sm:inline" />
+            <span className="text-emerald-400 inline-block">
               終わらせよう。
             </span>
           </h2>
           <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed pt-2">
-            「どれだけ綺麗に文章を盛れたか」で合否が決まる就活に、何の意味があるのか。<br className="hidden sm:inline" />
-            「会ってみたら思っていた雰囲気と違った」と落胆する採用に、何の価値があるのか。
+            <span className="inline-block">「どれだけ綺麗に文章を盛れたか」で</span>
+            <span className="inline-block">合否が決まる就活に、</span>
+            <span className="inline-block">何の意味があるのか。</span><br className="hidden sm:inline" />
+            <span className="inline-block">「会ってみたら思っていた雰囲気と違った」と</span>
+            <span className="inline-block">落胆する採用に、何の価値があるのか。</span>
           </p>
           <div className="p-6 sm:p-8 bg-[#141B2D] rounded-3xl border border-slate-700/60 max-w-3xl mx-auto text-xs sm:text-sm text-slate-300 leading-relaxed text-left space-y-3 shadow-xl">
             <p>
@@ -173,10 +181,12 @@ export default function HomePage() {
               Product Experience
             </span>
             <h2 className="text-3xl sm:text-4xl font-black text-white">
-              最初の数秒で、人柄を見抜く。
+              <span className="inline-block">最初の数秒で、</span>
+              <span className="inline-block">人柄を見抜く。</span>
             </h2>
             <p className="text-xs sm:text-sm text-slate-400">
-              指先ひとつのスワイプから、運命のオファーが生まれる。
+              <span className="inline-block">指先ひとつのスワイプから、</span>
+              <span className="inline-block">運命のオファーが生まれる。</span>
             </p>
           </div>
 
@@ -212,14 +222,17 @@ export default function HomePage() {
           </div>
 
           {/* 体感カード */}
-          <div className="max-w-lg mx-auto bg-[#141B2D] rounded-3xl border border-slate-700/80 p-8 shadow-2xl space-y-6">
+          <div className="max-w-lg mx-auto bg-[#141B2D] rounded-3xl border border-slate-700/80 p-6 sm:p-8 shadow-2xl space-y-6">
             {activeTab === "student" ? (
               <div className="space-y-5 text-center">
                 <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto border border-emerald-500/20">
                   <Camera className="w-8 h-8" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-xl font-bold text-white">自撮り感覚で数秒の動画を置くだけ</h3>
+                  <h3 className="text-xl font-bold text-white">
+                    <span className="inline-block">自撮り感覚で</span>
+                    <span className="inline-block">数秒の動画を置くだけ</span>
+                  </h3>
                   <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
                     エントリーシートは何十枚も書く必要はありません。スマホで撮ったPR動画を1本投稿したら、あとは企業からのスカウト通知を待つだけです。
                   </p>
@@ -240,7 +253,10 @@ export default function HomePage() {
                   <Layers className="w-8 h-8" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-xl font-bold text-white">隙間時間に縦スワイプで即戦力発掘</h3>
+                  <h3 className="text-xl font-bold text-white">
+                    <span className="inline-block">隙間時間に縦スワイプで</span>
+                    <span className="inline-block">即戦力発掘</span>
+                  </h3>
                   <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
                     通勤時間や面接の合間にショート動画をサクサク閲覧。表情や受け答えのテンポから、自社にフィットする候補者を直感的にスカウトできます。
                   </p>
@@ -270,11 +286,12 @@ export default function HomePage() {
               For Candidates
             </span>
             <h2 className="text-3xl sm:text-4xl font-black text-white">
-              盛ったESはもう終わり。<br />
-              <span className="text-emerald-400">短尺動画で届く、逆求人。</span>
+              <span className="inline-block">盛ったESはもう終わり。</span><br className="hidden sm:inline" />
+              <span className="text-emerald-400 inline-block">短尺動画で届く、逆求人。</span>
             </h2>
             <p className="text-xs sm:text-sm text-slate-400">
-              文字の綺麗さではなく、あなたの表情やエネルギーそのものが最大の武器になる。
+              <span className="inline-block">文字の綺麗さではなく、</span>
+              <span className="inline-block">あなたの表情やエネルギーそのものが最大の武器になる。</span>
             </p>
           </div>
 
@@ -322,11 +339,12 @@ export default function HomePage() {
               For Recruiters
             </span>
             <h2 className="text-3xl sm:text-4xl font-black text-white">
-              会ってガッカリをゼロに。<br />
-              <span className="text-emerald-400">直感スワイプで即戦力をハックする。</span>
+              <span className="inline-block">会ってガッカリをゼロに。</span><br className="hidden sm:inline" />
+              <span className="text-emerald-400 inline-block">直感スワイプで即戦力をハックする。</span>
             </h2>
             <p className="text-xs sm:text-sm text-slate-400">
-              書類選考の工数を劇的に削減し、カルチャーにフィットする意欲的な人材を最速で獲得。
+              <span className="inline-block">書類選考の工数を劇的に削減し、</span>
+              <span className="inline-block">カルチャーにフィットする意欲的な人材を最速で獲得。</span>
             </p>
           </div>
 
@@ -374,7 +392,9 @@ export default function HomePage() {
               Target Sectors
             </span>
             <h2 className="text-2xl sm:text-4xl font-black text-white">
-              「文字」よりも「対人印象」が武器になる、すべての業界へ。
+              <span className="inline-block">「文字」よりも「対人印象」が</span>
+              <span className="inline-block">武器になる、</span>
+              <span className="inline-block">すべての業界へ。</span>
             </h2>
           </div>
 
@@ -401,14 +421,15 @@ export default function HomePage() {
               Trust & Safety
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-white">
-              安心して自己表現できる、完全クローズド環境
+              <span className="inline-block">安心して自己表現できる、</span>
+              <span className="inline-block">完全クローズド環境</span>
             </h2>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
             <div className="p-6 sm:p-8 bg-[#141B2D] rounded-3xl border border-slate-700/60 space-y-3">
               <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm sm:text-base">
-                <Lock className="w-5 h-5" />
+                <Lock className="w-5 h-5 flex-shrink-0" />
                 <span>審査制企業のみに限定公開</span>
               </div>
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
@@ -418,7 +439,7 @@ export default function HomePage() {
 
             <div className="p-6 sm:p-8 bg-[#141B2D] rounded-3xl border border-slate-700/60 space-y-3">
               <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm sm:text-base">
-                <Camera className="w-5 h-5" />
+                <Camera className="w-5 h-5 flex-shrink-0" />
                 <span>編集不要・お題テンプレート付き</span>
               </div>
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
@@ -438,7 +459,10 @@ export default function HomePage() {
             <span className="text-xs font-black tracking-widest text-emerald-400 uppercase">
               How It Works
             </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-white">かんたん3ステップでスタート</h2>
+            <h2 className="text-3xl sm:text-4xl font-black text-white">
+              <span className="inline-block">かんたん3ステップで</span>
+              <span className="inline-block">スタート</span>
+            </h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
@@ -526,14 +550,14 @@ export default function HomePage() {
 
         <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 space-y-6">
           <h2 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
-            さあ、あなたの魅力を<br />
-            <span className="text-emerald-400">
+            <span className="inline-block">さあ、あなたの魅力を</span><br className="hidden sm:inline" />
+            <span className="text-emerald-400 inline-block">
               短尺動画に解き放とう。
             </span>
           </h2>
           <p className="text-sm sm:text-base text-slate-300 max-w-xl mx-auto leading-relaxed">
-            履歴書の文字数で悩む時間は、今日でおしまい。<br />
-            スマホひとつで、あなたを本当に求める企業に出会おう。
+            <span className="inline-block">履歴書の文字数で悩む時間は、今日でおしまい。</span><br className="hidden sm:inline" />
+            <span className="inline-block">スマホひとつで、あなたを本当に求める企業に出会おう。</span>
           </p>
 
           <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -541,16 +565,16 @@ export default function HomePage() {
               href="/register"
               className="w-full sm:w-auto px-9 py-4 bg-emerald-600 hover:bg-emerald-500 text-white text-base font-bold rounded-2xl shadow-[0_10px_25px_rgba(5,150,105,0.3)] transition-all active:scale-95 flex items-center justify-center gap-2"
             >
-              <User className="w-5 h-5" />
+              <User className="w-5 h-5 flex-shrink-0" />
               <span>今すぐ学生新規登録（完全無料）</span>
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="w-5 h-5 flex-shrink-0" />
             </Link>
 
             <Link
               href="/company/login"
               className="w-full sm:w-auto px-8 py-4 bg-[#141B2D] hover:bg-[#1D263F] text-slate-200 border border-slate-700/80 rounded-2xl text-sm font-bold transition-all flex items-center justify-center gap-2"
             >
-              <Building2 className="w-4 h-4 text-emerald-400" />
+              <Building2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
               <span>採用企業様 ログイン・登録</span>
             </Link>
           </div>
