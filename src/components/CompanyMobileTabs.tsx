@@ -3,16 +3,17 @@
 import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Sparkles, BarChart3, Heart, MessageSquare, Building2 } from "lucide-react";
+import { Sparkles, Search, Heart, MessageSquare, Bell } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { appStore } from "@/lib/appStore";
 
-// 企業側の5つのタブ並び順
+// 企業側の5つのタブ並び順: スワイプ ➔ 検索 ➔ 気になる ➔ チャット ➔ 通知
 const TABS = [
   { path: "/swipe", label: "スワイプ", icon: Sparkles },
-  { path: "/company/usage", label: "利用状況", icon: BarChart3 },
+  { path: "/company/search", label: "検索", icon: Search },
   { path: "/company/likes", label: "気になる", icon: Heart },
   { path: "/company/chat", label: "チャット", icon: MessageSquare },
-  { path: "/company/profile", label: "企業情報", icon: Building2 },
+  { path: "/company/notifications", label: "通知", icon: Bell },
 ];
 
 interface CompanyMobileTabsProps {
@@ -27,11 +28,18 @@ export default function CompanyMobileTabs({ children }: CompanyMobileTabsProps) 
   const [slideDirection, setSlideDirection] = useState<"right" | "left" | null>(null);
   const [touchOffset, setTouchOffset] = useState<number>(0);
   const [isSwiping, setIsSwiping] = useState(false);
+  const [unreadCount, setUnreadCount] = useState<number>(0);
 
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
 
   const currentIdx = TABS.findIndex((t) => pathname.startsWith(t.path));
+
+  useEffect(() => {
+    // 企業の未読通知数を取得
+    const count = appStore.getUnreadNotificationCount("COMPANY");
+    setUnreadCount(count);
+  }, [pathname]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -127,16 +135,18 @@ export default function CompanyMobileTabs({ children }: CompanyMobileTabsProps) 
       </div>
 
       {/* ========================================================================= */}
-      {/* 📱 企業専用: 固定ボトムナビゲーションバー（開いているタブの色が変化） */}
+      {/* 📱 企業専用: 固定ボトムナビゲーションバー（赤点バッジ対応） */}
       {/* ========================================================================= */}
       <nav
-        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur border-t border-slate-200/90 shadow-[0_-4px_16px_rgba(0,0,0,0.04)] px-1.5 py-1.5"
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur border-t border-slate-200/90 shadow-[0_-4px_16px_rgba(0,0,0,0.04)] px-1 py-1.5"
         aria-label="企業モバイル下部ナビゲーション"
       >
         <div className="grid grid-cols-5 gap-0.5 max-w-md mx-auto">
           {TABS.map((tab) => {
             const isActive = pathname.startsWith(tab.path);
             const Icon = tab.icon;
+            const isNotificationTab = tab.path === "/company/notifications";
+            const showRedDot = isNotificationTab && unreadCount > 0;
 
             return (
               <Link
@@ -156,10 +166,14 @@ export default function CompanyMobileTabs({ children }: CompanyMobileTabsProps) 
                         : "text-slate-400 group-hover:text-slate-600"
                     }`}
                   />
+                  {/* 未読通知がある場合の赤点バッジ */}
+                  {showRedDot && (
+                    <span className="absolute -top-0.5 -right-1 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white" />
+                  )}
                 </div>
 
                 <span
-                  className={`text-[9.5px] mt-1 tracking-tight transition-colors ${
+                  className={`text-[9.5px] mt-1 tracking-tight transition-colors truncate max-w-full ${
                     isActive ? "font-black text-blue-950" : "font-medium text-slate-500"
                   }`}
                 >

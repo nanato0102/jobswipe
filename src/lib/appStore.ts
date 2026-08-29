@@ -83,6 +83,25 @@ export interface StoredInquiry {
   createdAt: string;
 }
 
+export type NotificationType =
+  | "OFFER_RECEIVED"
+  | "MESSAGE_RECEIVED"
+  | "LIKE_RECEIVED"
+  | "OFFER_ACCEPTED"
+  | "OFFER_DECLINED"
+  | "SYSTEM_NOTICE";
+
+export interface NotificationItem {
+  id: string;
+  role: "STUDENT" | "COMPANY";
+  type: NotificationType;
+  title: string;
+  content: string;
+  linkUrl: string;
+  isRead: boolean;
+  createdAt: string;
+}
+
 const DEFAULT_OFFERS: StoredOffer[] = [
   {
     id: "off-1",
@@ -530,7 +549,136 @@ export const appStore = {
     }
     return updated;
   },
+
+  // =========================================================================
+  // 通知（Notifications）管理
+  // =========================================================================
+  getNotifications: (role?: "STUDENT" | "COMPANY"): NotificationItem[] => {
+    if (typeof window === "undefined") return DEFAULT_NOTIFICATIONS;
+    const raw = localStorage.getItem("jobswipe_notifications");
+    if (!raw) {
+      localStorage.setItem("jobswipe_notifications", JSON.stringify(DEFAULT_NOTIFICATIONS));
+      return role
+        ? DEFAULT_NOTIFICATIONS.filter((n) => n.role === role)
+        : DEFAULT_NOTIFICATIONS;
+    }
+    try {
+      const parsed: NotificationItem[] = JSON.parse(raw);
+      return role ? parsed.filter((n) => n.role === role) : parsed;
+    } catch {
+      return role
+        ? DEFAULT_NOTIFICATIONS.filter((n) => n.role === role)
+        : DEFAULT_NOTIFICATIONS;
+    }
+  },
+
+  markNotificationAsRead: (id: string) => {
+    const all = appStore.getNotifications();
+    const updated = all.map((n) => (n.id === id ? { ...n, isRead: true } : n));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("jobswipe_notifications", JSON.stringify(updated));
+    }
+    return updated;
+  },
+
+  markAllNotificationsAsRead: (role: "STUDENT" | "COMPANY") => {
+    const all = appStore.getNotifications();
+    const updated = all.map((n) => (n.role === role ? { ...n, isRead: true } : n));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("jobswipe_notifications", JSON.stringify(updated));
+    }
+    return updated;
+  },
+
+  getUnreadNotificationCount: (role: "STUDENT" | "COMPANY"): number => {
+    const list = appStore.getNotifications(role);
+    return list.filter((n) => !n.isRead).length;
+  },
+
+  addNotification: (item: Omit<NotificationItem, "id" | "isRead" | "createdAt">) => {
+    const all = appStore.getNotifications();
+    const newNotif: NotificationItem = {
+      ...item,
+      id: "notif-" + Date.now() + "-" + Math.floor(Math.random() * 1000),
+      isRead: false,
+      createdAt: new Date().toLocaleString("ja-JP", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    };
+    const updated = [newNotif, ...all];
+    if (typeof window !== "undefined") {
+      localStorage.setItem("jobswipe_notifications", JSON.stringify(updated));
+    }
+    return newNotif;
+  },
 };
+
+const DEFAULT_NOTIFICATIONS: NotificationItem[] = [
+  {
+    id: "notif-s-1",
+    role: "STUDENT",
+    type: "OFFER_RECEIVED",
+    title: "テックイノベーション株式会社からオファーが届きました！",
+    content: "「動画を拝見しました！チームでのリーダーシップと技術への熱意に大変共感いたしました。」",
+    linkUrl: "/student/offers",
+    isRead: false,
+    createdAt: "2026/08/29 14:00",
+  },
+  {
+    id: "notif-s-2",
+    role: "STUDENT",
+    type: "MESSAGE_RECEIVED",
+    title: "グローバル・コンサルティング株式会社から新着メッセージがあります",
+    content: "「ご案内ありがとうございます！面談の日程について承知いたしました。」",
+    linkUrl: "/company/chat",
+    isRead: false,
+    createdAt: "2026/08/29 12:30",
+  },
+  {
+    id: "notif-s-3",
+    role: "STUDENT",
+    type: "LIKE_RECEIVED",
+    title: "株式会社サイバー・イノベーションがあなたの動画に「気になる」を押しました",
+    content: "企業がスカウト検討リストに追加しました。オファーが届くまでお待ちください。",
+    linkUrl: "/student/video",
+    isRead: true,
+    createdAt: "2026/08/28 17:45",
+  },
+  {
+    id: "notif-c-1",
+    role: "COMPANY",
+    type: "OFFER_ACCEPTED",
+    title: "佐藤 健太 さんがオファーを承諾しました！",
+    content: "マッチングが成立しました。Webチャットで日程を調整してカジュアル面談へ進みましょう。",
+    linkUrl: "/company/chat",
+    isRead: false,
+    createdAt: "2026/08/29 14:10",
+  },
+  {
+    id: "notif-c-2",
+    role: "COMPANY",
+    type: "MESSAGE_RECEIVED",
+    title: "佐藤 健太 さんから新着メッセージがあります",
+    content: "「面談の日程について、以下で調整可能でしょうか？・第1希望: 8月31日...」",
+    linkUrl: "/company/chat",
+    isRead: false,
+    createdAt: "2026/08/29 14:30",
+  },
+  {
+    id: "notif-c-3",
+    role: "COMPANY",
+    type: "SYSTEM_NOTICE",
+    title: "今月のオファー枠（残り8枠）のご案内",
+    content: "アクティブな学生PR動画が新たに12件追加されました。スワイプで候補者を発掘しましょう。",
+    linkUrl: "/swipe",
+    isRead: true,
+    createdAt: "2026/08/28 10:00",
+  },
+];
 
 const DEFAULT_INQUIRIES: StoredInquiry[] = [
   {

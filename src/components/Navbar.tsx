@@ -21,13 +21,26 @@ import {
   Settings,
   HelpCircle,
   BarChart3,
+  Bell,
 } from "lucide-react";
+import { appStore } from "@/lib/appStore";
 
 export default function Navbar() {
   const pathname = usePathname();
   const { session, isStudent, isCompany, isAdmin, isLoggedIn, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isStudent) {
+      setUnreadCount(appStore.getUnreadNotificationCount("STUDENT"));
+    } else if (isCompany) {
+      setUnreadCount(appStore.getUnreadNotificationCount("COMPANY"));
+    } else {
+      setUnreadCount(0);
+    }
+  }, [pathname, isStudent, isCompany]);
 
   const isAuthPage =
     pathname === "/login" ||
@@ -121,15 +134,20 @@ export default function Navbar() {
                 </Link>
 
                 <Link
-                  href="/company/chat"
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors ${
-                    pathname.startsWith("/company/chat")
+                  href="/student/notifications"
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors relative ${
+                    pathname.startsWith("/student/notifications")
                       ? "bg-emerald-50 text-emerald-800 font-bold"
                       : "hover:bg-slate-100 hover:text-slate-900"
                   }`}
                 >
-                  <MessageSquare className="h-4 w-4" />
-                  <span>チャット</span>
+                  <div className="relative">
+                    <Bell className="h-4 w-4 text-emerald-700" />
+                    {unreadCount > 0 && (
+                      <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white" />
+                    )}
+                  </div>
+                  <span>通知</span>
                 </Link>
               </>
             )}
@@ -150,15 +168,15 @@ export default function Navbar() {
                 </Link>
 
                 <Link
-                  href="/company/usage"
+                  href="/company/search"
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors ${
-                    pathname.startsWith("/company/usage")
+                    pathname.startsWith("/company/search")
                       ? "bg-blue-50 text-blue-900 font-bold"
                       : "hover:bg-slate-100 hover:text-slate-900"
                   }`}
                 >
-                  <BarChart3 className="h-4 w-4 text-blue-700" />
-                  <span>利用状況</span>
+                  <Search className="h-4 w-4 text-blue-700" />
+                  <span>学生検索</span>
                 </Link>
 
                 <Link
@@ -169,8 +187,8 @@ export default function Navbar() {
                       : "hover:bg-slate-100 hover:text-slate-900"
                   }`}
                 >
-                  <Heart className="h-4 w-4" />
-                  <span>気になる一覧</span>
+                  <Heart className="h-4 w-4 text-blue-700" />
+                  <span>気になる</span>
                 </Link>
 
                 <Link
@@ -181,8 +199,25 @@ export default function Navbar() {
                       : "hover:bg-slate-100 hover:text-slate-900"
                   }`}
                 >
-                  <MessageSquare className="h-4 w-4" />
+                  <MessageSquare className="h-4 w-4 text-blue-700" />
                   <span>チャット</span>
+                </Link>
+
+                <Link
+                  href="/company/notifications"
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors relative ${
+                    pathname.startsWith("/company/notifications")
+                      ? "bg-blue-50 text-blue-900 font-bold"
+                      : "hover:bg-slate-100 hover:text-slate-900"
+                  }`}
+                >
+                  <div className="relative">
+                    <Bell className="h-4 w-4 text-blue-700" />
+                    {unreadCount > 0 && (
+                      <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white" />
+                    )}
+                  </div>
+                  <span>通知</span>
                 </Link>
 
                 <Link
@@ -193,7 +228,7 @@ export default function Navbar() {
                       : "hover:bg-slate-100 hover:text-slate-900"
                   }`}
                 >
-                  <Building2 className="h-4 w-4" />
+                  <Building2 className="h-4 w-4 text-blue-700" />
                   <span>企業情報</span>
                 </Link>
               </>
@@ -360,6 +395,15 @@ export default function Navbar() {
                   )}
 
                   <hr className="border-slate-100 my-1" />
+
+                  <Link
+                    href="/settings"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex items-center gap-2.5 px-3.5 py-2 text-xs text-slate-700 hover:bg-slate-50 hover:text-slate-900 rounded-xl transition-colors font-medium"
+                  >
+                    <Settings className="w-4 h-4 text-slate-500" />
+                    <span>各種設定</span>
+                  </Link>
 
                   <Link
                     href="/contact"

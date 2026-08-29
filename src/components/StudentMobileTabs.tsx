@@ -3,15 +3,17 @@
 import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { User, Film, Sparkles, MessageSquare } from "lucide-react";
+import { User, Film, Sparkles, MessageSquare, Bell } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { appStore } from "@/lib/appStore";
 
-// ご指示いただいた正しい並び順: プロフィール ➔ 動画投稿 ➔ オファー ➔ チャット
+// 並び順: プロフィール ➔ 動画投稿 ➔ オファー ➔ チャット ➔ 通知
 const TABS = [
   { path: "/student/profile", label: "プロフィール", icon: User },
   { path: "/student/video", label: "動画投稿", icon: Film },
   { path: "/student/offers", label: "オファー", icon: Sparkles },
   { path: "/company/chat", label: "チャット", icon: MessageSquare },
+  { path: "/student/notifications", label: "通知", icon: Bell },
 ];
 
 interface StudentMobileTabsProps {
@@ -26,11 +28,18 @@ export default function StudentMobileTabs({ children }: StudentMobileTabsProps) 
   const [slideDirection, setSlideDirection] = useState<"right" | "left" | null>(null);
   const [touchOffset, setTouchOffset] = useState<number>(0);
   const [isSwiping, setIsSwiping] = useState(false);
+  const [unreadCount, setUnreadCount] = useState<number>(0);
 
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
 
   const currentIdx = TABS.findIndex((t) => pathname.startsWith(t.path));
+
+  useEffect(() => {
+    // 未読通知数を取得
+    const count = appStore.getUnreadNotificationCount("STUDENT");
+    setUnreadCount(count);
+  }, [pathname]);
 
   useEffect(() => {
     // ページ遷移後にアニメーション方向をリセット
@@ -125,22 +134,24 @@ export default function StudentMobileTabs({ children }: StudentMobileTabsProps) 
       </div>
 
       {/* ========================================================================= */}
-      {/* 📱 スマホ専用: 固定ボトムナビゲーションバー（開いているタブの色が変化） */}
+      {/* 📱 スマホ専用: 固定ボトムナビゲーションバー（赤点バッジ対応） */}
       {/* ========================================================================= */}
       <nav
-        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur border-t border-slate-200/90 shadow-[0_-4px_16px_rgba(0,0,0,0.04)] px-2 py-1.5"
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur border-t border-slate-200/90 shadow-[0_-4px_16px_rgba(0,0,0,0.04)] px-1 py-1.5"
         aria-label="モバイル下部ナビゲーション"
       >
-        <div className="grid grid-cols-4 gap-1 max-w-md mx-auto">
+        <div className="grid grid-cols-5 gap-0.5 max-w-md mx-auto">
           {TABS.map((tab) => {
             const isActive = pathname.startsWith(tab.path);
             const Icon = tab.icon;
+            const isNotificationTab = tab.path === "/student/notifications";
+            const showRedDot = isNotificationTab && unreadCount > 0;
 
             return (
               <Link
                 key={tab.path}
                 href={tab.path}
-                className={`flex flex-col items-center justify-center py-1.5 px-1 rounded-2xl transition-all select-none relative group ${
+                className={`flex flex-col items-center justify-center py-1.5 px-0.5 rounded-2xl transition-all select-none relative group ${
                   isActive
                     ? "bg-emerald-50 text-emerald-800 font-bold"
                     : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
@@ -148,16 +159,20 @@ export default function StudentMobileTabs({ children }: StudentMobileTabsProps) 
               >
                 <div className="relative mt-0.5">
                   <Icon
-                    className={`w-5 h-5 transition-transform duration-200 ${
+                    className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-200 ${
                       isActive
                         ? "text-emerald-700 scale-110"
                         : "text-slate-400 group-hover:text-slate-600"
                     }`}
                   />
+                  {/* 未読通知がある場合の赤点バッジ */}
+                  {showRedDot && (
+                    <span className="absolute -top-0.5 -right-1 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white" />
+                  )}
                 </div>
 
                 <span
-                  className={`text-[10px] mt-1 tracking-tight transition-colors ${
+                  className={`text-[9.5px] mt-1 tracking-tight transition-colors truncate max-w-full ${
                     isActive ? "font-black text-emerald-900" : "font-medium text-slate-500"
                   }`}
                 >
