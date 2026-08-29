@@ -661,12 +661,13 @@ export default function HomePage() {
       {/* ========================================================================= */}
       {/* 11. 信頼性フッター */}
       {/* ========================================================================= */}
-      <footer className="bg-[#080B12] border-t border-slate-800 py-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-slate-800">
-            <div className="flex flex-col items-center md:items-start gap-2">
+      <footer className="bg-[#080B12] border-t border-slate-800 pt-12 pb-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-10">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8 border-b border-slate-800">
+            {/* ブランド */}
+            <div className="md:col-span-1 space-y-3">
               <div className="flex items-center gap-2">
-                <div className="relative w-8 h-8 flex items-center justify-center">
+                <div className="relative w-8 h-8 flex items-center justify-center flex-shrink-0">
                   <Image
                     src="/logo.png"
                     alt="JobSwipe Logo"
@@ -677,42 +678,81 @@ export default function HomePage() {
                 </div>
                 <span className="font-bold text-lg text-white">JobSwipe</span>
               </div>
-              <p className="text-xs text-slate-400 text-center md:text-left">
+              <p className="text-xs text-slate-400 leading-relaxed">
                 人柄が採用の基準になる社会をつくる。短尺動画スワイプ型 逆求人プラットフォーム
               </p>
             </div>
 
-            <div className="flex flex-wrap justify-center gap-6 text-xs text-slate-300 font-semibold">
-              <Link href="/register" className="hover:text-emerald-400 transition-colors">
-                学生新規登録
-              </Link>
-              <Link href="/company/login" className="hover:text-emerald-400 transition-colors">
-                採用担当の方はこちら
-              </Link>
-              <Link href="/contact" className="hover:text-emerald-400 transition-colors">
-                お問い合わせ・導入相談
-              </Link>
-              <Link href="/login" className="hover:text-white transition-colors">
-                ログイン
-              </Link>
+            {/* サービス利用導線 */}
+            <div className="space-y-3">
+              <p className="text-xs font-bold text-slate-200 tracking-wider">サービス利用</p>
+              <ul className="space-y-2 text-xs text-slate-400">
+                <li>
+                  <Link href="/register" className="hover:text-emerald-400 transition-colors">
+                    学生 新規会員登録（無料）
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/company/login" className="hover:text-emerald-400 transition-colors">
+                    企業 採用担当者ログイン
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/company/register" className="hover:text-emerald-400 transition-colors">
+                    企業 新規アカウント開設
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/login" className="hover:text-white transition-colors">
+                    ログイン画面
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* 企業情報・法的表記 */}
+            <div className="space-y-3">
+              <p className="text-xs font-bold text-slate-200 tracking-wider">企業情報・法的表記</p>
+              <ul className="space-y-2 text-xs text-slate-400">
+                <li>
+                  <Link href="/company/about" className="hover:text-emerald-400 transition-colors">
+                    会社概要・特定商取引法に基づく表記
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/terms" className="hover:text-emerald-400 transition-colors">
+                    利用規約
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/privacy" className="hover:text-emerald-400 transition-colors">
+                    プライバシーポリシー
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* サポート・安心安全 */}
+            <div className="space-y-3">
+              <p className="text-xs font-bold text-slate-200 tracking-wider">サポート・セキュリティ</p>
+              <ul className="space-y-2 text-xs text-slate-400">
+                <li>
+                  <Link href="/contact" className="hover:text-emerald-400 transition-colors">
+                    お問い合わせ・導入相談窓口
+                  </Link>
+                </li>
+                <li className="text-[11px] text-slate-500 pt-1">
+                  IPA「安全なウェブサイトの作り方」運用準拠
+                </li>
+              </ul>
             </div>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-400">
-            <p>© 2026 JobSwipe. All rights reserved.</p>
-            <div className="flex flex-wrap items-center gap-4">
-              <Link href="/company/about" className="hover:text-slate-200 transition-colors">
-                会社概要・特定商取引法
-              </Link>
-              <Link href="/terms" className="hover:text-slate-200 transition-colors">
-                利用規約
-              </Link>
-              <Link href="/privacy" className="hover:text-slate-200 transition-colors">
-                プライバシーポリシー
-              </Link>
-              <span className="text-slate-600">|</span>
-              <span className="text-slate-400">IPA安全なウェブサイト運用準拠</span>
-            </div>
+            <p>© 2026 JobSwipe Inc. All rights reserved.</p>
+            <p className="text-slate-400">
+              就活版TikTok型 逆求人プラットフォーム JobSwipe
+            </p>
           </div>
         </div>
       </footer>
