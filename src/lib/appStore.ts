@@ -26,6 +26,13 @@ export interface ChatThread {
   unread: number;
 }
 
+export interface MessageAttachment {
+  name: string;
+  size: string;
+  type: "image" | "pdf";
+  url: string;
+}
+
 export interface StoredMessage {
   id: string;
   threadId: string;
@@ -33,6 +40,7 @@ export interface StoredMessage {
   senderName: string;
   content: string;
   sentAt: string;
+  attachment?: MessageAttachment;
 }
 
 export interface StoredLike {
@@ -442,7 +450,8 @@ export const appStore = {
     threadId: string,
     senderRole: "STUDENT" | "COMPANY",
     senderName: string,
-    content: string
+    content: string,
+    attachment?: MessageAttachment
   ): StoredMessage => {
     const allMessages = appStore.getMessages();
     const newMsg: StoredMessage = {
@@ -452,6 +461,7 @@ export const appStore = {
       senderName,
       content,
       sentAt: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      ...(attachment ? { attachment } : {}),
     };
     const updated = [...allMessages, newMsg];
     localStorage.setItem("jobswipe_chat_messages", JSON.stringify(updated));

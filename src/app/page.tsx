@@ -700,7 +700,10 @@ export default function HomePage() {
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-400">
             <p>© 2026 JobSwipe. All rights reserved.</p>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap items-center gap-4">
+              <Link href="/company/about" className="hover:text-slate-200 transition-colors">
+                会社概要・特定商取引法
+              </Link>
               <Link href="/terms" className="hover:text-slate-200 transition-colors">
                 利用規約
               </Link>
