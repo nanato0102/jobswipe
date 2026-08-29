@@ -208,7 +208,7 @@ export default function Navbar() {
             </div>
           ) : (
             <div className="flex items-center gap-2 sm:gap-3">
-              {/* 採用担当の方はこちら リンク */}
+              {/* PC用 採用担当の方はこちら リンク */}
               <Link
                 href="/company/login"
                 className="text-xs font-semibold text-slate-600 hover:text-emerald-800 hover:underline px-2 py-1.5 transition-colors hidden sm:flex items-center gap-1"

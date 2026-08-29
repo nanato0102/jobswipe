@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Sparkles, User, ArrowRight, Video, MessageSquare } from "lucide-react";
+import { Sparkles, User, ArrowRight, Video, MessageSquare, Building2 } from "lucide-react";
 
 export default function HomePage() {
   return (
@@ -53,6 +53,18 @@ export default function HomePage() {
             >
               <User className="h-4 w-4" />
               <span>ログイン</span>
+            </Link>
+          </div>
+
+          {/* スマホ専用 採用担当の方はこちらリンク（新規登録・ログインの下に配置） */}
+          <div className="pt-2 sm:hidden">
+            <Link
+              href="/company/login"
+              className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-emerald-800 font-semibold p-2"
+            >
+              <Building2 className="w-3.5 h-3.5 text-slate-400" />
+              <span>採用担当の方はこちら</span>
+              <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
         </div>
