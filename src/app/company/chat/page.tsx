@@ -19,6 +19,7 @@ import {
   Clock,
 } from "lucide-react";
 import StudentMobileTabs from "@/components/StudentMobileTabs";
+import CompanyMobileTabs from "@/components/CompanyMobileTabs";
 
 function ChatContent() {
   const { session, isStudent, isCompany } = useAuth();
@@ -84,9 +85,11 @@ function ChatContent() {
     t.partnerSub.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const TabsWrapper = isCompany ? CompanyMobileTabs : StudentMobileTabs;
+
   return (
     <RoleGuard allowedRoles={["COMPANY", "STUDENT", "ADMIN"]}>
-      <StudentMobileTabs>
+      <TabsWrapper>
         <div className="flex-1 py-4 sm:py-6 px-3 sm:px-6 max-w-6xl mx-auto w-full flex flex-col h-[calc(100vh-6rem)] min-h-[600px]">
         <div className="bg-white rounded-3xl border border-slate-200 shadow-xl flex-1 flex overflow-hidden">
           {/* ========================================================================= */}
@@ -354,7 +357,7 @@ function ChatContent() {
           </div>
         </div>
         </div>
-      </StudentMobileTabs>
+      </TabsWrapper>
     </RoleGuard>
   );
 }

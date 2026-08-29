@@ -48,6 +48,18 @@ export interface StoredLike {
   createdAt: string;
 }
 
+export interface CompanyUsageStats {
+  planName: string;
+  monthlyQuota: number;
+  sentOffersCount: number;
+  remainingQuota: number;
+  totalSwipedVideos: number;
+  totalLikedCount: number;
+  acceptedOffersCount: number;
+  acceptanceRate: string;
+  nextResetDate: string;
+}
+
 const DEFAULT_OFFERS: StoredOffer[] = [
   {
     id: "off-1",
@@ -362,5 +374,28 @@ export const appStore = {
     const updated = [...allMessages, newMsg];
     localStorage.setItem("jobswipe_chat_messages", JSON.stringify(updated));
     return newMsg;
+  },
+
+  // 企業向け利用状況・オファー枠統計
+  getCompanyStats: (): CompanyUsageStats => {
+    const offers = appStore.getOffers();
+    const likes = appStore.getLikes();
+    const sentCount = offers.length;
+    const acceptedCount = offers.filter((o) => o.status === "ACCEPTED").length;
+    const monthlyQuota = 50;
+    const remainingQuota = Math.max(0, monthlyQuota - sentCount);
+    const rate = sentCount > 0 ? `${Math.round((acceptedCount / sentCount) * 100)}%` : "0%";
+
+    return {
+      planName: "スタンダードプラン (月50枠)",
+      monthlyQuota,
+      sentOffersCount: sentCount,
+      remainingQuota,
+      totalSwipedVideos: 128 + sentCount + likes.length,
+      totalLikedCount: likes.length,
+      acceptedOffersCount: acceptedCount,
+      acceptanceRate: rate,
+      nextResetDate: "2026/09/01",
+    };
   },
 };

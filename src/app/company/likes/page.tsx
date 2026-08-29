@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import RoleGuard from "@/components/RoleGuard";
+import CompanyMobileTabs from "@/components/CompanyMobileTabs";
 import { appStore, StoredLike } from "@/lib/appStore";
 import { useAuth } from "@/context/AuthContext";
 import { Heart, Send, User, GraduationCap, X, Sparkles } from "lucide-react";
@@ -40,17 +41,18 @@ export default function CompanyLikesPage() {
 
   return (
     <RoleGuard allowedRoles={["COMPANY", "ADMIN"]}>
-      <div className="flex-1 py-6 px-4 sm:px-6 max-w-5xl mx-auto w-full">
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-              <Heart className="w-5 h-5 text-rose-500 fill-rose-500" />
-              <span>「気になる」学生リスト</span>
-            </h1>
-            <p className="text-xs text-slate-500 mt-1">
-              動画スワイプで「気になる」に追加した学生の一覧です。いつでもオファーを送信できます（企業専用）。
-            </p>
-          </div>
+      <CompanyMobileTabs>
+        <div className="flex-1 py-6 px-4 sm:px-6 max-w-5xl mx-auto w-full">
+          <div className="mb-6 flex items-center justify-between">
+            <div>
+              <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <Heart className="w-5 h-5 text-rose-500 fill-rose-500" />
+                <span>気になる一覧</span>
+              </h1>
+              <p className="text-xs text-slate-500 mt-1">
+                動画スワイプで「気になる」に追加した学生の一覧です。いつでもオファーを送信できます（企業専用）。
+              </p>
+            </div>
 
           <Link
             href="/swipe"
@@ -183,7 +185,8 @@ export default function CompanyLikesPage() {
             </div>
           </div>
         )}
-      </div>
+        </div>
+      </CompanyMobileTabs>
     </RoleGuard>
   );
 }

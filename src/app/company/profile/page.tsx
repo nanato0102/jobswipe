@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import RoleGuard from "@/components/RoleGuard";
+import CompanyMobileTabs from "@/components/CompanyMobileTabs";
 import { useAuth } from "@/context/AuthContext";
 import {
   Building2,
@@ -65,7 +66,8 @@ export default function CompanyProfilePage() {
 
   return (
     <RoleGuard allowedRoles={["COMPANY", "ADMIN"]}>
-      <div className="flex-1 py-6 px-4 sm:px-6 max-w-4xl mx-auto w-full">
+      <CompanyMobileTabs>
+        <div className="flex-1 py-6 px-4 sm:px-6 max-w-4xl mx-auto w-full">
         <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 sm:p-8 space-y-6">
           {/* ヘッダー */}
           <div className="flex items-center justify-between pb-6 border-b border-slate-100">
@@ -263,12 +265,13 @@ export default function CompanyProfilePage() {
                 className="flex items-center gap-2 px-8 py-3 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-2xl transition-all disabled:opacity-50 shadow-md"
               >
                 <Save className="w-4 h-4" />
-                <span>{loading ? "保存中..." : "企業プロフィールを保存する"}</span>
+                <span>{loading ? "保存中..." : "企業情報を保存する"}</span>
               </button>
             </div>
           </form>
         </div>
-      </div>
+        </div>
+      </CompanyMobileTabs>
     </RoleGuard>
   );
 }

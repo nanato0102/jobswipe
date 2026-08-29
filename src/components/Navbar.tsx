@@ -20,6 +20,7 @@ import {
   ChevronDown,
   Settings,
   HelpCircle,
+  BarChart3,
 } from "lucide-react";
 
 export default function Navbar() {
@@ -149,15 +150,15 @@ export default function Navbar() {
                 </Link>
 
                 <Link
-                  href="/company/search"
+                  href="/company/usage"
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors ${
-                    pathname.startsWith("/company/search")
+                    pathname.startsWith("/company/usage")
                       ? "bg-blue-50 text-blue-900 font-bold"
                       : "hover:bg-slate-100 hover:text-slate-900"
                   }`}
                 >
-                  <Search className="h-4 w-4" />
-                  <span>学生検索</span>
+                  <BarChart3 className="h-4 w-4 text-blue-700" />
+                  <span>利用状況</span>
                 </Link>
 
                 <Link
@@ -319,12 +320,12 @@ export default function Navbar() {
                         <span>動画スワイプ</span>
                       </Link>
                       <Link
-                        href="/company/search"
+                        href="/company/usage"
                         onClick={() => setMenuOpen(false)}
                         className="flex items-center gap-2.5 px-3.5 py-2.5 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-900 rounded-xl transition-colors font-medium"
                       >
-                        <Search className="w-4 h-4 text-blue-700" />
-                        <span>学生検索</span>
+                        <BarChart3 className="w-4 h-4 text-blue-700" />
+                        <span>利用状況</span>
                       </Link>
                       <Link
                         href="/company/likes"
