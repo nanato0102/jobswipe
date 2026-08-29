@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Film, User, Building2, ShieldCheck, LogIn, Sparkles, MessageSquare, Search, Heart, LogOut } from "lucide-react";
+import { Film, User, Building2, ShieldCheck, LogIn, Sparkles, MessageSquare, Search, Heart, UserPlus } from "lucide-react";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -13,11 +14,20 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/95 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 h-16">
         {/* ロゴ */}
-        <Link href="/" className="flex items-center gap-2 font-bold text-xl text-slate-900 tracking-tight">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-900 text-white">
-            <Film className="h-5 w-5" />
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <div className="relative w-9 h-9 rounded-lg overflow-hidden border border-slate-100 bg-white shadow-sm flex items-center justify-center p-0.5">
+            <Image
+              src="/logo.png"
+              alt="JobSwipe Logo"
+              width={36}
+              height={36}
+              className="object-contain w-full h-full"
+              priority
+            />
           </div>
-          <span>JobSwipe</span>
+          <span className="font-bold text-xl text-slate-900 tracking-tight group-hover:text-slate-700 transition-colors">
+            JobSwipe
+          </span>
         </Link>
 
         {/* ナビゲーションメニュー */}
@@ -29,7 +39,7 @@ export default function Navbar() {
                 pathname === "/swipe" ? "bg-slate-100 text-slate-900 font-semibold" : "hover:bg-slate-50 hover:text-slate-900"
               }`}
             >
-              <Sparkles className="h-4 w-4" />
+              <Sparkles className="h-4 w-4 text-slate-700" />
               <span>動画スワイプ</span>
             </Link>
 
@@ -122,6 +132,7 @@ export default function Navbar() {
             href="/register"
             className="flex items-center gap-1.5 px-3.5 py-1.5 text-sm font-medium text-white bg-slate-900 hover:bg-slate-800 rounded-lg transition-colors"
           >
+            <UserPlus className="h-4 w-4" />
             <span>無料登録</span>
           </Link>
         </div>

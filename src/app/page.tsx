@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Film, Sparkles, Building2, UserCheck, ShieldCheck, ArrowRight, Video, Heart, Send } from "lucide-react";
 
 export default function HomePage() {
@@ -6,7 +7,19 @@ export default function HomePage() {
     <div className="flex flex-col flex-1">
       {/* ヒーローセクション */}
       <section className="bg-slate-900 text-white py-20 px-4 sm:px-6 lg:px-8 border-b border-slate-800">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-4xl mx-auto text-center flex flex-col items-center">
+          {/* ロゴアイコン表示 */}
+          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-white p-2 shadow-2xl mb-6 flex items-center justify-center border border-slate-700">
+            <Image
+              src="/logo.png"
+              alt="JobSwipe Official Logo"
+              width={112}
+              height={112}
+              className="object-contain w-full h-full"
+              priority
+            />
+          </div>
+
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-slate-700 bg-slate-800 text-slate-300 text-xs font-medium mb-6">
             <Sparkles className="w-3.5 h-3.5 text-slate-300" />
             <span>就活版TikTok型 逆求人プラットフォーム</span>
@@ -22,7 +35,7 @@ export default function HomePage() {
             直感的にオファーを送り、ミスマッチのない採用を実現します。
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
             <Link
               href="/swipe"
               className="w-full sm:w-auto px-6 py-3 bg-white text-slate-900 hover:bg-slate-100 font-semibold rounded-xl text-sm transition-all shadow-sm flex items-center justify-center gap-2"

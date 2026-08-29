@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { LogIn, AlertCircle } from "lucide-react";
 
 export default function LoginPage() {
@@ -18,7 +19,6 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      // 簡易ログイン処理（デモ対応）
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -33,7 +33,6 @@ export default function LoginPage() {
       router.push("/swipe");
       router.refresh();
     } catch (err: any) {
-      // デモ用としてフォールバック
       if (email) {
         router.push("/swipe");
       } else {
@@ -47,9 +46,16 @@ export default function LoginPage() {
   return (
     <div className="flex-1 flex items-center justify-center p-4 py-12">
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 max-w-md w-full">
-        <div className="text-center mb-6">
-          <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white mb-3">
-            <LogIn className="h-5 w-5" />
+        <div className="text-center mb-6 flex flex-col items-center">
+          <div className="w-16 h-16 rounded-2xl bg-white p-1 shadow-md mb-3 flex items-center justify-center border border-slate-100">
+            <Image
+              src="/logo.png"
+              alt="JobSwipe Logo"
+              width={60}
+              height={60}
+              className="object-contain"
+              priority
+            />
           </div>
           <h1 className="text-xl font-bold text-slate-900">JobSwipeにログイン</h1>
           <p className="text-xs text-slate-500 mt-1">メールアドレスとパスワードを入力してください</p>
