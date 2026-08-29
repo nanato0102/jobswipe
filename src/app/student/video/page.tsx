@@ -26,17 +26,13 @@ interface UploadedVideoItem {
 }
 
 export default function StudentVideoUploadPage() {
-  const [title, setTitle] = useState("体育会サッカー部主将としての挑戦と組織推進力");
-  const [description, setDescription] = useState(
-    "部活動での主将経験を通じて培った、周囲を巻き込んで目標達成する推進力を60秒でアピールしています。"
-  );
-  const [tags, setTags] = useState<string[]>(["リーダーシップ", "体育会", "チーム推進力"]);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
 
   const [videoFile, setVideoFile] = useState<File | null>(null);
-  const [videoPreview, setVideoPreview] = useState<string | null>(
-    "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
-  );
+  const [videoPreview, setVideoPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
@@ -82,6 +78,14 @@ export default function StudentVideoUploadPage() {
     }
   };
 
+  const handleClearSelectedVideo = () => {
+    setVideoFile(null);
+    setVideoPreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!videoPreview) {
@@ -97,7 +101,7 @@ export default function StudentVideoUploadPage() {
         id: `vid-${Date.now()}`,
         title: title || "私の60秒自己PR",
         description: description,
-        tags: tags,
+        tags: tags.length > 0 ? tags : ["笑顔", "成長意欲"],
         videoUrl: videoPreview,
         uploadedAt: new Date().toLocaleDateString("ja-JP", {
           year: "numeric",
@@ -109,7 +113,11 @@ export default function StudentVideoUploadPage() {
       };
 
       setUploadedVideos([newVideo, ...uploadedVideos]);
-      setStatus({ type: "success", message: "PR動画を正常に投稿・更新しました！企業の検索・スワイプに即時公開されます。" });
+      setStatus({ type: "success", message: "自己PR動画を正常に投稿しました！企業のスワイプ画面に即時公開されます。" });
+      handleClearSelectedVideo();
+      setTitle("");
+      setDescription("");
+      setTags([]);
     } catch (err: any) {
       setStatus({ type: "error", message: "投稿に失敗しました。" });
     } finally {
@@ -217,14 +225,22 @@ export default function StudentVideoUploadPage() {
                 </div>
               </div>
 
-              {/* プレビュー表示 */}
+              {/* プレビュー表示（動画選択時のみ） */}
               {videoPreview && (
-                <div className="pt-2">
-                  <div className="flex items-center justify-between text-xs text-slate-600 mb-1 font-bold">
-                    <span className="flex items-center gap-1 text-emerald-700">
-                      <CheckCircle className="w-3.5 h-3.5" />
+                <div className="pt-2 animate-fade-in">
+                  <div className="flex items-center justify-between text-xs text-slate-600 mb-2 font-bold px-1">
+                    <span className="flex items-center gap-1.5 text-emerald-700">
+                      <CheckCircle className="w-4 h-4" />
                       <span>選択中の動画プレビュー</span>
                     </span>
+                    <button
+                      type="button"
+                      onClick={handleClearSelectedVideo}
+                      className="text-[11px] text-rose-600 hover:text-rose-700 hover:underline flex items-center gap-1 font-bold"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                      <span>選択解除</span>
+                    </button>
                   </div>
                   <div className="max-w-[220px] mx-auto rounded-2xl overflow-hidden bg-black shadow-lg aspect-[9/16]">
                     <video src={videoPreview} controls className="w-full h-full object-cover" />
