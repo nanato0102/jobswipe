@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { appStore } from "@/lib/appStore";
 import {
   Building2,
   User,
@@ -42,6 +43,7 @@ export default function ContactPage() {
   const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [receiptNumber, setReceiptNumber] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -55,11 +57,37 @@ export default function ContactPage() {
 
     setLoading(true);
 
-    // 送信シミュレーション（実稼働時はAPIエンドポイントへ送信）
-    setTimeout(() => {
+    try {
+      if (userType === "company") {
+        const item = appStore.addInquiry({
+          userType: "company",
+          senderName: companyName.trim(),
+          repName: repName.trim(),
+          department: department.trim(),
+          email: companyEmail.trim(),
+          phone: phone.trim(),
+          inquiryType: companyInquiryType,
+          message: companyMessage.trim(),
+        });
+        setReceiptNumber(item.receiptNumber);
+      } else {
+        const item = appStore.addInquiry({
+          userType: "student",
+          senderName: studentName.trim(),
+          university: university.trim(),
+          email: studentEmail.trim(),
+          inquiryType: studentInquiryType,
+          message: studentMessage.trim(),
+        });
+        setReceiptNumber(item.receiptNumber);
+      }
+
       setLoading(false);
       setSubmitted(true);
-    }, 800);
+    } catch (err: any) {
+      setLoading(false);
+      setError("送信に失敗しました。時間をおいて再度お試しください。");
+    }
   };
 
   return (
@@ -89,8 +117,13 @@ export default function ContactPage() {
             <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto border border-emerald-500/30">
               <CheckCircle2 className="w-8 h-8" />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-3">
               <h2 className="text-2xl font-bold text-white">お問い合わせを受け付けました</h2>
+              {receiptNumber && (
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 text-xs font-bold">
+                  <span>受付番号: {receiptNumber}</span>
+                </div>
+              )}
               <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
                 ご入力いただいたメールアドレス宛に受付確認メールをお送りいたしました。担当者より速やかにご連絡申し上げます。
               </p>

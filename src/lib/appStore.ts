@@ -67,6 +67,22 @@ export interface StudentVideoStats {
   completionRate: string;
 }
 
+export interface StoredInquiry {
+  id: string;
+  receiptNumber: string;
+  userType: "company" | "student";
+  senderName: string;
+  repName?: string;
+  department?: string;
+  university?: string;
+  email: string;
+  phone?: string;
+  inquiryType: string;
+  message: string;
+  status: "UNTOUCHED" | "IN_PROGRESS" | "RESOLVED";
+  createdAt: string;
+}
+
 const DEFAULT_OFFERS: StoredOffer[] = [
   {
     id: "off-1",
@@ -420,4 +436,102 @@ export const appStore = {
       completionRate: "84%",
     };
   },
+
+  // お問い合わせ一覧の取得
+  getInquiries: (): StoredInquiry[] => {
+    if (typeof window === "undefined") return DEFAULT_INQUIRIES;
+    const data = localStorage.getItem("jobswipe_inquiries");
+    if (data) {
+      try {
+        return JSON.parse(data);
+      } catch {
+        return DEFAULT_INQUIRIES;
+      }
+    }
+    localStorage.setItem("jobswipe_inquiries", JSON.stringify(DEFAULT_INQUIRIES));
+    return DEFAULT_INQUIRIES;
+  },
+
+  // お問い合わせの追加
+  addInquiry: (inquiryData: Omit<StoredInquiry, "id" | "receiptNumber" | "createdAt" | "status">): StoredInquiry => {
+    const all = appStore.getInquiries();
+    const now = new Date();
+    const dateStr = now.toISOString().slice(0, 10).replace(/-/g, "");
+    const randomNum = Math.floor(1000 + Math.random() * 9000);
+    const receiptNumber = `JS-${dateStr}-${randomNum}`;
+
+    const newInquiry: StoredInquiry = {
+      ...inquiryData,
+      id: "inq-" + Date.now(),
+      receiptNumber,
+      status: "UNTOUCHED",
+      createdAt: now.toLocaleString("ja-JP", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    };
+
+    const updated = [newInquiry, ...all];
+    if (typeof window !== "undefined") {
+      localStorage.setItem("jobswipe_inquiries", JSON.stringify(updated));
+    }
+    return newInquiry;
+  },
+
+  // お問い合わせステータス更新
+  updateInquiryStatus: (id: string, status: "UNTOUCHED" | "IN_PROGRESS" | "RESOLVED") => {
+    const all = appStore.getInquiries();
+    const updated = all.map((item) => (item.id === id ? { ...item, status } : item));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("jobswipe_inquiries", JSON.stringify(updated));
+    }
+    return updated;
+  },
 };
+
+const DEFAULT_INQUIRIES: StoredInquiry[] = [
+  {
+    id: "inq-1",
+    receiptNumber: "JS-20260829-1082",
+    userType: "company",
+    senderName: "株式会社ネクストフロンティア",
+    repName: "山田 太郎",
+    department: "人事採用部",
+    email: "t.yamada@example.co.jp",
+    phone: "03-1234-5678",
+    inquiryType: "オファー枠の追加・料金プラン相談",
+    message: "現在のスタンダードプランから月間100枠のエンタープライズプランへのアップグレードを検討しております。見積もりとお手続きの流れについて教えていただけますでしょうか。",
+    status: "UNTOUCHED",
+    createdAt: "2026/08/29 16:30",
+  },
+  {
+    id: "inq-2",
+    receiptNumber: "JS-20260829-1055",
+    userType: "student",
+    senderName: "鈴木 結衣",
+    university: "慶應義塾大学 総合政策学部",
+    email: "yui.suzuki@example.com",
+    phone: "090-9876-5432",
+    inquiryType: "動画の撮り方・お題について",
+    message: "動画投稿でおすすめの撮影機材や、アピールポイントのまとめ方について詳しくアドバイスをいただきたいです。",
+    status: "IN_PROGRESS",
+    createdAt: "2026/08/29 14:15",
+  },
+  {
+    id: "inq-3",
+    receiptNumber: "JS-20260828-9842",
+    userType: "company",
+    senderName: "グローバルメディア株式会社",
+    repName: "佐藤 次郎",
+    department: "新卒採用担当",
+    email: "recruit@global-media.example.com",
+    phone: "06-6789-0123",
+    inquiryType: "資料請求・サービス概要",
+    message: "サービス紹介資料および導入事例のPDFをお送りいただけますと幸いです。",
+    status: "RESOLVED",
+    createdAt: "2026/08/28 11:00",
+  },
+];

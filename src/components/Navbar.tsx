@@ -203,15 +203,15 @@ export default function Navbar() {
             {isAdmin && (
               <>
                 <Link
-                  href="/admin/dashboard"
+                  href="/admin-console/dashboard"
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors ${
-                    pathname.startsWith("/admin")
+                    pathname.startsWith("/admin-console")
                       ? "bg-rose-50 text-rose-900 font-bold"
                       : "hover:bg-slate-100 hover:text-slate-900"
                   }`}
                 >
                   <ShieldCheck className="h-4 w-4 text-rose-600" />
-                  <span>管理ダッシュボード</span>
+                  <span>管理コンソール</span>
                 </Link>
 
                 <Link
@@ -350,6 +350,19 @@ export default function Navbar() {
                       >
                         <Building2 className="w-4 h-4 text-blue-700" />
                         <span>企業情報</span>
+                      </Link>
+                    </>
+                  )}
+
+                  {isAdmin && (
+                    <>
+                      <Link
+                        href="/admin-console/dashboard"
+                        onClick={() => setMenuOpen(false)}
+                        className="flex items-center gap-2.5 px-3.5 py-2.5 text-xs text-rose-700 hover:bg-rose-50 rounded-xl transition-colors font-bold"
+                      >
+                        <ShieldCheck className="w-4 h-4 text-rose-600" />
+                        <span>管理コンソール</span>
                       </Link>
                     </>
                   )}
