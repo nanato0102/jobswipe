@@ -89,9 +89,7 @@ export default function StudentNotificationsPage() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-xs">
               <div className="space-y-1">
                 <div className="flex items-center gap-2.5">
-                  <div className="p-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700">
-                    <Bell className="w-5 h-5" />
-                  </div>
+                  <Bell className="w-6 h-6 text-emerald-700" />
                   <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
                     通知センター
                   </h1>
@@ -197,14 +195,8 @@ export default function StudentNotificationsPage() {
                         : "bg-white/70 border-slate-200 hover:bg-white hover:border-slate-300"
                     }`}
                   >
-                    <div className="flex items-start gap-3.5 min-w-0">
-                      <div
-                        className={`p-2.5 rounded-xl flex-shrink-0 mt-0.5 ${
-                          !item.isRead
-                            ? "bg-emerald-50 border border-emerald-200"
-                            : "bg-slate-100 text-slate-500"
-                        }`}
-                      >
+                    <div className="flex items-start gap-3 min-w-0">
+                      <div className="flex-shrink-0 mt-0.5">
                         {getIcon(item.type)}
                       </div>
 

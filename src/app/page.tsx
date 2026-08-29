@@ -245,8 +245,8 @@ export default function HomePage() {
             <div className="max-w-lg mx-auto bg-[#141B2D] rounded-3xl border border-slate-700/80 p-6 sm:p-8 shadow-2xl space-y-6 hover:border-emerald-500/50 hover:shadow-[0_20px_40px_rgba(5,150,105,0.2)] transition-all duration-300">
               {activeTab === "student" ? (
                 <div className="space-y-5 text-center">
-                  <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto border border-emerald-500/20 shadow-inner">
-                    <Camera className="w-8 h-8" />
+                  <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto">
+                    <Camera className="w-7 h-7" />
                   </div>
                   <div className="space-y-2">
                     <h3 className="text-xl font-bold text-white">
@@ -269,8 +269,8 @@ export default function HomePage() {
                 </div>
               ) : (
                 <div className="space-y-5 text-center">
-                  <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto border border-emerald-500/20 shadow-inner">
-                    <Layers className="w-8 h-8" />
+                  <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto">
+                    <Layers className="w-7 h-7" />
                   </div>
                   <div className="space-y-2">
                     <h3 className="text-xl font-bold text-white">
@@ -321,7 +321,7 @@ export default function HomePage() {
           <div className="grid md:grid-cols-3 gap-6">
             <FadeInView delay={100}>
               <div className="bg-[#141B2D] rounded-3xl border border-slate-700/60 p-6 sm:p-8 space-y-4 hover:border-emerald-500/50 hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(5,150,105,0.2)] transition-all duration-300 shadow-lg h-full">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
+                <div className="w-11 h-11 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
                   <Sparkles className="w-6 h-6" />
                 </div>
                 <h3 className="text-base font-bold text-white">文章力より、あなたらしさ</h3>
@@ -333,7 +333,7 @@ export default function HomePage() {
 
             <FadeInView delay={200}>
               <div className="bg-[#141B2D] rounded-3xl border border-slate-700/60 p-6 sm:p-8 space-y-4 hover:border-emerald-500/50 hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(5,150,105,0.2)] transition-all duration-300 shadow-lg h-full">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
+                <div className="w-11 h-11 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
                   <Zap className="w-6 h-6" />
                 </div>
                 <h3 className="text-base font-bold text-white">動画を置いたら待つだけ</h3>
@@ -345,7 +345,7 @@ export default function HomePage() {
 
             <FadeInView delay={300}>
               <div className="bg-[#141B2D] rounded-3xl border border-slate-700/60 p-6 sm:p-8 space-y-4 hover:border-emerald-500/50 hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(5,150,105,0.2)] transition-all duration-300 shadow-lg h-full">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
+                <div className="w-11 h-11 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
                   <ShieldCheck className="w-6 h-6" />
                 </div>
                 <h3 className="text-base font-bold text-white">「人柄重視」の優良企業が集結</h3>
@@ -382,7 +382,7 @@ export default function HomePage() {
           <div className="grid md:grid-cols-3 gap-6">
             <FadeInView delay={100}>
               <div className="bg-[#141B2D] rounded-3xl border border-slate-700/60 p-6 sm:p-8 space-y-4 hover:border-emerald-500/50 hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(5,150,105,0.2)] transition-all duration-300 shadow-lg h-full">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
+                <div className="w-11 h-11 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
                   <TrendingUp className="w-6 h-6" />
                 </div>
                 <h3 className="text-base font-bold text-white">書類選考の時間を90%削減</h3>
@@ -394,7 +394,7 @@ export default function HomePage() {
 
             <FadeInView delay={200}>
               <div className="bg-[#141B2D] rounded-3xl border border-slate-700/60 p-6 sm:p-8 space-y-4 hover:border-emerald-500/50 hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(5,150,105,0.2)] transition-all duration-300 shadow-lg h-full">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
+                <div className="w-11 h-11 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
                   <CheckCircle2 className="w-6 h-6" />
                 </div>
                 <h3 className="text-base font-bold text-white">カルチャーマッチ率の最大化</h3>
@@ -406,7 +406,7 @@ export default function HomePage() {
 
             <FadeInView delay={300}>
               <div className="bg-[#141B2D] rounded-3xl border border-slate-700/60 p-6 sm:p-8 space-y-4 hover:border-emerald-500/50 hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(5,150,105,0.2)] transition-all duration-300 shadow-lg h-full">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
+                <div className="w-11 h-11 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
                   <Flame className="w-6 h-6" />
                 </div>
                 <h3 className="text-base font-bold text-white">熱量の高い母集団へアプローチ</h3>
@@ -666,7 +666,7 @@ export default function HomePage() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-slate-800">
             <div className="flex flex-col items-center md:items-start gap-2">
               <div className="flex items-center gap-2">
-                <div className="relative w-8 h-8 rounded-lg overflow-hidden border border-slate-700 bg-white shadow-sm flex items-center justify-center p-0.5">
+                <div className="relative w-8 h-8 flex items-center justify-center">
                   <Image
                     src="/logo.png"
                     alt="JobSwipe Logo"

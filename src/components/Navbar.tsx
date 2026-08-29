@@ -76,7 +76,7 @@ export default function Navbar() {
           className="flex items-center gap-2.5 group select-none flex-shrink-0"
           title="ホームへ戻る"
         >
-          <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl overflow-hidden border border-slate-100 bg-white shadow-sm flex items-center justify-center p-0.5 group-hover:scale-105 transition-transform">
+          <div className="relative w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center group-hover:scale-105 transition-transform">
             <Image
               src="/logo.png"
               alt="JobSwipe Logo"

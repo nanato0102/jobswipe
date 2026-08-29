@@ -115,9 +115,7 @@ export default function SettingsPage() {
           <div className="max-w-3xl mx-auto space-y-6">
           {/* ページヘッダー */}
           <div className="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-xs flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-slate-100 text-slate-800">
-              <Settings className="w-5 h-5" />
-            </div>
+            <Settings className="w-6 h-6 text-slate-800" />
             <div>
               <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
                 各種設定

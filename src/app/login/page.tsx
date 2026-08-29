@@ -47,12 +47,12 @@ export default function LoginPage() {
       <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 sm:p-8 max-w-md w-full">
         {/* ロゴ & タイトル */}
         <div className="text-center mb-6 flex flex-col items-center">
-          <div className="w-16 h-16 rounded-2xl bg-white p-1 shadow-md mb-3 flex items-center justify-center border border-slate-100">
+          <div className="w-14 h-14 mb-3 flex items-center justify-center">
             <Image
               src="/logo.png"
               alt="JobSwipe Logo"
-              width={60}
-              height={60}
+              width={56}
+              height={56}
               className="object-contain"
               priority
             />
