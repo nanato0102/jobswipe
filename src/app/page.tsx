@@ -8,14 +8,9 @@ import {
   User,
   Building2,
   ArrowRight,
-  Video,
-  MessageSquare,
-  Heart,
   CheckCircle2,
   XCircle,
   HelpCircle,
-  Play,
-  Award,
   Zap,
   TrendingUp,
   ShieldCheck,
@@ -213,118 +208,7 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 3. 実際の学生プロフィール実例カード */}
-      {/* ========================================================================= */}
-      <section className="py-20 bg-white border-b border-slate-200">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-16 space-y-2">
-            <span className="text-xs font-bold text-emerald-800 tracking-wider uppercase">Student Profiles</span>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
-              こんな学生が動画でスカウトを獲得しています
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-500">
-              特別な経歴がなくても大丈夫。あなたの熱意と人柄がそのまま武器になります。
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* 学生カード 1 */}
-            <div className="bg-slate-50 rounded-3xl border border-slate-200 p-5 space-y-4 hover:border-emerald-500 transition-colors shadow-sm flex flex-col justify-between">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
-                    体育会 / リーダー
-                  </span>
-                  <span className="text-[11px] text-slate-500 font-semibold">26卒</span>
-                </div>
-                <div>
-                  <h3 className="font-bold text-base text-slate-900">佐藤 健太</h3>
-                  <p className="text-xs text-slate-500">早稲田大学 商学部</p>
-                </div>
-                <p className="text-xs text-slate-700 font-medium leading-relaxed bg-white p-3 rounded-2xl border border-slate-200">
-                  「サッカー部主将として全員で目標達成する推進力をPR。動画で熱量を伝えたらベンチャーからスカウト！」
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-1">
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-semibold">#リーダーシップ</span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-semibold">#組織マネジメント</span>
-              </div>
-            </div>
-
-            {/* 学生カード 2 */}
-            <div className="bg-slate-50 rounded-3xl border border-slate-200 p-5 space-y-4 hover:border-emerald-500 transition-colors shadow-sm flex flex-col justify-between">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800">
-                    語学力 / 留学
-                  </span>
-                  <span className="text-[11px] text-slate-500 font-semibold">26卒</span>
-                </div>
-                <div>
-                  <h3 className="font-bold text-base text-slate-900">高橋 美咲</h3>
-                  <p className="text-xs text-slate-500">上智大学 外国語学部</p>
-                </div>
-                <p className="text-xs text-slate-700 font-medium leading-relaxed bg-white p-3 rounded-2xl border border-slate-200">
-                  「英語での1分スピーチ動画を投稿。書類選考なしでグローバル事業の企業から特別オファーを受信！」
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-1">
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-semibold">#TOEIC850</span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-semibold">#英語対応可</span>
-              </div>
-            </div>
-
-            {/* 学生カード 3 */}
-            <div className="bg-slate-50 rounded-3xl border border-slate-200 p-5 space-y-4 hover:border-emerald-500 transition-colors shadow-sm flex flex-col justify-between">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800">
-                    開発 / モノづくり
-                  </span>
-                  <span className="text-[11px] text-slate-500 font-semibold">27卒</span>
-                </div>
-                <div>
-                  <h3 className="font-bold text-base text-slate-900">田中 翔平</h3>
-                  <p className="text-xs text-slate-500">慶應義塾大学 理工学部</p>
-                </div>
-                <p className="text-xs text-slate-700 font-medium leading-relaxed bg-white p-3 rounded-2xl border border-slate-200">
-                  「個人で開発したアプリのデモ画面を動画で紹介。技術への探求心を評価していただき開発責任者と面談へ。」
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-1">
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-semibold">#エンジニア志望</span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-semibold">#個人開発</span>
-              </div>
-            </div>
-
-            {/* 学生カード 4 */}
-            <div className="bg-slate-50 rounded-3xl border border-slate-200 p-5 space-y-4 hover:border-emerald-500 transition-colors shadow-sm flex flex-col justify-between">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800">
-                    アルバイト / 笑顔
-                  </span>
-                  <span className="text-[11px] text-slate-500 font-semibold">26卒</span>
-                </div>
-                <div>
-                  <h3 className="font-bold text-base text-slate-900">伊藤 桜</h3>
-                  <p className="text-xs text-slate-500">立教大学 現代心理学部</p>
-                </div>
-                <p className="text-xs text-slate-700 font-medium leading-relaxed bg-white p-3 rounded-2xl border border-slate-200">
-                  「カフェでの接客リーダー経験を明るい笑顔でアピール。人柄を一番大切にする成長企業からオファー！」
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-1">
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-semibold">#笑顔</span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-semibold">#コミュニケーション</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================================================= */}
-      {/* 4. 企業側のリアルな採用メリット */}
+      {/* 3. 企業側のリアルな採用メリット */}
       {/* ========================================================================= */}
       <section className="py-20 bg-slate-900 text-white border-b border-slate-800">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -384,7 +268,7 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 5. よくある質問（FAQ） */}
+      {/* 4. よくある質問（FAQ） */}
       {/* ========================================================================= */}
       <section className="py-20 bg-slate-50 border-b border-slate-200">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
@@ -430,7 +314,7 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 6. ラストCTA */}
+      {/* 5. ラストCTA */}
       {/* ========================================================================= */}
       <section className="py-20 bg-emerald-800 text-white text-center">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 space-y-6">
@@ -456,7 +340,7 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 7. 信頼性フッター */}
+      {/* 6. 信頼性フッター */}
       {/* ========================================================================= */}
       <footer className="bg-white border-t border-slate-200 py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8">
