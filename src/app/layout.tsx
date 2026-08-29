@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
-import BottomNav from "@/components/BottomNav";
 import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
 
@@ -19,13 +18,12 @@ export default function RootLayout({
       <body className="min-h-screen bg-slate-50 text-slate-900 flex flex-col antialiased">
         <AuthProvider>
           <Navbar />
-          <main className="flex-1 flex flex-col pb-16 md:pb-0">{children}</main>
+          <main className="flex-1 flex flex-col">{children}</main>
           <footer className="hidden md:block border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500">
             <div className="max-w-7xl mx-auto px-4">
               <p>&copy; {new Date().getFullYear()} JobSwipe. All rights reserved.</p>
             </div>
           </footer>
-          <BottomNav />
         </AuthProvider>
       </body>
     </html>

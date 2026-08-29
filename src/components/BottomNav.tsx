@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { Sparkles, Search, Heart, Building2, User, Film, ShieldCheck, MessageSquare } from "lucide-react";
+import { Sparkles, BarChart3, Heart, Building2, User, Film, ShieldCheck, MessageSquare } from "lucide-react";
 
 interface NavItem {
   href: string;
@@ -40,15 +40,16 @@ export default function BottomNav() {
   } else if (isCompany) {
     navItems = [
       { href: "/swipe", label: "スワイプ", icon: Sparkles, active: pathname === "/swipe" },
-      { href: "/company/search", label: "学生検索", icon: Search, active: pathname.startsWith("/company/search") },
+      { href: "/company/usage", label: "利用状況", icon: BarChart3, active: pathname.startsWith("/company/usage") },
       { href: "/company/likes", label: "気になる", icon: Heart, active: pathname.startsWith("/company/likes") },
       { href: "/company/chat", label: "チャット", icon: MessageSquare, active: pathname.startsWith("/company/chat") },
+      { href: "/company/profile", label: "企業情報", icon: Building2, active: pathname.startsWith("/company/profile") },
     ];
   } else if (isAdmin) {
     navItems = [
       { href: "/admin/dashboard", label: "管理", icon: ShieldCheck, active: pathname.startsWith("/admin") },
       { href: "/swipe", label: "スワイプ", icon: Sparkles, active: pathname === "/swipe" },
-      { href: "/company/search", label: "学生検索", icon: Search, active: pathname.startsWith("/company/search") },
+      { href: "/company/usage", label: "利用状況", icon: BarChart3, active: pathname.startsWith("/company/usage") },
       { href: "/company/chat", label: "チャット", icon: MessageSquare, active: pathname.startsWith("/company/chat") },
     ];
   }
