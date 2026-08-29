@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Sparkles, User, Building2, ShieldCheck, ArrowRight, Video, MessageSquare, Search } from "lucide-react";
+import { Sparkles, User, Building2, ArrowRight, Video, MessageSquare, Play } from "lucide-react";
 
 export default function HomePage() {
   return (
@@ -36,11 +36,11 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* CTAボタン */}
+          {/* CTAボタン群（新規登録・企業ログイン・デモ体験） */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
             <Link
               href="/register"
-              className="w-full sm:w-auto px-8 py-3.5 text-sm font-bold text-white bg-emerald-700 hover:bg-emerald-600 rounded-xl transition-all shadow-md flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-8 py-3.5 text-sm font-bold text-white bg-emerald-700 hover:bg-emerald-600 rounded-2xl transition-all shadow-md flex items-center justify-center gap-2"
             >
               <User className="h-4 w-4" />
               <span>学生として新規登録</span>
@@ -49,10 +49,10 @@ export default function HomePage() {
 
             <Link
               href="/login"
-              className="w-full sm:w-auto px-8 py-3.5 text-sm font-bold text-slate-800 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-xl transition-all flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-8 py-3.5 text-sm font-bold text-slate-800 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-2xl transition-all flex items-center justify-center gap-2"
             >
               <Building2 className="h-4 w-4" />
-              <span>企業担当者ログイン</span>
+              <span>ログイン・デモ体験</span>
             </Link>
           </div>
         </div>
@@ -69,9 +69,9 @@ export default function HomePage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
-                <Video className="w-5 h-5" />
+            <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                <Video className="w-6 h-6" />
               </div>
               <h3 className="text-base font-bold text-slate-900">60秒PR動画で人柄訴求</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
@@ -79,9 +79,9 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center">
-                <Sparkles className="w-5 h-5" />
+            <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center">
+                <Sparkles className="w-6 h-6" />
               </div>
               <h3 className="text-base font-bold text-slate-900">直感スワイプで効率採用</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
@@ -89,9 +89,9 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center">
-                <MessageSquare className="w-5 h-5" />
+            <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-slate-100 text-slate-800 flex items-center justify-center">
+                <MessageSquare className="w-6 h-6" />
               </div>
               <h3 className="text-base font-bold text-slate-900">マッチング後のチャット</h3>
               <p className="text-xs text-slate-600 leading-relaxed">

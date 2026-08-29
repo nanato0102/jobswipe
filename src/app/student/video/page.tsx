@@ -1,22 +1,48 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import RoleGuard from "@/components/RoleGuard";
-import { Film, Upload, CheckCircle, Tag, AlertCircle } from "lucide-react";
+import { Film, Upload, CheckCircle, Tag, AlertCircle, Video, FileVideo } from "lucide-react";
 
 export default function StudentVideoPage() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
+  const [fileName, setFileName] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith("video/")) {
+        setError("動画ファイル（.mp4, .mov 等）を選択してください");
+        return;
+      }
+      setError(null);
+      setFileName(file.name);
+      const url = URL.createObjectURL(file);
+      setVideoUrl(url);
+      if (!title) {
+        setTitle(file.name.replace(/\.[^/.]+$/, ""));
+      }
+    }
+  };
+
+  const handleSelectSample = (url: string, defaultTitle: string, defaultTags: string) => {
+    setVideoUrl(url);
+    setFileName(null);
+    setTitle(defaultTitle);
+    setTags(defaultTags);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!videoUrl.trim()) {
-      setError("動画URLまたは動画ファイルを設定してください");
+      setError("動画ファイルを選択するか、動画URLを入力してください");
       return;
     }
 
@@ -41,10 +67,6 @@ export default function StudentVideoPage() {
       }
 
       setSuccess(true);
-      setTitle("");
-      setDescription("");
-      setTags("");
-      setVideoUrl("");
       setTimeout(() => setSuccess(false), 4000);
     } catch (err: any) {
       setError(err.message || "エラーが発生しました");
@@ -53,16 +75,10 @@ export default function StudentVideoPage() {
     }
   };
 
-  const handleSelectSample = (url: string, defaultTitle: string, defaultTags: string) => {
-    setVideoUrl(url);
-    setTitle(defaultTitle);
-    setTags(defaultTags);
-  };
-
   return (
     <RoleGuard allowedRoles={["STUDENT", "ADMIN"]}>
       <div className="flex-1 py-6 px-4 sm:px-6 max-w-3xl mx-auto w-full">
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+        <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 sm:p-8">
           <div className="flex items-center justify-between pb-6 mb-6 border-b border-slate-100">
             <div>
               <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
@@ -76,23 +92,55 @@ export default function StudentVideoPage() {
           </div>
 
           {error && (
-            <div className="mb-6 p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 text-xs flex items-center gap-2">
+            <div className="mb-6 p-3 bg-rose-50 border border-rose-200 rounded-2xl text-rose-700 text-xs flex items-center gap-2">
               <AlertCircle className="w-4 h-4" />
               <span>{error}</span>
             </div>
           )}
 
           {success && (
-            <div className="mb-6 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs flex items-center gap-2">
+            <div className="mb-6 p-3 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 text-xs flex items-center gap-2">
               <CheckCircle className="w-4 h-4" />
               <span>動画を正常に投稿しました！スワイプ画面に掲載されます。</span>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* 動画ファイル アップロード UI */}
+            <div>
+              <label className="block text-xs font-bold text-slate-800 mb-2">
+                PR動画ファイルを選択（またはドラッグ＆ドロップ）
+              </label>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="video/*"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
+
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                className="border-2 border-dashed border-slate-300 hover:border-emerald-600 bg-slate-50 hover:bg-emerald-50/40 rounded-3xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center space-y-2"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-emerald-700">
+                  <Upload className="w-6 h-6" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-slate-800">
+                    {fileName ? `選択中: ${fileName}` : "クリックして動画ファイルを選択"}
+                  </p>
+                  <p className="text-[11px] text-slate-500 mt-0.5">MP4, MOV, WebM など（推奨: 60秒以内・縦型 9:16）</p>
+                </div>
+              </div>
+            </div>
+
             {/* サンプル選択（デモ用） */}
             <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
-              <span className="text-xs font-semibold text-slate-700">デモ用サンプル動画から選択:</span>
+              <span className="text-xs font-bold text-slate-700 flex items-center gap-1">
+                <FileVideo className="w-3.5 h-3.5 text-emerald-700" />
+                <span>またはデモ用サンプル動画から選択:</span>
+              </span>
               <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
@@ -103,7 +151,7 @@ export default function StudentVideoPage() {
                       "リーダーシップ, 粘り強さ, 行動力"
                     )
                   }
-                  className="text-xs px-3 py-1.5 bg-white border border-slate-300 rounded-lg hover:bg-emerald-50 hover:border-emerald-300 text-slate-700 font-medium transition-colors"
+                  className="text-xs px-3 py-1.5 bg-white border border-slate-300 rounded-xl hover:bg-emerald-50 hover:border-emerald-300 text-slate-700 font-semibold transition-colors"
                 >
                   サンプル 1 (リーダーシップ)
                 </button>
@@ -116,7 +164,7 @@ export default function StudentVideoPage() {
                       "留学, 英語対応可, 笑顔"
                     )
                   }
-                  className="text-xs px-3 py-1.5 bg-white border border-slate-300 rounded-lg hover:bg-emerald-50 hover:border-emerald-300 text-slate-700 font-medium transition-colors"
+                  className="text-xs px-3 py-1.5 bg-white border border-slate-300 rounded-xl hover:bg-emerald-50 hover:border-emerald-300 text-slate-700 font-semibold transition-colors"
                 >
                   サンプル 2 (語学力・留学)
                 </button>
@@ -124,43 +172,30 @@ export default function StudentVideoPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">動画URL / ストレージURL</label>
-              <input
-                type="url"
-                required
-                value={videoUrl}
-                onChange={(e) => setVideoUrl(e.target.value)}
-                placeholder="https://example.com/my-pr-video.mp4"
-                className="w-full text-sm border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
-              />
-              <p className="text-[11px] text-slate-500 mt-1">※ MP4などの動画URLを入力してください（AWS S3等への保存を想定）</p>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">動画タイトル</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">動画タイトル</label>
               <input
                 type="text"
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="例: 体育会サッカー部主将 / チームを牽引する行動力"
-                className="w-full text-sm border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+                className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">動画の説明文 / 見どころ</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">動画の説明文 / 見どころ</label>
               <textarea
                 rows={3}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="動画でアピールしている内容や、伝えたいメッセージを簡単に記載してください"
-                className="w-full text-sm border border-slate-300 rounded-xl p-3.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+                className="w-full text-sm border border-slate-300 rounded-2xl p-4 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1">
+              <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
                 <Tag className="w-3.5 h-3.5 text-emerald-700" />
                 <span>タグ設定（カンマ区切り）</span>
               </label>
@@ -169,15 +204,15 @@ export default function StudentVideoPage() {
                 value={tags}
                 onChange={(e) => setTags(e.target.value)}
                 placeholder="笑顔, 英語対応可, リーダーシップ, エンジニア志望"
-                className="w-full text-sm border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+                className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
               />
             </div>
 
             {/* プレビュー */}
             {videoUrl && (
               <div className="pt-2">
-                <span className="block text-xs font-semibold text-slate-700 mb-2">動画プレビュー</span>
-                <div className="w-full max-w-xs rounded-2xl overflow-hidden border border-slate-300 bg-black aspect-[9/16] max-h-72 shadow-md">
+                <span className="block text-xs font-bold text-slate-700 mb-2">動画プレビュー</span>
+                <div className="w-full max-w-xs rounded-3xl overflow-hidden border border-slate-300 bg-black aspect-[9/16] max-h-72 shadow-lg">
                   <video src={videoUrl} controls className="w-full h-full object-cover" />
                 </div>
               </div>
@@ -187,10 +222,10 @@ export default function StudentVideoPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex items-center gap-2 px-6 py-2.5 bg-emerald-700 hover:bg-emerald-600 text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50 shadow-sm"
+                className="flex items-center gap-2 px-6 py-3 bg-emerald-700 hover:bg-emerald-600 text-white text-sm font-bold rounded-2xl transition-colors disabled:opacity-50 shadow-md"
               >
                 <Upload className="w-4 h-4" />
-                <span>{loading ? "投稿処理中..." : "動画を投稿する"}</span>
+                <span>{loading ? "投稿処理中..." : "この動画を投稿する"}</span>
               </button>
             </div>
           </form>

@@ -1,20 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
-import { UserPlus, User, Building2, AlertCircle, CheckCircle } from "lucide-react";
+import { UserPlus, User, Building2, AlertCircle, CheckCircle, GraduationCap, Briefcase } from "lucide-react";
 import type { UserType } from "@/types";
 
 export default function RegisterPage() {
-  const router = useRouter();
   const { login } = useAuth();
   const [userType, setUserType] = useState<UserType>("STUDENT");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [university, setUniversity] = useState("");
+  const [graduationYear, setGraduationYear] = useState(2026);
+  const [industry, setIndustry] = useState("IT / Webサービス");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -78,14 +79,14 @@ export default function RegisterPage() {
         </div>
 
         {error && (
-          <div className="mb-4 p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 text-xs flex items-center gap-2">
+          <div className="mb-4 p-3 bg-rose-50 border border-rose-200 rounded-2xl text-rose-700 text-xs flex items-center gap-2">
             <AlertCircle className="w-4 h-4 flex-shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         {success && (
-          <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs flex items-center gap-2">
+          <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 text-xs flex items-center gap-2">
             <CheckCircle className="w-4 h-4 flex-shrink-0" />
             <span>登録が完了しました！専用画面へ移動します...</span>
           </div>
@@ -94,12 +95,12 @@ export default function RegisterPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* 種別選択 */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-2">アカウント種別</label>
+            <label className="block text-xs font-bold text-slate-700 mb-2">アカウント種別</label>
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={() => setUserType("STUDENT")}
-                className={`py-2.5 px-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
+                className={`py-2.5 px-3 rounded-2xl border text-xs font-bold flex items-center justify-center gap-2 transition-all ${
                   userType === "STUDENT"
                     ? "border-emerald-700 bg-emerald-700 text-white shadow-sm"
                     : "border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100"
@@ -112,7 +113,7 @@ export default function RegisterPage() {
               <button
                 type="button"
                 onClick={() => setUserType("COMPANY")}
-                className={`py-2.5 px-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
+                className={`py-2.5 px-3 rounded-2xl border text-xs font-bold flex items-center justify-center gap-2 transition-all ${
                   userType === "COMPANY"
                     ? "border-slate-900 bg-slate-900 text-white shadow-sm"
                     : "border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100"
@@ -125,7 +126,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-bold text-slate-700 mb-1">
               {userType === "STUDENT" ? "氏名" : "企業名"}
             </label>
             <input
@@ -134,24 +135,75 @@ export default function RegisterPage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={userType === "STUDENT" ? "山田 太郎" : "株式会社サンプル"}
-              className="w-full text-sm border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+              className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
             />
           </div>
 
+          {/* 学生専用フィールド */}
+          {userType === "STUDENT" && (
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">大学・学部</label>
+                <input
+                  type="text"
+                  value={university}
+                  onChange={(e) => setUniversity(e.target.value)}
+                  placeholder="早稲田大学 商学部"
+                  className="w-full text-sm border border-slate-300 rounded-2xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">卒業年</label>
+                <select
+                  value={graduationYear}
+                  onChange={(e) => setGraduationYear(Number(e.target.value))}
+                  className="w-full text-sm border border-slate-300 rounded-2xl px-3 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 bg-white"
+                >
+                  <option value={2025}>2025年卒</option>
+                  <option value={2026}>2026年卒</option>
+                  <option value={2027}>2027年卒</option>
+                  <option value={2028}>2028年卒</option>
+                </select>
+              </div>
+            </div>
+          )}
+
+          {/* 企業専用フィールド */}
+          {userType === "COMPANY" && (
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
+                <Briefcase className="w-3.5 h-3.5 text-slate-500" />
+                <span>主な業界</span>
+              </label>
+              <select
+                value={industry}
+                onChange={(e) => setIndustry(e.target.value)}
+                className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 bg-white"
+              >
+                <option value="IT / Webサービス">IT / Webサービス</option>
+                <option value="コンサルティング">コンサルティング</option>
+                <option value="メーカー / 製造">メーカー / 製造</option>
+                <option value="広告 / マスコミ">広告 / マスコミ</option>
+                <option value="金融 / 不動産">金融 / 不動産</option>
+                <option value="人材 / 教育">人材 / 教育</option>
+              </select>
+            </div>
+          )}
+
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">メールアドレス</label>
+            <label className="block text-xs font-bold text-slate-700 mb-1">メールアドレス</label>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="user@example.com"
-              className="w-full text-sm border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+              className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">パスワード</label>
+            <label className="block text-xs font-bold text-slate-700 mb-1">パスワード</label>
             <input
               type="password"
               required
@@ -159,14 +211,14 @@ export default function RegisterPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="6文字以上の英数字"
-              className="w-full text-sm border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+              className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50 shadow-sm"
+            className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-2xl transition-colors disabled:opacity-50 shadow-md"
           >
             {loading ? "登録中..." : "新規登録する"}
           </button>

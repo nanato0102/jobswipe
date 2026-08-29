@@ -3,40 +3,23 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import RoleGuard from "@/components/RoleGuard";
+import { useAuth } from "@/context/AuthContext";
+import { appStore, StoredMessage } from "@/lib/appStore";
 import { Send, User, Building2, ArrowLeft, CheckCheck } from "lucide-react";
 
-interface ChatMessage {
-  id: string;
-  sender: "student" | "company";
-  text: string;
-  time: string;
-}
-
-const INITIAL_MESSAGES: ChatMessage[] = [
-  {
-    id: "m1",
-    sender: "company",
-    text: "佐藤さん、はじめまして！動画を拝見し、体育会での主将経験と推進力に大変感銘を受けました。弊社の新規事業部にて一度カジュアル面談でお話ししませんか？",
-    time: "14:00",
-  },
-  {
-    id: "m2",
-    sender: "student",
-    text: "オファーいただき誠にありがとうございます！自己PR動画を見ていただき大変嬉しいです。ぜひカジュアル面談でお話しさせていただけますと幸いです。",
-    time: "14:15",
-  },
-  {
-    id: "m3",
-    sender: "company",
-    text: "ご快諾ありがとうございます！来週の平日（火曜または木曜の16:00以降など）でご都合の良い日時はございますでしょうか？",
-    time: "14:30",
-  },
-];
-
 export default function ChatPage() {
-  const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
+  const { session, isStudent, isCompany } = useAuth();
+  const [messages, setMessages] = useState<StoredMessage[]>([]);
   const [inputText, setInputText] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const loadMessages = () => {
+    setMessages(appStore.getMessages());
+  };
+
+  useEffect(() => {
+    loadMessages();
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -50,80 +33,84 @@ export default function ChatPage() {
     e.preventDefault();
     if (!inputText.trim()) return;
 
-    const newMsg: ChatMessage = {
-      id: "m-" + Date.now(),
-      sender: "company",
-      text: inputText.trim(),
-      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-    };
+    const senderRole = isStudent ? "STUDENT" : "COMPANY";
+    const senderName = session?.name || (isStudent ? "佐藤 健太" : "テックイノベーション株式会社");
 
+    const newMsg = appStore.sendMessage(senderRole, senderName, inputText.trim());
     setMessages((prev) => [...prev, newMsg]);
     setInputText("");
   };
 
+  const partnerName = isStudent ? "テックイノベーション株式会社" : "佐藤 健太 さん";
+  const partnerSub = isStudent ? "IT / Webサービス • 採用担当" : "早稲田大学 商学部 / 2026年卒";
+
   return (
     <RoleGuard allowedRoles={["COMPANY", "STUDENT", "ADMIN"]}>
       <div className="flex-1 py-4 px-3 sm:px-6 max-w-4xl mx-auto w-full flex flex-col h-[calc(100vh-8rem)] min-h-[500px]">
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm flex-1 flex flex-col overflow-hidden">
+        <div className="bg-white rounded-3xl border border-slate-200 shadow-xl flex-1 flex flex-col overflow-hidden">
           {/* チャットヘッダー */}
-          <div className="p-3.5 sm:p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+          <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
             <div className="flex items-center gap-3">
               <Link
-                href="/company/likes"
-                className="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-200 rounded-lg transition-colors md:hidden"
+                href={isStudent ? "/student/offers" : "/company/likes"}
+                className="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-200 rounded-xl transition-colors md:hidden"
                 title="戻る"
               >
                 <ArrowLeft className="w-4 h-4" />
               </Link>
-              <div className="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-sm">
-                佐
+              <div className="w-10 h-10 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-sm">
+                {isStudent ? <Building2 className="w-5 h-5 text-emerald-400" /> : "佐"}
               </div>
               <div>
                 <h2 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
-                  <span>佐藤 健太 さん</span>
+                  <span>{partnerName}</span>
                 </h2>
-                <p className="text-[11px] text-slate-500">早稲田大学 商学部 / 2026年卒</p>
+                <p className="text-[11px] text-slate-500">{partnerSub}</p>
               </div>
             </div>
 
-            <span className="text-xs bg-emerald-50 text-emerald-800 px-3 py-1 rounded-full font-semibold border border-emerald-200 flex items-center gap-1">
+            <span className="text-xs bg-emerald-50 text-emerald-800 px-3 py-1 rounded-full font-bold border border-emerald-200 flex items-center gap-1">
               <CheckCheck className="w-3.5 h-3.5 text-emerald-600" />
-              <span>マッチング成立</span>
+              <span>マッチング中</span>
             </span>
           </div>
 
           {/* メッセージリスト */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50/50">
+          <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50/40">
             {messages.map((m) => {
-              const isCompany = m.sender === "company";
+              const isMe =
+                (isStudent && m.senderRole === "STUDENT") ||
+                (isCompany && m.senderRole === "COMPANY") ||
+                (!isStudent && !isCompany && m.senderRole === "COMPANY");
+
               return (
                 <div
                   key={m.id}
-                  className={`flex flex-col ${isCompany ? "items-end" : "items-start"}`}
+                  className={`flex flex-col ${isMe ? "items-end" : "items-start"}`}
                 >
-                  <div className="flex items-center gap-1.5 mb-1 text-[11px] text-slate-500">
-                    {isCompany ? (
+                  <div className="flex items-center gap-1.5 mb-1 text-[11px] text-slate-500 font-medium">
+                    {m.senderRole === "COMPANY" ? (
                       <>
-                        <span>自社（採用担当）</span>
                         <Building2 className="w-3 h-3 text-slate-400" />
+                        <span>{m.senderName}</span>
                       </>
                     ) : (
                       <>
                         <User className="w-3 h-3 text-slate-400" />
-                        <span>佐藤 健太</span>
+                        <span>{m.senderName}</span>
                       </>
                     )}
-                    <span>• {m.time}</span>
+                    <span>• {m.sentAt}</span>
                   </div>
 
                   <div
-                    className={`max-w-md p-3.5 rounded-2xl text-xs sm:text-sm leading-relaxed ${
-                      isCompany
-                        ? "bg-slate-900 text-white rounded-tr-none shadow-sm"
+                    className={`max-w-md p-4 rounded-2xl text-xs sm:text-sm leading-relaxed ${
+                      isMe
+                        ? "bg-emerald-700 text-white rounded-tr-none shadow-md"
                         : "bg-white text-slate-900 border border-slate-200 rounded-tl-none shadow-sm"
                     }`}
                   >
-                    {m.text}
+                    {m.content}
                   </div>
                 </div>
               );
@@ -137,13 +124,13 @@ export default function ChatPage() {
               type="text"
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              placeholder="メッセージを入力してください..."
-              className="flex-1 text-sm border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+              placeholder={`${partnerName} にメッセージを送信...`}
+              className="flex-1 text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
             />
             <button
               type="submit"
               disabled={!inputText.trim()}
-              className="px-5 py-2.5 bg-emerald-700 hover:bg-emerald-600 text-white text-sm font-semibold rounded-xl flex items-center gap-1.5 transition-colors disabled:opacity-50 shadow-sm"
+              className="px-6 py-2.5 bg-emerald-700 hover:bg-emerald-600 text-white text-sm font-bold rounded-2xl flex items-center gap-1.5 transition-colors disabled:opacity-50 shadow-sm"
             >
               <Send className="w-4 h-4" />
               <span>送信</span>
