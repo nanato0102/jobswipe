@@ -4,9 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
-import { LogIn, AlertCircle, User, Building2, Sparkles, ArrowRight } from "lucide-react";
+import { LogIn, AlertCircle, Building2, User, Sparkles, ArrowRight } from "lucide-react";
 
-export default function LoginPage() {
+export default function CompanyLoginPage() {
   const { login, demoLogin } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -33,12 +33,12 @@ export default function LoginPage() {
       const data = await res.json();
       if (data.user) {
         login(data.user);
-        window.location.href = data.user.userType === "STUDENT" ? "/student/profile" : "/swipe";
+        window.location.href = "/swipe";
       }
     } catch (err: any) {
       if (email) {
-        demoLogin("STUDENT");
-        window.location.href = "/student/profile";
+        demoLogin("COMPANY");
+        window.location.href = "/swipe";
       } else {
         setError(err.message || "ログインに失敗しました");
       }
@@ -48,8 +48,8 @@ export default function LoginPage() {
   };
 
   const handleQuickDemo = () => {
-    demoLogin("STUDENT");
-    window.location.href = "/student/profile";
+    demoLogin("COMPANY");
+    window.location.href = "/swipe";
   };
 
   return (
@@ -67,26 +67,30 @@ export default function LoginPage() {
               priority
             />
           </div>
-          <h1 className="text-xl font-bold text-slate-900">学生ログイン</h1>
-          <p className="text-xs text-slate-500 mt-1">動画投稿・オファー確認マイページへログイン</p>
+          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-blue-50 text-blue-800 text-[11px] font-bold border border-blue-200 mb-2">
+            <Building2 className="w-3.5 h-3.5" />
+            <span>企業採用担当者専用</span>
+          </div>
+          <h1 className="text-xl font-bold text-slate-900">企業ログイン</h1>
+          <p className="text-xs text-slate-500 mt-1">動画スワイプ・スカウト管理画面へログイン</p>
         </div>
 
-        {/* ワンクリック・デモログイン（学生用） */}
-        <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl mb-6 flex items-center justify-between">
+        {/* ワンクリック・デモログイン（企業用） */}
+        <div className="p-3.5 bg-blue-50/50 border border-blue-100 rounded-2xl mb-6 flex items-center justify-between">
           <div>
-            <span className="text-xs font-bold text-slate-800 flex items-center gap-1">
-              <Sparkles className="w-3.5 h-3.5 text-emerald-700" />
+            <span className="text-xs font-bold text-blue-900 flex items-center gap-1">
+              <Sparkles className="w-3.5 h-3.5 text-blue-700" />
               <span>テスト用デモログイン</span>
             </span>
-            <p className="text-[10px] text-slate-500 mt-0.5">パスワードなしで学生としてログイン</p>
+            <p className="text-[10px] text-slate-500 mt-0.5">パスワードなしで企業としてログイン</p>
           </div>
 
           <button
             type="button"
             onClick={handleQuickDemo}
-            className="py-2 px-3.5 bg-emerald-700 hover:bg-emerald-600 active:scale-95 text-white rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-1"
+            className="py-2 px-3.5 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-1"
           >
-            <User className="w-3.5 h-3.5" />
+            <Building2 className="w-3.5 h-3.5" />
             <span>今すぐ試す</span>
           </button>
         </div>
@@ -100,14 +104,14 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">メールアドレス</label>
+            <label className="block text-xs font-bold text-slate-700 mb-1">企業メールアドレス</label>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="sato@example.com"
-              className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+              placeholder="hr@tech-innovations.jp"
+              className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
           </div>
 
@@ -119,7 +123,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+              className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
           </div>
 
@@ -129,25 +133,25 @@ export default function LoginPage() {
             className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-2xl transition-colors disabled:opacity-50 shadow-md flex items-center justify-center gap-2"
           >
             <LogIn className="w-4 h-4" />
-            <span>{loading ? "ログイン中..." : "ログイン"}</span>
+            <span>{loading ? "ログイン中..." : "企業としてログイン"}</span>
           </button>
         </form>
 
         <div className="mt-6 pt-6 border-t border-slate-100 space-y-3 text-center text-xs">
           <p className="text-slate-500">
-            アカウントをお持ちでないですか？{" "}
-            <Link href="/register" className="font-bold text-emerald-800 hover:underline">
-              新規登録（無料）
+            企業アカウントをお持ちでないですか？{" "}
+            <Link href="/company/register" className="font-bold text-slate-900 hover:underline">
+              企業アカウント登録
             </Link>
           </p>
 
           <div className="pt-2 border-t border-slate-100">
             <Link
-              href="/company/login"
-              className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-900 font-semibold"
+              href="/login"
+              className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-emerald-800 font-semibold"
             >
-              <Building2 className="w-3.5 h-3.5 text-slate-400" />
-              <span>採用担当・企業の方はこちら</span>
+              <User className="w-3.5 h-3.5 text-slate-400" />
+              <span>学生・求職者の方はこちら</span>
               <ArrowRight className="w-3 h-3" />
             </Link>
           </div>

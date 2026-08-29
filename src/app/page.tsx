@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Sparkles, User, Building2, ArrowRight, Video, MessageSquare, Play } from "lucide-react";
+import { Sparkles, User, Building2, ArrowRight, Video, MessageSquare } from "lucide-react";
 
 export default function HomePage() {
   return (
@@ -36,14 +36,14 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* CTAボタン群（新規登録・企業ログイン・デモ体験） */}
+          {/* CTAボタン群 */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
             <Link
               href="/register"
               className="w-full sm:w-auto px-8 py-3.5 text-sm font-bold text-white bg-emerald-700 hover:bg-emerald-600 rounded-2xl transition-all shadow-md flex items-center justify-center gap-2"
             >
               <User className="h-4 w-4" />
-              <span>学生として新規登録</span>
+              <span>新規登録</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
 
@@ -51,8 +51,20 @@ export default function HomePage() {
               href="/login"
               className="w-full sm:w-auto px-8 py-3.5 text-sm font-bold text-slate-800 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-2xl transition-all flex items-center justify-center gap-2"
             >
-              <Building2 className="h-4 w-4" />
-              <span>ログイン・デモ体験</span>
+              <User className="h-4 w-4" />
+              <span>ログイン</span>
+            </Link>
+          </div>
+
+          {/* 採用担当企業向けリンク */}
+          <div className="pt-3">
+            <Link
+              href="/company/login"
+              className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-emerald-800 hover:underline font-medium transition-colors"
+            >
+              <Building2 className="w-3.5 h-3.5 text-slate-400" />
+              <span>採用担当・企業の方はこちら（企業ログイン・登録）</span>
+              <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
         </div>

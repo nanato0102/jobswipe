@@ -4,13 +4,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { Film, User, Building2, ShieldCheck, LogIn, Sparkles, MessageSquare, Search, Heart, UserPlus, LogOut, Home } from "lucide-react";
+import { Film, User, Building2, ShieldCheck, LogIn, Sparkles, MessageSquare, Search, Heart, UserPlus, LogOut, Home, Briefcase } from "lucide-react";
 
 export default function Navbar() {
   const pathname = usePathname();
   const { session, isStudent, isCompany, isAdmin, isLoggedIn, logout } = useAuth();
 
-  const isAuthPage = pathname === "/login" || pathname === "/register";
+  const isAuthPage =
+    pathname === "/login" ||
+    pathname === "/register" ||
+    pathname === "/company/login" ||
+    pathname === "/company/register";
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/95 backdrop-blur">
@@ -186,9 +190,9 @@ export default function Navbar() {
         )}
 
         {/* 認証・ユーザー情報・ログアウト */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5 sm:gap-3">
           {isLoggedIn && session ? (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <div className="flex items-center gap-2">
                 <span
                   className={`text-xs px-2.5 py-0.5 rounded-full font-bold shadow-sm ${
@@ -201,7 +205,7 @@ export default function Navbar() {
                 >
                   {isStudent ? "学生" : isCompany ? "企業" : "管理者"}
                 </span>
-                <span className="text-xs text-slate-800 font-bold max-w-[150px] truncate">
+                <span className="text-xs text-slate-800 font-bold max-w-[130px] truncate hidden sm:inline">
                   {session.name || session.email}
                 </span>
               </div>
@@ -216,22 +220,31 @@ export default function Navbar() {
               </button>
             </div>
           ) : (
-            <>
+            <div className="flex items-center gap-2 sm:gap-3">
+              {/* 採用担当の方はこちら リンク */}
+              <Link
+                href="/company/login"
+                className="text-xs font-semibold text-slate-600 hover:text-emerald-800 hover:underline px-2 py-1.5 transition-colors hidden sm:flex items-center gap-1"
+              >
+                <Building2 className="w-3.5 h-3.5 text-slate-500" />
+                <span>採用担当の方はこちら</span>
+              </Link>
+
               <Link
                 href="/login"
-                className="flex items-center gap-1.5 px-3.5 py-1.5 text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors"
               >
-                <LogIn className="h-4 w-4" />
+                <LogIn className="h-3.5 w-3.5" />
                 <span>ログイン</span>
               </Link>
               <Link
                 href="/register"
-                className="flex items-center gap-1.5 px-3.5 py-1.5 text-sm font-medium text-white bg-slate-900 hover:bg-slate-800 rounded-lg transition-colors"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-white bg-emerald-700 hover:bg-emerald-600 rounded-xl transition-colors shadow-sm"
               >
-                <UserPlus className="h-4 w-4" />
+                <UserPlus className="h-3.5 w-3.5" />
                 <span>新規登録</span>
               </Link>
-            </>
+            </div>
           )}
         </div>
       </div>

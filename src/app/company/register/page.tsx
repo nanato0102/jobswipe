@@ -4,15 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
-import { UserPlus, User, Building2, AlertCircle, CheckCircle, GraduationCap, ArrowRight } from "lucide-react";
+import { Building2, User, AlertCircle, CheckCircle, Briefcase, ArrowRight } from "lucide-react";
 
-export default function RegisterPage() {
+export default function CompanyRegisterPage() {
   const { login } = useAuth();
+  const [name, setName] = useState("");
+  const [industry, setIndustry] = useState("IT / Webサービス");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [university, setUniversity] = useState("");
-  const [graduationYear, setGraduationYear] = useState(2026);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -26,7 +25,7 @@ export default function RegisterPage() {
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, userType: "STUDENT", name }),
+        body: JSON.stringify({ email, password, userType: "COMPANY", name }),
       });
 
       if (!res.ok) {
@@ -37,14 +36,14 @@ export default function RegisterPage() {
       const dummyUser = {
         id: "u-" + Date.now(),
         email,
-        userType: "STUDENT" as const,
+        userType: "COMPANY" as const,
         name,
       };
       login(dummyUser);
 
       setSuccess(true);
       setTimeout(() => {
-        window.location.href = "/student/profile";
+        window.location.href = "/swipe";
       }, 1000);
     } catch (err: any) {
       setError(err.message || "登録処理中にエラーが発生しました");
@@ -67,8 +66,12 @@ export default function RegisterPage() {
               priority
             />
           </div>
-          <h1 className="text-xl font-bold text-slate-900">学生 新規登録</h1>
-          <p className="text-xs text-slate-500 mt-1">動画を投稿して企業からスカウトを受け取ろう</p>
+          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-blue-50 text-blue-800 text-[11px] font-bold border border-blue-200 mb-2">
+            <Building2 className="w-3.5 h-3.5" />
+            <span>企業採用担当者専用</span>
+          </div>
+          <h1 className="text-xl font-bold text-slate-900">企業アカウント新規登録</h1>
+          <p className="text-xs text-slate-500 mt-1">動画スワイプで新しい採用をはじめましょう</p>
         </div>
 
         {error && (
@@ -81,58 +84,51 @@ export default function RegisterPage() {
         {success && (
           <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 text-xs flex items-center gap-2">
             <CheckCircle className="w-4 h-4 flex-shrink-0" />
-            <span>登録が完了しました！プロフィール画面へ移動します...</span>
+            <span>企業登録が完了しました！スワイプ画面へ移動します...</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">氏名</label>
+            <label className="block text-xs font-bold text-slate-700 mb-1">企業名 / 法人名</label>
             <input
               type="text"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="山田 太郎"
-              className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+              placeholder="株式会社サンプル"
+              className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">大学・学部</label>
-              <input
-                type="text"
-                value={university}
-                onChange={(e) => setUniversity(e.target.value)}
-                placeholder="早稲田大学 商学部"
-                className="w-full text-sm border border-slate-300 rounded-2xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">卒業年</label>
-              <select
-                value={graduationYear}
-                onChange={(e) => setGraduationYear(Number(e.target.value))}
-                className="w-full text-sm border border-slate-300 rounded-2xl px-3 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 bg-white"
-              >
-                <option value={2025}>2025年卒</option>
-                <option value={2026}>2026年卒</option>
-                <option value={2027}>2027年卒</option>
-                <option value={2028}>2028年卒</option>
-              </select>
-            </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
+              <Briefcase className="w-3.5 h-3.5 text-slate-500" />
+              <span>主な業界</span>
+            </label>
+            <select
+              value={industry}
+              onChange={(e) => setIndustry(e.target.value)}
+              className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 bg-white"
+            >
+              <option value="IT / Webサービス">IT / Webサービス</option>
+              <option value="コンサルティング">コンサルティング</option>
+              <option value="メーカー / 製造">メーカー / 製造</option>
+              <option value="広告 / マスコミ">広告 / マスコミ</option>
+              <option value="金融 / 不動産">金融 / 不動産</option>
+              <option value="人材 / 教育">人材 / 教育</option>
+            </select>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">メールアドレス</label>
+            <label className="block text-xs font-bold text-slate-700 mb-1">ご担当者メールアドレス</label>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="student@example.com"
-              className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+              placeholder="hr@company.jp"
+              className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
           </div>
 
@@ -145,35 +141,35 @@ export default function RegisterPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="6文字以上の英数字"
-              className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+              className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-emerald-700 hover:bg-emerald-600 text-white text-sm font-bold rounded-2xl transition-colors disabled:opacity-50 shadow-md flex items-center justify-center gap-2"
+            className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-2xl transition-colors disabled:opacity-50 shadow-md flex items-center justify-center gap-2"
           >
-            <UserPlus className="w-4 h-4" />
-            <span>{loading ? "登録中..." : "新規登録する（無料）"}</span>
+            <Building2 className="w-4 h-4" />
+            <span>{loading ? "登録中..." : "企業アカウントを登録"}</span>
           </button>
         </form>
 
         <div className="mt-6 pt-6 border-t border-slate-100 space-y-3 text-center text-xs">
           <p className="text-slate-500">
             既にアカウントをお持ちですか？{" "}
-            <Link href="/login" className="font-bold text-emerald-800 hover:underline">
-              ログイン
+            <Link href="/company/login" className="font-bold text-slate-900 hover:underline">
+              企業ログイン
             </Link>
           </p>
 
           <div className="pt-2 border-t border-slate-100">
             <Link
-              href="/company/register"
-              className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-900 font-semibold"
+              href="/register"
+              className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-emerald-800 font-semibold"
             >
-              <Building2 className="w-3.5 h-3.5 text-slate-400" />
-              <span>採用担当・企業の方の登録はこちら</span>
+              <User className="w-3.5 h-3.5 text-slate-400" />
+              <span>学生・求職者の方はこちら</span>
               <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
