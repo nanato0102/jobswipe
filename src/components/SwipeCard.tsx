@@ -403,44 +403,51 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
             </div>
           </div>
 
-          {/* 人柄・自己PRサマリー */}
+          {/* ひとことスローガン */}
           <div>
-            <span className="text-xs font-bold text-slate-800 block mb-1.5">人柄・自己PRサマリー</span>
-            <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 text-xs text-slate-700 leading-relaxed">
-              {currentVideo.student?.bio || "自己PR情報は登録されていません。"}
+            <span className="text-xs font-bold text-slate-800 block mb-1.5">ひとことスローガン</span>
+            <div className="p-3.5 bg-emerald-50/60 rounded-2xl border border-emerald-100 text-xs font-bold text-emerald-950 leading-relaxed">
+              {currentVideo.student?.bio || "笑顔と前向きな姿勢でチームに貢献します！"}
             </div>
           </div>
 
-          {/* スキル・強み */}
+          {/* 人柄・強みタグ */}
           {currentVideo.student?.skills && (
             <div>
               <span className="text-xs font-bold text-slate-800 flex items-center gap-1 mb-1.5">
-                <Award className="w-3.5 h-3.5 text-emerald-700" />
-                <span>スキル・強み</span>
+                <Sparkles className="w-3.5 h-3.5 text-emerald-700" />
+                <span>人柄・強みタグ</span>
               </span>
               <div className="flex flex-wrap gap-1.5">
                 {currentVideo.student.skills.split(",").map((s, idx) => (
                   <span
                     key={idx}
-                    className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-1 rounded-lg text-xs font-semibold"
+                    className="bg-emerald-50 text-emerald-900 border border-emerald-200 px-3 py-1 rounded-full text-xs font-bold shadow-sm"
                   >
-                    {s.trim()}
+                    #{s.trim()}
                   </span>
                 ))}
               </div>
             </div>
           )}
 
-          {/* 学生時代の経験・活動 */}
+          {/* 興味のある業界 */}
           {currentVideo.student?.experience && (
             <div>
               <span className="text-xs font-bold text-slate-800 flex items-center gap-1 mb-1.5">
                 <Briefcase className="w-3.5 h-3.5 text-emerald-700" />
-                <span>学生時代の経験・活動</span>
+                <span>興味のある業界</span>
               </span>
-              <p className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 text-xs text-slate-700 leading-relaxed">
-                {currentVideo.student.experience}
-              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {currentVideo.student.experience.split(",").map((ind, idx) => (
+                  <span
+                    key={idx}
+                    className="bg-slate-100 text-slate-700 border border-slate-200 px-3 py-1 rounded-full text-xs font-semibold"
+                  >
+                    {ind.trim()}
+                  </span>
+                ))}
+              </div>
             </div>
           )}
 
