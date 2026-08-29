@@ -46,7 +46,7 @@ const CANDIDATES_DATA: StudentCandidate[] = [
     university: "早稲田大学",
     faculty: "商学部",
     grade: "大学3年生",
-    graduationYear: 2026,
+    graduationYear: 2027,
     catchphrase: "目標に向かって周囲を巻き込む推進力",
     bio: "体育会サッカー部で主将を務めています。困難な状況でもチーム全員で前進する組織づくりと目標達成に向けた推進力に自信があります。",
     tags: ["リーダーシップ", "体育会", "組織マネジメント", "粘り強さ"],
@@ -62,7 +62,7 @@ const CANDIDATES_DATA: StudentCandidate[] = [
     university: "上智大学",
     faculty: "外国語学部",
     grade: "大学3年生",
-    graduationYear: 2026,
+    graduationYear: 2027,
     catchphrase: "グローバルな環境で培った柔軟性と伝達力",
     bio: "カナダへ1年間の留学経験があり、現地でのプレゼンコンペで入賞。異なる文化や価値観を持つ人々と協働することが得意です。",
     tags: ["英語対応可", "留学経験", "プレゼンテーション", "笑顔"],
@@ -78,7 +78,7 @@ const CANDIDATES_DATA: StudentCandidate[] = [
     university: "慶應義塾大学",
     faculty: "理工学部",
     grade: "大学2年生",
-    graduationYear: 2027,
+    graduationYear: 2028,
     catchphrase: "課題を自ら見つけ、プロダクトで解決する技術力",
     bio: "未経験から独学でWebサービスを開発し、月間1万PVを達成。最新技術の探求とものづくりへの情熱には誰にも負けません。",
     tags: ["エンジニア志望", "プログラミング", "個人開発", "Python", "React"],
@@ -94,7 +94,7 @@ const CANDIDATES_DATA: StudentCandidate[] = [
     university: "立教大学",
     faculty: "現代心理学部",
     grade: "大学3年生",
-    graduationYear: 2026,
+    graduationYear: 2027,
     catchphrase: "人の感情に寄り添い、場の安心感をつくる笑顔",
     bio: "カフェでのアルバイトリーダーとして新人20名のメンターを担当。接客満足度アンケートで店舗1位を獲得しました。",
     tags: ["笑顔", "コミュニケーション", "接客・育成", "傾聴力"],
@@ -246,10 +246,10 @@ export default function CompanySearchPage() {
                   className="w-full border border-slate-300 rounded-xl px-3 py-2 text-slate-800 bg-white font-medium focus:outline-none focus:ring-1 focus:ring-slate-900"
                 >
                   <option value="all">すべて</option>
-                  <option value="2025">2025年卒</option>
-                  <option value="2026">2026年卒</option>
                   <option value="2027">2027年卒</option>
                   <option value="2028">2028年卒</option>
+                  <option value="2029">2029年卒</option>
+                  <option value="2030">2030年卒</option>
                 </select>
               </div>
 

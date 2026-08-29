@@ -42,7 +42,7 @@ export default function ChatPage() {
   };
 
   const partnerName = isStudent ? "テックイノベーション株式会社" : "佐藤 健太 さん";
-  const partnerSub = isStudent ? "IT / Webサービス • 採用担当" : "早稲田大学 商学部 / 2026年卒";
+  const partnerSub = isStudent ? "IT / Webサービス • 採用担当" : "早稲田大学 商学部 / 2027年卒";
 
   return (
     <RoleGuard allowedRoles={["COMPANY", "STUDENT", "ADMIN"]}>

@@ -149,7 +149,7 @@ export default function StudentProfilePage() {
   const [faculty, setFaculty] = useState("商学部");
   const [department, setDepartment] = useState("商学科");
   const [grade, setGrade] = useState("大学3年生");
-  const [graduationYear, setGraduationYear] = useState<number>(2026);
+  const [graduationYear, setGraduationYear] = useState<number>(2027);
   const [academicField, setAcademicField] = useState("文系");
 
   // 自己PR・ガクチカ
@@ -436,10 +436,10 @@ export default function StudentProfilePage() {
                         onChange={(e) => setGraduationYear(Number(e.target.value))}
                         className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 bg-white"
                       >
-                        <option value={2025}>2025年3月 卒業</option>
-                        <option value={2026}>2026年3月 卒業</option>
                         <option value={2027}>2027年3月 卒業</option>
                         <option value={2028}>2028年3月 卒業</option>
+                        <option value={2029}>2029年3月 卒業</option>
+                        <option value={2030}>2030年3月 卒業</option>
                       </select>
                     </div>
                   </div>

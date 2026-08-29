@@ -12,7 +12,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [university, setUniversity] = useState("");
-  const [graduationYear, setGraduationYear] = useState(2026);
+  const [graduationYear, setGraduationYear] = useState(2027);
   const [agreed, setAgreed] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -123,10 +123,10 @@ export default function RegisterPage() {
                 onChange={(e) => setGraduationYear(Number(e.target.value))}
                 className="w-full text-sm border border-slate-300 rounded-2xl px-3 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 bg-white font-medium"
               >
-                <option value={2025}>2025年卒</option>
-                <option value={2026}>2026年卒</option>
                 <option value={2027}>2027年卒</option>
                 <option value={2028}>2028年卒</option>
+                <option value={2029}>2029年卒</option>
+                <option value={2030}>2030年卒</option>
               </select>
             </div>
           </div>
