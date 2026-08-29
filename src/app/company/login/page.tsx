@@ -4,10 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
-import { LogIn, AlertCircle, Building2, Sparkles, UserPlus } from "lucide-react";
+import { LogIn, AlertCircle, Building2 } from "lucide-react";
 
 export default function CompanyLoginPage() {
-  const { login, demoLogin } = useAuth();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -36,20 +36,10 @@ export default function CompanyLoginPage() {
         window.location.href = "/swipe";
       }
     } catch (err: any) {
-      if (email) {
-        demoLogin("COMPANY");
-        window.location.href = "/swipe";
-      } else {
-        setError(err.message || "ログインに失敗しました");
-      }
+      setError(err.message || "ログインに失敗しました。企業メールアドレスとパスワードをお確かめください。");
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleQuickDemo = () => {
-    demoLogin("COMPANY");
-    window.location.href = "/swipe";
   };
 
   return (
@@ -75,26 +65,6 @@ export default function CompanyLoginPage() {
           <p className="text-xs text-slate-500 mt-1">動画スワイプ・スカウト管理画面へログイン</p>
         </div>
 
-        {/* ワンクリック・デモログイン（企業用） */}
-        <div className="p-3.5 bg-blue-50/50 border border-blue-100 rounded-2xl mb-6 flex items-center justify-between">
-          <div>
-            <span className="text-xs font-bold text-blue-900 flex items-center gap-1">
-              <Sparkles className="w-3.5 h-3.5 text-blue-700" />
-              <span>テスト用デモログイン</span>
-            </span>
-            <p className="text-[10px] text-slate-500 mt-0.5">パスワードなしで企業としてログイン</p>
-          </div>
-
-          <button
-            type="button"
-            onClick={handleQuickDemo}
-            className="py-2 px-3.5 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-1"
-          >
-            <Building2 className="w-3.5 h-3.5" />
-            <span>今すぐ試す</span>
-          </button>
-        </div>
-
         {error && (
           <div className="mb-4 p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 text-xs flex items-center gap-2">
             <AlertCircle className="w-4 h-4 flex-shrink-0" />
@@ -110,7 +80,7 @@ export default function CompanyLoginPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="hr@tech-innovations.jp"
+              placeholder="hr@company.jp"
               className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
           </div>

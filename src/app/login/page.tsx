@@ -4,10 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
-import { LogIn, AlertCircle, User, Sparkles } from "lucide-react";
+import { LogIn, AlertCircle } from "lucide-react";
 
 export default function LoginPage() {
-  const { login, demoLogin } = useAuth();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -36,20 +36,10 @@ export default function LoginPage() {
         window.location.href = data.user.userType === "STUDENT" ? "/student/profile" : "/swipe";
       }
     } catch (err: any) {
-      if (email) {
-        demoLogin("STUDENT");
-        window.location.href = "/student/profile";
-      } else {
-        setError(err.message || "ログインに失敗しました");
-      }
+      setError(err.message || "ログインに失敗しました。メールアドレスとパスワードをお確かめください。");
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleQuickDemo = () => {
-    demoLogin("STUDENT");
-    window.location.href = "/student/profile";
   };
 
   return (
@@ -68,27 +58,7 @@ export default function LoginPage() {
             />
           </div>
           <h1 className="text-xl font-bold text-slate-900">ログイン</h1>
-          <p className="text-xs text-slate-500 mt-1">マイページへログイン</p>
-        </div>
-
-        {/* ワンクリック・デモログイン（学生用） */}
-        <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl mb-6 flex items-center justify-between">
-          <div>
-            <span className="text-xs font-bold text-slate-800 flex items-center gap-1">
-              <Sparkles className="w-3.5 h-3.5 text-emerald-700" />
-              <span>テスト用デモログイン</span>
-            </span>
-            <p className="text-[10px] text-slate-500 mt-0.5">パスワードなしで学生としてログイン</p>
-          </div>
-
-          <button
-            type="button"
-            onClick={handleQuickDemo}
-            className="py-2 px-3.5 bg-emerald-700 hover:bg-emerald-600 active:scale-95 text-white rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-1"
-          >
-            <User className="w-3.5 h-3.5" />
-            <span>今すぐ試す</span>
-          </button>
+          <p className="text-xs text-slate-500 mt-1">メールアドレスとパスワードを入力してください</p>
         </div>
 
         {error && (
@@ -106,7 +76,7 @@ export default function LoginPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="sato@example.com"
+              placeholder="student@example.com"
               className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
             />
           </div>

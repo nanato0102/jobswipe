@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { Sparkles, Search, Heart, Building2, User, Film, ShieldCheck, Home, LogIn, MessageSquare } from "lucide-react";
+import { Sparkles, Search, Heart, Building2, User, Film, ShieldCheck, MessageSquare } from "lucide-react";
 
 interface NavItem {
   href: string;
   label: string;
-  icon: typeof Home;
+  icon: typeof User;
   active: boolean;
 }
 
@@ -16,19 +16,21 @@ export default function BottomNav() {
   const pathname = usePathname();
   const { isStudent, isCompany, isAdmin, isLoggedIn } = useAuth();
 
-  // ログイン・登録画面では非表示
-  if (pathname === "/login" || pathname === "/register") {
+  // 未ログイン、またはログイン・登録画面では非表示
+  if (
+    !isLoggedIn ||
+    pathname === "/login" ||
+    pathname === "/register" ||
+    pathname === "/company/login" ||
+    pathname === "/company/register" ||
+    pathname === "/"
+  ) {
     return null;
   }
 
   let navItems: NavItem[] = [];
 
-  if (!isLoggedIn) {
-    navItems = [
-      { href: "/", label: "ホーム", icon: Home, active: pathname === "/" },
-      { href: "/login", label: "ログイン", icon: LogIn, active: pathname === "/login" },
-    ];
-  } else if (isStudent) {
+  if (isStudent) {
     navItems = [
       { href: "/student/profile", label: "プロフィール", icon: User, active: pathname === "/student/profile" },
       { href: "/student/video", label: "動画投稿", icon: Film, active: pathname === "/student/video" },

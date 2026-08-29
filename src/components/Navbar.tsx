@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { Film, User, Building2, ShieldCheck, LogIn, Sparkles, MessageSquare, Search, Heart, UserPlus, LogOut, Home, Briefcase } from "lucide-react";
+import { Film, User, Building2, ShieldCheck, LogIn, Sparkles, MessageSquare, Search, Heart, UserPlus, LogOut } from "lucide-react";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -36,22 +36,9 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* ナビゲーションメニュー（ロールに応じた完全出し分け） */}
-        {!isAuthPage && (
+        {/* ナビゲーションメニュー（ログイン時のみ表示） */}
+        {!isAuthPage && isLoggedIn && (
           <nav className="hidden md:flex items-center gap-1 text-sm font-medium text-slate-600">
-            {/* 未ログイン時 */}
-            {!isLoggedIn && (
-              <Link
-                href="/"
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-md transition-colors ${
-                  pathname === "/" ? "bg-slate-100 text-slate-900 font-semibold" : "hover:bg-slate-50 hover:text-slate-900"
-                }`}
-              >
-                <Home className="h-4 w-4 text-emerald-700" />
-                <span>ホーム</span>
-              </Link>
-            )}
-
             {/* 🎓 学生（STUDENT）ログイン時 */}
             {isStudent && (
               <>
