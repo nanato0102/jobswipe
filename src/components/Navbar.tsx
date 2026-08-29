@@ -226,11 +226,11 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => setMenuOpen(!menuOpen)}
-                className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-2 rounded-2xl border border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-all focus:outline-none"
+                className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-lg border border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-all focus:outline-none"
                 aria-expanded={menuOpen}
               >
                 <span
-                  className={`text-[10px] px-2 py-0.5 rounded-full font-bold shadow-sm ${
+                  className={`text-[10px] px-2 py-0.5 rounded-md font-bold shadow-2xs ${
                     isStudent
                       ? "bg-emerald-100 text-emerald-800 border border-emerald-200"
                       : isCompany
@@ -254,9 +254,9 @@ export default function Navbar() {
 
               {/* ドロップダウンメニューパネル */}
               {menuOpen && (
-                <div className="absolute right-0 mt-2 w-64 bg-white rounded-3xl border border-slate-200 shadow-2xl p-2 z-50 animate-fade-in-up space-y-1">
+                <div className="absolute right-0 mt-2 w-60 bg-white rounded-xl border border-slate-200 shadow-xl p-1.5 z-50 animate-fade-in-up space-y-0.5">
                   {/* ユーザーサマリー情報 */}
-                  <div className="px-4 py-3 border-b border-slate-100 bg-slate-50/70 rounded-2xl mb-1">
+                  <div className="px-3.5 py-2.5 border-b border-slate-100 bg-slate-50 rounded-lg mb-1">
                     <p className="text-xs font-bold text-slate-900 truncate">
                       {session?.name || "ユーザー"}
                     </p>
@@ -269,7 +269,7 @@ export default function Navbar() {
                       <Link
                         href="/student/profile"
                         onClick={() => setMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-3.5 py-2.5 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-900 rounded-xl transition-colors font-medium"
+                        className="flex items-center gap-2.5 px-3 py-2 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-900 rounded-md transition-colors font-medium"
                       >
                         <User className="w-4 h-4 text-emerald-700" />
                         <span>プロフィール</span>
@@ -277,7 +277,7 @@ export default function Navbar() {
                       <Link
                         href="/student/video"
                         onClick={() => setMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-3.5 py-2.5 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-900 rounded-xl transition-colors font-medium"
+                        className="flex items-center gap-2.5 px-3 py-2 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-900 rounded-md transition-colors font-medium"
                       >
                         <Film className="w-4 h-4 text-emerald-700" />
                         <span>動画投稿</span>

@@ -34,8 +34,8 @@ export default function StudentOffersPage() {
         </div>
 
         {offers.length === 0 ? (
-          <div className="bg-white p-12 rounded-3xl border border-slate-200 text-center text-slate-500 text-sm shadow-sm space-y-2">
-            <Sparkles className="w-10 h-10 text-slate-400 mx-auto" />
+          <div className="bg-white p-12 rounded-xl border border-slate-200 text-center text-slate-500 text-sm shadow-xs space-y-2">
+            <Sparkles className="w-8 h-8 text-slate-400 mx-auto" />
             <p className="font-bold text-slate-700">まだオファーは届いていません</p>
             <p className="text-xs text-slate-400">自己PR動画を投稿すると、企業からオファーが届きます。</p>
           </div>
@@ -44,16 +44,16 @@ export default function StudentOffersPage() {
             {offers.map((offer) => (
               <div
                 key={offer.id}
-                className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 flex flex-col gap-4 hover:shadow-md transition-shadow"
+                className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 sm:p-6 flex flex-col gap-4 hover:shadow-sm transition-shadow"
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="text-base font-bold text-slate-900">{offer.companyName}</h3>
+                    <h3 className="text-base font-bold text-slate-900 tracking-tight">{offer.companyName}</h3>
                     <span className="text-xs text-slate-500">{offer.industry}</span>
                   </div>
 
                   <span
-                    className={`text-xs px-3 py-1 rounded-full font-bold flex items-center gap-1 shadow-sm ${
+                    className={`text-[11px] px-2.5 py-0.5 rounded-md font-bold flex items-center gap-1 shadow-2xs ${
                       offer.status === "ACCEPTED"
                         ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
                         : offer.status === "DECLINED"
@@ -68,25 +68,25 @@ export default function StudentOffersPage() {
                   </span>
                 </div>
 
-                <p className="text-sm text-slate-700 bg-slate-50 p-4 rounded-2xl border border-slate-100 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-700 bg-slate-50 p-3.5 rounded-lg border border-slate-200 leading-relaxed">
                   {offer.message}
                 </p>
 
                 <div className="flex items-center justify-between pt-3 border-t border-slate-100">
-                  <span className="text-xs text-slate-400">受信日時: {offer.createdAt}</span>
+                  <span className="text-[11px] text-slate-400">受信日時: {offer.createdAt}</span>
 
                   <div className="flex items-center gap-2">
                     {offer.status === "SENT" && (
                       <>
                         <button
                           onClick={() => handleStatusChange(offer.id, "DECLINED")}
-                          className="px-3.5 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-xl border border-slate-200 transition-colors"
+                          className="px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-md border border-slate-200 transition-colors"
                         >
                           辞退
                         </button>
                         <button
                           onClick={() => handleStatusChange(offer.id, "ACCEPTED")}
-                          className="px-4 py-1.5 text-xs font-bold text-white bg-emerald-700 hover:bg-emerald-600 rounded-xl shadow-sm transition-colors"
+                          className="px-3.5 py-1.5 text-xs font-bold text-white bg-emerald-700 hover:bg-emerald-600 rounded-md shadow-2xs transition-colors"
                         >
                           承諾する
                         </button>
@@ -96,7 +96,7 @@ export default function StudentOffersPage() {
                     {offer.status === "ACCEPTED" && (
                       <Link
                         href={`/company/chat?threadId=thread-${offer.companyId}`}
-                        className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold text-white bg-emerald-700 hover:bg-emerald-600 rounded-xl shadow-sm transition-colors"
+                        className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-white bg-emerald-700 hover:bg-emerald-600 rounded-md shadow-2xs transition-colors"
                       >
                         <MessageSquare className="w-3.5 h-3.5" />
                         <span>チャットを開く</span>

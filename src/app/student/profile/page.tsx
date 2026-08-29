@@ -240,7 +240,7 @@ export default function StudentProfilePage() {
     <RoleGuard allowedRoles={["STUDENT", "ADMIN"]}>
       <StudentMobileTabs>
         <div className="flex-1 py-6 sm:py-10 px-4 sm:px-6 max-w-3xl mx-auto w-full">
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 sm:p-8 space-y-6">
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xl p-6 sm:p-8 space-y-6">
           {/* ヘッダー */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
             <div>
@@ -256,7 +256,7 @@ export default function StudentProfilePage() {
             <div className="flex items-center gap-3">
               <Link
                 href="/student/video"
-                className="flex items-center gap-1.5 px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold rounded-xl border border-emerald-200 transition-colors"
+                className="flex items-center gap-1.5 px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold rounded-lg border border-emerald-200 transition-colors"
               >
                 <Video className="w-4 h-4 text-emerald-700" />
                 <span>動画投稿へ</span>
@@ -265,7 +265,7 @@ export default function StudentProfilePage() {
               <button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="flex items-center gap-1.5 px-5 py-2 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold rounded-xl transition-all disabled:opacity-50 shadow-md"
+                className="flex items-center gap-1.5 px-5 py-2 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold rounded-lg transition-all disabled:opacity-50 shadow-md"
               >
                 <Save className="w-4 h-4" />
                 <span>{loading ? "保存中..." : "保存"}</span>
@@ -275,16 +275,16 @@ export default function StudentProfilePage() {
 
           {/* 保存成功メッセージ */}
           {saved && (
-            <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 text-xs font-bold flex items-center gap-2 animate-fade-in shadow-sm">
+            <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-800 text-xs font-bold flex items-center gap-2 animate-fade-in shadow-sm">
               <CheckCircle className="w-4 h-4 flex-shrink-0 text-emerald-700" />
               <span>プロフィールを保存しました！動画を投稿してオファーを待ちましょう。</span>
             </div>
           )}
 
           {/* 動画投稿リマインダーバナー */}
-          <div className="p-4 bg-slate-900 border border-slate-800 text-white rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md">
+          <div className="p-4 bg-slate-900 border border-slate-800 text-white rounded-lg flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-950/80 text-emerald-400 flex items-center justify-center border border-emerald-800/50 flex-shrink-0">
+              <div className="w-10 h-10 rounded-lg bg-emerald-950/80 text-emerald-400 flex items-center justify-center border border-emerald-800/50 flex-shrink-0">
                 <Sparkles className="w-5 h-5" />
               </div>
               <div>
@@ -344,7 +344,7 @@ export default function StudentProfilePage() {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="佐藤 健太"
-                    className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 font-medium"
+                    className="w-full text-sm border border-slate-300 rounded-lg px-3.5 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 font-medium"
                   />
                 </div>
 
@@ -357,7 +357,7 @@ export default function StudentProfilePage() {
                       value={university}
                       onChange={(e) => setUniversity(e.target.value)}
                       placeholder="早稲田大学"
-                      className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 font-medium"
+                      className="w-full text-sm border border-slate-300 rounded-lg px-3.5 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 font-medium"
                     />
                   </div>
 
@@ -366,7 +366,7 @@ export default function StudentProfilePage() {
                     <select
                       value={graduationYear}
                       onChange={(e) => setGraduationYear(Number(e.target.value))}
-                      className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 bg-white font-medium"
+                      className="w-full text-sm border border-slate-300 rounded-lg px-3.5 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 bg-white font-medium"
                     >
                       <option value={2027}>2027年3月 卒業（27卒）</option>
                       <option value={2028}>2028年3月 卒業（28卒）</option>
@@ -385,7 +385,7 @@ export default function StudentProfilePage() {
                     value={catchphrase}
                     onChange={(e) => setCatchphrase(e.target.value)}
                     placeholder="例: 笑顔と前向きな行動力で、チームを明るく牽引します！"
-                    className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 font-medium"
+                    className="w-full text-sm border border-slate-300 rounded-lg px-3.5 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 font-medium"
                   />
                   <p className="text-[11px] text-slate-500 mt-1">
                     企業がスワイプする際に、動画の下に表示される1行のキャッチコピーです。
@@ -446,9 +446,9 @@ export default function StudentProfilePage() {
                           key={pref}
                           type="button"
                           onClick={() => toggleLocation(pref)}
-                          className={`text-xs px-3.5 py-1.5 rounded-full border font-semibold transition-all ${
+                          className={`text-xs px-3 py-1 rounded-md border font-semibold transition-all ${
                             isSelected
-                              ? "bg-emerald-700 text-white border-emerald-700 shadow-sm"
+                              ? "bg-emerald-700 text-white border-emerald-700 shadow-2xs"
                               : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"
                           }`}
                         >
@@ -467,7 +467,7 @@ export default function StudentProfilePage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full sm:w-auto px-8 py-3 bg-emerald-700 hover:bg-emerald-600 active:scale-95 text-white text-sm font-bold rounded-2xl transition-all shadow-md flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-6 py-2.5 bg-emerald-700 hover:bg-emerald-600 active:scale-95 text-white text-sm font-bold rounded-lg transition-all shadow-xs flex items-center justify-center gap-2"
               >
                 <Save className="w-4 h-4" />
                 <span>{loading ? "保存中..." : "変更を保存する"}</span>

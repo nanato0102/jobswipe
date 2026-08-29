@@ -219,7 +219,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
-          className="lg:col-span-7 w-full max-w-md mx-auto bg-black text-white rounded-3xl overflow-hidden shadow-2xl border border-slate-800 flex flex-col h-[74vh] min-h-[580px] max-h-[720px] relative"
+          className="lg:col-span-7 w-full max-w-md mx-auto bg-black text-white rounded-xl overflow-hidden shadow-2xl border border-slate-800 flex flex-col h-[74vh] min-h-[580px] max-h-[720px] relative"
         >
           {/* 動画表示エリア */}
           <div
@@ -406,7 +406,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
           {/* ひとことスローガン */}
           <div>
             <span className="text-xs font-bold text-slate-800 block mb-1.5">ひとことスローガン</span>
-            <div className="p-3.5 bg-emerald-50/60 rounded-2xl border border-emerald-100 text-xs font-bold text-emerald-950 leading-relaxed">
+            <div className="p-3 bg-emerald-50/60 rounded-lg border border-emerald-100 text-xs font-bold text-emerald-950 leading-relaxed">
               {currentVideo.student?.bio || "笑顔と前向きな姿勢でチームに貢献します！"}
             </div>
           </div>
@@ -422,7 +422,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                 {currentVideo.student.skills.split(",").map((s, idx) => (
                   <span
                     key={idx}
-                    className="bg-emerald-50 text-emerald-900 border border-emerald-200 px-3 py-1 rounded-full text-xs font-bold shadow-sm"
+                    className="bg-emerald-50 text-emerald-900 border border-emerald-200 px-2.5 py-0.5 rounded-md text-xs font-bold shadow-2xs"
                   >
                     #{s.trim()}
                   </span>
@@ -442,7 +442,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                 {currentVideo.student.experience.split(",").map((ind, idx) => (
                   <span
                     key={idx}
-                    className="bg-slate-100 text-slate-700 border border-slate-200 px-3 py-1 rounded-full text-xs font-semibold"
+                    className="bg-slate-100 text-slate-700 border border-slate-200 px-2.5 py-0.5 rounded-md text-xs font-semibold"
                   >
                     {ind.trim()}
                   </span>
@@ -455,7 +455,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
           <div className="mt-auto pt-4 border-t border-slate-100">
             <button
               onClick={() => setIsOfferModalOpen(true)}
-              className="w-full py-3 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold rounded-2xl flex items-center justify-center gap-2 transition-colors shadow-md"
+              className="w-full py-2.5 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold rounded-lg flex items-center justify-center gap-2 transition-colors shadow-xs"
             >
               <Send className="w-4 h-4" />
               <span>この学生にオファーを送る</span>
@@ -466,8 +466,8 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
 
       {/* スマホ用 詳細プロフィールモーダル */}
       {isProfileModalOpen && currentVideo.student && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 max-w-lg w-full shadow-2xl border border-slate-200 max-h-[85vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl p-6 max-w-lg w-full shadow-2xl border border-slate-200 max-h-[85vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
               <div>
                 <h3 className="text-base font-bold text-slate-900">{currentVideo.student.fullName} さんの詳細</h3>

@@ -206,14 +206,14 @@ export default function AdminConsoleDashboardPage() {
     <RoleGuard allowedRoles={["ADMIN"]}>
       <div className="flex-1 py-6 sm:py-10 px-4 sm:px-6 max-w-7xl mx-auto w-full space-y-6">
         {/* ================= ヘッダー ================= */}
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-6 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-rose-50 text-rose-800 text-[11px] font-bold border border-rose-200 mb-1.5">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-rose-50 text-rose-800 text-[11px] font-bold border border-rose-200 mb-1.5">
                 <ShieldCheck className="w-3.5 h-3.5" />
                 <span>JobSwipe 管理者専用コンソール</span>
               </div>
-              <h1 className="text-xl sm:text-2xl font-black text-slate-900">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
                 統括管理ダッシュボード
               </h1>
               <p className="text-xs text-slate-500 mt-1">
@@ -234,7 +234,7 @@ export default function AdminConsoleDashboardPage() {
             >
               <Mail className="w-4 h-4" />
               <span>お問い合わせ管理</span>
-              <span className="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[10px]">
+              <span className="px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 text-[10px]">
                 {inquiries.length}件
               </span>
             </button>
@@ -281,17 +281,17 @@ export default function AdminConsoleDashboardPage() {
         {activeTab === "inquiries" && (
           <div className="space-y-6">
             {/* ツールバー */}
-            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
               {/* 検索・フィルター */}
               <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
                 <div className="relative w-full sm:w-72">
-                  <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
                     value={inquirySearch}
                     onChange={(e) => setInquirySearch(e.target.value)}
                     placeholder="送信元名・メール・受付番号で検索..."
-                    className="w-full text-xs border border-slate-300 rounded-xl pl-9 pr-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                    className="w-full text-xs border border-slate-300 rounded-lg pl-8 pr-3 py-1.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
                   />
                 </div>
 
@@ -300,7 +300,7 @@ export default function AdminConsoleDashboardPage() {
                     <button
                       key={st}
                       onClick={() => setInquiryStatusFilter(st)}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors ${
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${
                         inquiryStatusFilter === st
                           ? "bg-slate-900 text-white"
                           : "bg-slate-100 text-slate-600 hover:bg-slate-200"
@@ -322,7 +322,7 @@ export default function AdminConsoleDashboardPage() {
               <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
                 <button
                   onClick={handleExportCSV}
-                  className="px-4 py-2.5 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold rounded-xl flex items-center gap-2 transition-all shadow-sm active:scale-95"
+                  className="px-3.5 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold rounded-lg flex items-center gap-2 transition-all shadow-2xs active:scale-95"
                 >
                   <FileSpreadsheet className="w-4 h-4" />
                   <span>Googleスプレッドシート用 CSV出力</span>
@@ -336,12 +336,12 @@ export default function AdminConsoleDashboardPage() {
               {filteredInquiries.map((inq) => (
                 <div
                   key={inq.id}
-                  className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 space-y-4 hover:shadow-md transition-shadow"
+                  className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 sm:p-6 space-y-4 hover:shadow-sm transition-shadow"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
                     <div className="flex items-center gap-2">
                       <span
-                        className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
                           inq.userType === "company"
                             ? "bg-blue-50 text-blue-800 border border-blue-200"
                             : "bg-emerald-50 text-emerald-800 border border-emerald-200"
@@ -367,7 +367,7 @@ export default function AdminConsoleDashboardPage() {
                             e.target.value as "UNTOUCHED" | "IN_PROGRESS" | "RESOLVED"
                           )
                         }
-                        className={`text-xs font-bold px-3 py-1.5 rounded-xl border focus:outline-none ${
+                        className={`text-xs font-bold px-2.5 py-1 rounded-md border focus:outline-none ${
                           inq.status === "UNTOUCHED"
                             ? "bg-rose-50 text-rose-800 border-rose-200"
                             : inq.status === "IN_PROGRESS"
@@ -406,7 +406,7 @@ export default function AdminConsoleDashboardPage() {
                     </div>
                   </div>
 
-                  <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-1 text-xs">
+                  <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-lg space-y-1 text-xs">
                     <div className="flex items-center gap-1.5 text-slate-700 font-bold">
                       <Sparkles className="w-3.5 h-3.5 text-rose-600" />
                       <span>【種別】 {inq.inquiryType}</span>
@@ -419,7 +419,7 @@ export default function AdminConsoleDashboardPage() {
               ))}
 
               {filteredInquiries.length === 0 && (
-                <div className="bg-white p-12 rounded-3xl border border-slate-200 text-center text-slate-400 text-xs shadow-sm">
+                <div className="bg-white p-12 rounded-xl border border-slate-200 text-center text-slate-400 text-xs shadow-xs">
                   該当するお問い合わせは見つかりませんでした。
                 </div>
               )}
@@ -430,39 +430,39 @@ export default function AdminConsoleDashboardPage() {
         {/* ================= 2. KPIサマリータブ ================= */}
         {activeTab === "kpi" && (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 space-y-2">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-500">登録学生数</span>
+                <span className="text-xs font-semibold text-slate-500">登録学生数</span>
                 <Users className="w-5 h-5 text-emerald-600" />
               </div>
-              <p className="text-3xl font-black text-slate-900">{stats.studentsCount} 名</p>
+              <p className="text-3xl font-bold tracking-tight text-slate-900">{stats.studentsCount} 名</p>
               <p className="text-[11px] text-emerald-700 font-bold">前週比 +12%</p>
             </div>
 
-            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 space-y-2">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-500">登録企業数</span>
+                <span className="text-xs font-semibold text-slate-500">登録企業数</span>
                 <Building2 className="w-5 h-5 text-blue-600" />
               </div>
-              <p className="text-3xl font-black text-slate-900">{stats.companiesCount} 社</p>
+              <p className="text-3xl font-bold tracking-tight text-slate-900">{stats.companiesCount} 社</p>
               <p className="text-[11px] text-blue-700 font-bold">前週比 +4社</p>
             </div>
 
-            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 space-y-2">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-500">総オファー数</span>
+                <span className="text-xs font-semibold text-slate-500">総オファー数</span>
                 <Send className="w-5 h-5 text-purple-600" />
               </div>
-              <p className="text-3xl font-black text-slate-900">{stats.offersCount} 件</p>
+              <p className="text-3xl font-bold tracking-tight text-slate-900">{stats.offersCount} 件</p>
               <p className="text-[11px] text-purple-700 font-bold">今月目標の 89%</p>
             </div>
 
-            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 space-y-2">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-500">マッチング成立数</span>
+                <span className="text-xs font-semibold text-slate-500">マッチング成立数</span>
                 <CheckCircle className="w-5 h-5 text-amber-600" />
               </div>
-              <p className="text-3xl font-black text-slate-900">{stats.acceptedCount} 組</p>
+              <p className="text-3xl font-bold tracking-tight text-slate-900">{stats.acceptedCount} 組</p>
               <p className="text-[11px] text-amber-700 font-bold">承諾率 58.4%</p>
             </div>
           </div>
@@ -470,7 +470,7 @@ export default function AdminConsoleDashboardPage() {
 
         {/* ================= 3. 動画コンテンツ管理タブ ================= */}
         {activeTab === "videos" && (
-          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 space-y-4">
+          <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-6 space-y-4">
             <h2 className="text-base font-bold text-slate-900">公開中PR動画の監視・モデレーション</h2>
             <div className="divide-y divide-slate-100">
               {videoList.map((v) => (
@@ -492,14 +492,14 @@ export default function AdminConsoleDashboardPage() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setPreviewVideo(v.videoUrl)}
-                      className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl flex items-center gap-1"
+                      className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-lg flex items-center gap-1"
                     >
                       <Play className="w-3.5 h-3.5" />
                       <span>再生</span>
                     </button>
                     <button
                       onClick={() => setVideoList(videoList.filter((item) => item.id !== v.id))}
-                      className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-xl flex items-center gap-1 border border-rose-200"
+                      className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-lg flex items-center gap-1 border border-rose-200"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                       <span>削除</span>
@@ -513,7 +513,7 @@ export default function AdminConsoleDashboardPage() {
 
         {/* ================= 4. ユーザー管理タブ ================= */}
         {activeTab === "users" && (
-          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 space-y-4">
+          <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-6 space-y-4">
             <h2 className="text-base font-bold text-slate-900">登録アカウント一覧</h2>
             <div className="divide-y divide-slate-100">
               {userList.map((u) => (
@@ -522,7 +522,7 @@ export default function AdminConsoleDashboardPage() {
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-slate-900 text-sm">{u.name}</span>
                       <span
-                        className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
                           u.type === "STUDENT"
                             ? "bg-emerald-50 text-emerald-800"
                             : "bg-blue-50 text-blue-800"
@@ -549,7 +549,7 @@ export default function AdminConsoleDashboardPage() {
                           )
                         )
                       }
-                      className={`px-3 py-1.5 rounded-xl font-bold transition-colors ${
+                      className={`px-3 py-1.5 rounded-lg font-bold transition-colors ${
                         u.status === "ACTIVE"
                           ? "bg-slate-100 text-slate-700 hover:bg-rose-50 hover:text-rose-700"
                           : "bg-rose-100 text-rose-800"

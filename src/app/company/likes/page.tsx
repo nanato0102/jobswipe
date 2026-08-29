@@ -63,7 +63,7 @@ export default function CompanyLikesPage() {
         </div>
 
         {likes.length === 0 ? (
-          <div className="bg-white p-12 rounded-3xl border border-slate-200 text-center text-slate-500 text-sm shadow-sm space-y-3">
+          <div className="bg-white p-12 rounded-xl border border-slate-200 text-center text-slate-500 text-sm shadow-sm space-y-3">
             <Sparkles className="w-10 h-10 text-slate-400 mx-auto" />
             <p className="font-bold text-slate-700">気になる学生はまだいません</p>
             <p className="text-xs text-slate-400">動画スワイプ画面で「❤️ 気になる」を押すとここにストックされます。</p>
@@ -79,7 +79,7 @@ export default function CompanyLikesPage() {
             {likes.map((student) => (
               <div
                 key={student.id}
-                className="bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow p-5 flex flex-col justify-between"
+                className="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow p-5 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-start justify-between mb-2">
@@ -100,7 +100,7 @@ export default function CompanyLikesPage() {
                     <span className="text-xs font-semibold text-slate-700 block mb-1">
                       動画: {student.videoTitle}
                     </span>
-                    <p className="text-xs text-slate-600 bg-slate-50 p-3 rounded-2xl border border-slate-100 leading-relaxed">
+                    <p className="text-xs text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100 leading-relaxed">
                       {student.bio || "自己PRサマリーが登録されています。"}
                     </p>
                   </div>
@@ -134,7 +134,7 @@ export default function CompanyLikesPage() {
         {/* オファー送信モーダル */}
         {selectedStudent && (
           <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-200">
+            <div className="bg-white rounded-xl p-6 max-w-md w-full shadow-2xl border border-slate-200">
               <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
                 <h3 className="text-base font-bold text-slate-900">
                   {selectedStudent.studentName} さんへのオファー送信
@@ -162,20 +162,20 @@ export default function CompanyLikesPage() {
                     onChange={(e) => setOfferText(e.target.value)}
                     placeholder="例: 自己PR動画を拝見しました。ぜひ一度カジュアル面談でお話しさせてください！"
                     rows={4}
-                    className="w-full text-sm border border-slate-300 rounded-2xl p-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+                    className="w-full text-sm border border-slate-300 rounded-lg p-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
                   />
 
                   <div className="mt-4 flex gap-2 justify-end">
                     <button
                       onClick={() => setSelectedStudent(null)}
-                      className="px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 rounded-xl"
+                      className="px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 rounded-lg"
                     >
                       キャンセル
                     </button>
                     <button
                       onClick={handleSendOffer}
                       disabled={!offerText.trim()}
-                      className="px-4 py-2 text-xs font-semibold bg-emerald-700 text-white rounded-xl hover:bg-emerald-600 disabled:opacity-50 shadow-sm"
+                      className="px-4 py-2 text-xs font-semibold bg-emerald-700 text-white rounded-lg hover:bg-emerald-600 disabled:opacity-50 shadow-sm"
                     >
                       送信する
                     </button>

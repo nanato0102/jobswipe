@@ -91,7 +91,7 @@ function ChatContent() {
     <RoleGuard allowedRoles={["COMPANY", "STUDENT", "ADMIN"]}>
       <TabsWrapper>
         <div className="flex-1 py-4 sm:py-6 px-3 sm:px-6 max-w-6xl mx-auto w-full flex flex-col h-[calc(100vh-6rem)] min-h-[600px]">
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-xl flex-1 flex overflow-hidden">
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xl flex-1 flex overflow-hidden">
           {/* ========================================================================= */}
           {/* 左サイドバー: スレッド一覧（スマホではスレッド未選択時または一覧表示時） */}
           {/* ========================================================================= */}
@@ -142,7 +142,7 @@ function ChatContent() {
                   >
                     {/* アバター */}
                     <div
-                      className={`w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-sm shadow-sm flex-shrink-0 ${
+                      className={`w-11 h-11 rounded-xl flex items-center justify-center font-bold text-sm shadow-sm flex-shrink-0 ${
                         thread.role === "COMPANY"
                           ? "bg-slate-900 text-emerald-400"
                           : "bg-emerald-700 text-white"
@@ -205,14 +205,14 @@ function ChatContent() {
                     <button
                       type="button"
                       onClick={() => setSelectedThreadId("")}
-                      className="p-1.5 -ml-1 text-slate-500 hover:text-slate-800 hover:bg-slate-200 rounded-xl transition-colors md:hidden"
+                      className="p-1.5 -ml-1 text-slate-500 hover:text-slate-800 hover:bg-slate-200 rounded-lg transition-colors md:hidden"
                       title="一覧に戻る"
                     >
                       <ArrowLeft className="w-5 h-5" />
                     </button>
 
                     <div
-                      className={`w-10 h-10 rounded-2xl flex items-center justify-center font-bold text-sm shadow-sm flex-shrink-0 ${
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm shadow-sm flex-shrink-0 ${
                         currentThread.role === "COMPANY"
                           ? "bg-slate-900 text-emerald-400"
                           : "bg-emerald-700 text-white"
@@ -233,7 +233,7 @@ function ChatContent() {
                     </div>
                   </div>
 
-                  <span className="text-xs bg-emerald-50 text-emerald-800 px-3 py-1 rounded-full font-bold border border-emerald-200 flex items-center gap-1">
+                  <span className="text-xs bg-emerald-50 text-emerald-800 px-3 py-1 rounded-lg font-bold border border-emerald-200 flex items-center gap-1">
                     <CheckCheck className="w-3.5 h-3.5 text-emerald-600" />
                     <span className="hidden sm:inline">マッチング成立</span>
                   </span>
@@ -268,7 +268,7 @@ function ChatContent() {
                         </div>
 
                         <div
-                          className={`max-w-md p-4 rounded-2xl text-xs sm:text-sm leading-relaxed whitespace-pre-wrap ${
+                          className={`max-w-md p-4 rounded-xl text-xs sm:text-sm leading-relaxed whitespace-pre-wrap ${
                             isMe
                               ? "bg-emerald-700 text-white rounded-tr-none shadow-md"
                               : "bg-white text-slate-900 border border-slate-200 rounded-tl-none shadow-sm"
@@ -294,9 +294,9 @@ function ChatContent() {
                           : "動画を拝見し、明るく前向きな人柄に大変惹かれました！ぜひ一度15分〜30分程度、オンラインでカジュアルにお話ししませんか？ご都合のよろしい日程をいくつか教えていただけますと幸いです。"
                       )
                     }
-                    className="px-3 py-1 bg-white hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 rounded-full font-medium whitespace-nowrap transition-colors shadow-2xs"
+                    className="px-3 py-1 bg-white hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 rounded-lg font-medium whitespace-nowrap transition-colors shadow-sm"
                   >
-                    📅 面談日程の調整
+                    面談日程の調整
                   </button>
 
                   <button
@@ -308,9 +308,9 @@ function ChatContent() {
                           : "以下の日程枠でオンラインカジュアル面談を実施可能です。ご希望の日時をお選びいただけますでしょうか？\n1. 来週火曜日 14:00〜\n2. 来週木曜日 16:00〜\n3. 来週金曜日 11:00〜"
                       )
                     }
-                    className="px-3 py-1 bg-white hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 rounded-full font-medium whitespace-nowrap transition-colors shadow-2xs"
+                    className="px-3 py-1 bg-white hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 rounded-lg font-medium whitespace-nowrap transition-colors shadow-sm"
                   >
-                    🕒 日程候補の提示
+                    日程候補の提示
                   </button>
 
                   <button
@@ -322,9 +322,9 @@ function ChatContent() {
                           : "本日はカジュアル面談にご参加いただきありがとうございました！ぜひ次の選考ステップに進んでいただきたく存じます。"
                       )
                     }
-                    className="px-3 py-1 bg-white hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 rounded-full font-medium whitespace-nowrap transition-colors shadow-2xs"
+                    className="px-3 py-1 bg-white hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 rounded-lg font-medium whitespace-nowrap transition-colors shadow-sm"
                   >
-                    ✨ 面談のお礼
+                    面談のお礼
                   </button>
                 </div>
 
@@ -335,12 +335,12 @@ function ChatContent() {
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
                     placeholder={`${currentThread.partnerName} にメッセージを送信...`}
-                    className="flex-1 text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+                    className="flex-1 text-sm border border-slate-300 rounded-lg px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
                   />
                   <button
                     type="submit"
                     disabled={!inputText.trim()}
-                    className="px-6 py-2.5 bg-emerald-700 hover:bg-emerald-600 text-white text-sm font-bold rounded-2xl flex items-center gap-1.5 transition-colors disabled:opacity-50 shadow-sm"
+                    className="px-6 py-2.5 bg-emerald-700 hover:bg-emerald-600 text-white text-sm font-bold rounded-lg flex items-center gap-1.5 transition-colors disabled:opacity-50 shadow-sm"
                   >
                     <Send className="w-4 h-4" />
                     <span>送信</span>

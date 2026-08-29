@@ -154,76 +154,76 @@ export default function StudentVideoUploadPage() {
         <div className="flex-1 py-6 px-4 sm:px-6 max-w-4xl mx-auto w-full space-y-6 sm:space-y-8">
           {/* ================= 動画反響・視聴実績アナリティクス ================= */}
           {stats && (
-            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-6 space-y-4">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <div className="flex items-center gap-2">
                   <BarChart3 className="w-5 h-5 text-emerald-700" />
                   <h2 className="text-base font-bold text-slate-900">自己PR動画の反響・視聴実績</h2>
                 </div>
-                <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+                <span className="text-xs font-bold px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200">
                   リアルタイム集計中
                 </span>
               </div>
 
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 pt-1">
                 {/* 1. 総視聴回数 */}
-                <div className="bg-slate-900 border border-slate-800 text-white rounded-2xl p-4 sm:p-5 shadow-sm space-y-1.5">
+                <div className="bg-slate-900 border border-slate-800 text-white rounded-xl p-4 sm:p-5 shadow-xs space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-300">総視聴回数</span>
+                    <span className="text-xs font-semibold text-slate-300">総視聴回数</span>
                     <Eye className="w-4 h-4 text-emerald-400" />
                   </div>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-2xl sm:text-3xl font-black text-white">{stats.totalViews}</span>
-                    <span className="text-xs text-slate-300 font-bold">回</span>
+                    <span className="text-2xl sm:text-3xl font-bold tracking-tight text-white">{stats.totalViews}</span>
+                    <span className="text-xs text-slate-300 font-medium">回</span>
                   </div>
-                  <p className="text-[10px] text-slate-400">企業が動画を再生した回数</p>
+                  <p className="text-[11px] text-slate-400">企業が動画を再生した回数</p>
                 </div>
 
                 {/* 2. 気になる追加数 */}
-                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-2xs space-y-1.5">
+                <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-600">気になる獲得</span>
+                    <span className="text-xs font-semibold text-slate-600">気になる獲得</span>
                     <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />
                   </div>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-2xl sm:text-3xl font-black text-slate-900">{stats.totalLikes}</span>
-                    <span className="text-xs text-slate-400 font-bold">社</span>
+                    <span className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">{stats.totalLikes}</span>
+                    <span className="text-xs text-slate-400 font-medium">社</span>
                   </div>
-                  <p className="text-[10px] text-slate-400">興味を持った企業数</p>
+                  <p className="text-[11px] text-slate-400">興味を持った企業数</p>
                 </div>
 
                 {/* 3. 届いたオファー */}
-                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-2xs space-y-1.5">
+                <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-600">届いたオファー</span>
+                    <span className="text-xs font-semibold text-slate-600">届いたオファー</span>
                     <Send className="w-4 h-4 text-emerald-700" />
                   </div>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-2xl sm:text-3xl font-black text-emerald-700">{stats.totalOffers}</span>
-                    <span className="text-xs text-slate-400 font-bold">社</span>
+                    <span className="text-2xl sm:text-3xl font-bold tracking-tight text-emerald-700">{stats.totalOffers}</span>
+                    <span className="text-xs text-slate-400 font-medium">社</span>
                   </div>
-                  <p className="text-[10px] text-slate-400">直接スカウトに発展</p>
+                  <p className="text-[11px] text-slate-400">直接スカウトに発展</p>
                 </div>
 
                 {/* 4. 平均視聴完了率 */}
-                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-2xs space-y-1.5">
+                <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-600">平均視聴完了率</span>
+                    <span className="text-xs font-semibold text-slate-600">平均視聴完了率</span>
                     <TrendingUp className="w-4 h-4 text-blue-600" />
                   </div>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-2xl sm:text-3xl font-black text-slate-900">{stats.completionRate}</span>
+                    <span className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">{stats.completionRate}</span>
                   </div>
-                  <p className="text-[10px] text-slate-400">60秒の視聴維持率</p>
+                  <p className="text-[11px] text-slate-400">60秒の視聴維持率</p>
                 </div>
               </div>
             </div>
           )}
 
           {/* ================= 新規動画投稿フォーム ================= */}
-          <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 sm:p-8 space-y-6">
+          <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-6 sm:p-8 space-y-6">
           <div className="border-b border-slate-100 pb-4">
-            <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[11px] font-bold border border-emerald-200 mb-1.5">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-800 text-[11px] font-bold border border-emerald-200 mb-1.5">
               <Sparkles className="w-3.5 h-3.5" />
               <span>自己PR動画</span>
             </div>
@@ -237,7 +237,7 @@ export default function StudentVideoUploadPage() {
           </div>
 
           {/* 60秒お題カンペガイド */}
-          <div className="p-5 bg-emerald-50/80 border border-emerald-200 rounded-3xl space-y-3 shadow-xs">
+          <div className="p-5 bg-emerald-50/80 border border-emerald-200 rounded-xl space-y-3 shadow-2xs">
             <div className="flex items-center gap-2 text-emerald-900 font-bold text-xs sm:text-sm">
               <Sparkles className="w-4 h-4 text-emerald-700 flex-shrink-0" />
               <span>何を話せばいいか迷ったら？ 60秒お題カンペガイド</span>
@@ -246,7 +246,7 @@ export default function StudentVideoUploadPage() {
               立派なスピーチや志望動機は不要です。スマートフォンで自撮りしながら、以下の3つの順に普段の自然なトーンで話すだけで完了します。
             </p>
             <div className="grid sm:grid-cols-3 gap-2.5 pt-1">
-              <div className="p-3.5 bg-white rounded-2xl border border-emerald-200 shadow-2xs space-y-1.5">
+              <div className="p-3.5 bg-white rounded-lg border border-emerald-200 shadow-2xs space-y-1.5">
                 <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800">
                   01. 挨拶 (約5秒)
                 </span>
@@ -256,7 +256,7 @@ export default function StudentVideoUploadPage() {
                 <p className="text-[11px] text-slate-500">笑顔で明るくスタート</p>
               </div>
 
-              <div className="p-3.5 bg-white rounded-2xl border border-emerald-200 shadow-2xs space-y-1.5">
+              <div className="p-3.5 bg-white rounded-lg border border-emerald-200 shadow-2xs space-y-1.5">
                 <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800">
                   02. 人柄・熱量 (約35秒)
                 </span>
@@ -266,7 +266,7 @@ export default function StudentVideoUploadPage() {
                 <p className="text-[11px] text-slate-500">性格や最近夢中なことを1つ</p>
               </div>
 
-              <div className="p-3.5 bg-white rounded-2xl border border-emerald-200 shadow-2xs space-y-1.5">
+              <div className="p-3.5 bg-white rounded-lg border border-emerald-200 shadow-2xs space-y-1.5">
                 <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800">
                   03. 意気込み (約20秒)
                 </span>
@@ -357,7 +357,7 @@ export default function StudentVideoUploadPage() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="動画で話している内容の要約や、特に注目してほしいポイントを記載してください"
-                className="w-full text-xs sm:text-sm border border-slate-300 rounded-2xl p-4 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 leading-relaxed"
+                className="w-full text-xs sm:text-sm border border-slate-300 rounded-lg p-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 leading-relaxed"
               />
             </div>
 
@@ -366,11 +366,11 @@ export default function StudentVideoUploadPage() {
               <label className="block text-xs font-bold text-slate-700">
                 特徴・アピールタグ（Enterキーで追加）
               </label>
-              <div className="flex flex-wrap items-center gap-1.5 p-2 bg-slate-50 border border-slate-300 rounded-2xl min-h-[44px]">
+              <div className="flex flex-wrap items-center gap-1.5 p-2 bg-slate-50 border border-slate-300 rounded-lg min-h-[44px]">
                 {tags.map((tag) => (
                   <span
                     key={tag}
-                    className="inline-flex items-center gap-1 px-3 py-1 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-800 shadow-sm"
+                    className="inline-flex items-center gap-1 px-2.5 py-1 bg-white border border-slate-300 rounded-md text-xs font-semibold text-slate-800 shadow-2xs"
                   >
                     <span>#{tag}</span>
                     <button
@@ -398,7 +398,7 @@ export default function StudentVideoUploadPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 bg-emerald-700 hover:bg-emerald-600 active:scale-98 text-white text-sm font-bold rounded-2xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:opacity-50"
+                className="w-full py-3 bg-emerald-700 hover:bg-emerald-600 active:scale-98 text-white text-sm font-bold rounded-lg transition-all shadow-xs flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 <Film className="w-4 h-4" />
                 <span>{loading ? "投稿処理中..." : "この動画を投稿・更新する"}</span>
@@ -408,7 +408,7 @@ export default function StudentVideoUploadPage() {
         </div>
 
         {/* ================= 下部: 投稿済み動画の管理・削除セクション ================= */}
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 sm:p-8 space-y-4">
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-6 sm:p-8 space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div>
               <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
@@ -423,11 +423,11 @@ export default function StudentVideoUploadPage() {
             {uploadedVideos.map((item) => (
               <div
                 key={item.id}
-                className="p-4 sm:p-5 rounded-2xl border border-slate-200 bg-slate-50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                className="p-4 sm:p-5 rounded-lg border border-slate-200 bg-slate-50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
               >
                 <div className="space-y-2 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                    <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-md border border-emerald-200">
                       公開中
                     </span>
                     <span className="text-[11px] text-slate-400 flex items-center gap-1">
@@ -441,15 +441,15 @@ export default function StudentVideoUploadPage() {
 
                   {/* 動画アナリティクスバッジ */}
                   <div className="flex flex-wrap items-center gap-2 pt-1">
-                    <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-xl bg-slate-900 text-white shadow-2xs">
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-md bg-slate-900 text-white shadow-2xs">
                       <Eye className="w-3.5 h-3.5 text-emerald-400" />
                       <span>{item.viewsCount ?? 142}回 視聴</span>
                     </span>
-                    <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 shadow-2xs">
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-md bg-rose-50 border border-rose-200 text-rose-800 shadow-2xs">
                       <Heart className="w-3.5 h-3.5 fill-rose-500 text-rose-500" />
                       <span>{item.likesCount ?? 18}社 気になる</span>
                     </span>
-                    <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 shadow-2xs">
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-800 shadow-2xs">
                       <Send className="w-3.5 h-3.5 text-emerald-700" />
                       <span>{item.offersCount ?? 3}社 オファー</span>
                     </span>
@@ -459,7 +459,7 @@ export default function StudentVideoUploadPage() {
                     {item.tags.map((t) => (
                       <span
                         key={t}
-                        className="text-[10px] px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-slate-700 font-semibold"
+                        className="text-[10px] px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700 font-semibold"
                       >
                         #{t}
                       </span>
@@ -471,7 +471,7 @@ export default function StudentVideoUploadPage() {
                   <button
                     type="button"
                     onClick={() => setPreviewModalVideo(item.videoUrl)}
-                    className="flex-1 sm:flex-none px-4 py-2 bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+                    className="flex-1 sm:flex-none px-3.5 py-1.5 bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 rounded-md text-xs font-bold transition-colors flex items-center justify-center gap-1.5 shadow-2xs"
                   >
                     <Play className="w-3.5 h-3.5 fill-slate-700" />
                     <span>再生確認</span>
@@ -480,7 +480,7 @@ export default function StudentVideoUploadPage() {
                   <button
                     type="button"
                     onClick={() => setDeleteConfirmId(item.id)}
-                    className="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-1.5"
+                    className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-md text-xs font-bold transition-colors flex items-center justify-center gap-1.5"
                     title="動画を削除"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
