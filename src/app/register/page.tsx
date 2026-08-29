@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
-import { UserPlus, AlertCircle, CheckCircle } from "lucide-react";
+import { UserPlus, AlertCircle, CheckCircle, ShieldCheck, FileText } from "lucide-react";
 
 export default function RegisterPage() {
   const { login } = useAuth();
@@ -13,6 +13,7 @@ export default function RegisterPage() {
   const [name, setName] = useState("");
   const [university, setUniversity] = useState("");
   const [graduationYear, setGraduationYear] = useState(2026);
+  const [agreed, setAgreed] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -20,6 +21,12 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    if (!agreed) {
+      setError("利用規約・プライバシーポリシーおよび誓約事項への同意が必要です。");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -67,7 +74,7 @@ export default function RegisterPage() {
               priority
             />
           </div>
-          <h1 className="text-xl font-bold text-slate-900">新規登録</h1>
+          <h1 className="text-xl font-bold text-slate-900">学生新規登録</h1>
           <p className="text-xs text-slate-500 mt-1">動画を投稿して企業からスカウトを受け取ろう</p>
         </div>
 
@@ -94,7 +101,7 @@ export default function RegisterPage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="山田 太郎"
-              className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+              className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 font-medium"
             />
           </div>
 
@@ -106,7 +113,7 @@ export default function RegisterPage() {
                 value={university}
                 onChange={(e) => setUniversity(e.target.value)}
                 placeholder="早稲田大学 商学部"
-                className="w-full text-sm border border-slate-300 rounded-2xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+                className="w-full text-sm border border-slate-300 rounded-2xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 font-medium"
               />
             </div>
             <div>
@@ -114,7 +121,7 @@ export default function RegisterPage() {
               <select
                 value={graduationYear}
                 onChange={(e) => setGraduationYear(Number(e.target.value))}
-                className="w-full text-sm border border-slate-300 rounded-2xl px-3 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 bg-white"
+                className="w-full text-sm border border-slate-300 rounded-2xl px-3 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 bg-white font-medium"
               >
                 <option value={2025}>2025年卒</option>
                 <option value={2026}>2026年卒</option>
@@ -149,13 +156,42 @@ export default function RegisterPage() {
             />
           </div>
 
+          {/* 誓約書・規約同意チェックボックス */}
+          <div className="pt-2">
+            <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+              <label className="flex items-start gap-2.5 cursor-pointer text-xs select-none">
+                <input
+                  type="checkbox"
+                  checked={agreed}
+                  onChange={(e) => setAgreed(e.target.checked)}
+                  className="mt-0.5 w-4 h-4 rounded border-slate-300 text-emerald-700 focus:ring-emerald-600 cursor-pointer"
+                />
+                <span className="text-slate-700 leading-relaxed font-medium">
+                  <Link href="/terms" target="_blank" className="font-bold text-emerald-800 underline hover:text-emerald-700">
+                    利用規約
+                  </Link>
+                  {" "}および{" "}
+                  <Link href="/privacy" target="_blank" className="font-bold text-emerald-800 underline hover:text-emerald-700">
+                    プライバシーポリシー
+                  </Link>
+                  {" "}を確認し、誓約事項に同意します
+                </span>
+              </label>
+
+              <div className="text-[10px] text-slate-500 pl-6 space-y-0.5">
+                <p>・経歴の虚偽登録や他者の権利（著作権・肖像権）侵害を行いません</p>
+                <p>・投稿したPR動画が採用選考目的で登録企業に公開されることに同意します</p>
+              </div>
+            </div>
+          </div>
+
           <button
             type="submit"
-            disabled={loading}
-            className="w-full py-3 bg-emerald-700 hover:bg-emerald-600 text-white text-sm font-bold rounded-2xl transition-colors disabled:opacity-50 shadow-md flex items-center justify-center gap-2"
+            disabled={loading || !agreed}
+            className="w-full py-3.5 bg-emerald-700 hover:bg-emerald-600 active:scale-98 text-white text-sm font-bold rounded-2xl transition-all disabled:opacity-50 shadow-md flex items-center justify-center gap-2"
           >
             <UserPlus className="w-4 h-4" />
-            <span>{loading ? "登録中..." : "新規登録する（無料）"}</span>
+            <span>{loading ? "登録処理中..." : "新規登録する（完全無料）"}</span>
           </button>
         </form>
 

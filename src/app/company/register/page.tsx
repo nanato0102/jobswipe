@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
-import { Building2, AlertCircle, CheckCircle, Briefcase } from "lucide-react";
+import { Building2, AlertCircle, CheckCircle, Briefcase, ShieldCheck } from "lucide-react";
 
 export default function CompanyRegisterPage() {
   const { login } = useAuth();
@@ -12,6 +12,7 @@ export default function CompanyRegisterPage() {
   const [industry, setIndustry] = useState("IT / Webサービス");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [agreed, setAgreed] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -19,6 +20,12 @@ export default function CompanyRegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    if (!agreed) {
+      setError("利用規約・プライバシーポリシーおよび誓約事項への同意が必要です。");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -97,7 +104,7 @@ export default function CompanyRegisterPage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="株式会社サンプル"
-              className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
+              className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 font-medium"
             />
           </div>
 
@@ -109,7 +116,7 @@ export default function CompanyRegisterPage() {
             <select
               value={industry}
               onChange={(e) => setIndustry(e.target.value)}
-              className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 bg-white"
+              className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 bg-white font-medium"
             >
               <option value="IT / Webサービス">IT / Webサービス</option>
               <option value="コンサルティング">コンサルティング</option>
@@ -145,13 +152,42 @@ export default function CompanyRegisterPage() {
             />
           </div>
 
+          {/* 誓約書・規約同意チェックボックス */}
+          <div className="pt-2">
+            <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+              <label className="flex items-start gap-2.5 cursor-pointer text-xs select-none">
+                <input
+                  type="checkbox"
+                  checked={agreed}
+                  onChange={(e) => setAgreed(e.target.checked)}
+                  className="mt-0.5 w-4 h-4 rounded border-slate-300 text-blue-900 focus:ring-slate-900 cursor-pointer"
+                />
+                <span className="text-slate-700 leading-relaxed font-medium">
+                  <Link href="/terms" target="_blank" className="font-bold text-blue-900 underline hover:text-blue-700">
+                    利用規約
+                  </Link>
+                  {" "}および{" "}
+                  <Link href="/privacy" target="_blank" className="font-bold text-blue-900 underline hover:text-blue-700">
+                    プライバシーポリシー
+                  </Link>
+                  {" "}を確認し、誓約事項に同意します
+                </span>
+              </label>
+
+              <div className="text-[10px] text-slate-500 pl-6 space-y-0.5">
+                <p>・採用選考以外の目的で学生の個人情報・動画を利用または漏洩しません</p>
+                <p>・労働関係諸法令を遵守し、誠実かつ公正な採用活動を行うことを誓約します</p>
+              </div>
+            </div>
+          </div>
+
           <button
             type="submit"
-            disabled={loading}
-            className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-2xl transition-colors disabled:opacity-50 shadow-md flex items-center justify-center gap-2"
+            disabled={loading || !agreed}
+            className="w-full py-3.5 bg-slate-900 hover:bg-slate-800 active:scale-98 text-white text-sm font-bold rounded-2xl transition-all disabled:opacity-50 shadow-md flex items-center justify-center gap-2"
           >
             <Building2 className="w-4 h-4" />
-            <span>{loading ? "登録中..." : "企業アカウントを登録"}</span>
+            <span>{loading ? "登録処理中..." : "企業アカウントを登録する"}</span>
           </button>
         </form>
 
