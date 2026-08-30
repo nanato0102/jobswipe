@@ -1,18 +1,40 @@
+"use client";
+
 import Link from "next/link";
-import { ArrowLeft, FileText, Shield } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ArrowLeft, FileText, Home, ArrowUpRight } from "lucide-react";
 
 export default function TermsPage() {
+  const router = useRouter();
+
+  const handleGoBack = () => {
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back();
+    } else {
+      router.push("/register");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 py-10 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto space-y-8">
-        {/* ナビゲーション戻るボタン */}
-        <div>
+      <div className="max-w-4xl mx-auto space-y-6">
+        {/* ナビゲーション戻るボタングループ */}
+        <div className="flex items-center justify-between">
+          <button
+            type="button"
+            onClick={handleGoBack}
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-800 hover:bg-slate-100 hover:text-slate-900 transition-colors shadow-2xs cursor-pointer"
+          >
+            <ArrowLeft className="w-4 h-4 text-slate-600" />
+            <span>前の画面（登録画面）に戻る</span>
+          </button>
+
           <Link
             href="/"
             className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-900 transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" />
-            <span>トップページに戻る</span>
+            <Home className="w-3.5 h-3.5" />
+            <span>トップページ</span>
           </Link>
         </div>
 
@@ -106,6 +128,21 @@ export default function TermsPage() {
               2. ユーザー間で生じたトラブルについて、当事務局に故意または重過失がある場合を除き、当事務局は一切の責任を負いません。
             </p>
           </section>
+        </div>
+
+        {/* ページ下部：戻るCTAカード */}
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-slate-600 font-medium">
+            利用規約の確認が完了しましたら、元の登録画面へお戻りください。
+          </p>
+          <button
+            type="button"
+            onClick={handleGoBack}
+            className="w-full sm:w-auto px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>登録画面に戻る</span>
+          </button>
         </div>
 
         {/* 関連リンク */}

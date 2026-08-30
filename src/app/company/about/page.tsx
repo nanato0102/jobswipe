@@ -1,21 +1,41 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ArrowLeft, Building2, CreditCard, ShieldCheck } from "lucide-react";
+import { ArrowLeft, Building2, CreditCard, ShieldCheck, Home } from "lucide-react";
 
 export default function AboutAndLegalPage() {
+  const router = useRouter();
+
+  const handleGoBack = () => {
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back();
+    } else {
+      router.push("/");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 py-10 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto space-y-8">
+      <div className="max-w-4xl mx-auto space-y-6">
         {/* ナビゲーション戻るボタン */}
-        <div>
+        <div className="flex items-center justify-between">
+          <button
+            type="button"
+            onClick={handleGoBack}
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-800 hover:bg-slate-100 hover:text-slate-900 transition-colors shadow-2xs cursor-pointer"
+          >
+            <ArrowLeft className="w-4 h-4 text-slate-600" />
+            <span>前の画面に戻る</span>
+          </button>
+
           <Link
             href="/"
             className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-900 transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" />
-            <span>トップページに戻る</span>
+            <Home className="w-3.5 h-3.5" />
+            <span>トップページ</span>
           </Link>
         </div>
 
