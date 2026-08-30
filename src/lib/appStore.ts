@@ -1066,13 +1066,13 @@ export const appStore = {
     const sentCount = offers.length;
     const acceptedCount = offers.filter((o) => o.status === "ACCEPTED").length;
 
-    let planName = "スタンダードプラン (月50枠)";
-    let baseQuota = 50;
+    let planName = "スタンダードプラン (月100枠 / 月額9,800円)";
+    let baseQuota = 100;
     let extraQuota = 0;
 
     if (typeof window !== "undefined") {
-      planName = localStorage.getItem("jobswipe_plan_name") || "スタンダードプラン (月50枠)";
-      baseQuota = Number(localStorage.getItem("jobswipe_base_quota") || "50");
+      planName = localStorage.getItem("jobswipe_plan_name") || "スタンダードプラン (月100枠 / 月額9,800円)";
+      baseQuota = Number(localStorage.getItem("jobswipe_base_quota") || "100");
       extraQuota = Number(localStorage.getItem("jobswipe_extra_quota") || "0");
     }
 
@@ -1091,6 +1091,25 @@ export const appStore = {
       acceptanceRate: rate,
       nextResetDate: "2026/09/01",
     };
+  },
+
+  // プラン変更
+  updateCompanyPlan: (newPlanName: string, newBaseQuota: number) => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("jobswipe_plan_name", newPlanName);
+      localStorage.setItem("jobswipe_base_quota", String(newBaseQuota));
+      window.dispatchEvent(new CustomEvent("jobswipe_sync", { detail: { type: "PLAN_UPDATED" } }));
+    }
+  },
+
+  // スポット増枠
+  addCompanyExtraQuota: (additionalQuota: number) => {
+    if (typeof window !== "undefined") {
+      const currentExtra = Number(localStorage.getItem("jobswipe_extra_quota") || "0");
+      const nextExtra = currentExtra + additionalQuota;
+      localStorage.setItem("jobswipe_extra_quota", String(nextExtra));
+      window.dispatchEvent(new CustomEvent("jobswipe_sync", { detail: { type: "QUOTA_ADDED" } }));
+    }
   },
 
   // 学生向けPR動画の視聴数・反響アナリティクス統計
