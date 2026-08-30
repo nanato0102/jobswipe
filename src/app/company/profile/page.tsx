@@ -9,17 +9,14 @@ import {
   Building2,
   Globe,
   MapPin,
-  Calendar,
-  Briefcase,
-  Users,
   CheckCircle,
   Save,
-  FileText,
+  Camera,
   Sparkles,
 } from "lucide-react";
 
 export default function CompanyProfilePage() {
-  const { session, login } = useAuth();
+  const { session } = useAuth();
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [companyName, setCompanyName] = useState(session?.name || "テックイノベーション株式会社");
   const [industry, setIndustry] = useState("IT / Webサービス");
@@ -64,289 +61,253 @@ export default function CompanyProfilePage() {
     }
   };
 
-  const handleRemoveLogo = () => {
-    setLogoUrl(null);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setSaved(false);
 
-    try {
-      // 1. appStoreへ即時保存（全画面リアルタイム同期）
+    setTimeout(() => {
       appStore.saveCompanyProfile({
         id: "c1",
         name: companyName,
         industry,
-        logoUrl: logoUrl || undefined,
-        location,
-        description,
-        websiteUrl,
-        employees: employeesCount,
         established: establishedYear,
+        employees: employeesCount,
+        location,
+        websiteUrl,
+        description,
+        logoUrl: logoUrl || undefined,
       });
 
-      // 2. AuthContext セッション更新
-      if (session) {
-        login({ ...session, name: companyName });
-      }
-
-      setSaved(true);
-      setTimeout(() => setSaved(false), 3000);
-    } catch (e) {
-      console.error(e);
-      setSaved(true);
-    } finally {
       setLoading(false);
-    }
+      setSaved(true);
+      setTimeout(() => setSaved(false), 4000);
+    }, 400);
   };
 
   return (
     <RoleGuard allowedRoles={["COMPANY", "ADMIN"]}>
       <CompanyMobileTabs>
-        <div className="flex-1 py-6 px-4 sm:px-6 max-w-4xl mx-auto w-full">
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 sm:p-8 space-y-6">
-          {/* ヘッダー */}
-          <div className="flex items-center justify-between pb-6 border-b border-slate-100">
-            <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-blue-50 text-blue-800 text-[11px] font-bold border border-blue-200 mb-1.5">
+        <div className="max-w-4xl mx-auto px-4 py-6 sm:py-8 space-y-6 w-full">
+          {/* ================= 統一ページヘッダー ================= */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-blue-50 text-blue-900 border border-blue-200">
                 <Building2 className="w-3.5 h-3.5" />
-                <span>企業情報</span>
-              </div>
-              <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                <span>企業情報設定</span>
+                <span>企業マイページ</span>
+              </span>
+              <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                企業情報・求人編集
               </h1>
-              <p className="text-xs text-slate-500 mt-1">
-                学生へオファーを送る際や、チャット画面で公開される自社の企業情報を登録してください
+              <p className="text-xs sm:text-sm text-slate-500">
+                学生に公開される企業プロフィールや募集要項、カルチャー情報を設定します。
               </p>
             </div>
 
             <button
+              type="button"
               onClick={handleSubmit}
               disabled={loading}
-              className="hidden sm:flex items-center gap-1.5 px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition-all disabled:opacity-50 shadow-md"
+              className="px-5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 disabled:opacity-50 cursor-pointer self-start sm:self-auto"
             >
               <Save className="w-4 h-4" />
-              <span>{loading ? "保存中..." : "保存する"}</span>
+              <span>{loading ? "保存中..." : "変更を保存する"}</span>
             </button>
           </div>
 
+          {/* 保存成功メッセージ */}
           {saved && (
-            <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 text-xs font-semibold flex items-center gap-2 shadow-sm">
-              <CheckCircle className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-              <span>企業情報を正常に保存しました（ヘッダーの表示名も更新されました）</span>
+            <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 text-xs font-bold flex items-center gap-2 animate-fade-in shadow-2xs">
+              <CheckCircle className="w-4 h-4 flex-shrink-0 text-emerald-700" />
+              <span>企業プロフィールを保存しました！学生詳細ページ等に即時反映されます。</span>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* 企業ロゴ画像（四角切り抜き・自動フィット） */}
-            <div className="p-4 sm:p-5 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
-              <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                {/* 四角ロゴプレビュー */}
-                <div className="flex-shrink-0 flex items-center gap-4">
+            {/* ================= ブロック1: 自社ロゴ画像設定 ================= */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 sm:p-6 space-y-5">
+              <h2 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
+                <Camera className="w-4 h-4 text-slate-700" />
+                <span>1. 自社ロゴ画像設定</span>
+              </h2>
+
+              <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+                <div className="flex-shrink-0">
                   {logoUrl ? (
-                    <div className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-slate-300 shadow-md bg-white flex items-center justify-center p-1.5 flex-shrink-0">
+                    <div className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-slate-200 shadow-2xs bg-white flex items-center justify-center p-2">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={logoUrl} alt="企業ロゴ" className="max-w-full max-h-full object-contain" />
+                      <img src={logoUrl} alt="自社ロゴ" className="max-w-full max-h-full object-contain" />
                     </div>
                   ) : (
-                    <div className="w-20 h-20 rounded-2xl bg-slate-900 text-emerald-400 font-black text-2xl shadow-md flex items-center justify-center flex-shrink-0 border-2 border-slate-800">
-                      <span>{companyName.slice(0, 1) || "企"}</span>
+                    <div className="w-20 h-20 rounded-2xl bg-slate-900 text-emerald-400 font-black text-xl flex items-center justify-center shadow-xs">
+                      {companyName.slice(0, 1) || "企"}
                     </div>
                   )}
+                </div>
 
-                  <div className="space-y-1.5">
-                    <p className="text-xs font-bold text-slate-800">企業ロゴ画像（四角切り抜き・自動フィット）</p>
-                    <p className="text-[11px] text-slate-500">チャット、企業詳細ページ、オファー一覧で表示されます</p>
-                    <div className="flex items-center gap-2 pt-0.5">
-                      <label className="cursor-pointer px-3.5 py-1.5 bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 text-xs font-bold rounded-xl shadow-2xs transition-colors inline-block">
-                        <span>ロゴを選択</span>
-                        <input type="file" accept="image/*" onChange={handleLogoChange} className="hidden" />
-                      </label>
-                      {logoUrl && (
-                        <button
-                          type="button"
-                          onClick={handleRemoveLogo}
-                          className="px-2.5 py-1.5 text-xs text-rose-600 hover:text-rose-700 hover:underline font-bold"
-                        >
-                          削除
-                        </button>
-                      )}
-                    </div>
+                <div className="space-y-2 flex-1">
+                  <div>
+                    <p className="text-xs font-bold text-slate-900">企業ロゴ画像（正方形推奨）</p>
+                    <p className="text-[11px] text-slate-500">
+                      オファー一覧やチャット、企業詳細ページで学生に表示されます。
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2.5">
+                    <label className="cursor-pointer px-3.5 py-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-bold rounded-xl shadow-2xs transition-colors inline-block">
+                      <span>ロゴを選択</span>
+                      <input type="file" accept="image/*" onChange={handleLogoChange} className="hidden" />
+                    </label>
+                    {logoUrl && (
+                      <button
+                        type="button"
+                        onClick={() => setLogoUrl(null)}
+                        className="px-2.5 py-1.5 text-xs text-rose-600 hover:underline font-bold"
+                      >
+                        ロゴをリセット
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* 基本情報 */}
-            <div className="space-y-4">
-              <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5 border-b border-slate-100 pb-2">
-                <Building2 className="w-4 h-4 text-blue-700" />
-                <span>会社基本情報</span>
-              </span>
+            {/* ================= ブロック2: 企業基本情報 ================= */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 sm:p-6 space-y-4">
+              <h2 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
+                <Building2 className="w-4 h-4 text-slate-700" />
+                <span>2. 会社基本情報</span>
+              </h2>
 
               <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">企業名 / 法人名</label>
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-bold text-slate-700">
+                    企業名（法人名） <span className="text-rose-500">*</span>
+                  </label>
                   <input
                     type="text"
-                    required
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
-                    className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 font-bold"
+                    required
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">主な業界</label>
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-bold text-slate-700">
+                    業界・事業領域 <span className="text-rose-500">*</span>
+                  </label>
                   <select
                     value={industry}
                     onChange={(e) => setIndustry(e.target.value)}
-                    className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 bg-white"
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 cursor-pointer"
                   >
-                    <option value="IT / Webサービス">IT / Webサービス</option>
-                    <option value="ベンチャー / スタートアップ">ベンチャー / スタートアップ</option>
-                    <option value="美容 / コスメ / ヘルスケア">美容 / コスメ / ヘルスケア</option>
-                    <option value="アパレル / ファッション">アパレル / ファッション</option>
-                    <option value="広告 / PR / マスコミ">広告 / PR / マスコミ</option>
-                    <option value="人材 / 教育 / コンサルティング">人材 / 教育 / コンサルティング</option>
-                    <option value="不動産 / 建設 / 住宅">不動産 / 建設 / 住宅</option>
-                    <option value="総合商社 / 専門商社">総合商社 / 専門商社</option>
-                    <option value="飲食 / フードサービス">飲食 / フードサービス</option>
-                    <option value="ブライダル / ホテル / 観光">ブライダル / ホテル / 観光</option>
-                    <option value="エンタメ / イベント / 音楽">エンタメ / イベント / 音楽</option>
-                    <option value="メーカー / 製造 / 日用品">メーカー / 製造 / 日用品</option>
-                    <option value="金融 / 保険">金融 / 保険</option>
-                    <option value="その他">その他</option>
+                    <option value="IT / Webサービス">IT / Webサービス / SaaS</option>
+                    <option value="AI・テクノロジー">AI / ディープテック</option>
+                    <option value="人材・コンサルティング">人材 / 組織コンサルティング</option>
+                    <option value="金融・FinTech">金融 / FinTech / 投資</option>
+                    <option value="メーカー・製造">メーカー / モビリティ / 精密</option>
+                    <option value="商社・流通">総合商社 / 専門商社</option>
+                    <option value="広告・メディア">広告 / メディア / マーケティング</option>
+                    <option value="不動産・建設">不動産 / PropTech / 建設</option>
                   </select>
                 </div>
-              </div>
 
-              <div className="grid sm:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">代表者名</label>
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-bold text-slate-700">代表者氏名</label>
                   <input
                     type="text"
                     value={representative}
                     onChange={(e) => setRepresentative(e.target.value)}
-                    placeholder="代表取締役 山田 太郎"
-                    className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">設立年（西暦）</label>
-                  <input
-                    type="text"
-                    value={establishedYear}
-                    onChange={(e) => setEstablishedYear(e.target.value)}
-                    placeholder="2018"
-                    className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">従業員数</label>
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-bold text-slate-700">従業員数</label>
                   <input
                     type="text"
                     value={employeesCount}
                     onChange={(e) => setEmployeesCount(e.target.value)}
-                    placeholder="150名"
-                    className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
                   />
                 </div>
-              </div>
 
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
-                    <MapPin className="w-3.5 h-3.5 text-slate-500" />
-                    <span>本社所在地</span>
-                  </label>
+                <div className="sm:col-span-2 space-y-1.5">
+                  <label className="block text-xs font-bold text-slate-700">本社所在地</label>
                   <input
                     type="text"
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
-                    placeholder="東京都渋谷区..."
-                    className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
-                    <Globe className="w-3.5 h-3.5 text-slate-500" />
-                    <span>企業WebサイトURL</span>
-                  </label>
+                <div className="sm:col-span-2 space-y-1.5">
+                  <label className="block text-xs font-bold text-slate-700">企業公式WebサイトURL</label>
                   <input
                     type="url"
                     value={websiteUrl}
                     onChange={(e) => setWebsiteUrl(e.target.value)}
-                    placeholder="https://company.jp"
-                    className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
+                    placeholder="https://..."
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
                   />
                 </div>
               </div>
             </div>
 
-            {/* 事業内容 ＆ 採用メッセージ */}
-            <div className="space-y-4 pt-4 border-t border-slate-100">
-              <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5 border-b border-slate-100 pb-2">
-                <FileText className="w-4 h-4 text-blue-700" />
-                <span>事業内容・採用メッセージ</span>
-              </span>
+            {/* ================= ブロック3: 会社紹介・求める人物像 ================= */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 sm:p-6 space-y-4">
+              <h2 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-slate-700" />
+                <span>3. 会社紹介・カルチャー・求める人物像</span>
+              </h2>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">事業内容 / 会社概要</label>
-                <textarea
-                  rows={4}
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="自社のミッションや主力事業、強みについて記載してください"
-                  className="w-full text-sm border border-slate-300 rounded-2xl p-4 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 leading-relaxed"
-                />
-              </div>
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-bold text-slate-700">
+                    事業内容・会社のミッション <span className="text-rose-500">*</span>
+                  </label>
+                  <textarea
+                    rows={4}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 leading-relaxed"
+                  />
+                </div>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
-                  <Sparkles className="w-3.5 h-3.5 text-blue-700" />
-                  <span>求める人物像・カルチャー</span>
-                </label>
-                <textarea
-                  rows={3}
-                  value={idealCandidate}
-                  onChange={(e) => setIdealCandidate(e.target.value)}
-                  placeholder="自社が歓迎する学生の人柄、強み、行動指針を記載してください"
-                  className="w-full text-sm border border-slate-300 rounded-2xl p-4 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 leading-relaxed"
-                />
-              </div>
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-bold text-slate-700">求める人物像（人柄・スタンス）</label>
+                  <textarea
+                    rows={3}
+                    value={idealCandidate}
+                    onChange={(e) => setIdealCandidate(e.target.value)}
+                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 leading-relaxed"
+                  />
+                </div>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">福利厚生・働く環境（特徴）</label>
-                <input
-                  type="text"
-                  value={benefits}
-                  onChange={(e) => setBenefits(e.target.value)}
-                  placeholder="リモートワーク制度, 資格手当, カフェスペース完備"
-                  className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
-                />
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-bold text-slate-700">福利厚生・働く環境（カンマ区切り）</label>
+                  <input
+                    type="text"
+                    value={benefits}
+                    onChange={(e) => setBenefits(e.target.value)}
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
+                  />
+                </div>
               </div>
             </div>
 
-            {/* 下部保存ボタン */}
-            <div className="flex items-center justify-between pt-6 border-t border-slate-100">
-              <span className="text-xs text-slate-400">※ 入力内容はオファー受信時の企業情報として学生に公開されます</span>
+            {/* 保存ボタン */}
+            <div className="flex items-center justify-end pt-2">
               <button
                 type="submit"
                 disabled={loading}
-                className="flex items-center gap-2 px-8 py-3 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-2xl transition-all disabled:opacity-50 shadow-md"
+                className="w-full sm:w-auto px-8 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs sm:text-sm font-bold shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 <Save className="w-4 h-4" />
-                <span>{loading ? "保存中..." : "企業情報を保存する"}</span>
+                <span>{loading ? "保存中..." : "変更を保存する"}</span>
               </button>
             </div>
           </form>
-        </div>
         </div>
       </CompanyMobileTabs>
     </RoleGuard>

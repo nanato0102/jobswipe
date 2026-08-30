@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { appStore } from "@/lib/appStore";
 import { useToast } from "@/context/ToastContext";
@@ -624,13 +625,19 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
           )}
 
           {/* オファー送信CTA */}
-          <div className="mt-auto pt-4 border-t border-slate-100">
+          <div className="mt-auto pt-4 border-t border-slate-100 flex gap-2.5">
+            <Link
+              href={`/students/${currentVideo.student?.id || currentVideo.studentId || "s1"}`}
+              className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-colors flex items-center justify-center"
+            >
+              詳細
+            </Link>
             <button
               onClick={() => setIsOfferModalOpen(true)}
-              className="w-full py-2.5 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold rounded-lg flex items-center justify-center gap-2 transition-colors shadow-xs"
+              className="flex-1 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer"
             >
-              <Send className="w-4 h-4" />
-              <span>この学生にオファーを送る</span>
+              <Send className="w-4 h-4 text-blue-400" />
+              <span>オファーを送る</span>
             </button>
           </div>
         </div>

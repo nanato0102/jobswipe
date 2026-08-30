@@ -273,24 +273,25 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => setMenuOpen(!menuOpen)}
-                className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-lg border border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-all focus:outline-none"
+                className="flex items-center gap-2 pr-2 rounded-full hover:bg-slate-100 transition-colors focus:outline-none"
                 aria-expanded={menuOpen}
               >
+                {/* 角丸四角アバターまたはロールバッジ */}
                 {isCompany ? (
                   (() => {
                     const c = appStore.getCompanyDetails("c1");
                     if (c?.logoUrl) {
                       return (
-                        <div className="w-6 h-6 rounded-lg overflow-hidden border border-slate-200 bg-white flex items-center justify-center p-0.5 shadow-2xs flex-shrink-0">
+                        <div className="w-8 h-8 rounded-full overflow-hidden border border-slate-200 bg-white flex items-center justify-center shadow-sm flex-shrink-0">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={c.logoUrl} alt="Logo" className="max-w-full max-h-full object-contain" />
+                          <img src={c.logoUrl} alt="Logo" className="w-full h-full object-contain" />
                         </div>
                       );
                     }
                     return (
-                      <span className="text-[10px] px-2 py-0.5 rounded-md font-bold shadow-2xs bg-blue-100 text-blue-800 border border-blue-200">
-                        企業
-                      </span>
+                      <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-900 flex items-center justify-center font-bold text-xs border border-blue-200">
+                        企
+                      </div>
                     );
                   })()
                 ) : isStudent ? (
@@ -298,22 +299,27 @@ export default function Navbar() {
                     const s = appStore.getStudentDetails("s1");
                     if (s?.avatarUrl) {
                       return (
-                        <div className="w-6 h-6 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shadow-2xs flex-shrink-0">
+                        <div className="w-8 h-8 rounded-full overflow-hidden border border-slate-200 bg-slate-100 shadow-sm flex-shrink-0">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img src={s.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
                         </div>
                       );
                     }
+                    const isFemale = s?.gender === "FEMALE";
                     return (
-                      <span className="text-[10px] px-2 py-0.5 rounded-md font-bold shadow-2xs bg-emerald-100 text-emerald-800 border border-emerald-200">
-                        学生
-                      </span>
+                      <div
+                        className={`w-8 h-8 rounded-full flex items-center justify-center text-white ${
+                          isFemale ? "bg-rose-500" : "bg-blue-600"
+                        }`}
+                      >
+                        <User className="w-4 h-4" />
+                      </div>
                     );
                   })()
                 ) : (
-                  <span className="text-[10px] px-2 py-0.5 rounded-md font-bold shadow-2xs bg-slate-900 text-white">
-                    管理者
-                  </span>
+                  <div className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xs">
+                    管
+                  </div>
                 )}
 
                 <span className="text-xs sm:text-sm font-bold text-slate-800 max-w-[100px] sm:max-w-[150px] truncate">

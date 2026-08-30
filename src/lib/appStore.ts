@@ -911,6 +911,13 @@ export const appStore = {
     return updated;
   },
 
+  removeLike: (studentId: string) => {
+    const current = appStore.getLikes();
+    const updated = current.filter((l) => l.studentId !== studentId);
+    localStorage.setItem("jobswipe_likes", JSON.stringify(updated));
+    return updated;
+  },
+
   // チャットスレッド一覧（最新メッセージ・時刻を動的同期）
   getThreads: (isStudentRole: boolean): ChatThread[] => {
     let baseThreads = isStudentRole ? DEFAULT_STUDENT_THREADS : DEFAULT_COMPANY_THREADS;
