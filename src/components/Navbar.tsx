@@ -304,14 +304,9 @@ export default function Navbar() {
                         </div>
                       );
                     }
-                    const isFemale = s?.gender === "FEMALE";
                     return (
-                      <span
-                        className={`text-[10px] px-2 py-0.5 rounded-md font-bold shadow-2xs text-white ${
-                          isFemale ? "bg-rose-500" : "bg-blue-600"
-                        }`}
-                      >
-                        {isFemale ? "学生 ♀" : "学生 ♂"}
+                      <span className="text-[10px] px-2 py-0.5 rounded-md font-bold shadow-2xs bg-emerald-100 text-emerald-800 border border-emerald-200">
+                        学生
                       </span>
                     );
                   })()

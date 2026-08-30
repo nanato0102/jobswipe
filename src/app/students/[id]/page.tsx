@@ -248,11 +248,11 @@ export default function StudentDetailPage({ params }: Props) {
                   </div>
                 ) : (
                   <div
-                    className={`w-14 h-14 rounded-2xl font-black text-xl flex items-center justify-center shadow-md flex-shrink-0 text-white ${
+                    className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-md flex-shrink-0 text-white border-2 border-white/40 ${
                       student.gender === "FEMALE" ? "bg-rose-500" : "bg-blue-600"
                     }`}
                   >
-                    {student.avatarText}
+                    <User className="w-7 h-7 stroke-[2.2]" />
                   </div>
                 )}
               </div>

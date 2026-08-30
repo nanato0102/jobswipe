@@ -526,11 +526,11 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                   const isFemale = sDetail?.gender === "FEMALE" || name.includes("美咲");
                   return (
                     <div
-                      className={`w-12 h-12 rounded-xl font-black text-lg flex items-center justify-center shadow-2xs flex-shrink-0 text-white ${
+                      className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-2xs flex-shrink-0 text-white border border-white/20 ${
                         isFemale ? "bg-rose-500" : "bg-blue-600"
                       }`}
                     >
-                      <span>{name.slice(0, 1) || "学"}</span>
+                      <User className="w-6 h-6 stroke-[2.2]" />
                     </div>
                   );
                 })()}

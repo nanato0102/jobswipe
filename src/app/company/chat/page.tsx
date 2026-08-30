@@ -181,11 +181,11 @@ function ChatContent() {
       const isFemale = student?.gender === "FEMALE" || thread.partnerName.includes("美咲");
       return (
         <div
-          className={`${sizeClass} rounded-2xl flex items-center justify-center font-bold text-white shadow-2xs flex-shrink-0 ${
+          className={`${sizeClass} rounded-2xl flex items-center justify-center text-white shadow-2xs flex-shrink-0 border border-white/20 ${
             isFemale ? "bg-rose-500" : "bg-blue-600"
           }`}
         >
-          <span>{thread.avatarText || "学"}</span>
+          <User className="w-5 h-5 stroke-[2.2]" />
         </div>
       );
     }

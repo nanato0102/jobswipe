@@ -394,7 +394,7 @@ export default function StudentProfilePage() {
                         </div>
                       ) : (
                         <div
-                          className={`w-20 h-20 rounded-2xl flex items-center justify-center font-black text-2xl shadow-md flex-shrink-0 text-white transition-colors ${
+                          className={`w-20 h-20 rounded-2xl flex flex-col items-center justify-center shadow-md flex-shrink-0 text-white transition-colors border-2 border-white/40 ${
                             gender === "FEMALE"
                               ? "bg-rose-500"
                               : gender === "MALE"
@@ -402,15 +402,18 @@ export default function StudentProfilePage() {
                               : "bg-emerald-700"
                           }`}
                         >
-                          <span>{fullName.slice(0, 1) || "学"}</span>
+                          <User className="w-9 h-9 stroke-[2.2]" />
+                          <span className="text-[10px] font-bold mt-0.5 opacity-90">
+                            {gender === "FEMALE" ? "女性" : gender === "MALE" ? "男性" : "学生"}
+                          </span>
                         </div>
                       )}
 
                       <div className="space-y-1.5">
                         <p className="text-xs font-bold text-slate-800">プロフィール写真（四角切り抜き）</p>
-                        <p className="text-[11px] text-slate-500">未設定時は性別カラーの四角バッジが表示されます</p>
+                        <p className="text-[11px] text-slate-500">未設定時は選択した性別カラーの人型アバターが表示されます</p>
                         <div className="flex items-center gap-2 pt-0.5">
-                          <label className="cursor-pointer px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 text-xs font-bold rounded-xl shadow-2xs transition-colors inline-block">
+                          <label className="cursor-pointer px-3.5 py-1.5 bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 text-xs font-bold rounded-xl shadow-2xs transition-colors inline-block">
                             <span>写真を選択</span>
                             <input type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" />
                           </label>
@@ -430,44 +433,44 @@ export default function StudentProfilePage() {
 
                   {/* 性別選択 */}
                   <div className="pt-3 border-t border-slate-200">
-                    <label className="block text-xs font-bold text-slate-700 mb-2">性別（アイコン色に反映）</label>
-                    <div className="grid grid-cols-3 gap-2 sm:max-w-md">
+                    <label className="block text-xs font-bold text-slate-700 mb-2">性別</label>
+                    <div className="grid grid-cols-3 gap-2.5 sm:max-w-md">
                       <button
                         type="button"
                         onClick={() => setGender("MALE")}
-                        className={`py-2 px-3 text-xs font-bold rounded-xl border transition-all flex items-center justify-center gap-1.5 ${
+                        className={`py-2.5 px-3 text-xs font-bold rounded-xl border transition-all flex items-center justify-center gap-2 whitespace-nowrap ${
                           gender === "MALE"
-                            ? "border-blue-600 bg-blue-50 text-blue-900 ring-2 ring-blue-600/30"
-                            : "border-slate-200 bg-white text-slate-600 hover:border-blue-300"
+                            ? "border-2 border-blue-600 bg-blue-50 text-blue-900 shadow-2xs"
+                            : "border border-slate-200 bg-white text-slate-600 hover:border-blue-300 hover:bg-slate-50"
                         }`}
                       >
-                        <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
-                        <span>男性 (青)</span>
+                        <span className="w-2.5 h-2.5 rounded-full bg-blue-600 flex-shrink-0"></span>
+                        <span>男性</span>
                       </button>
 
                       <button
                         type="button"
                         onClick={() => setGender("FEMALE")}
-                        className={`py-2 px-3 text-xs font-bold rounded-xl border transition-all flex items-center justify-center gap-1.5 ${
+                        className={`py-2.5 px-3 text-xs font-bold rounded-xl border transition-all flex items-center justify-center gap-2 whitespace-nowrap ${
                           gender === "FEMALE"
-                            ? "border-rose-500 bg-rose-50 text-rose-900 ring-2 ring-rose-500/30"
-                            : "border-slate-200 bg-white text-slate-600 hover:border-rose-300"
+                            ? "border-2 border-rose-500 bg-rose-50 text-rose-900 shadow-2xs"
+                            : "border border-slate-200 bg-white text-slate-600 hover:border-rose-300 hover:bg-slate-50"
                         }`}
                       >
-                        <span className="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-                        <span>女性 (ピンク)</span>
+                        <span className="w-2.5 h-2.5 rounded-full bg-rose-500 flex-shrink-0"></span>
+                        <span>女性</span>
                       </button>
 
                       <button
                         type="button"
                         onClick={() => setGender("OTHER")}
-                        className={`py-2 px-3 text-xs font-bold rounded-xl border transition-all flex items-center justify-center gap-1.5 ${
+                        className={`py-2.5 px-3 text-xs font-bold rounded-xl border transition-all flex items-center justify-center gap-2 whitespace-nowrap ${
                           gender === "OTHER"
-                            ? "border-slate-800 bg-slate-100 text-slate-900 ring-2 ring-slate-800/30"
-                            : "border-slate-200 bg-white text-slate-600 hover:border-slate-300"
+                            ? "border-2 border-slate-800 bg-slate-100 text-slate-900 shadow-2xs"
+                            : "border border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50"
                         }`}
                       >
-                        <span className="w-2.5 h-2.5 rounded-full bg-slate-500"></span>
+                        <span className="w-2.5 h-2.5 rounded-full bg-slate-400 flex-shrink-0"></span>
                         <span>その他</span>
                       </button>
                     </div>
