@@ -53,7 +53,7 @@ export default function StudentOffersPage() {
               <span>オファー一覧</span>
             </h1>
             <p className="text-xs text-slate-500 mt-1">
-              企業からあなたの自己PR動画を見て届いたオファーです
+              あなたの自己PR動画に関心を持った企業からのオファーです。承諾するとチャット面談へ進めます。
             </p>
           </div>
 

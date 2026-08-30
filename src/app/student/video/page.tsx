@@ -191,7 +191,7 @@ export default function StudentVideoUploadPage() {
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <div className="flex items-center gap-2">
                   <BarChart3 className="w-5 h-5 text-emerald-700" />
-                  <h2 className="text-base font-bold text-slate-900">自己PR動画の反響・視聴実績</h2>
+                  <h2 className="text-base font-bold text-slate-900">自己PR動画のアナリティクス（企業からの視聴・注目度）</h2>
                 </div>
                 <span className="text-xs font-bold px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200">
                   リアルタイム集計中

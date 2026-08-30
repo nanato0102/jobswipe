@@ -230,7 +230,7 @@ export default function CompanyRegisterPage() {
               <div className="space-y-0.5">
                 <p className="font-bold text-slate-900">安心・安全の完全審査制プラットフォーム</p>
                 <p className="text-[11px] text-slate-500 leading-relaxed">
-                  学生の個人情報保護および信頼性向上のため、企業様のアカウント発行には事前審査（通常1〜2営業日）を設けております。
+                  安心してご利用いただくため、運営事務局による企業様の掲載審査（通常1〜2営業日）を実施しております。審査完了後、担当者様宛に即時ログイン情報をご案内いたします。
                 </p>
               </div>
             </div>

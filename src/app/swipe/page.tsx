@@ -59,9 +59,9 @@ export default function SwipePage() {
       <CompanyMobileTabs>
         <div className="flex-1 flex flex-col justify-center items-center p-3 sm:p-6 w-full max-w-4xl mx-auto">
           <div className="text-center mb-3">
-            <h1 className="text-lg font-bold text-slate-900">学生自己PR動画スワイプ</h1>
+            <h1 className="text-lg font-bold text-slate-900">自己PR動画スワイプ</h1>
             <p className="text-xs text-slate-500">
-              上下スワイプで学生の自己PR動画を閲覧し、気になるへの追加やオファーを送信できます（企業専用）
+              候補者の人柄や雰囲気が伝わる自己PR動画です。「気になる」に保存するか、直接オファーを送信できます。
             </p>
           </div>
 

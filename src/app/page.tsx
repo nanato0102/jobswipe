@@ -336,9 +336,9 @@ export default function HomePage() {
                 <div className="w-11 h-11 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
                   <Zap className="w-6 h-6" />
                 </div>
-                <h3 className="text-base font-bold text-white">動画を置いたら待つだけ</h3>
+                <h3 className="text-base font-bold text-white">1本の動画が、あなたの魅力を24時間アピール</h3>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                  何十社もエントリーして疲弊する就活から解放。あなたに興味を持った企業から特別スカウトが届きます。
+                  何十社もエントリーシートを書き続ける就活から解放。あなたの雰囲気や強みに惹かれた厳選企業から直接オファーが届きます。
                 </p>
               </div>
             </FadeInView>
@@ -369,8 +369,8 @@ export default function HomePage() {
                 For Recruiters
               </span>
               <h2 className="text-3xl sm:text-4xl font-black text-white">
-                <span className="inline-block">会ってガッカリをゼロに。</span><br className="hidden sm:inline" />
-                <span className="text-emerald-400 inline-block">直感スワイプで自社に合う人材を最速採用。</span>
+                <span className="inline-block">面接前の「カルチャーミスマッチ」を解消。</span><br className="hidden sm:inline" />
+                <span className="text-emerald-400 inline-block">直感スワイプで、会うべき人材と確実に出会う。</span>
               </h2>
               <p className="text-xs sm:text-sm text-slate-400">
                 <span className="inline-block">書類選考の工数を劇的に削減し、</span>
