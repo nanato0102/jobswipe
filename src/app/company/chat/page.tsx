@@ -414,6 +414,7 @@ function ChatContent() {
                         (isStudent && m.senderRole === "STUDENT") ||
                         (isCompany && m.senderRole === "COMPANY") ||
                         (!isStudent && !isCompany && m.senderRole === "COMPANY");
+                      const isOfferMsg = m.content.startsWith("【特別オファー") || m.content.startsWith("【オファー");
 
                       return (
                         <div
@@ -421,13 +422,20 @@ function ChatContent() {
                           className={`flex flex-col min-w-0 w-full ${isMe ? "items-end" : "items-start"}`}
                         >
                           <div className="flex items-center gap-1.5 mb-1 px-1 text-[10px] text-slate-400 font-medium">
+                            {isOfferMsg && (
+                              <span className="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-800 font-bold border border-emerald-200 text-[10px]">
+                                特別オファー
+                              </span>
+                            )}
                             <span className="truncate max-w-[150px]">{m.senderName}</span>
                             <span className="whitespace-nowrap">• {m.sentAt}</span>
                           </div>
 
                           <div
-                            className={`max-w-[85%] sm:max-w-md p-3 sm:p-3.5 rounded-lg text-xs sm:text-sm leading-relaxed whitespace-pre-wrap break-words shadow-2xs space-y-2 ${
-                              isMe
+                            className={`max-w-[85%] sm:max-w-md p-3 sm:p-3.5 rounded-2xl text-xs sm:text-sm leading-relaxed whitespace-pre-wrap break-words shadow-2xs space-y-2 ${
+                              isOfferMsg
+                                ? "bg-emerald-50 text-emerald-950 border-2 border-emerald-300 font-medium"
+                                : isMe
                                 ? "bg-slate-900 text-white"
                                 : "bg-white text-slate-900 border border-slate-200"
                             }`}

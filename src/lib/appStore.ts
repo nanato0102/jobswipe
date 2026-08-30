@@ -287,23 +287,23 @@ const DEFAULT_COMPANY_THREADS: ChatThread[] = [
 const DEFAULT_MESSAGES: StoredMessage[] = [
   // thread-c1 (学生視点: テックイノベーション)
   {
-    id: "m-c1-1",
+    id: "m-c1-0",
     threadId: "thread-c1",
     senderRole: "COMPANY",
     senderName: "テックイノベーション株式会社",
-    content: "佐藤さん、はじめまして！自己PR動画を拝見し、明るい人柄と推進力に大変感銘を受けました。弊社の新規事業チームにて一度カジュアルにお話ししませんか？",
-    sentAt: "14:00",
+    content: "【特別オファーメッセージ】\n動画を拝見しました！チームでのリーダーシップと技術への熱意に大変共感いたしました。弊社の新規事業推進ポジションにて、ぜひ一度カジュアル面談でお話しさせてください。",
+    sentAt: "8/28 14:00",
   },
   {
-    id: "m-c1-2",
+    id: "m-c1-1",
     threadId: "thread-c1",
     senderRole: "STUDENT",
     senderName: "佐藤 健太",
     content: "オファーいただき誠にありがとうございます！短尺動画を見ていただき大変嬉しいです。ぜひカジュアル面談でお話しさせていただけますと幸いです。",
-    sentAt: "14:15",
+    sentAt: "8/28 14:15",
   },
   {
-    id: "m-c1-3",
+    id: "m-c1-2",
     threadId: "thread-c1",
     senderRole: "COMPANY",
     senderName: "テックイノベーション株式会社",
@@ -312,15 +312,15 @@ const DEFAULT_MESSAGES: StoredMessage[] = [
   },
   // thread-c2 (学生視点: グローバルコンサルティング)
   {
-    id: "m-c2-1",
+    id: "m-c2-0",
     threadId: "thread-c2",
     senderRole: "COMPANY",
     senderName: "グローバルコンサルティング合同会社",
-    content: "佐藤さん、動画を拝見いたしました。堂々とした話し方と英語力が素晴らしく、弊社のグローバル案件で即戦力として期待しております。",
-    sentAt: "昨日 10:30",
+    content: "【特別オファーメッセージ】\n英語力と前向きな姿勢が弊社のグローバル案件推進にマッチすると感じました。書類選考免除の特別選考ルートをご案内いたします。",
+    sentAt: "8/25 10:30",
   },
   {
-    id: "m-c2-2",
+    id: "m-c2-1",
     threadId: "thread-c2",
     senderRole: "STUDENT",
     senderName: "佐藤 健太",
@@ -328,7 +328,7 @@ const DEFAULT_MESSAGES: StoredMessage[] = [
     sentAt: "昨日 11:00",
   },
   {
-    id: "m-c2-3",
+    id: "m-c2-2",
     threadId: "thread-c2",
     senderRole: "COMPANY",
     senderName: "グローバルコンサルティング合同会社",
@@ -337,32 +337,40 @@ const DEFAULT_MESSAGES: StoredMessage[] = [
   },
   // thread-c3 (学生視点: ネクストフューチャー)
   {
-    id: "m-c3-1",
+    id: "m-c3-0",
     threadId: "thread-c3",
     senderRole: "COMPANY",
     senderName: "ネクストフューチャー株式会社",
-    content: "佐藤さん、初めまして！代表の藤本です。動画から溢れるエネルギーに一目惚れしました！ぜひ一度カジュアルにお話ししましょう！",
+    content: "【特別オファーメッセージ】\n動画の明るい人柄とチャレンジ精神に強く惹かれました！代表との1on1カジュアル面談枠を確保いたしましたので、ぜひお話ししましょう！",
     sentAt: "8/27 11:00",
   },
   {
-    id: "m-c3-2",
+    id: "m-c3-1",
     threadId: "thread-c3",
     senderRole: "STUDENT",
     senderName: "佐藤 健太",
     content: "藤本代表、直接オファーをいただき感激です！ぜひ急成長中の事業やカルチャーについてお伺いしたいです！",
     sentAt: "8/27 11:45",
   },
+  {
+    id: "m-c3-2",
+    threadId: "thread-c3",
+    senderRole: "COMPANY",
+    senderName: "ネクストフューチャー株式会社",
+    content: "動画を拝見しました！ぜひ一度カジュアルにお話ししましょう！",
+    sentAt: "8/27 12:00",
+  },
   // thread-s1 (企業視点: 佐藤健太さん)
   {
-    id: "m-s1-1",
+    id: "m-s1-0",
     threadId: "thread-s1",
     senderRole: "COMPANY",
     senderName: "テックイノベーション株式会社",
-    content: "佐藤さん、はじめまして！動画を拝見し、明るい人柄と推進力に大変感銘を受けました。弊社の新規事業チームにて一度カジュアルにお話ししませんか？",
-    sentAt: "14:00",
+    content: "【特別オファーメッセージ】\n動画を拝見しました！チームでのリーダーシップと技術への熱意に大変共感いたしました。弊社の新規事業推進ポジションにて、ぜひ一度カジュアル面談でお話しさせてください。",
+    sentAt: "8/28 14:00",
   },
   {
-    id: "m-s1-2",
+    id: "m-s1-1",
     threadId: "thread-s1",
     senderRole: "STUDENT",
     senderName: "佐藤 健太",
@@ -370,6 +378,14 @@ const DEFAULT_MESSAGES: StoredMessage[] = [
     sentAt: "14:15",
   },
   // thread-s2 (企業視点: 高橋美咲さん)
+  {
+    id: "m-s2-0",
+    threadId: "thread-s2",
+    senderRole: "COMPANY",
+    senderName: "テックイノベーション株式会社",
+    content: "【特別オファーメッセージ】\n動画を拝見しました！マーケティングへの高い探求心と、明るく誠実なコミュニケーション能力に大変魅力を感じております。ぜひ一度お話ししませんか？",
+    sentAt: "8/29 09:30",
+  },
   {
     id: "m-s2-1",
     threadId: "thread-s2",
@@ -387,6 +403,14 @@ const DEFAULT_MESSAGES: StoredMessage[] = [
     sentAt: "11:20",
   },
   // thread-s3 (企業視点: 伊藤翼さん)
+  {
+    id: "m-s3-0",
+    threadId: "thread-s3",
+    senderRole: "COMPANY",
+    senderName: "テックイノベーション株式会社",
+    content: "【特別オファーメッセージ】\n動画での行動力と組織推進力に感銘を受けました。弊社のプロダクト開発・営業推進チームで活躍いただけると思いオファーを送らせていただきました。",
+    sentAt: "8/26 15:20",
+  },
   {
     id: "m-s3-1",
     threadId: "thread-s3",
@@ -802,42 +826,84 @@ export const appStore = {
     return updated;
   },
 
-  // チャットスレッド一覧
+  // チャットスレッド一覧（最新メッセージ・時刻を動的同期）
   getThreads: (isStudentRole: boolean): ChatThread[] => {
-    if (typeof window === "undefined") {
-      return isStudentRole ? DEFAULT_STUDENT_THREADS : DEFAULT_COMPANY_THREADS;
+    let baseThreads = isStudentRole ? DEFAULT_STUDENT_THREADS : DEFAULT_COMPANY_THREADS;
+
+    if (typeof window !== "undefined") {
+      const key = isStudentRole ? "jobswipe_student_threads" : "jobswipe_company_threads";
+      const data = localStorage.getItem(key);
+      if (data) {
+        try {
+          baseThreads = JSON.parse(data);
+        } catch {
+          baseThreads = isStudentRole ? DEFAULT_STUDENT_THREADS : DEFAULT_COMPANY_THREADS;
+        }
+      }
     }
-    const key = isStudentRole ? "jobswipe_student_threads" : "jobswipe_company_threads";
-    const initial = isStudentRole ? DEFAULT_STUDENT_THREADS : DEFAULT_COMPANY_THREADS;
-    const data = localStorage.getItem(key);
-    if (!data) {
-      localStorage.setItem(key, JSON.stringify(initial));
-      return initial;
-    }
-    try {
-      return JSON.parse(data);
-    } catch {
-      return initial;
-    }
+
+    // 全メッセージから各スレッドの「最新メッセージ（lastMessage）」と「最新時刻（lastTime）」をリアルタイムに自動算出して反映
+    const allMessages = appStore.getMessages();
+
+    return baseThreads.map((thread) => {
+      const threadMsgs = allMessages.filter((m) => m.threadId === thread.id);
+      if (threadMsgs.length > 0) {
+        const lastMsg = threadMsgs[threadMsgs.length - 1];
+        let preview = lastMsg.content;
+        if (lastMsg.attachment) {
+          preview = lastMsg.attachment.type === "pdf" ? `[PDF] ${lastMsg.attachment.name}` : "[画像]";
+        }
+        return {
+          ...thread,
+          lastMessage: preview,
+          lastTime: lastMsg.sentAt,
+        };
+      }
+      return thread;
+    });
   },
 
-  // メッセージ一覧（スレッド単位）
+  // メッセージ一覧（スレッド単位 & オファーメッセージ先頭保証）
   getMessages: (threadId?: string): StoredMessage[] => {
-    if (typeof window === "undefined") {
-      return threadId ? DEFAULT_MESSAGES.filter((m) => m.threadId === threadId) : DEFAULT_MESSAGES;
-    }
-    const data = localStorage.getItem("jobswipe_chat_messages");
-    let list = DEFAULT_MESSAGES;
-    if (data) {
-      try {
-        list = JSON.parse(data);
-      } catch {
+    let list: StoredMessage[] = DEFAULT_MESSAGES;
+
+    if (typeof window !== "undefined") {
+      const version = localStorage.getItem("jobswipe_msg_v");
+      const data = localStorage.getItem("jobswipe_chat_messages");
+
+      if (version === "v4" && data) {
+        try {
+          list = JSON.parse(data);
+        } catch {
+          list = DEFAULT_MESSAGES;
+        }
+      } else {
+        // v4への自動マイグレーション（オファーメッセージを含む最新DEFAULT_MESSAGESをセット）
         list = DEFAULT_MESSAGES;
+        localStorage.setItem("jobswipe_chat_messages", JSON.stringify(DEFAULT_MESSAGES));
+        localStorage.setItem("jobswipe_msg_v", "v4");
       }
-    } else {
-      localStorage.setItem("jobswipe_chat_messages", JSON.stringify(DEFAULT_MESSAGES));
     }
-    return threadId ? list.filter((m) => m.threadId === threadId) : list;
+
+    if (!threadId) return list;
+
+    let threadMsgs = list.filter((m) => m.threadId === threadId);
+
+    // もしスレッドメッセージにオファーメッセージがまだない場合、オファー情報を先頭に自動追加
+    const offer = appStore.getOfferForThread(threadId);
+    if (offer && !threadMsgs.some((m) => m.content.includes("オファーメッセージ"))) {
+      const initialOfferMsg: StoredMessage = {
+        id: `m-offer-${threadId}`,
+        threadId,
+        senderRole: "COMPANY",
+        senderName: offer.companyName,
+        content: `【特別オファーメッセージ】\n${offer.message}`,
+        sentAt: offer.createdAt.slice(5) || "受信時",
+      };
+      threadMsgs = [initialOfferMsg, ...threadMsgs];
+    }
+
+    return threadMsgs;
   },
 
   // メッセージ送信
