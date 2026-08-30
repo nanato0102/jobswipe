@@ -5,7 +5,7 @@ import { ToastProvider } from "@/context/ToastContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "JobSwipe | 人柄を可視化する就活版TikTok型 逆求人プラットフォーム",
+  title: "JobSwipe | 短尺自己PR動画で人柄を可視化する新卒逆求人プラットフォーム",
   description: "学生が投稿した自己PR動画を企業がスワイプ形式で閲覧し、直感的にオファーを送れる逆求人プラットフォーム",
 };
 

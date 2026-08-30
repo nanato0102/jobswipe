@@ -751,7 +751,7 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-400">
             <p>© 2026 JobSwipe Inc. All rights reserved.</p>
             <p className="text-slate-400">
-              就活版TikTok型 逆求人プラットフォーム JobSwipe
+              短尺自己PR動画を活用した新卒逆求人プラットフォーム JobSwipe
             </p>
           </div>
         </div>

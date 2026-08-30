@@ -245,7 +245,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
 
       {/* PC 2カラム / スマホ 1カラム コンテナ */}
       <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* 左側：TikTok風縦型動画プレーヤー（7カラム） */}
+        {/* 左側：縦型ショート動画プレーヤー（7カラム） */}
         <div
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
