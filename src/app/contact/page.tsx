@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { appStore } from "@/lib/appStore";
+import { useAuth } from "@/context/AuthContext";
 import {
   Building2,
   User,
@@ -13,6 +14,7 @@ import {
   CheckCircle2,
   AlertCircle,
   ArrowRight,
+  ArrowLeft,
   ShieldCheck,
   Clock,
   Sparkles,
@@ -22,6 +24,7 @@ import {
 } from "lucide-react";
 
 export default function ContactPage() {
+  const { session, isStudent, isCompany } = useAuth();
   const [userType, setUserType] = useState<"company" | "student">("company");
   
   // 企業用フォームステート
@@ -128,13 +131,35 @@ export default function ContactPage() {
                 ご入力いただいたメールアドレス宛に受付確認メールをお送りいたしました。担当者より速やかにご連絡申し上げます。
               </p>
             </div>
-            <div className="pt-4 flex justify-center gap-4">
+            <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+              {session && (
+                <Link
+                  href={isStudent ? "/student/profile" : isCompany ? "/company/profile" : "/admin-console/dashboard"}
+                  className="w-full sm:w-auto px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold rounded-2xl transition-all shadow-md flex items-center justify-center gap-1.5"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  <span>{isStudent ? "学生マイページに戻る" : isCompany ? "企業情報に戻る" : "管理画面に戻る"}</span>
+                </Link>
+              )}
               <Link
                 href="/"
-                className="px-8 py-3 bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold rounded-2xl transition-all shadow-md"
+                className="w-full sm:w-auto px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs sm:text-sm font-bold rounded-2xl transition-all shadow-sm flex items-center justify-center"
               >
                 トップページへ戻る
               </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  setSubmitted(false);
+                  setReceiptNumber("");
+                  setAgreed(false);
+                  setCompanyMessage("");
+                  setStudentMessage("");
+                }}
+                className="w-full sm:w-auto px-5 py-3 text-xs sm:text-sm text-slate-400 hover:text-white transition-colors cursor-pointer"
+              >
+                別のお問い合わせを送信
+              </button>
             </div>
           </div>
         ) : (

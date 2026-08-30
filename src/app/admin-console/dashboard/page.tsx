@@ -5,6 +5,7 @@ import Link from "next/link";
 import RoleGuard from "@/components/RoleGuard";
 import { appStore, StoredInquiry } from "@/lib/appStore";
 import { useToast } from "@/context/ToastContext";
+import { useAuth } from "@/context/AuthContext";
 import {
   ShieldCheck,
   Users,
@@ -30,6 +31,8 @@ import {
   Eye,
   EyeOff,
   AlertOctagon,
+  Globe,
+  LogOut,
 } from "lucide-react";
 
 interface AdminVideoItem {
@@ -54,6 +57,7 @@ interface AdminUserItem {
 }
 
 export default function AdminConsoleDashboardPage() {
+  const { logout } = useAuth();
   const { success, info, error } = useToast();
   const [activeTab, setActiveTab] = useState<"kpi" | "inquiries" | "videos" | "users">("inquiries");
 
@@ -247,6 +251,26 @@ export default function AdminConsoleDashboardPage() {
               <p className="text-xs text-slate-500 mt-1">
                 お問い合わせの確認、Googleスプレッドシート連携、主要KPI、動画監視、ユーザー管理を行います
               </p>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Link
+                href="/"
+                target="_blank"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors"
+                title="一般ユーザー向けトップページを別タブで開く"
+              >
+                <Globe className="w-3.5 h-3.5" />
+                <span>一般サイト(LP)を確認</span>
+              </Link>
+              <button
+                type="button"
+                onClick={logout}
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold transition-colors cursor-pointer border border-rose-200"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span>ログアウト</span>
+              </button>
             </div>
           </div>
 

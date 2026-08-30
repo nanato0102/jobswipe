@@ -16,6 +16,7 @@ import {
   Sparkles,
   ArrowRight,
   CheckCircle2,
+  Film,
 } from "lucide-react";
 
 export default function StudentOffersPage() {
@@ -57,10 +58,25 @@ export default function StudentOffersPage() {
           </div>
 
           {offers.length === 0 ? (
-            <div className="bg-white p-12 rounded-xl border border-slate-200 text-center text-slate-500 text-sm shadow-xs space-y-2">
-              <Sparkles className="w-8 h-8 text-slate-400 mx-auto" />
-              <p className="font-bold text-slate-700">まだオファーは届いていません</p>
-              <p className="text-xs text-slate-400">自己PR動画を投稿すると、企業からオファーが届きます。</p>
+            <div className="bg-white p-8 sm:p-12 rounded-xl border border-slate-200 text-center text-slate-500 text-sm shadow-xs space-y-4">
+              <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto border border-emerald-200">
+                <Sparkles className="w-6 h-6" />
+              </div>
+              <div className="space-y-1">
+                <p className="font-bold text-slate-800 text-base">まだオファーは届いていません</p>
+                <p className="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
+                  短尺自己PR動画を投稿すると、あなたの雰囲気や人柄を見た企業の採用担当者から直接スカウト・オファーが届きます。
+                </p>
+              </div>
+              <div className="pt-2">
+                <Link
+                  href="/student/video"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold transition-all shadow-xs"
+                >
+                  <Film className="w-4 h-4" />
+                  <span>自己PR動画を投稿・管理する</span>
+                </Link>
+              </div>
             </div>
           ) : (
             <div className="space-y-4">

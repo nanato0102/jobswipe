@@ -7,6 +7,7 @@ import { useToast } from "@/context/ToastContext";
 import RoleGuard from "@/components/RoleGuard";
 import StudentMobileTabs from "@/components/StudentMobileTabs";
 import CompanyMobileTabs from "@/components/CompanyMobileTabs";
+import Link from "next/link";
 import {
   Settings,
   User,
@@ -21,6 +22,7 @@ import {
   ShieldCheck,
   Trash2,
   ArrowRight,
+  ArrowLeft,
   X,
 } from "lucide-react";
 
@@ -118,6 +120,17 @@ export default function SettingsPage() {
       <TabsWrapper>
         <div className="min-h-screen bg-slate-50 py-8 px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto space-y-6">
+          {/* 上部戻る導線 */}
+          <div className="flex items-center justify-between">
+            <Link
+              href={isStudent ? "/student/profile" : isCompany ? "/company/profile" : "/admin-console/dashboard"}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors shadow-2xs"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>{isStudent ? "学生プロフィールに戻る" : isCompany ? "企業情報に戻る" : "管理ダッシュボードに戻る"}</span>
+            </Link>
+          </div>
+
           {/* ページヘッダー */}
           <div className="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-xs flex items-center gap-3">
             <Settings className="w-6 h-6 text-slate-800" />
