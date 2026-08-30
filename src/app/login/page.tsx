@@ -27,7 +27,7 @@ export default function LoginPage() {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, expectedRole: "STUDENT" }),
       });
 
       if (!res.ok) {
@@ -36,9 +36,11 @@ export default function LoginPage() {
       }
 
       const data = await res.json();
-      if (data.user) {
+      if (data.user && data.user.userType === "STUDENT") {
         login(data.user);
-        window.location.href = data.user.userType === "STUDENT" ? "/student/profile" : "/swipe";
+        window.location.href = "/student/profile";
+      } else {
+        throw new Error("メールアドレスまたはパスワードが正しくありません");
       }
     } catch (err: any) {
       setError(err.message || "ログインに失敗しました。メールアドレスとパスワードをお確かめください。");

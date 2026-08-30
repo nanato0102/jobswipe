@@ -127,7 +127,7 @@ export default function SettingsPage() {
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors shadow-2xs"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              <span>{isStudent ? "学生プロフィールに戻る" : isCompany ? "企業情報に戻る" : "管理ダッシュボードに戻る"}</span>
+              <span>{isStudent ? "プロフィールに戻る" : isCompany ? "企業情報に戻る" : "管理ダッシュボードに戻る"}</span>
             </Link>
           </div>
 
@@ -166,7 +166,7 @@ export default function SettingsPage() {
                         : "bg-slate-900 text-white"
                     }`}
                   >
-                    {isStudent ? "学生アカウント" : isCompany ? "企業アカウント" : "管理者"}
+                    {isStudent ? "一般アカウント (求職・スカウト受信)" : isCompany ? "企業アカウント" : "管理者"}
                   </span>
                 </div>
               </div>

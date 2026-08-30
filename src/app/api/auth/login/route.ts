@@ -5,7 +5,7 @@ import { sanitizeString } from "@/lib/sanitizer";
 
 export async function POST(req: Request) {
   try {
-    const { email, password } = await req.json();
+    const { email, password, expectedRole } = await req.json();
     if (!email || !password) {
       return NextResponse.json({ message: "必須項目を入力してください" }, { status: 400 });
     }
@@ -25,6 +25,11 @@ export async function POST(req: Request) {
         return NextResponse.json({ message: "メールアドレスまたはパスワードが正しくありません" }, { status: 401 });
       }
 
+      // 権限・アカウント種別の厳格チェック
+      if (expectedRole && user.userType !== expectedRole) {
+        return NextResponse.json({ message: "メールアドレスまたはパスワードが正しくありません" }, { status: 401 });
+      }
+
       const isValid = await bcrypt.compare(password, user.password);
       if (!isValid) {
         return NextResponse.json({ message: "メールアドレスまたはパスワードが正しくありません" }, { status: 401 });
@@ -33,7 +38,7 @@ export async function POST(req: Request) {
       const name =
         user.studentProfile?.fullName ||
         user.companyProfile?.companyName ||
-        (user.userType === "STUDENT" ? "学生ユーザー" : user.userType === "COMPANY" ? "企業担当者" : "管理者");
+        (user.userType === "STUDENT" ? "佐藤 健太" : user.userType === "COMPANY" ? "テックイノベーション株式会社" : "管理者");
 
       return NextResponse.json({
         success: true,
@@ -45,15 +50,26 @@ export async function POST(req: Request) {
         },
       });
     } catch (dbError) {
-      console.warn("DB operation warning:", dbError);
+      console.warn("DB operation warning, entering controlled demo auth:", dbError);
+
+      // デモ・モック認証における権限の厳格チェック
+      const isCompanyEmail = cleanEmail.includes("company") || cleanEmail.includes("hr@") || cleanEmail === "hr@tech-innovations.jp";
+      const isStudentEmail = cleanEmail === "sato@example.com" || cleanEmail.includes("student") || (!isCompanyEmail && cleanEmail !== "admin@jobswipe.jp");
+
+      const resolvedRole: "STUDENT" | "COMPANY" = isCompanyEmail ? "COMPANY" : "STUDENT";
+
+      if (expectedRole && resolvedRole !== expectedRole) {
+        return NextResponse.json({ message: "メールアドレスまたはパスワードが正しくありません" }, { status: 401 });
+      }
+
       return NextResponse.json({
         success: true,
         demoMode: true,
         user: {
-          id: "user-" + Date.now(),
+          id: resolvedRole === "STUDENT" ? "s1" : "c1",
           email: cleanEmail,
-          userType: cleanEmail.includes("company") ? "COMPANY" : "STUDENT",
-          name: cleanEmail.includes("company") ? "企業担当者" : "学生ユーザー",
+          userType: resolvedRole,
+          name: resolvedRole === "STUDENT" ? "佐藤 健太" : "テックイノベーション株式会社",
         },
       });
     }

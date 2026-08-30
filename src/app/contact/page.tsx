@@ -138,7 +138,7 @@ export default function ContactPage() {
                   className="w-full sm:w-auto px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold rounded-2xl transition-all shadow-md flex items-center justify-center gap-1.5"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  <span>{isStudent ? "学生マイページに戻る" : isCompany ? "企業情報に戻る" : "管理画面に戻る"}</span>
+                  <span>{isStudent ? "マイページに戻る" : isCompany ? "企業情報に戻る" : "管理画面に戻る"}</span>
                 </Link>
               )}
               <Link

@@ -108,7 +108,7 @@ export default function RegisterPage() {
               priority
             />
           </div>
-          <h1 className="text-xl font-bold text-slate-900">学生新規登録</h1>
+          <h1 className="text-xl font-bold text-slate-900">新規会員登録</h1>
           <p className="text-xs text-slate-500 mt-1">動画を投稿して企業からスカウトを受け取ろう</p>
         </div>
 
@@ -297,7 +297,7 @@ export default function RegisterPage() {
             className="w-full bg-emerald-700 hover:bg-emerald-600 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-md active:scale-95 disabled:opacity-50 text-sm flex items-center justify-center gap-2 cursor-pointer"
           >
             <UserPlus className="w-4 h-4" />
-            <span>{loading ? "登録処理中..." : "学生アカウントを作成する"}</span>
+            <span>{loading ? "登録処理中..." : "アカウントを作成する"}</span>
           </button>
         </form>
 

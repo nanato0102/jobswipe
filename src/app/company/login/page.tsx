@@ -27,7 +27,7 @@ export default function CompanyLoginPage() {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, expectedRole: "COMPANY" }),
       });
 
       if (!res.ok) {
@@ -36,9 +36,11 @@ export default function CompanyLoginPage() {
       }
 
       const data = await res.json();
-      if (data.user) {
+      if (data.user && data.user.userType === "COMPANY") {
         login(data.user);
         window.location.href = "/swipe";
+      } else {
+        throw new Error("メールアドレスまたはパスワードが正しくありません");
       }
     } catch (err: any) {
       setError(err.message || "ログインに失敗しました。企業メールアドレスとパスワードをお確かめください。");
