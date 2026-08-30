@@ -241,9 +241,20 @@ export default function StudentDetailPage({ params }: Props) {
                   </p>
                 </div>
 
-                <div className="w-14 h-14 rounded-2xl bg-emerald-700 text-white font-black text-xl flex items-center justify-center shadow-md flex-shrink-0">
-                  {student.avatarText}
-                </div>
+                {student.avatarUrl ? (
+                  <div className="w-14 h-14 rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-slate-100 flex-shrink-0">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={student.avatarUrl} alt={student.name} className="w-full h-full object-cover" />
+                  </div>
+                ) : (
+                  <div
+                    className={`w-14 h-14 rounded-2xl font-black text-xl flex items-center justify-center shadow-md flex-shrink-0 text-white ${
+                      student.gender === "FEMALE" ? "bg-rose-500" : "bg-blue-600"
+                    }`}
+                  >
+                    {student.avatarText}
+                  </div>
+                )}
               </div>
 
               {/* キャッチコピー */}

@@ -81,9 +81,16 @@ export default function CompanyDetailPage({ params }: Props) {
         {/* 企業ヘッダーカード */}
         <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-xs space-y-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-900 text-emerald-400 font-black text-2xl sm:text-3xl flex items-center justify-center shadow-md flex-shrink-0">
-              {company.logoText}
-            </div>
+            {company.logoUrl ? (
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-slate-200 bg-white flex items-center justify-center p-2 shadow-md flex-shrink-0">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={company.logoUrl} alt={company.name} className="max-w-full max-h-full object-contain" />
+              </div>
+            ) : (
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-900 text-emerald-400 font-black text-2xl sm:text-3xl flex items-center justify-center shadow-md flex-shrink-0">
+                {company.logoText}
+              </div>
+            )}
 
             <div className="space-y-1.5 flex-1 min-w-0">
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-blue-50 text-blue-800 text-[11px] font-bold border border-blue-200">

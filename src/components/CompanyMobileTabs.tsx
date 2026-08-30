@@ -114,7 +114,7 @@ export default function CompanyMobileTabs({ children }: CompanyMobileTabsProps) 
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      className="flex-1 flex flex-col w-full min-h-full pb-20 md:pb-6 overflow-x-hidden"
+      className="flex-1 flex flex-col w-full min-h-[calc(100dvh-4rem)] pb-20 md:pb-6 overflow-x-hidden"
     >
       {/* 画面コンテンツ（滑らかなスライドトランジション） */}
       <div

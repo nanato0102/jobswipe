@@ -152,6 +152,45 @@ function ChatContent() {
     }
   };
 
+  const renderAvatar = (thread: ChatThread, sizeClass = "w-10 h-10") => {
+    if (thread.role === "COMPANY") {
+      const company = appStore.getCompanyDetails(thread.partnerId);
+      if (company?.logoUrl) {
+        return (
+          <div className={`${sizeClass} rounded-2xl overflow-hidden border border-slate-200 bg-white flex items-center justify-center p-1 shadow-2xs flex-shrink-0`}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={company.logoUrl} alt={thread.partnerName} className="max-w-full max-h-full object-contain" />
+          </div>
+        );
+      }
+      return (
+        <div className={`${sizeClass} rounded-2xl bg-slate-900 text-emerald-400 font-bold flex items-center justify-center shadow-2xs flex-shrink-0`}>
+          <span>{thread.avatarText || "企"}</span>
+        </div>
+      );
+    } else {
+      const student = appStore.getStudentDetails(thread.partnerId);
+      if (student?.avatarUrl) {
+        return (
+          <div className={`${sizeClass} rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 shadow-2xs flex-shrink-0`}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={student.avatarUrl} alt={thread.partnerName} className="w-full h-full object-cover" />
+          </div>
+        );
+      }
+      const isFemale = student?.gender === "FEMALE" || thread.partnerName.includes("美咲");
+      return (
+        <div
+          className={`${sizeClass} rounded-2xl flex items-center justify-center font-bold text-white shadow-2xs flex-shrink-0 ${
+            isFemale ? "bg-rose-500" : "bg-blue-600"
+          }`}
+        >
+          <span>{thread.avatarText || "学"}</span>
+        </div>
+      );
+    }
+  };
+
   const handleSend = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if ((!inputText.trim() && !selectedFile) || !currentThread) return;
@@ -249,19 +288,7 @@ function ChatContent() {
                       }`}
                     >
                       {/* アバター */}
-                      <div
-                        className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm shadow-2xs flex-shrink-0 ${
-                          thread.role === "COMPANY"
-                            ? "bg-slate-900 text-emerald-400"
-                            : "bg-emerald-700 text-white"
-                        }`}
-                      >
-                        {thread.role === "COMPANY" ? (
-                          <Building2 className="w-4 h-4" />
-                        ) : (
-                          <span>{thread.avatarText}</span>
-                        )}
-                      </div>
+                      {renderAvatar(thread, "w-10 h-10")}
 
                       {/* スレッド詳細 */}
                       <div className="flex-1 min-w-0">
@@ -329,19 +356,7 @@ function ChatContent() {
                         className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 group hover:opacity-90 transition-opacity"
                         title="プロフィール詳細を見る"
                       >
-                        <div
-                          className={`w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm shadow-2xs flex-shrink-0 ${
-                            currentThread.role === "COMPANY"
-                              ? "bg-slate-900 text-emerald-400"
-                              : "bg-emerald-700 text-white"
-                          }`}
-                        >
-                          {currentThread.role === "COMPANY" ? (
-                            <Building2 className="w-4 h-4" />
-                          ) : (
-                            <span>{currentThread.avatarText}</span>
-                          )}
-                        </div>
+                        {renderAvatar(currentThread, "w-9 h-9")}
 
                         <div className="min-w-0 flex-1">
                           <h2 className="text-xs sm:text-sm font-bold text-slate-900 truncate group-hover:text-emerald-800 group-hover:underline flex items-center gap-1">

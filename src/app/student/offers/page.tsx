@@ -85,18 +85,37 @@ export default function StudentOffersPage() {
                   key={offer.id}
                   className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 sm:p-6 flex flex-col gap-4 hover:shadow-sm transition-shadow"
                 >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <Link
-                        href={`/companies/${offer.companyId}`}
-                        className="text-base font-bold text-slate-900 hover:text-emerald-800 hover:underline tracking-tight flex items-center gap-1 group"
-                      >
-                        <span>{offer.companyName}</span>
-                        <span className="text-[11px] font-normal text-emerald-700 opacity-0 group-hover:opacity-100 transition-opacity">
-                          (企業情報を見る →)
-                        </span>
-                      </Link>
-                      <span className="text-xs text-slate-500">{offer.industry}</span>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      {(() => {
+                        const company = appStore.getCompanyDetails(offer.companyId);
+                        if (company?.logoUrl) {
+                          return (
+                            <div className="w-10 h-10 rounded-xl overflow-hidden border border-slate-200 bg-white flex items-center justify-center p-1 shadow-2xs flex-shrink-0">
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img src={company.logoUrl} alt={offer.companyName} className="max-w-full max-h-full object-contain" />
+                            </div>
+                          );
+                        }
+                        return (
+                          <div className="w-10 h-10 rounded-xl bg-slate-900 text-emerald-400 font-black text-sm flex items-center justify-center shadow-2xs flex-shrink-0">
+                            <span>{offer.companyName.slice(0, 1) || "企"}</span>
+                          </div>
+                        );
+                      })()}
+
+                      <div>
+                        <Link
+                          href={`/companies/${offer.companyId}`}
+                          className="text-base font-bold text-slate-900 hover:text-emerald-800 hover:underline tracking-tight flex items-center gap-1 group"
+                        >
+                          <span>{offer.companyName}</span>
+                          <span className="text-[11px] font-normal text-emerald-700 opacity-0 group-hover:opacity-100 transition-opacity">
+                            (企業情報を見る →)
+                          </span>
+                        </Link>
+                        <span className="text-xs text-slate-500">{offer.industry}</span>
+                      </div>
                     </div>
 
                     <span

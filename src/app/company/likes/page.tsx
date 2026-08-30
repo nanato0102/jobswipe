@@ -82,19 +82,42 @@ export default function CompanyLikesPage() {
                 className="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow p-5 flex flex-col justify-between"
               >
                 <div>
-                  <div className="flex items-start justify-between mb-2">
-                    <div>
-                      <Link
-                        href={`/students/${student.studentId}`}
-                        className="text-base font-bold text-slate-900 hover:text-emerald-800 hover:underline flex items-center gap-1.5 group"
-                      >
-                        <User className="w-4 h-4 text-slate-500 group-hover:text-emerald-700" />
-                        <span>{student.studentName}</span>
-                        <span className="text-[11px] font-normal text-emerald-700 opacity-0 group-hover:opacity-100 transition-opacity">
-                          (詳細・動画 →)
-                        </span>
-                      </Link>
-                      <p className="text-xs text-slate-500">{student.university}</p>
+                  <div className="flex items-start justify-between mb-3 gap-2">
+                    <div className="flex items-center gap-3">
+                      {(() => {
+                        const sDetail = appStore.getStudentDetails(student.studentId);
+                        if (sDetail?.avatarUrl) {
+                          return (
+                            <div className="w-11 h-11 rounded-xl overflow-hidden border border-slate-200 bg-slate-100 shadow-2xs flex-shrink-0">
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img src={sDetail.avatarUrl} alt={student.studentName} className="w-full h-full object-cover" />
+                            </div>
+                          );
+                        }
+                        const isFemale = sDetail?.gender === "FEMALE" || student.studentName.includes("美咲");
+                        return (
+                          <div
+                            className={`w-11 h-11 rounded-xl font-black text-base flex items-center justify-center shadow-2xs flex-shrink-0 text-white ${
+                              isFemale ? "bg-rose-500" : "bg-blue-600"
+                            }`}
+                          >
+                            <span>{student.studentName.slice(0, 1) || "学"}</span>
+                          </div>
+                        );
+                      })()}
+
+                      <div>
+                        <Link
+                          href={`/students/${student.studentId}`}
+                          className="text-base font-bold text-slate-900 hover:text-emerald-800 hover:underline flex items-center gap-1.5 group"
+                        >
+                          <span>{student.studentName}</span>
+                          <span className="text-[11px] font-normal text-emerald-700 opacity-0 group-hover:opacity-100 transition-opacity">
+                            (詳細・動画 →)
+                          </span>
+                        </Link>
+                        <p className="text-xs text-slate-500">{student.university}</p>
+                      </div>
                     </div>
                     <span className="text-xs bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-full flex items-center gap-1 font-medium">
                       <GraduationCap className="w-3 h-3" />

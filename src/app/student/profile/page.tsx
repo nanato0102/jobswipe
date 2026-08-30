@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import RoleGuard from "@/components/RoleGuard";
 import StudentMobileTabs from "@/components/StudentMobileTabs";
+import { appStore } from "@/lib/appStore";
 import {
   User,
   GraduationCap,
@@ -127,6 +128,10 @@ export default function StudentProfilePage() {
   const { session, login } = useAuth();
   const [activeTab, setActiveTab] = useState<"basic" | "tags">("basic");
 
+  // 性別・アバター
+  const [gender, setGender] = useState<"MALE" | "FEMALE" | "OTHER">("MALE");
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+
   // 基本情報
   const [fullName, setFullName] = useState(session?.name || "佐藤 健太");
   const [university, setUniversity] = useState("早稲田大学");
@@ -161,7 +166,31 @@ export default function StudentProfilePage() {
     if (session?.name) {
       setFullName(session.name);
     }
+    const currentStudent = appStore.getStudentDetails("s1");
+    if (currentStudent) {
+      if (currentStudent.gender) setGender(currentStudent.gender);
+      if (currentStudent.avatarUrl) setAvatarUrl(currentStudent.avatarUrl);
+      if (currentStudent.university) setUniversity(currentStudent.university);
+      if (currentStudent.graduationYear) setGraduationYear(currentStudent.graduationYear);
+      if (currentStudent.catchphrase) setCatchphrase(currentStudent.catchphrase);
+      if (currentStudent.personalityTags?.length) setPersonalityTags(currentStudent.personalityTags);
+    }
   }, [session]);
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setAvatarUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveAvatar = () => {
+    setAvatarUrl(null);
+  };
 
   const toggleLocation = (pref: string) => {
     if (selectedLocations.includes(pref)) {
@@ -177,11 +206,28 @@ export default function StudentProfilePage() {
     setSaved(false);
 
     try {
+      // 1. appStoreへ即時保存（全画面リアルタイム同期）
+      appStore.saveStudentProfile({
+        id: "s1",
+        name: fullName,
+        gender,
+        avatarUrl: avatarUrl || undefined,
+        university,
+        graduationYear,
+        catchphrase,
+        personalityTags,
+        desiredIndustries,
+        desiredLocations: selectedLocations,
+      });
+
+      // 2. サーバーAPI呼び出し
       await fetch("/api/profile/student", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           fullName,
+          gender,
+          avatarUrl,
           university,
           graduationYear,
           bio: catchphrase,
@@ -336,6 +382,98 @@ export default function StudentProfilePage() {
             {/* ================= タブ1: 基本情報・大学 ================= */}
             {activeTab === "basic" && (
               <div className="space-y-5">
+                {/* プロフィール写真（四角切り抜き）＆ 性別設定 */}
+                <div className="p-4 sm:p-5 bg-slate-50 border border-slate-200 rounded-2xl space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                    {/* 四角アバタープレビュー */}
+                    <div className="flex-shrink-0 flex items-center gap-4">
+                      {avatarUrl ? (
+                        <div className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-slate-300 shadow-md bg-slate-100 flex-shrink-0">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={avatarUrl} alt="プロフィール写真" className="w-full h-full object-cover" />
+                        </div>
+                      ) : (
+                        <div
+                          className={`w-20 h-20 rounded-2xl flex items-center justify-center font-black text-2xl shadow-md flex-shrink-0 text-white transition-colors ${
+                            gender === "FEMALE"
+                              ? "bg-rose-500"
+                              : gender === "MALE"
+                              ? "bg-blue-600"
+                              : "bg-emerald-700"
+                          }`}
+                        >
+                          <span>{fullName.slice(0, 1) || "学"}</span>
+                        </div>
+                      )}
+
+                      <div className="space-y-1.5">
+                        <p className="text-xs font-bold text-slate-800">プロフィール写真（四角切り抜き）</p>
+                        <p className="text-[11px] text-slate-500">未設定時は性別カラーの四角バッジが表示されます</p>
+                        <div className="flex items-center gap-2 pt-0.5">
+                          <label className="cursor-pointer px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 text-xs font-bold rounded-xl shadow-2xs transition-colors inline-block">
+                            <span>写真を選択</span>
+                            <input type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" />
+                          </label>
+                          {avatarUrl && (
+                            <button
+                              type="button"
+                              onClick={handleRemoveAvatar}
+                              className="px-2.5 py-1.5 text-xs text-rose-600 hover:text-rose-700 hover:underline font-bold"
+                            >
+                              削除
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 性別選択 */}
+                  <div className="pt-3 border-t border-slate-200">
+                    <label className="block text-xs font-bold text-slate-700 mb-2">性別（アイコン色に反映）</label>
+                    <div className="grid grid-cols-3 gap-2 sm:max-w-md">
+                      <button
+                        type="button"
+                        onClick={() => setGender("MALE")}
+                        className={`py-2 px-3 text-xs font-bold rounded-xl border transition-all flex items-center justify-center gap-1.5 ${
+                          gender === "MALE"
+                            ? "border-blue-600 bg-blue-50 text-blue-900 ring-2 ring-blue-600/30"
+                            : "border-slate-200 bg-white text-slate-600 hover:border-blue-300"
+                        }`}
+                      >
+                        <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+                        <span>男性 (青)</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setGender("FEMALE")}
+                        className={`py-2 px-3 text-xs font-bold rounded-xl border transition-all flex items-center justify-center gap-1.5 ${
+                          gender === "FEMALE"
+                            ? "border-rose-500 bg-rose-50 text-rose-900 ring-2 ring-rose-500/30"
+                            : "border-slate-200 bg-white text-slate-600 hover:border-rose-300"
+                        }`}
+                      >
+                        <span className="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                        <span>女性 (ピンク)</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setGender("OTHER")}
+                        className={`py-2 px-3 text-xs font-bold rounded-xl border transition-all flex items-center justify-center gap-1.5 ${
+                          gender === "OTHER"
+                            ? "border-slate-800 bg-slate-100 text-slate-900 ring-2 ring-slate-800/30"
+                            : "border-slate-200 bg-white text-slate-600 hover:border-slate-300"
+                        }`}
+                      >
+                        <span className="w-2.5 h-2.5 rounded-full bg-slate-500"></span>
+                        <span>その他</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">氏名</label>
                   <input

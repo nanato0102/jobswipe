@@ -510,14 +510,39 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
         <div className="hidden lg:flex lg:col-span-5 flex-col bg-white rounded-3xl border border-slate-200 shadow-xl p-6 h-[74vh] min-h-[580px] max-h-[720px] overflow-y-auto space-y-5">
           <div className="border-b border-slate-100 pb-4">
             <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                  <User className="w-5 h-5 text-emerald-700" />
-                  <span>{currentVideo.student?.fullName || "学生ユーザー"}</span>
-                </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  {currentVideo.student?.university} • {currentVideo.student?.graduationYear}年卒
-                </p>
+              <div className="flex items-center gap-3">
+                {(() => {
+                  const sId = currentVideo.student?.id || currentVideo.studentId || "s1";
+                  const sDetail = appStore.getStudentDetails(sId);
+                  const name = currentVideo.student?.fullName || "学生ユーザー";
+                  if (sDetail?.avatarUrl) {
+                    return (
+                      <div className="w-12 h-12 rounded-xl overflow-hidden border border-slate-200 bg-slate-100 shadow-2xs flex-shrink-0">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={sDetail.avatarUrl} alt={name} className="w-full h-full object-cover" />
+                      </div>
+                    );
+                  }
+                  const isFemale = sDetail?.gender === "FEMALE" || name.includes("美咲");
+                  return (
+                    <div
+                      className={`w-12 h-12 rounded-xl font-black text-lg flex items-center justify-center shadow-2xs flex-shrink-0 text-white ${
+                        isFemale ? "bg-rose-500" : "bg-blue-600"
+                      }`}
+                    >
+                      <span>{name.slice(0, 1) || "学"}</span>
+                    </div>
+                  );
+                })()}
+
+                <div>
+                  <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <span>{currentVideo.student?.fullName || "学生ユーザー"}</span>
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    {currentVideo.student?.university} • {currentVideo.student?.graduationYear}年卒
+                  </p>
+                </div>
               </div>
 
               <button

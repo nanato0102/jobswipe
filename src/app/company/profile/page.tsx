@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import RoleGuard from "@/components/RoleGuard";
 import CompanyMobileTabs from "@/components/CompanyMobileTabs";
 import { useAuth } from "@/context/AuthContext";
+import { appStore } from "@/lib/appStore";
 import {
   Building2,
   Globe,
@@ -19,13 +20,14 @@ import {
 
 export default function CompanyProfilePage() {
   const { session, login } = useAuth();
-  const [companyName, setCompanyName] = useState(session?.name || "株式会社サイバー・イノベーション");
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  const [companyName, setCompanyName] = useState(session?.name || "テックイノベーション株式会社");
   const [industry, setIndustry] = useState("IT / Webサービス");
   const [representative, setRepresentative] = useState("代表取締役 田中 健一");
-  const [establishedYear, setEstablishedYear] = useState("2018");
-  const [employeesCount, setEmployeesCount] = useState("150名");
-  const [location, setLocation] = useState("東京都渋谷区道玄坂1-2-3 渋谷イノベーションタワー14F");
-  const [websiteUrl, setWebsiteUrl] = useState("https://example.com");
+  const [establishedYear, setEstablishedYear] = useState("2020");
+  const [employeesCount, setEmployeesCount] = useState("120名");
+  const [location, setLocation] = useState("東京都渋谷区道玄坂1丁目 渋谷イノベーションタワー14F");
+  const [websiteUrl, setWebsiteUrl] = useState("https://example.com/tech-innovations");
   const [description, setDescription] = useState(
     "「テクノロジーで次世代の当たり前を創る」をミッションに、急成長中の自社SaaSプロダクトおよびAIソリューションを展開するメガベンチャーです。若手社員が裁量を持って挑戦できるフラットな組織風土が特徴です。"
   );
@@ -41,7 +43,30 @@ export default function CompanyProfilePage() {
     if (session?.name) {
       setCompanyName(session.name);
     }
+    const currentCompany = appStore.getCompanyDetails("c1");
+    if (currentCompany) {
+      if (currentCompany.logoUrl) setLogoUrl(currentCompany.logoUrl);
+      if (currentCompany.name) setCompanyName(currentCompany.name);
+      if (currentCompany.industry) setIndustry(currentCompany.industry);
+      if (currentCompany.location) setLocation(currentCompany.location);
+      if (currentCompany.description) setDescription(currentCompany.description);
+    }
   }, [session]);
+
+  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setLogoUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveLogo = () => {
+    setLogoUrl(null);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,7 +74,20 @@ export default function CompanyProfilePage() {
     setSaved(false);
 
     try {
-      // 企業プロフィールの保存処理
+      // 1. appStoreへ即時保存（全画面リアルタイム同期）
+      appStore.saveCompanyProfile({
+        id: "c1",
+        name: companyName,
+        industry,
+        logoUrl: logoUrl || undefined,
+        location,
+        description,
+        websiteUrl,
+        employees: employeesCount,
+        established: establishedYear,
+      });
+
+      // 2. AuthContext セッション更新
       if (session) {
         login({ ...session, name: companyName });
       }
@@ -102,6 +140,45 @@ export default function CompanyProfilePage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* 企業ロゴ画像（四角切り抜き・自動フィット） */}
+            <div className="p-4 sm:p-5 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                {/* 四角ロゴプレビュー */}
+                <div className="flex-shrink-0 flex items-center gap-4">
+                  {logoUrl ? (
+                    <div className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-slate-300 shadow-md bg-white flex items-center justify-center p-1.5 flex-shrink-0">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={logoUrl} alt="企業ロゴ" className="max-w-full max-h-full object-contain" />
+                    </div>
+                  ) : (
+                    <div className="w-20 h-20 rounded-2xl bg-slate-900 text-emerald-400 font-black text-2xl shadow-md flex items-center justify-center flex-shrink-0 border-2 border-slate-800">
+                      <span>{companyName.slice(0, 1) || "企"}</span>
+                    </div>
+                  )}
+
+                  <div className="space-y-1.5">
+                    <p className="text-xs font-bold text-slate-800">企業ロゴ画像（四角切り抜き・自動フィット）</p>
+                    <p className="text-[11px] text-slate-500">チャット、企業詳細ページ、オファー一覧で表示されます</p>
+                    <div className="flex items-center gap-2 pt-0.5">
+                      <label className="cursor-pointer px-3.5 py-1.5 bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 text-xs font-bold rounded-xl shadow-2xs transition-colors inline-block">
+                        <span>ロゴを選択</span>
+                        <input type="file" accept="image/*" onChange={handleLogoChange} className="hidden" />
+                      </label>
+                      {logoUrl && (
+                        <button
+                          type="button"
+                          onClick={handleRemoveLogo}
+                          className="px-2.5 py-1.5 text-xs text-rose-600 hover:text-rose-700 hover:underline font-bold"
+                        >
+                          削除
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* 基本情報 */}
             <div className="space-y-4">
               <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5 border-b border-slate-100 pb-2">

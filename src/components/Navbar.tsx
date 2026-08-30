@@ -276,17 +276,50 @@ export default function Navbar() {
                 className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-lg border border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-all focus:outline-none"
                 aria-expanded={menuOpen}
               >
-                <span
-                  className={`text-[10px] px-2 py-0.5 rounded-md font-bold shadow-2xs ${
-                    isStudent
-                      ? "bg-emerald-100 text-emerald-800 border border-emerald-200"
-                      : isCompany
-                      ? "bg-blue-100 text-blue-800 border border-blue-200"
-                      : "bg-slate-900 text-white"
-                  }`}
-                >
-                  {isStudent ? "学生" : isCompany ? "企業" : "管理者"}
-                </span>
+                {isCompany ? (
+                  (() => {
+                    const c = appStore.getCompanyDetails("c1");
+                    if (c?.logoUrl) {
+                      return (
+                        <div className="w-6 h-6 rounded-lg overflow-hidden border border-slate-200 bg-white flex items-center justify-center p-0.5 shadow-2xs flex-shrink-0">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={c.logoUrl} alt="Logo" className="max-w-full max-h-full object-contain" />
+                        </div>
+                      );
+                    }
+                    return (
+                      <span className="text-[10px] px-2 py-0.5 rounded-md font-bold shadow-2xs bg-blue-100 text-blue-800 border border-blue-200">
+                        企業
+                      </span>
+                    );
+                  })()
+                ) : isStudent ? (
+                  (() => {
+                    const s = appStore.getStudentDetails("s1");
+                    if (s?.avatarUrl) {
+                      return (
+                        <div className="w-6 h-6 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shadow-2xs flex-shrink-0">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={s.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                        </div>
+                      );
+                    }
+                    const isFemale = s?.gender === "FEMALE";
+                    return (
+                      <span
+                        className={`text-[10px] px-2 py-0.5 rounded-md font-bold shadow-2xs text-white ${
+                          isFemale ? "bg-rose-500" : "bg-blue-600"
+                        }`}
+                      >
+                        {isFemale ? "学生 ♀" : "学生 ♂"}
+                      </span>
+                    );
+                  })()
+                ) : (
+                  <span className="text-[10px] px-2 py-0.5 rounded-md font-bold shadow-2xs bg-slate-900 text-white">
+                    管理者
+                  </span>
+                )}
 
                 <span className="text-xs sm:text-sm font-bold text-slate-800 max-w-[100px] sm:max-w-[150px] truncate">
                   {session?.name || session?.email}

@@ -123,6 +123,7 @@ export interface CompanyDetail {
   name: string;
   industry: string;
   logoText: string;
+  logoUrl?: string;
   catchphrase: string;
   description: string;
   culture: string[];
@@ -137,10 +138,12 @@ export interface CompanyDetail {
 export interface StudentDetail {
   id: string;
   name: string;
+  gender: "MALE" | "FEMALE" | "OTHER";
   university: string;
   faculty: string;
   graduationYear: number;
   avatarText: string;
+  avatarUrl?: string;
   catchphrase: string;
   bio: string;
   personalityTags: string[];
@@ -580,12 +583,24 @@ export const appStore = {
 
   // 企業詳細情報マスタ取得
   getCompanyDetails: (companyId: string): CompanyDetail => {
+    let savedLogo: string | undefined = undefined;
+    if (typeof window !== "undefined") {
+      const custom = localStorage.getItem(`jobswipe_company_profile_${companyId}`);
+      if (custom) {
+        try {
+          return JSON.parse(custom);
+        } catch {}
+      }
+      savedLogo = localStorage.getItem(`jobswipe_company_logo_${companyId}`) || undefined;
+    }
+
     const companies: Record<string, CompanyDetail> = {
       c1: {
         id: "c1",
         name: "テックイノベーション株式会社",
         industry: "IT・Webサービス / SaaS",
         logoText: "テ",
+        logoUrl: savedLogo,
         catchphrase: "テクノロジーで次世代の社会インフラを再定義する",
         description:
           "テックイノベーションは、独自のクラウドSaaSプラットフォームおよびAI活用ソリューションを展開する急成長ITベンチャーです。若手メンバーが主導権を持ってプロダクト開発・事業推進を行っており、失敗を恐れずスピード感を持って挑戦する文化が根付いています。",
@@ -627,6 +642,7 @@ export const appStore = {
         name: "グローバルコンサルティング合同会社",
         industry: "総合コンサルティング / 戦略",
         logoText: "グ",
+        logoUrl: savedLogo,
         catchphrase: "グローバル企業の変革を加速するプロフェッショナルファーム",
         description:
           "国内外の大手企業を対象に、DX推進・グローバル展開・組織改革などの高付加価値コンサルティングサービスを提供しています。多国籍なメンバーが所属し、英語力を活かした案件も多数展開しています。",
@@ -659,6 +675,7 @@ export const appStore = {
         name: "ネクストフューチャー株式会社",
         industry: "ベンチャー・スタートアップ / メディア",
         logoText: "ネ",
+        logoUrl: savedLogo,
         catchphrase: "Z世代の熱量で、次のスタンダードを創り出す",
         description:
           "SNSマーケティング、クリエイターエコノミー支援、自社メディア事業を展開するスタートアップです。社員の8割が20代で、カルチャーマッチと情熱を最重視した採用を行っています。",
@@ -694,6 +711,7 @@ export const appStore = {
         name: "登録企業",
         industry: "IT / サービス",
         logoText: "企",
+        logoUrl: savedLogo,
         catchphrase: "人柄を重視した新卒採用を推進中",
         description: "JobSwipeを通じて意欲的な学生との出会いを創出しています。",
         culture: ["フラットな社風", "挑戦を歓迎する環境"],
@@ -715,16 +733,47 @@ export const appStore = {
     );
   },
 
+  // 企業プロフィール保存
+  saveCompanyProfile: (profile: Partial<CompanyDetail> & { id: string }) => {
+    if (typeof window === "undefined") return;
+    const existing = appStore.getCompanyDetails(profile.id);
+    const updated = { ...existing, ...profile };
+    localStorage.setItem(`jobswipe_company_profile_${profile.id}`, JSON.stringify(updated));
+    if (profile.logoUrl) {
+      localStorage.setItem(`jobswipe_company_logo_${profile.id}`, profile.logoUrl);
+    }
+    window.dispatchEvent(new CustomEvent("jobswipe_sync", { detail: { type: "COMPANY_UPDATED", company: updated } }));
+  },
+
   // 学生詳細情報マスタ取得
   getStudentDetails: (studentId: string): StudentDetail => {
+    let savedAvatar: string | undefined = undefined;
+    let savedGender: "MALE" | "FEMALE" | "OTHER" | undefined = undefined;
+
+    if (typeof window !== "undefined") {
+      const custom = localStorage.getItem(`jobswipe_student_profile_${studentId}`);
+      if (custom) {
+        try {
+          return JSON.parse(custom);
+        } catch {}
+      }
+      savedAvatar = localStorage.getItem(`jobswipe_student_avatar_${studentId}`) || undefined;
+      const g = localStorage.getItem(`jobswipe_student_gender_${studentId}`);
+      if (g === "MALE" || g === "FEMALE" || g === "OTHER") {
+        savedGender = g;
+      }
+    }
+
     const students: Record<string, StudentDetail> = {
       s1: {
         id: "s1",
         name: "佐藤 健太",
+        gender: savedGender || "MALE",
         university: "早稲田大学",
         faculty: "商学部 3年",
         graduationYear: 2027,
         avatarText: "佐",
+        avatarUrl: savedAvatar,
         catchphrase: "体育会サッカー部主将。チームを巻き込む推進力と愚直な行動力が武器です！",
         bio: "体育会サッカー部で100名規模の組織主将を務めています。「誰よりも声を出し、背中で引っ張る」を行動指針に、部員一人ひとりと対話を重ねながらリーグ昇格を果たしました。ビジネスの現場でも、失敗を恐れず主体的に行動し、周囲をポジティブに巻き込めるリーダーを目指しています。",
         personalityTags: ["リーダーシップ", "体育会系", "行動力", "粘り強さ", "ポジティブ", "チームワーク"],
@@ -738,10 +787,12 @@ export const appStore = {
       s2: {
         id: "s2",
         name: "高橋 美咲",
+        gender: savedGender || "FEMALE",
         university: "慶應義塾大学",
         faculty: "総合政策学部 3年",
         graduationYear: 2027,
         avatarText: "高",
+        avatarUrl: savedAvatar,
         catchphrase: "SNSマーケティング長期インターンで月間100万PV達成！探求心と笑顔が強みです。",
         bio: "大学1年次よりSNSマーケティングベンチャーでインターンを行い、TikTok・Instagramの企画・分析を担当。ユーザーの心理を徹底的に分析し、再現性のあるコンテンツ設計を実践してきました。誠実なコミュニケーションと笑顔で、相手の懐に飛び込むことが得意です。",
         personalityTags: ["探求心", "笑顔", "コミュニケーション力", "素直さ", "企画提案力"],
@@ -755,10 +806,12 @@ export const appStore = {
       s3: {
         id: "s3",
         name: "伊藤 翼",
+        gender: savedGender || "MALE",
         university: "明治大学",
         faculty: "経営学部 2年",
         graduationYear: 2028,
         avatarText: "伊",
+        avatarUrl: savedAvatar,
         catchphrase: "留学経験と国際交流イベント主催。多様性を受け入れ自ら先頭を走る行動派！",
         bio: "カナダへの1年間留学を経て、大学では留学生支援イベントを企画・運営。言語やバックグラウンドの異なるメンバーと協働し、信頼関係を築いてきました。物事をポジティブに捉え、困難な状況でも周囲を明るく鼓舞することができます。",
         personalityTags: ["英語対応可", "行動力", "ポジティブ", "傾聴力", "チャレンジ精神"],
@@ -775,10 +828,12 @@ export const appStore = {
       students[studentId] || {
         id: studentId,
         name: "候補者",
+        gender: savedGender || "MALE",
         university: "大学情報",
         faculty: "学部未設定",
         graduationYear: 2027,
         avatarText: "学",
+        avatarUrl: savedAvatar,
         catchphrase: "動画で人柄と熱量をアピール中！",
         bio: "自己PR動画を投稿しています。ぜひ動画をご覧ください。",
         personalityTags: ["行動力", "ポジティブ", "笑顔"],
@@ -790,6 +845,21 @@ export const appStore = {
         videoLikes: 10,
       }
     );
+  },
+
+  // 学生プロフィール保存
+  saveStudentProfile: (profile: Partial<StudentDetail> & { id: string }) => {
+    if (typeof window === "undefined") return;
+    const existing = appStore.getStudentDetails(profile.id);
+    const updated = { ...existing, ...profile };
+    localStorage.setItem(`jobswipe_student_profile_${profile.id}`, JSON.stringify(updated));
+    if (profile.avatarUrl) {
+      localStorage.setItem(`jobswipe_student_avatar_${profile.id}`, profile.avatarUrl);
+    }
+    if (profile.gender) {
+      localStorage.setItem(`jobswipe_student_gender_${profile.id}`, profile.gender);
+    }
+    window.dispatchEvent(new CustomEvent("jobswipe_sync", { detail: { type: "STUDENT_UPDATED", student: updated } }));
   },
 
   // 気になる関連
