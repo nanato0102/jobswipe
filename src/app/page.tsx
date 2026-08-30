@@ -60,8 +60,8 @@ export default function HomePage() {
       a: "はい、マイページから何度でも納得いくまで撮り直し・更新が可能です。就活の進捗や新たな挑戦に合わせていつでも最新のPR動画にアップデートできます。",
     },
     {
-      q: "学生の利用料金は本当にかかりませんか？",
-      a: "はい、学生の方は新規登録、動画投稿、オファー受信、チャット面談まですべて完全無料でご利用いただけます。",
+      q: "利用料金は本当にかかりませんか？",
+      a: "はい、求職者・学生の方は新規登録、動画投稿、オファー受信、チャット面談まですべて完全無料でご利用いただけます。",
     },
     {
       q: "投稿した動画がSNSのように勝手に一般公開・拡散される心配はありませんか？",
@@ -221,7 +221,7 @@ export default function HomePage() {
                   }`}
                 >
                   <User className="w-3.5 h-3.5 flex-shrink-0" />
-                  <span className="truncate">学生（動画投稿）</span>
+                  <span className="truncate">求職・動画投稿</span>
                 </button>
 
                 <button
@@ -234,7 +234,7 @@ export default function HomePage() {
                   }`}
                 >
                   <Building2 className="w-3.5 h-3.5 flex-shrink-0" />
-                  <span className="truncate">企業（スワイプ）</span>
+                  <span className="truncate">採用企業（スワイプ）</span>
                 </button>
               </div>
             </div>
@@ -370,7 +370,7 @@ export default function HomePage() {
               </span>
               <h2 className="text-3xl sm:text-4xl font-black text-white">
                 <span className="inline-block">会ってガッカリをゼロに。</span><br className="hidden sm:inline" />
-                <span className="text-emerald-400 inline-block">直感スワイプで即戦力をハックする。</span>
+                <span className="text-emerald-400 inline-block">直感スワイプで自社に合う人材を最速採用。</span>
               </h2>
               <p className="text-xs sm:text-sm text-slate-400">
                 <span className="inline-block">書類選考の工数を劇的に削減し、</span>
