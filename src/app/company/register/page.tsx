@@ -32,7 +32,7 @@ export default function CompanyRegisterPage() {
   const [department, setDepartment] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [targetHiring, setTargetHiring] = useState("2026年卒・2027年卒");
+  const [hiringPurpose, setHiringPurpose] = useState("新卒採用（本選考・早期選考）");
   const [planType, setPlanType] = useState("無料トライアル希望（デモ体験）");
   const [message, setMessage] = useState("");
   const [agreed, setAgreed] = useState(false);
@@ -83,7 +83,7 @@ export default function CompanyRegisterPage() {
         department: department.trim() || "採用担当",
         phone: phone.trim(),
         inquiryType: "企業利用・トライアルお申し込み",
-        message: `【希望プラン】${planType}\n【採用対象】${targetHiring}\n【業種】${industry}\n【ご要望・質問】\n${message.trim() || "特になし"}`,
+        message: `【ご利用目的】${hiringPurpose}\n【希望プラン】${planType}\n【業種】${industry}\n【ご要望・質問】\n${message.trim() || "特になし"}`,
       });
 
       setSubmittedRequestNumber(createdInquiry.receiptNumber);
@@ -368,21 +368,25 @@ export default function CompanyRegisterPage() {
               <div className="space-y-3">
                 <h3 className="text-xs font-bold text-slate-900 flex items-center gap-1.5 border-b border-slate-100 pb-1.5">
                   <Sparkles className="w-4 h-4 text-slate-600" />
-                  <span>採用対象・ご希望プラン</span>
+                  <span>ご利用目的・ご希望プラン</span>
                 </h3>
 
                 <div className="grid sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">主な採用対象</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      ご利用の目的・採用種別 <span className="text-rose-500">*</span>
+                    </label>
                     <select
-                      value={targetHiring}
-                      onChange={(e) => setTargetHiring(e.target.value)}
+                      value={hiringPurpose}
+                      onChange={(e) => setHiringPurpose(e.target.value)}
                       className="w-full text-xs sm:text-sm border border-slate-300 rounded-xl px-3.5 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 bg-white"
                     >
-                      <option value="2026年卒・2027年卒">2026年卒・2027年卒（新卒採用）</option>
-                      <option value="2028年卒以降（インターン採用）">2028年卒以降（早期インターン）</option>
+                      <option value="新卒採用（本選考・早期選考）">新卒採用（本選考・早期選考）</option>
+                      <option value="サマー / 秋冬インターンシップ募集">サマー / 秋冬インターンシップ募集</option>
+                      <option value="長期インターンシップ採用（通年）">長期インターンシップ採用（通年）</option>
+                      <option value="新卒・インターン両方の採用">新卒・インターン両方の採用</option>
                       <option value="第二新卒・中途採用">第二新卒・中途採用</option>
-                      <option value="新卒・中途両方">新卒・中途両方</option>
+                      <option value="その他・まずは情報収集">その他・まずは情報収集</option>
                     </select>
                   </div>
 
