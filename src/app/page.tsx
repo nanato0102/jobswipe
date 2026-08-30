@@ -117,7 +117,7 @@ export default function HomePage() {
               className="w-full sm:w-auto px-9 py-4 text-base font-bold text-white bg-emerald-600 hover:bg-emerald-500 active:scale-95 rounded-2xl transition-all shadow-[0_10px_25px_rgba(5,150,105,0.3)] hover:shadow-[0_15px_35px_rgba(5,150,105,0.5)] hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
             >
               <User className="h-5 w-5 flex-shrink-0" />
-              <span>[学生] 無料でスカウトを受け取る</span>
+              <span>無料でスカウトを受け取る</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 flex-shrink-0" />
             </Link>
 
@@ -126,7 +126,7 @@ export default function HomePage() {
               className="w-full sm:w-auto px-8 py-4 text-base font-bold text-slate-200 bg-[#141B2D] hover:bg-[#1D263F] hover:text-white border border-slate-700/80 hover:border-emerald-500/50 hover:-translate-y-0.5 rounded-2xl transition-all flex items-center justify-center gap-2 shadow-sm"
             >
               <Building2 className="h-5 w-5 text-emerald-400 flex-shrink-0" />
-              <span>[企業] 候補者をスワイプする</span>
+              <span>採用企業様 ログイン・利用申込</span>
             </Link>
           </div>
 
@@ -642,7 +642,7 @@ export default function HomePage() {
                 className="w-full sm:w-auto px-9 py-4 bg-emerald-600 hover:bg-emerald-500 text-white text-base font-bold rounded-2xl shadow-[0_10px_25px_rgba(5,150,105,0.3)] hover:shadow-[0_15px_35px_rgba(5,150,105,0.5)] transition-all active:scale-95 hover:-translate-y-0.5 flex items-center justify-center gap-2"
               >
                 <User className="h-5 w-5 flex-shrink-0" />
-                <span>今すぐ学生新規登録（完全無料）</span>
+                <span>今すぐ無料登録してスカウトを受け取る</span>
                 <ArrowRight className="w-5 h-5 flex-shrink-0" />
               </Link>
 
@@ -689,7 +689,7 @@ export default function HomePage() {
               <ul className="space-y-2 text-xs text-slate-400">
                 <li>
                   <Link href="/register" className="hover:text-emerald-400 transition-colors">
-                    学生 新規会員登録（無料）
+                    新規会員登録（スカウトを受け取る）
                   </Link>
                 </li>
                 <li>
@@ -699,7 +699,7 @@ export default function HomePage() {
                 </li>
                 <li>
                   <Link href="/company/register" className="hover:text-emerald-400 transition-colors">
-                    企業 新規アカウント開設
+                    企業 利用お申し込み（無料体験）
                   </Link>
                 </li>
                 <li>

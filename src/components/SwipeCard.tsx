@@ -161,6 +161,38 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
     touchEndY.current = null;
   };
 
+  // キーボードショートカット（PC操作性向上: ↑↓, J/K, Space, L）
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // テキスト入力中またはモーダルオープン中はキーボードショートカットを無効化
+      if (
+        document.activeElement?.tagName === "INPUT" ||
+        document.activeElement?.tagName === "TEXTAREA" ||
+        isOfferModalOpen ||
+        isProfileModalOpen
+      ) {
+        return;
+      }
+
+      if (e.key === "ArrowDown" || e.key === "j" || e.key === "J") {
+        e.preventDefault();
+        handleNext();
+      } else if (e.key === "ArrowUp" || e.key === "k" || e.key === "K") {
+        e.preventDefault();
+        handlePrev();
+      } else if (e.key === " ") {
+        e.preventDefault();
+        togglePlay();
+      } else if (e.key === "l" || e.key === "L") {
+        e.preventDefault();
+        handleLike();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [currentIndex, isPlaying, isOfferModalOpen, isProfileModalOpen, currentVideo]);
+
   // タップで再生 / 一時停止
   const togglePlay = () => {
     if (!videoRef.current) return;

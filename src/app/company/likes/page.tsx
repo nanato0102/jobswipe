@@ -66,7 +66,7 @@ export default function CompanyLikesPage() {
           <div className="bg-white p-12 rounded-xl border border-slate-200 text-center text-slate-500 text-sm shadow-sm space-y-3">
             <Sparkles className="w-10 h-10 text-slate-400 mx-auto" />
             <p className="font-bold text-slate-700">気になる学生はまだいません</p>
-            <p className="text-xs text-slate-400">動画スワイプ画面で「❤️ 気になる」を押すとここにストックされます。</p>
+            <p className="text-xs text-slate-400">動画スワイプ画面で「気になる（Like）」を押すとここにストックされます。</p>
             <Link
               href="/swipe"
               className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-sm"

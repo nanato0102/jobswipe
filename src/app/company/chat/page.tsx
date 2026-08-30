@@ -141,7 +141,8 @@ function ChatContent() {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+    if (e.nativeEvent.isComposing) return;
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSend();
     }
@@ -561,7 +562,7 @@ function ChatContent() {
                           value={inputText}
                           onChange={(e) => setInputText(e.target.value)}
                           onKeyDown={handleKeyDown}
-                          placeholder={`${currentThread.partnerName} へのメッセージを入力... (Ctrl+Enter で送信)`}
+                          placeholder={`${currentThread.partnerName} へのメッセージを入力... (Enterで送信 / Shift+Enterで改行)`}
                           className="w-full text-xs sm:text-sm border border-slate-300 rounded-lg p-2.5 sm:p-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 leading-relaxed resize-none break-words pr-10"
                         />
 
