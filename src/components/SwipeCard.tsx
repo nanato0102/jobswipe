@@ -250,7 +250,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
-          className="lg:col-span-7 w-full max-w-full sm:max-w-md mx-auto bg-black text-white rounded-xl overflow-hidden shadow-2xl border border-slate-800 flex flex-col h-[70dvh] sm:h-[74vh] min-h-[480px] sm:min-h-[580px] max-h-[720px] relative"
+          className="lg:col-span-7 w-full max-w-full sm:max-w-md mx-auto bg-black text-white rounded-xl overflow-hidden shadow-2xl border border-slate-800 flex flex-col h-[70dvh] sm:h-[74vh] min-h-[480px] sm:min-h-[580px] max-h-[720px] relative touch-pan-y select-none"
         >
           {/* 動画表示エリア */}
           <div

@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import RoleGuard from "@/components/RoleGuard";
 import StudentMobileTabs from "@/components/StudentMobileTabs";
 import { appStore, StudentVideoStats } from "@/lib/appStore";
+import { useToast } from "@/context/ToastContext";
 import {
   Film,
   UploadCloud,
@@ -20,6 +21,7 @@ import {
   TrendingUp,
   BarChart3,
   Send,
+  Clock,
 } from "lucide-react";
 
 interface UploadedVideoItem {
@@ -32,9 +34,11 @@ interface UploadedVideoItem {
   viewsCount?: number;
   likesCount?: number;
   offersCount?: number;
+  duration?: number;
 }
 
 export default function StudentVideoUploadPage() {
+  const { success, error: toastError, info } = useToast();
   const [stats, setStats] = useState<StudentVideoStats | null>(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -43,6 +47,7 @@ export default function StudentVideoUploadPage() {
 
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
+  const [videoDuration, setVideoDuration] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
@@ -89,15 +94,42 @@ export default function StudentVideoUploadPage() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+
+      // 1. ファイルサイズチェック（最大100MB）
+      const maxSizeBytes = 100 * 1024 * 1024;
+      if (file.size > maxSizeBytes) {
+        toastError(
+          "動画サイズが大きすぎます",
+          "アップロードできる動画は100MB以下にしてください。"
+        );
+        handleClearSelectedVideo();
+        return;
+      }
+
       setVideoFile(file);
       const url = URL.createObjectURL(file);
       setVideoPreview(url);
+
+      // 2. 動画の長さ（尺）をメタデータから取得（60秒以内推奨）
+      const tempVideo = document.createElement("video");
+      tempVideo.src = url;
+      tempVideo.onloadedmetadata = () => {
+        const sec = Math.round(tempVideo.duration);
+        setVideoDuration(sec);
+        if (sec > 65) {
+          info(
+            "動画の長さについて",
+            `選択された動画は${sec}秒です。JobSwipeでは60秒以内の短尺動画が企業に最も視聴されやすいです。`
+          );
+        }
+      };
     }
   };
 
   const handleClearSelectedVideo = () => {
     setVideoFile(null);
     setVideoPreview(null);
+    setVideoDuration(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -106,7 +138,7 @@ export default function StudentVideoUploadPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!videoPreview) {
-      setStatus({ type: "error", message: "動画ファイルを選択してください。" });
+      toastError("動画を選択してください", "自己PR動画ファイルが必要です。");
       return;
     }
 
@@ -120,6 +152,7 @@ export default function StudentVideoUploadPage() {
         description: description,
         tags: tags.length > 0 ? tags : ["笑顔", "成長意欲"],
         videoUrl: videoPreview,
+        duration: videoDuration || 45,
         uploadedAt: new Date().toLocaleDateString("ja-JP", {
           year: "numeric",
           month: "long",
@@ -130,13 +163,13 @@ export default function StudentVideoUploadPage() {
       };
 
       setUploadedVideos([newVideo, ...uploadedVideos]);
-      setStatus({ type: "success", message: "自己PR動画を正常に投稿しました！企業のスワイプ画面に即時公開されます。" });
+      success("自己PR動画を正常に投稿しました！", "企業のスワイプ一覧に即時公開されました。");
       handleClearSelectedVideo();
       setTitle("");
       setDescription("");
       setTags([]);
     } catch (err: any) {
-      setStatus({ type: "error", message: "投稿に失敗しました。" });
+      toastError("投稿に失敗しました", "ネットワーク状況をお確かめください。");
     } finally {
       setLoading(false);
     }
@@ -317,11 +350,17 @@ export default function StudentVideoUploadPage() {
                     <span className="flex items-center gap-1.5 text-emerald-700">
                       <CheckCircle className="w-4 h-4" />
                       <span>選択中の動画プレビュー</span>
+                      {videoDuration !== null && (
+                        <span className="ml-1.5 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          <span>{videoDuration}秒</span>
+                        </span>
+                      )}
                     </span>
                     <button
                       type="button"
                       onClick={handleClearSelectedVideo}
-                      className="text-[11px] text-rose-600 hover:text-rose-700 hover:underline flex items-center gap-1 font-bold"
+                      className="text-[11px] text-rose-600 hover:text-rose-700 hover:underline flex items-center gap-1 font-bold cursor-pointer"
                     >
                       <X className="w-3.5 h-3.5" />
                       <span>選択解除</span>

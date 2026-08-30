@@ -53,8 +53,11 @@ input[type="radio"],
 input[type="button"],
 input[type="submit"],
 select,
-button {
+button,
+a,
+[role="button"] {
   cursor: pointer;
+  touch-action: manipulation;
 }
 
 /* ダーク背景内の入力欄用キャレット */

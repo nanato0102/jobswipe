@@ -135,6 +135,9 @@ function ChatContent() {
     setMessages((prev) => [...prev, newMsg]);
     setInputText("");
     removeSelectedFile();
+
+    // スレッド一覧の最終メッセージ＆時刻を即座に更新して同期
+    setThreads(appStore.getThreads(isStudent));
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
