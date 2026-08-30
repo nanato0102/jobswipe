@@ -110,39 +110,103 @@ export interface NotificationItem {
   createdAt: string;
 }
 
+export interface CompanyPosition {
+  title: string;
+  type: string;
+  location: string;
+  salary: string;
+  description: string;
+}
+
+export interface CompanyDetail {
+  id: string;
+  name: string;
+  industry: string;
+  logoText: string;
+  catchphrase: string;
+  description: string;
+  culture: string[];
+  seeking: string[];
+  positions: CompanyPosition[];
+  websiteUrl: string;
+  established: string;
+  employees: string;
+  location: string;
+}
+
+export interface StudentDetail {
+  id: string;
+  name: string;
+  university: string;
+  faculty: string;
+  graduationYear: number;
+  avatarText: string;
+  catchphrase: string;
+  bio: string;
+  personalityTags: string[];
+  desiredIndustries: string[];
+  desiredLocations: string[];
+  videoUrl: string;
+  videoTitle: string;
+  videoViews: number;
+  videoLikes: number;
+}
+
 const DEFAULT_OFFERS: StoredOffer[] = [
   {
-    id: "off-1",
+    id: "off-c1-s1",
     companyId: "c1",
     companyName: "テックイノベーション株式会社",
     industry: "IT・Webサービス",
     studentId: "s1",
     studentName: "佐藤 健太",
-    message: "動画を拝見しました！チームでのリーダーシップと技術への熱意に大変共感いたしました。ぜひ一度カジュアル面談でお話しさせてください。",
+    message: "動画を拝見しました！チームでのリーダーシップと技術への熱意に大変共感いたしました。弊社の新規事業推進ポジションにて、ぜひ一度カジュアル面談でお話しさせてください。",
     status: "ACCEPTED",
     createdAt: "2026/08/28 14:00",
   },
   {
-    id: "off-2",
+    id: "off-c2-s1",
     companyId: "c2",
     companyName: "グローバルコンサルティング合同会社",
     industry: "コンサルティング",
     studentId: "s1",
     studentName: "佐藤 健太",
-    message: "英語力と前向きな姿勢が弊社のグローバル案件推進にマッチすると感じました。特別選考ルートをご案内いたします。",
+    message: "英語力と前向きな姿勢が弊社のグローバル案件推進にマッチすると感じました。書類選考免除の特別選考ルートをご案内いたします。",
     status: "ACCEPTED",
     createdAt: "2026/08/25 10:30",
   },
   {
-    id: "off-3",
+    id: "off-c3-s1",
     companyId: "c3",
     companyName: "ネクストフューチャー株式会社",
     industry: "ベンチャー・スタートアップ",
     studentId: "s1",
     studentName: "佐藤 健太",
-    message: "動画の明るい人柄とチャレンジ精神に惹かれました。代表とのカジュアル面談枠を確保いたしましたので、ぜひお話ししましょう！",
+    message: "動画の明るい人柄とチャレンジ精神に強く惹かれました！代表との1on1カジュアル面談枠を確保いたしましたので、ぜひお話ししましょう！",
     status: "ACCEPTED",
     createdAt: "2026/08/29 11:00",
+  },
+  {
+    id: "off-c1-s2",
+    companyId: "c1",
+    companyName: "テックイノベーション株式会社",
+    industry: "IT・Webサービス",
+    studentId: "s2",
+    studentName: "高橋 美咲",
+    message: "動画を拝見しました！マーケティングへの高い探求心と、明るく誠実なコミュニケーション能力に大変魅力を感じております。ぜひ一度お話ししませんか？",
+    status: "ACCEPTED",
+    createdAt: "2026/08/29 09:30",
+  },
+  {
+    id: "off-c1-s3",
+    companyId: "c1",
+    companyName: "テックイノベーション株式会社",
+    industry: "IT・Webサービス",
+    studentId: "s3",
+    studentName: "伊藤 翼",
+    message: "動画での行動力と組織推進力に感銘を受けました。弊社のプロダクト開発・営業推進チームで活躍いただけると思いオファーを送らせていただきました。",
+    status: "ACCEPTED",
+    createdAt: "2026/08/26 15:20",
   },
 ];
 
@@ -221,16 +285,17 @@ const DEFAULT_COMPANY_THREADS: ChatThread[] = [
 ];
 
 const DEFAULT_MESSAGES: StoredMessage[] = [
+  // thread-c1 (学生視点: テックイノベーション)
   {
-    id: "m-1",
+    id: "m-c1-1",
     threadId: "thread-c1",
     senderRole: "COMPANY",
     senderName: "テックイノベーション株式会社",
-    content: "佐藤さん、はじめまして！動画を拝見し、明るい人柄と推進力に大変感銘を受けました。弊社の新規事業チームにて一度カジュアルにお話ししませんか？",
+    content: "佐藤さん、はじめまして！自己PR動画を拝見し、明るい人柄と推進力に大変感銘を受けました。弊社の新規事業チームにて一度カジュアルにお話ししませんか？",
     sentAt: "14:00",
   },
   {
-    id: "m-2",
+    id: "m-c1-2",
     threadId: "thread-c1",
     senderRole: "STUDENT",
     senderName: "佐藤 健太",
@@ -238,14 +303,56 @@ const DEFAULT_MESSAGES: StoredMessage[] = [
     sentAt: "14:15",
   },
   {
-    id: "m-3",
+    id: "m-c1-3",
     threadId: "thread-c1",
     senderRole: "COMPANY",
     senderName: "テックイノベーション株式会社",
     content: "ご快諾ありがとうございます！来週の平日（火曜または木曜の16:00以降など）でご都合の良い日時はございますでしょうか？",
     sentAt: "14:30",
   },
-  // thread-s1 (企業側視点での佐藤健太さんスレッド)
+  // thread-c2 (学生視点: グローバルコンサルティング)
+  {
+    id: "m-c2-1",
+    threadId: "thread-c2",
+    senderRole: "COMPANY",
+    senderName: "グローバルコンサルティング合同会社",
+    content: "佐藤さん、動画を拝見いたしました。堂々とした話し方と英語力が素晴らしく、弊社のグローバル案件で即戦力として期待しております。",
+    sentAt: "昨日 10:30",
+  },
+  {
+    id: "m-c2-2",
+    threadId: "thread-c2",
+    senderRole: "STUDENT",
+    senderName: "佐藤 健太",
+    content: "過分なお言葉をいただき光栄です！グローバルコンサルティング事業に強い興味があります。日程を調整させていただきたいです。",
+    sentAt: "昨日 11:00",
+  },
+  {
+    id: "m-c2-3",
+    threadId: "thread-c2",
+    senderRole: "COMPANY",
+    senderName: "グローバルコンサルティング合同会社",
+    content: "オファー承諾ありがとうございます。オンライン面談URLをお送りします。",
+    sentAt: "昨日 11:30",
+  },
+  // thread-c3 (学生視点: ネクストフューチャー)
+  {
+    id: "m-c3-1",
+    threadId: "thread-c3",
+    senderRole: "COMPANY",
+    senderName: "ネクストフューチャー株式会社",
+    content: "佐藤さん、初めまして！代表の藤本です。動画から溢れるエネルギーに一目惚れしました！ぜひ一度カジュアルにお話ししましょう！",
+    sentAt: "8/27 11:00",
+  },
+  {
+    id: "m-c3-2",
+    threadId: "thread-c3",
+    senderRole: "STUDENT",
+    senderName: "佐藤 健太",
+    content: "藤本代表、直接オファーをいただき感激です！ぜひ急成長中の事業やカルチャーについてお伺いしたいです！",
+    sentAt: "8/27 11:45",
+  },
+  // thread-s1 (企業視点: 佐藤健太さん)
   {
     id: "m-s1-1",
     threadId: "thread-s1",
@@ -261,6 +368,40 @@ const DEFAULT_MESSAGES: StoredMessage[] = [
     senderName: "佐藤 健太",
     content: "オファーいただき誠にありがとうございます！ぜひ一度お話しさせていただけますと幸いです。",
     sentAt: "14:15",
+  },
+  // thread-s2 (企業視点: 高橋美咲さん)
+  {
+    id: "m-s2-1",
+    threadId: "thread-s2",
+    senderRole: "COMPANY",
+    senderName: "テックイノベーション株式会社",
+    content: "高橋さん、オファーを承諾いただきありがとうございます！弊社のマーケティング職の業務内容についてご説明できればと思います。",
+    sentAt: "10:00",
+  },
+  {
+    id: "m-s2-2",
+    threadId: "thread-s2",
+    senderRole: "STUDENT",
+    senderName: "高橋 美咲",
+    content: "面談日程の件、水曜日の15:00からでお願いいたします！",
+    sentAt: "11:20",
+  },
+  // thread-s3 (企業視点: 伊藤翼さん)
+  {
+    id: "m-s3-1",
+    threadId: "thread-s3",
+    senderRole: "COMPANY",
+    senderName: "テックイノベーション株式会社",
+    content: "伊藤さん、オファーのご確認ありがとうございます！ぜひざっくばらんにお話ししましょう。",
+    sentAt: "8/26 16:00",
+  },
+  {
+    id: "m-s3-2",
+    threadId: "thread-s3",
+    senderRole: "STUDENT",
+    senderName: "伊藤 翼",
+    content: "スカウトありがとうございます。ぜひ事業内容について詳しくお聞きしたいです。",
+    sentAt: "8/26 16:30",
   },
 ];
 
@@ -363,14 +504,238 @@ export const appStore = {
   // スレッドに紐づくオファー情報を取得
   getOfferForThread: (threadId: string): StoredOffer | null => {
     const offers = appStore.getOffers();
-    // threadId が thread-c1 / thread-s1 などの形式
-    const matched = offers.find((o) => 
-      threadId === `thread-${o.companyId}` || 
-      threadId === `thread-${o.studentId}` ||
-      threadId.includes(o.companyId) ||
+    
+    // 1. 完全一致チェック (例: thread-c1 -> companyId === "c1", thread-s2 -> studentId === "s2")
+    if (threadId.startsWith("thread-c")) {
+      const cId = threadId.replace("thread-", "");
+      const matched = offers.find((o) => o.companyId === cId);
+      if (matched) return matched;
+    } else if (threadId.startsWith("thread-s")) {
+      const sId = threadId.replace("thread-", "");
+      const matched = offers.find((o) => o.studentId === sId);
+      if (matched) return matched;
+    }
+
+    // 2. 部分一致フォールバック
+    const fallback = offers.find((o) => 
+      threadId.includes(o.companyId) || 
       threadId.includes(o.studentId)
     );
-    return matched || (offers.length > 0 ? offers[0] : null);
+    return fallback || null;
+  },
+
+  // 企業詳細情報マスタ取得
+  getCompanyDetails: (companyId: string): CompanyDetail => {
+    const companies: Record<string, CompanyDetail> = {
+      c1: {
+        id: "c1",
+        name: "テックイノベーション株式会社",
+        industry: "IT・Webサービス / SaaS",
+        logoText: "テ",
+        catchphrase: "テクノロジーで次世代の社会インフラを再定義する",
+        description:
+          "テックイノベーションは、独自のクラウドSaaSプラットフォームおよびAI活用ソリューションを展開する急成長ITベンチャーです。若手メンバーが主導権を持ってプロダクト開発・事業推進を行っており、失敗を恐れずスピード感を持って挑戦する文化が根付いています。",
+        culture: [
+          "フラットで風通しの良い組織風土",
+          "自律駆動・成果主義とチームワークの両立",
+          "新卒1〜2年目からの新規事業リーダー抜擢",
+          "リモートワークと出社のハイブリッド勤務",
+        ],
+        seeking: [
+          "主体的に課題を発見し、解決に向けて行動できる方",
+          "新しい技術やトレンドに強い関心と好奇心を持つ方",
+          "チームメンバーと誠実かつ前向きに協調できる方",
+          "目標達成に向けて粘り強く挑戦し続けられる方",
+        ],
+        positions: [
+          {
+            title: "新規事業開発・総合職ポジション",
+            type: "新卒採用（正社員）",
+            location: "東京都渋谷区（リモート可）",
+            salary: "月給 320,000円〜（年俸制）",
+            description: "新規SaaSプロダクトの企画立案、アライアンス推進、事業KPI管理を担当します。",
+          },
+          {
+            title: "ソリューションセールス・カスタマーサクセス",
+            type: "新卒・サマーインターン",
+            location: "東京都渋谷区 / オンライン",
+            salary: "時給 1,500円〜 / 正社員登用あり",
+            description: "導入企業へのコンサルティング提案および活用支援を通じた事業拡大を担います。",
+          },
+        ],
+        websiteUrl: "https://example.com/tech-innovations",
+        established: "2020年10月",
+        employees: "120名（平均年齢 28.5歳）",
+        location: "東京都渋谷区道玄坂1丁目",
+      },
+      c2: {
+        id: "c2",
+        name: "グローバルコンサルティング合同会社",
+        industry: "総合コンサルティング / 戦略",
+        logoText: "グ",
+        catchphrase: "グローバル企業の変革を加速するプロフェッショナルファーム",
+        description:
+          "国内外の大手企業を対象に、DX推進・グローバル展開・組織改革などの高付加価値コンサルティングサービスを提供しています。多国籍なメンバーが所属し、英語力を活かした案件も多数展開しています。",
+        culture: [
+          "徹底したロジカルシンキングと成果へのコミットメント",
+          "グローバル案件への早期アサイン体制",
+          "充実したメンター制度・育成研修プログラム",
+        ],
+        seeking: [
+          "高い論理的思考力とコミュニケーション力を持つ方",
+          "グローバル環境での活躍に情熱を持つ方",
+          "誠実さと高いプロフェッショナリズムを備えた方",
+        ],
+        positions: [
+          {
+            title: "ビジネスアナリスト / アソシエイトコンサルタント",
+            type: "新卒採用（正社員）",
+            location: "東京都千代田区大手町",
+            salary: "年俸 5,000,000円〜",
+            description: "クライアントの事業戦略策定、市場リサーチ、業務改革プロジェクトの実行支援を担当します。",
+          },
+        ],
+        websiteUrl: "https://example.com/global-consulting",
+        established: "2018年4月",
+        employees: "85名",
+        location: "東京都千代田区大手町1丁目",
+      },
+      c3: {
+        id: "c3",
+        name: "ネクストフューチャー株式会社",
+        industry: "ベンチャー・スタートアップ / メディア",
+        logoText: "ネ",
+        catchphrase: "Z世代の熱量で、次のスタンダードを創り出す",
+        description:
+          "SNSマーケティング、クリエイターエコノミー支援、自社メディア事業を展開するスタートアップです。社員の8割が20代で、カルチャーマッチと情熱を最重視した採用を行っています。",
+        culture: [
+          "失敗を賞賛し、挑戦を称えるカルチャー",
+          "服装・髪型完全自由、フラットなコミュニケーション",
+          "即決即断のスピード感あふれる意思決定",
+        ],
+        seeking: [
+          "明るくポジティブに周囲を巻き込める方",
+          "SNSや動画コンテンツへのアンテナが高い方",
+          "自らのアイデアを形にしたい強い情熱がある方",
+        ],
+        positions: [
+          {
+            title: "SNSマーケティング・コンテンツディレクター",
+            type: "新卒・長期インターン",
+            location: "東京都港区南青山",
+            salary: "月給 280,000円〜",
+            description: "企業のSNSアカウント運用戦略、ショート動画企画、インフルエンサーキャスティングを担当します。",
+          },
+        ],
+        websiteUrl: "https://example.com/next-future",
+        established: "2022年3月",
+        employees: "45名",
+        location: "東京都港区南青山3丁目",
+      },
+    };
+
+    return (
+      companies[companyId] || {
+        id: companyId,
+        name: "登録企業",
+        industry: "IT / サービス",
+        logoText: "企",
+        catchphrase: "人柄を重視した新卒採用を推進中",
+        description: "JobSwipeを通じて意欲的な学生との出会いを創出しています。",
+        culture: ["フラットな社風", "挑戦を歓迎する環境"],
+        seeking: ["前向きで主体的な人材"],
+        positions: [
+          {
+            title: "総合職ポジション",
+            type: "新卒採用",
+            location: "東京都内",
+            salary: "規定により決定",
+            description: "希望や適性に応じたポジションを配属します。",
+          },
+        ],
+        websiteUrl: "https://jobswipe.jp",
+        established: "2021年",
+        employees: "50名",
+        location: "東京都内",
+      }
+    );
+  },
+
+  // 学生詳細情報マスタ取得
+  getStudentDetails: (studentId: string): StudentDetail => {
+    const students: Record<string, StudentDetail> = {
+      s1: {
+        id: "s1",
+        name: "佐藤 健太",
+        university: "早稲田大学",
+        faculty: "商学部 3年",
+        graduationYear: 2027,
+        avatarText: "佐",
+        catchphrase: "体育会サッカー部主将。チームを巻き込む推進力と愚直な行動力が武器です！",
+        bio: "体育会サッカー部で100名規模の組織主将を務めています。「誰よりも声を出し、背中で引っ張る」を行動指針に、部員一人ひとりと対話を重ねながらリーグ昇格を果たしました。ビジネスの現場でも、失敗を恐れず主体的に行動し、周囲をポジティブに巻き込めるリーダーを目指しています。",
+        personalityTags: ["リーダーシップ", "体育会系", "行動力", "粘り強さ", "ポジティブ", "チームワーク"],
+        desiredIndustries: ["IT・Webサービス", "ベンチャー・スタートアップ", "総合営業・セールス"],
+        desiredLocations: ["東京都", "神奈川県", "リモートワーク可"],
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        videoTitle: "体育会サッカー部主将としての挑戦と組織推進力",
+        videoViews: 142,
+        videoLikes: 38,
+      },
+      s2: {
+        id: "s2",
+        name: "高橋 美咲",
+        university: "慶應義塾大学",
+        faculty: "総合政策学部 3年",
+        graduationYear: 2027,
+        avatarText: "高",
+        catchphrase: "SNSマーケティング長期インターンで月間100万PV達成！探求心と笑顔が強みです。",
+        bio: "大学1年次よりSNSマーケティングベンチャーでインターンを行い、TikTok・Instagramの企画・分析を担当。ユーザーの心理を徹底的に分析し、再現性のあるコンテンツ設計を実践してきました。誠実なコミュニケーションと笑顔で、相手の懐に飛び込むことが得意です。",
+        personalityTags: ["探求心", "笑顔", "コミュニケーション力", "素直さ", "企画提案力"],
+        desiredIndustries: ["マーケティング・PR", "IT・Webサービス", "美容・コスメ"],
+        desiredLocations: ["東京都", "リモートワーク可"],
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        videoTitle: "SNSマーケティング長期インターンとデータ分析",
+        videoViews: 98,
+        videoLikes: 26,
+      },
+      s3: {
+        id: "s3",
+        name: "伊藤 翼",
+        university: "明治大学",
+        faculty: "経営学部 2年",
+        graduationYear: 2028,
+        avatarText: "伊",
+        catchphrase: "留学経験と国際交流イベント主催。多様性を受け入れ自ら先頭を走る行動派！",
+        bio: "カナダへの1年間留学を経て、大学では留学生支援イベントを企画・運営。言語やバックグラウンドの異なるメンバーと協働し、信頼関係を築いてきました。物事をポジティブに捉え、困難な状況でも周囲を明るく鼓舞することができます。",
+        personalityTags: ["英語対応可", "行動力", "ポジティブ", "傾聴力", "チャレンジ精神"],
+        desiredIndustries: ["グローバル・商社", "コンサルティング", "ベンチャー"],
+        desiredLocations: ["東京都", "海外勤務希望"],
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+        videoTitle: "カナダ留学と国際交流イベントでの挑戦",
+        videoViews: 76,
+        videoLikes: 19,
+      },
+    };
+
+    return (
+      students[studentId] || {
+        id: studentId,
+        name: "候補者",
+        university: "大学情報",
+        faculty: "学部未設定",
+        graduationYear: 2027,
+        avatarText: "学",
+        catchphrase: "動画で人柄と熱量をアピール中！",
+        bio: "自己PR動画を投稿しています。ぜひ動画をご覧ください。",
+        personalityTags: ["行動力", "ポジティブ", "笑顔"],
+        desiredIndustries: ["IT・Webサービス", "総合職"],
+        desiredLocations: ["東京都"],
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        videoTitle: "自己PR動画",
+        videoViews: 50,
+        videoLikes: 10,
+      }
+    );
   },
 
   // 気になる関連

@@ -283,34 +283,61 @@ function ChatContent() {
                         <ArrowLeft className="w-5 h-5" />
                       </button>
 
-                      <div
-                        className={`w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm shadow-2xs flex-shrink-0 ${
+                      {/* 詳細ページへのリンク */}
+                      <Link
+                        href={
                           currentThread.role === "COMPANY"
-                            ? "bg-slate-900 text-emerald-400"
-                            : "bg-emerald-700 text-white"
-                        }`}
+                            ? `/companies/${currentThread.partnerId}`
+                            : `/students/${currentThread.partnerId}`
+                        }
+                        className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 group hover:opacity-90 transition-opacity"
+                        title="プロフィール詳細を見る"
                       >
-                        {currentThread.role === "COMPANY" ? (
-                          <Building2 className="w-4 h-4" />
-                        ) : (
-                          <span>{currentThread.avatarText}</span>
-                        )}
-                      </div>
+                        <div
+                          className={`w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm shadow-2xs flex-shrink-0 ${
+                            currentThread.role === "COMPANY"
+                              ? "bg-slate-900 text-emerald-400"
+                              : "bg-emerald-700 text-white"
+                          }`}
+                        >
+                          {currentThread.role === "COMPANY" ? (
+                            <Building2 className="w-4 h-4" />
+                          ) : (
+                            <span>{currentThread.avatarText}</span>
+                          )}
+                        </div>
 
-                      <div className="min-w-0 flex-1">
-                        <h2 className="text-xs sm:text-sm font-bold text-slate-900 truncate">
-                          {currentThread.partnerName}
-                        </h2>
-                        <p className="text-[10px] sm:text-[11px] text-slate-500 truncate">
-                          {currentThread.partnerSub}
-                        </p>
-                      </div>
+                        <div className="min-w-0 flex-1">
+                          <h2 className="text-xs sm:text-sm font-bold text-slate-900 truncate group-hover:text-emerald-800 group-hover:underline flex items-center gap-1">
+                            <span>{currentThread.partnerName}</span>
+                            <span className="text-[10px] text-emerald-700 font-normal hidden sm:inline">
+                              (詳細 →)
+                            </span>
+                          </h2>
+                          <p className="text-[10px] sm:text-[11px] text-slate-500 truncate">
+                            {currentThread.partnerSub}
+                          </p>
+                        </div>
+                      </Link>
                     </div>
 
-                    <span className="text-[10px] sm:text-[11px] bg-emerald-50 text-emerald-800 px-2 sm:px-2.5 py-0.5 rounded-md font-bold border border-emerald-200 flex items-center gap-1 flex-shrink-0">
-                      <CheckCheck className="w-3.5 h-3.5 text-emerald-600" />
-                      <span className="hidden xs:inline">成立</span>
-                    </span>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <Link
+                        href={
+                          currentThread.role === "COMPANY"
+                            ? `/companies/${currentThread.partnerId}`
+                            : `/students/${currentThread.partnerId}`
+                        }
+                        className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold transition-colors"
+                      >
+                        {currentThread.role === "COMPANY" ? "企業詳細" : "学生詳細"}
+                      </Link>
+
+                      <span className="text-[10px] sm:text-[11px] bg-emerald-50 text-emerald-800 px-2 sm:px-2.5 py-0.5 rounded-md font-bold border border-emerald-200 flex items-center gap-1 flex-shrink-0">
+                        <CheckCheck className="w-3.5 h-3.5 text-emerald-600" />
+                        <span className="hidden xs:inline">成立</span>
+                      </span>
+                    </div>
                   </div>
 
                   {/* メッセージタイムライン（縦スクロール） */}
@@ -323,9 +350,21 @@ function ChatContent() {
                             <Sparkles className="w-4 h-4 text-emerald-700 flex-shrink-0" />
                             <span className="truncate">届いたオファー内容</span>
                           </span>
-                          <span className="text-[10px] text-slate-400 whitespace-nowrap flex-shrink-0">
-                            {currentOffer.createdAt}
-                          </span>
+                          <div className="flex items-center gap-2">
+                            <Link
+                              href={
+                                currentThread.role === "COMPANY"
+                                  ? `/companies/${currentOffer.companyId}`
+                                  : `/students/${currentOffer.studentId}`
+                              }
+                              className="text-[11px] font-bold text-emerald-800 hover:underline"
+                            >
+                              {currentThread.role === "COMPANY" ? "企業情報を見る" : "プロフィールを見る"}
+                            </Link>
+                            <span className="text-[10px] text-slate-400 whitespace-nowrap flex-shrink-0">
+                              {currentOffer.createdAt}
+                            </span>
+                          </div>
                         </div>
                         <p className="text-xs sm:text-sm text-slate-800 whitespace-pre-wrap leading-relaxed break-words">
                           {currentOffer.message}

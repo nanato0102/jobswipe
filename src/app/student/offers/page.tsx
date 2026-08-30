@@ -87,7 +87,15 @@ export default function StudentOffersPage() {
                 >
                   <div className="flex items-start justify-between">
                     <div>
-                      <h3 className="text-base font-bold text-slate-900 tracking-tight">{offer.companyName}</h3>
+                      <Link
+                        href={`/companies/${offer.companyId}`}
+                        className="text-base font-bold text-slate-900 hover:text-emerald-800 hover:underline tracking-tight flex items-center gap-1 group"
+                      >
+                        <span>{offer.companyName}</span>
+                        <span className="text-[11px] font-normal text-emerald-700 opacity-0 group-hover:opacity-100 transition-opacity">
+                          (企業情報を見る →)
+                        </span>
+                      </Link>
                       <span className="text-xs text-slate-500">{offer.industry}</span>
                     </div>
 
@@ -111,10 +119,17 @@ export default function StudentOffersPage() {
                     {offer.message}
                   </p>
 
-                  <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+                  <div className="flex items-center justify-between pt-3 border-t border-slate-100 flex-wrap gap-2">
                     <span className="text-[11px] text-slate-400">受信日時: {offer.createdAt}</span>
 
                     <div className="flex items-center gap-2">
+                      <Link
+                        href={`/companies/${offer.companyId}`}
+                        className="px-3 py-1.5 text-xs font-semibold text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-md transition-colors"
+                      >
+                        企業詳細
+                      </Link>
+
                       {offer.status === "SENT" && (
                         <>
                           <button
@@ -138,7 +153,7 @@ export default function StudentOffersPage() {
                           className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-white bg-emerald-700 hover:bg-emerald-600 rounded-md shadow-2xs transition-colors cursor-pointer"
                         >
                           <MessageSquare className="w-3.5 h-3.5" />
-                          <span>チャットを開く</span>
+                          <span>チャットへ</span>
                         </Link>
                       )}
                     </div>
