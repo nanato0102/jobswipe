@@ -20,12 +20,17 @@ import {
   MapPin,
   Camera,
 } from "lucide-react";
+import ImageCropperModal from "@/components/ImageCropperModal";
 
 export default function StudentProfilePage() {
   const { session } = useAuth();
 
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  // 画像切り抜きモーダル用ステート
+  const [isCropperOpen, setIsCropperOpen] = useState(false);
+  const [rawImageForCrop, setRawImageForCrop] = useState<string | null>(null);
 
   // フォームステート
   const [fullName, setFullName] = useState("佐藤 健太");
@@ -77,10 +82,17 @@ export default function StudentProfilePage() {
       const reader = new FileReader();
       reader.onload = (ev) => {
         const dataUrl = ev.target?.result as string;
-        setAvatarUrl(dataUrl);
+        setRawImageForCrop(dataUrl);
+        setIsCropperOpen(true);
       };
       reader.readAsDataURL(file);
+      // 同じファイルを再度選択できるようにリセット
+      e.target.value = "";
     }
+  };
+
+  const handleCropComplete = (croppedDataUrl: string) => {
+    setAvatarUrl(croppedDataUrl);
   };
 
   const handleRemoveAvatar = () => {
@@ -503,6 +515,15 @@ export default function StudentProfilePage() {
               </button>
             </div>
           </form>
+
+          {/* 画像切り抜きモーダル */}
+          <ImageCropperModal
+            isOpen={isCropperOpen}
+            imageSrc={rawImageForCrop}
+            onClose={() => setIsCropperOpen(false)}
+            onCropComplete={handleCropComplete}
+            title="プロフィール写真の切り抜き"
+          />
         </div>
       </StudentMobileTabs>
     </RoleGuard>

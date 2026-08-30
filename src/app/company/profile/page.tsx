@@ -14,10 +14,16 @@ import {
   Camera,
   Sparkles,
 } from "lucide-react";
+import ImageCropperModal from "@/components/ImageCropperModal";
 
 export default function CompanyProfilePage() {
   const { session } = useAuth();
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
+
+  // 画像切り抜きモーダル用ステート
+  const [isCropperOpen, setIsCropperOpen] = useState(false);
+  const [rawImageForCrop, setRawImageForCrop] = useState<string | null>(null);
+
   const [companyName, setCompanyName] = useState(session?.name || "テックイノベーション株式会社");
   const [industry, setIndustry] = useState("IT / Webサービス");
   const [representative, setRepresentative] = useState("代表取締役 田中 健一");
@@ -54,11 +60,18 @@ export default function CompanyProfilePage() {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = () => {
-        setLogoUrl(reader.result as string);
+      reader.onload = (ev) => {
+        const dataUrl = ev.target?.result as string;
+        setRawImageForCrop(dataUrl);
+        setIsCropperOpen(true);
       };
       reader.readAsDataURL(file);
+      e.target.value = "";
     }
+  };
+
+  const handleCropComplete = (croppedDataUrl: string) => {
+    setLogoUrl(croppedDataUrl);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -308,6 +321,15 @@ export default function CompanyProfilePage() {
               </button>
             </div>
           </form>
+
+          {/* 画像切り抜きモーダル */}
+          <ImageCropperModal
+            isOpen={isCropperOpen}
+            imageSrc={rawImageForCrop}
+            onClose={() => setIsCropperOpen(false)}
+            onCropComplete={handleCropComplete}
+            title="企業ロゴ画像の切り抜き"
+          />
         </div>
       </CompanyMobileTabs>
     </RoleGuard>

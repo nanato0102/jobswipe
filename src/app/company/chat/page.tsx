@@ -396,18 +396,24 @@ function ChatContent() {
                   </button>
                   <input ref={fileInputRef} type="file" onChange={handleFileChange} className="hidden" />
 
-                  <input
-                    type="text"
+                  <textarea
+                    rows={1}
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
-                    placeholder="メッセージを入力..."
-                    className="flex-1 p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+                        e.preventDefault();
+                        handleSendMessage(e);
+                      }
+                    }}
+                    placeholder="メッセージを入力... (Enterで改行、送信ボタンで送信)"
+                    className="flex-1 p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 resize-none min-h-[42px] max-h-[140px] leading-relaxed"
                   />
 
                   <button
                     type="submit"
                     disabled={!inputText.trim() && !selectedFile}
-                    className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer disabled:opacity-40"
+                    className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer disabled:opacity-40 self-end mb-0.5"
                   >
                     <Send className="w-4 h-4" />
                     <span className="hidden sm:inline">送信</span>
