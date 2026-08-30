@@ -235,6 +235,18 @@ export default function CompanyUsagePage() {
                   <p className="text-xs font-bold text-emerald-400 pt-1">月額 ¥49,800</p>
                 </button>
               </div>
+
+              {/* 法定表記リンク */}
+              <div className="pt-2 text-right">
+                <Link
+                  href="/tokusho"
+                  target="_blank"
+                  className="text-[11px] font-bold text-slate-500 hover:text-emerald-800 hover:underline inline-flex items-center gap-1"
+                >
+                  <span>特定商取引法に基づく表記（解約・返金特約等）</span>
+                  <span className="text-[10px]">↗</span>
+                </Link>
+              </div>
             </div>
           </div>
 

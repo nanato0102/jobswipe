@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import RoleGuard from "@/components/RoleGuard";
-import { appStore, StoredInquiry } from "@/lib/appStore";
+import { appStore, StoredInquiry, StoredReport } from "@/lib/appStore";
 import { useToast } from "@/context/ToastContext";
 import { useAuth } from "@/context/AuthContext";
 import {
@@ -33,6 +33,9 @@ import {
   AlertOctagon,
   Globe,
   LogOut,
+  ShieldAlert,
+  Flag,
+  Ban,
 } from "lucide-react";
 
 interface AdminVideoItem {
@@ -59,7 +62,7 @@ interface AdminUserItem {
 export default function AdminConsoleDashboardPage() {
   const { logout } = useAuth();
   const { success, info, error } = useToast();
-  const [activeTab, setActiveTab] = useState<"kpi" | "inquiries" | "videos" | "users">("inquiries");
+  const [activeTab, setActiveTab] = useState<"kpi" | "inquiries" | "reports" | "videos" | "users">("inquiries");
 
   // KPIデータ
   const [stats, setStats] = useState({
@@ -75,9 +78,48 @@ export default function AdminConsoleDashboardPage() {
   const [inquiryStatusFilter, setInquiryStatusFilter] = useState<"ALL" | "UNTOUCHED" | "IN_PROGRESS" | "RESOLVED">("ALL");
   const [inquiryTypeFilter, setInquiryTypeFilter] = useState<"ALL" | "student" | "company">("ALL");
 
+  // 通報モデレーションデータ
+  const [reports, setReports] = useState<StoredReport[]>([]);
+  const [reportStatusFilter, setReportStatusFilter] = useState<"ALL" | "PENDING" | "RESOLVED" | "DISMISSED">("ALL");
+
+  const loadReports = () => {
+    setReports(appStore.getReports());
+  };
+
   useEffect(() => {
     setInquiries(appStore.getInquiries());
+    loadReports();
   }, []);
+
+  const handleUpdateReportStatus = (reportId: string, status: StoredReport["status"], actionText?: string) => {
+    appStore.updateReportStatus(reportId, status, actionText);
+    loadReports();
+    if (status === "RESOLVED") {
+      success("通報への対処を完了として記録しました");
+    } else if (status === "DISMISSED") {
+      info("通報を却下（問題なし）としてクローズしました");
+    }
+  };
+
+  const handleBanUser = (userId: string, userName: string, reportId?: string) => {
+    if (!confirm(`ユーザー「${userName}」のアカウントを停止（BAN）しますか？`)) return;
+    appStore.banUser(userId, "規約違反・通報によるアカウント停止");
+    if (reportId) {
+      appStore.updateReportStatus(reportId, "RESOLVED", "アカウント利用停止措置（BAN）を実施");
+    }
+    loadReports();
+    success(`ユーザー「${userName}」をアカウント停止にしました`);
+  };
+
+  const handleHideVideo = (videoId: string, videoTitle: string, reportId?: string) => {
+    if (!confirm(`動画「${videoTitle}」を非公開（削除扱い）にしますか？`)) return;
+    appStore.hideVideo(videoId, "利用規約違反コンテンツのため非公開化");
+    if (reportId) {
+      appStore.updateReportStatus(reportId, "RESOLVED", "動画の非公開・削除措置を実施");
+    }
+    loadReports();
+    success(`動画「${videoTitle}」を非公開に設定しました`);
+  };
 
   // 動画モデレーション用
   const [videoList, setVideoList] = useState<AdminVideoItem[]>([
@@ -289,6 +331,27 @@ export default function AdminConsoleDashboardPage() {
               <span className="px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 text-[10px]">
                 {inquiries.length}件
               </span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("reports")}
+              className={`pb-3 text-xs sm:text-sm font-bold transition-all border-b-2 flex items-center gap-2 whitespace-nowrap ${
+                activeTab === "reports"
+                  ? "border-rose-600 text-rose-700 font-black"
+                  : "border-transparent text-slate-500 hover:text-slate-900"
+              }`}
+            >
+              <ShieldAlert className="w-4 h-4" />
+              <span>通報・モデレーション</span>
+              {reports.filter((r) => r.status === "PENDING").length > 0 ? (
+                <span className="px-2 py-0.5 rounded-md bg-rose-600 text-white font-bold text-[10px] animate-pulse">
+                  未対応 {reports.filter((r) => r.status === "PENDING").length}件
+                </span>
+              ) : (
+                <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px]">
+                  {reports.length}件
+                </span>
+              )}
             </button>
 
             <button
@@ -513,6 +576,175 @@ export default function AdminConsoleDashboardPage() {
               {filteredInquiries.length === 0 && (
                 <div className="bg-white p-12 rounded-xl border border-slate-200 text-center text-slate-400 text-xs shadow-xs">
                   該当するお問い合わせは見つかりませんでした。
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* ================= 🚨 通報・モデレーション管理タブ ================= */}
+        {activeTab === "reports" && (
+          <div className="space-y-4">
+            {/* フィルターバー */}
+            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                  <ShieldAlert className="w-4 h-4 text-rose-600" />
+                  <span>ステータス:</span>
+                </span>
+                <div className="flex items-center gap-1">
+                  {(["ALL", "PENDING", "RESOLVED", "DISMISSED"] as const).map((st) => (
+                    <button
+                      key={st}
+                      type="button"
+                      onClick={() => setReportStatusFilter(st)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${
+                        reportStatusFilter === st
+                          ? "bg-slate-900 text-white shadow-2xs"
+                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      }`}
+                    >
+                      {st === "ALL"
+                        ? "すべて"
+                        : st === "PENDING"
+                        ? "未対応"
+                        : st === "RESOLVED"
+                        ? "対応済"
+                        : "却下"}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <span className="text-xs font-bold text-slate-500">
+                通報総数: {reports.length}件 (未対応: {reports.filter((r) => r.status === "PENDING").length}件)
+              </span>
+            </div>
+
+            {/* 通報カードリスト */}
+            <div className="space-y-3">
+              {reports
+                .filter((r) => reportStatusFilter === "ALL" || r.status === reportStatusFilter)
+                .map((rep) => {
+                  const isPending = rep.status === "PENDING";
+                  const isResolved = rep.status === "RESOLVED";
+
+                  return (
+                    <div
+                      key={rep.id}
+                      className={`bg-white rounded-2xl border shadow-xs p-5 sm:p-6 space-y-4 transition-all ${
+                        isPending
+                          ? "border-rose-300 ring-2 ring-rose-500/10"
+                          : "border-slate-200"
+                      }`}
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span
+                            className={`px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1 ${
+                              isPending
+                                ? "bg-rose-100 text-rose-800 border border-rose-200"
+                                : isResolved
+                                ? "bg-emerald-100 text-emerald-800 border border-emerald-200"
+                                : "bg-slate-100 text-slate-600"
+                            }`}
+                          >
+                            <ShieldAlert className="w-3.5 h-3.5" />
+                            <span>
+                              {isPending ? "🚨 未対応の通報" : isResolved ? "✅ 対応完了" : "🚫 却下（問題なし）"}
+                            </span>
+                          </span>
+
+                          <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-bold border border-slate-200">
+                            対象: {rep.targetType === "VIDEO" ? "自己PR動画" : rep.targetType === "CHAT" ? "チャット" : "ユーザー"}
+                          </span>
+
+                          <span className="text-xs font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-100">
+                            {rep.reasonText}
+                          </span>
+                        </div>
+
+                        <span className="text-[11px] text-slate-400 font-medium whitespace-nowrap">
+                          通報日時: {rep.createdAt}
+                        </span>
+                      </div>
+
+                      {/* 対象 & 通報理由サマリー */}
+                      <div className="grid sm:grid-cols-2 gap-4 text-xs bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <div className="space-y-1">
+                          <span className="text-slate-400 font-medium">通報対象コンテンツ:</span>
+                          <p className="font-bold text-slate-900 text-sm">{rep.targetTitle}</p>
+                          {rep.targetPreview && (
+                            <p className="text-slate-600 italic">「{rep.targetPreview}」</p>
+                          )}
+                        </div>
+
+                        <div className="space-y-1">
+                          <span className="text-slate-400 font-medium">通報者:</span>
+                          <p className="font-bold text-slate-800">{rep.reporterName}</p>
+                          <span className="text-slate-400 font-medium block pt-1">通報理由詳細:</span>
+                          <p className="text-slate-800 whitespace-pre-wrap">{rep.details}</p>
+                        </div>
+                      </div>
+
+                      {/* 過去に実施した措置 */}
+                      {rep.actionTaken && (
+                        <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-900 space-y-0.5">
+                          <span className="font-bold">実施済みの措置:</span>
+                          <p>{rep.actionTaken}</p>
+                        </div>
+                      )}
+
+                      {/* 管理者アクションボタン群 */}
+                      <div className="flex items-center justify-between pt-2 border-t border-slate-100 flex-wrap gap-2">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          {rep.targetType === "VIDEO" && (
+                            <button
+                              type="button"
+                              onClick={() => handleHideVideo(rep.targetId, rep.targetTitle, rep.id)}
+                              className="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 shadow-2xs cursor-pointer"
+                            >
+                              <EyeOff className="w-3.5 h-3.5" />
+                              <span>動画を即時非公開にする</span>
+                            </button>
+                          )}
+
+                          <button
+                            type="button"
+                            onClick={() => handleBanUser(rep.targetId, rep.targetTitle, rep.id)}
+                            className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 shadow-2xs cursor-pointer"
+                          >
+                            <Ban className="w-3.5 h-3.5 text-rose-400" />
+                            <span>アカウントを停止（BAN）する</span>
+                          </button>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => handleUpdateReportStatus(rep.id, "DISMISSED", "内容精査の結果、利用規約違反には該当しないと判断")}
+                            className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-xs font-bold transition-colors"
+                          >
+                            問題なし（却下）
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => handleUpdateReportStatus(rep.id, "RESOLVED", "警告および是正措置の実施")}
+                            className="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold transition-colors flex items-center gap-1 shadow-2xs cursor-pointer"
+                          >
+                            <CheckCircle2 className="w-3.5 h-3.5" />
+                            <span>対応完了とする</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+
+              {reports.length === 0 && (
+                <div className="bg-white p-12 rounded-xl border border-slate-200 text-center text-slate-400 text-xs shadow-xs">
+                  現在、通報されたコンテンツはありません。プラットフォームは健全に保たれています。
                 </div>
               )}
             </div>

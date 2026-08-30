@@ -23,7 +23,9 @@ import {
   Eye,
   CheckCircle,
   X,
+  Flag,
 } from "lucide-react";
+import ReportModal from "@/components/ReportModal";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -40,6 +42,7 @@ export default function StudentDetailPage({ params }: Props) {
   const [isMuted, setIsMuted] = useState(true);
   const [isLiked, setIsLiked] = useState(false);
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [offerMessage, setOfferMessage] = useState("");
   const [isOfferSent, setIsOfferSent] = useState(false);
 
@@ -137,6 +140,15 @@ export default function StudentDetailPage({ params }: Props) {
           </button>
 
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setIsReportModalOpen(true)}
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-500 hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 text-xs font-bold transition-colors cursor-pointer"
+              title="この学生プロフィールを通報する"
+            >
+              <Flag className="w-3.5 h-3.5" />
+              <span>通報</span>
+            </button>
             <Link
               href="/company/likes"
               className="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-semibold transition-colors"
@@ -454,6 +466,16 @@ export default function StudentDetailPage({ params }: Props) {
             </div>
           </div>
         )}
+
+        {/* 通報モーダル */}
+        <ReportModal
+          isOpen={isReportModalOpen}
+          onClose={() => setIsReportModalOpen(false)}
+          targetType="USER"
+          targetId={studentId}
+          targetTitle={`${student?.name || "学生"} さんのプロフィール`}
+          targetPreview={student?.catchphrase || student?.bio}
+        />
       </div>
     </CompanyMobileTabs>
   );

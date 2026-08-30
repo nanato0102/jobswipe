@@ -716,7 +716,12 @@ export default function HomePage() {
               <ul className="space-y-2 text-xs text-slate-400">
                 <li>
                   <Link href="/company/about" className="hover:text-emerald-400 transition-colors">
-                    会社概要・特定商取引法に基づく表記
+                    運営会社概要
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/tokusho" className="hover:text-emerald-400 transition-colors font-bold text-slate-300">
+                    特定商取引法に基づく表記
                   </Link>
                 </li>
                 <li>

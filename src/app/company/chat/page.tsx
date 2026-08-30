@@ -23,9 +23,11 @@ import {
   Download,
   X,
   Eye,
+  Flag,
 } from "lucide-react";
 import StudentMobileTabs from "@/components/StudentMobileTabs";
 import CompanyMobileTabs from "@/components/CompanyMobileTabs";
+import ReportModal from "@/components/ReportModal";
 
 function ChatContent() {
   const { session, isStudent, isCompany } = useAuth();
@@ -39,6 +41,7 @@ function ChatContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFile, setSelectedFile] = useState<MessageAttachment | null>(null);
   const [previewImageModal, setPreviewImageModal] = useState<string | null>(null);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -384,6 +387,16 @@ function ChatContent() {
                         {currentThread.role === "COMPANY" ? "企業詳細" : "学生詳細"}
                       </Link>
 
+                      <button
+                        type="button"
+                        onClick={() => setIsReportModalOpen(true)}
+                        className="p-1 sm:px-2 sm:py-1 rounded-md border border-slate-200 text-slate-400 hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 text-[11px] font-bold transition-colors flex items-center gap-1"
+                        title="不適切なメッセージ・ユーザーを通報"
+                      >
+                        <Flag className="w-3.5 h-3.5" />
+                        <span className="hidden sm:inline">通報</span>
+                      </button>
+
                       <span className="text-[10px] sm:text-[11px] bg-emerald-50 text-emerald-800 px-2 sm:px-2.5 py-0.5 rounded-md font-bold border border-emerald-200 flex items-center gap-1 flex-shrink-0">
                         <CheckCheck className="w-3.5 h-3.5 text-emerald-600" />
                         <span className="hidden xs:inline">成立</span>
@@ -720,6 +733,19 @@ function ChatContent() {
               />
             </div>
           </div>
+        )}
+
+        {/* 不適切チャット・ユーザーの通報モーダル */}
+        {currentThread && (
+          <ReportModal
+            isOpen={isReportModalOpen}
+            onClose={() => setIsReportModalOpen(false)}
+            targetType="CHAT"
+            targetId={currentThread.id}
+            targetTitle={`${currentThread.partnerName} とのチャット`}
+            targetPreview={currentThread.lastMessage}
+            reporterName={session?.name || (isStudent ? "学生ユーザー" : "企業ユーザー")}
+          />
         )}
       </TabsWrapper>
     </RoleGuard>

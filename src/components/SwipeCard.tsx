@@ -21,8 +21,10 @@ import {
   Briefcase,
   Building2,
   RotateCcw,
+  Flag,
 } from "lucide-react";
 import type { VideoData } from "@/types";
+import ReportModal from "@/components/ReportModal";
 
 interface SwipeCardProps {
   videos: VideoData[];
@@ -37,6 +39,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
   const [historyStack, setHistoryStack] = useState<number[]>([]);
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [offerMessage, setOfferMessage] = useState("");
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
@@ -439,6 +442,19 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                 </div>
                 <span className="text-[10px] font-bold text-white drop-shadow">詳細</span>
               </button>
+
+              {/* 通報ボタン */}
+              <button
+                type="button"
+                onClick={() => setIsReportModalOpen(true)}
+                className="flex flex-col items-center gap-1 group cursor-pointer opacity-70 hover:opacity-100 transition-opacity"
+                title="不適切なコンテンツを通報"
+              >
+                <div className="w-9 h-9 rounded-full bg-black/50 backdrop-blur border border-white/10 hover:bg-rose-950/80 hover:border-rose-500/50 active:scale-90 text-slate-300 hover:text-rose-400 flex items-center justify-center shadow-md transition-all">
+                  <Flag className="w-3.5 h-3.5" />
+                </div>
+                <span className="text-[9px] font-medium text-slate-300 drop-shadow">通報</span>
+              </button>
             </div>
 
             {/* 下部情報オーバーレイ */}
@@ -741,6 +757,17 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
           </div>
         </div>
       )}
+
+      {/* 不適切動画の通報モーダル */}
+      <ReportModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        targetType="VIDEO"
+        targetId={currentVideo?.id || "v-unknown"}
+        targetTitle={`${currentVideo?.student?.fullName || "学生"} さんの自己PR動画`}
+        targetPreview={currentVideo?.title}
+        reporterName={session?.name || "企業ユーザー"}
+      />
     </div>
   );
 }

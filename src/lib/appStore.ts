@@ -110,6 +110,21 @@ export interface NotificationItem {
   createdAt: string;
 }
 
+export interface StoredReport {
+  id: string;
+  targetType: "VIDEO" | "CHAT" | "USER";
+  targetId: string;
+  targetTitle: string;
+  targetPreview?: string;
+  reporterName: string;
+  reason: "INAPPROPRIATE_CONTENT" | "HARASSMENT" | "SPAM" | "DEFAMATION" | "OTHER";
+  reasonText: string;
+  details: string;
+  status: "PENDING" | "RESOLVED" | "DISMISSED";
+  actionTaken?: string;
+  createdAt: string;
+}
+
 export interface CompanyPosition {
   title: string;
   type: string;
@@ -1205,6 +1220,98 @@ export const appStore = {
     }
     return newNotif;
   },
+
+  // =========================================================================
+  // 🛡️ 通報・モデレーション管理
+  // =========================================================================
+  getReports(): StoredReport[] {
+    if (typeof window === "undefined") return DEFAULT_REPORTS;
+    const raw = localStorage.getItem("jobswipe_reports");
+    if (!raw) {
+      localStorage.setItem("jobswipe_reports", JSON.stringify(DEFAULT_REPORTS));
+      return DEFAULT_REPORTS;
+    }
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return DEFAULT_REPORTS;
+    }
+  },
+
+  addReport(report: Omit<StoredReport, "id" | "status" | "createdAt">): StoredReport {
+    const all = this.getReports();
+    const newReport: StoredReport = {
+      ...report,
+      id: `rep-${Date.now()}`,
+      status: "PENDING",
+      createdAt: new Date().toLocaleString("ja-JP", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    };
+    const updated = [newReport, ...all];
+    if (typeof window !== "undefined") {
+      localStorage.setItem("jobswipe_reports", JSON.stringify(updated));
+    }
+    return newReport;
+  },
+
+  updateReportStatus(reportId: string, status: StoredReport["status"], actionTaken?: string): void {
+    const all = this.getReports();
+    const updated = all.map((r) =>
+      r.id === reportId ? { ...r, status, actionTaken: actionTaken || r.actionTaken } : r
+    );
+    if (typeof window !== "undefined") {
+      localStorage.setItem("jobswipe_reports", JSON.stringify(updated));
+    }
+  },
+
+  isUserBanned(userId: string): boolean {
+    if (typeof window === "undefined") return false;
+    const banned = localStorage.getItem(`jobswipe_banned_user_${userId}`);
+    return banned === "true";
+  },
+
+  banUser(userId: string, reason?: string): void {
+    if (typeof window !== "undefined") {
+      localStorage.setItem(`jobswipe_banned_user_${userId}`, "true");
+      if (reason) {
+        localStorage.setItem(`jobswipe_ban_reason_${userId}`, reason);
+      }
+    }
+  },
+
+  unbanUser(userId: string): void {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(`jobswipe_banned_user_${userId}`);
+      localStorage.removeItem(`jobswipe_ban_reason_${userId}`);
+    }
+  },
+
+  isVideoHidden(videoId: string): boolean {
+    if (typeof window === "undefined") return false;
+    const hidden = localStorage.getItem(`jobswipe_hidden_video_${videoId}`);
+    return hidden === "true";
+  },
+
+  hideVideo(videoId: string, reason?: string): void {
+    if (typeof window !== "undefined") {
+      localStorage.setItem(`jobswipe_hidden_video_${videoId}`, "true");
+      if (reason) {
+        localStorage.setItem(`jobswipe_hide_reason_${videoId}`, reason);
+      }
+    }
+  },
+
+  unhideVideo(videoId: string): void {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(`jobswipe_hidden_video_${videoId}`);
+      localStorage.removeItem(`jobswipe_hide_reason_${videoId}`);
+    }
+  },
 };
 
 const DEFAULT_NOTIFICATIONS: NotificationItem[] = [
@@ -1311,5 +1418,35 @@ const DEFAULT_INQUIRIES: StoredInquiry[] = [
     message: "サービス紹介資料および導入事例のPDFをお送りいただけますと幸いです。",
     status: "RESOLVED",
     createdAt: "2026/08/28 11:00",
+  },
+];
+
+const DEFAULT_REPORTS: StoredReport[] = [
+  {
+    id: "rep-1",
+    targetType: "VIDEO",
+    targetId: "v-demo-4",
+    targetTitle: "不審な動画投稿（サンプルフラグ）",
+    targetPreview: "自己PR動画の音声に過度なノイズおよび規約に抵触する可能性があるコンテンツ",
+    reporterName: "テックイノベーション株式会社",
+    reason: "INAPPROPRIATE_CONTENT",
+    reasonText: "不適切な動画・コンテンツ",
+    details: "動画内で利用規約に反する表現が含まれているため確認をお願いします。",
+    status: "PENDING",
+    createdAt: "2026/08/29 17:00",
+  },
+  {
+    id: "rep-2",
+    targetType: "CHAT",
+    targetId: "thread-c99",
+    targetTitle: "迷惑メッセージの通報",
+    targetPreview: "面接とは無関係な投資勧誘メッセージの送信",
+    reporterName: "佐藤 健太",
+    reason: "HARASSMENT",
+    reasonText: "就活セクハラ・迷惑行為・勧誘",
+    details: "採用活動と関係のない外部有料セミナーへの誘導が行われました。",
+    status: "RESOLVED",
+    actionTaken: "対象アカウントの利用一時停止",
+    createdAt: "2026/08/28 14:30",
   },
 ];
