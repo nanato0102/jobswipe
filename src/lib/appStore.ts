@@ -448,7 +448,18 @@ export const appStore = {
     }
   },
 
+  // オファー送信可否チェック
+  canSendOffer: (): boolean => {
+    const stats = appStore.getCompanyStats();
+    return stats.remainingQuota > 0;
+  },
+
   sendOffer: (offer: Omit<StoredOffer, "id" | "createdAt" | "status">): StoredOffer => {
+    // 残枠チェック
+    if (!appStore.canSendOffer()) {
+      throw new Error("今月のオファー上限枠に達しています。追加オファー枠をご購入ください。");
+    }
+
     const current = appStore.getOffers();
     const newOffer: StoredOffer = {
       ...offer,
@@ -463,7 +474,9 @@ export const appStore = {
       }),
     };
     const updated = [newOffer, ...current];
-    localStorage.setItem("jobswipe_offers", JSON.stringify(updated));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("jobswipe_offers", JSON.stringify(updated));
+    }
 
     // チャットスレッド＆最初のオファーメッセージを自動生成
     if (typeof window !== "undefined") {
@@ -489,6 +502,23 @@ export const appStore = {
         sentAt: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       };
       localStorage.setItem("jobswipe_chat_messages", JSON.stringify([...allMessages, offerMsg, offerMsgCompany]));
+
+      // リアルタイム更新イベント発火
+      window.dispatchEvent(new CustomEvent("jobswipe_sync", { detail: { type: "OFFER_SENT", offer: newOffer } }));
+
+      // メール通知APIを非同期トリガー
+      fetch("/api/notifications/email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "OFFER_RECEIVED",
+          recipientRole: "STUDENT",
+          recipientName: offer.studentName,
+          senderName: offer.companyName,
+          title: "特別オファーが届きました！",
+          content: offer.message,
+        }),
+      }).catch(() => {});
     }
 
     return newOffer;
@@ -829,8 +859,46 @@ export const appStore = {
       ...(attachment ? { attachment } : {}),
     };
     const updated = [...allMessages, newMsg];
-    localStorage.setItem("jobswipe_chat_messages", JSON.stringify(updated));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("jobswipe_chat_messages", JSON.stringify(updated));
+
+      // リアルタイム更新イベント発火
+      window.dispatchEvent(new CustomEvent("jobswipe_sync", { detail: { type: "MESSAGE_SENT", message: newMsg } }));
+
+      // メール通知APIを非同期トリガー
+      const recipientRole = senderRole === "STUDENT" ? "COMPANY" : "STUDENT";
+      fetch("/api/notifications/email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "MESSAGE_RECEIVED",
+          recipientRole,
+          recipientName: senderRole === "STUDENT" ? "採用ご担当者様" : "佐藤 健太 様",
+          senderName,
+          title: "新着メッセージが届きました",
+          content: content.slice(0, 100) + (content.length > 100 ? "..." : ""),
+        }),
+      }).catch(() => {});
+    }
     return newMsg;
+  },
+
+  // 追加オファー枠の購入
+  addOfferQuota: (additionalCount: number): number => {
+    if (typeof window === "undefined") return 50;
+    const currentExtra = Number(localStorage.getItem("jobswipe_extra_quota") || "0");
+    const updatedExtra = currentExtra + additionalCount;
+    localStorage.setItem("jobswipe_extra_quota", String(updatedExtra));
+    window.dispatchEvent(new CustomEvent("jobswipe_sync", { detail: { type: "QUOTA_UPDATED" } }));
+    return updatedExtra;
+  },
+
+  // プラン変更
+  changeCompanyPlan: (planName: string, baseQuota: number) => {
+    if (typeof window === "undefined") return;
+    localStorage.setItem("jobswipe_plan_name", planName);
+    localStorage.setItem("jobswipe_base_quota", String(baseQuota));
+    window.dispatchEvent(new CustomEvent("jobswipe_sync", { detail: { type: "PLAN_UPDATED" } }));
   },
 
   // 企業向け利用状況・オファー枠統計
@@ -839,12 +907,23 @@ export const appStore = {
     const likes = appStore.getLikes();
     const sentCount = offers.length;
     const acceptedCount = offers.filter((o) => o.status === "ACCEPTED").length;
-    const monthlyQuota = 50;
+
+    let planName = "スタンダードプラン (月50枠)";
+    let baseQuota = 50;
+    let extraQuota = 0;
+
+    if (typeof window !== "undefined") {
+      planName = localStorage.getItem("jobswipe_plan_name") || "スタンダードプラン (月50枠)";
+      baseQuota = Number(localStorage.getItem("jobswipe_base_quota") || "50");
+      extraQuota = Number(localStorage.getItem("jobswipe_extra_quota") || "0");
+    }
+
+    const monthlyQuota = baseQuota + extraQuota;
     const remainingQuota = Math.max(0, monthlyQuota - sentCount);
     const rate = sentCount > 0 ? `${Math.round((acceptedCount / sentCount) * 100)}%` : "0%";
 
     return {
-      planName: "スタンダードプラン (月50枠)",
+      planName,
       monthlyQuota,
       sentOffersCount: sentCount,
       remainingQuota,

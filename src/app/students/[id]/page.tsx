@@ -102,17 +102,22 @@ export default function StudentDetailPage({ params }: Props) {
   const handleSendOffer = () => {
     if (!offerMessage.trim()) return;
 
-    appStore.sendOffer({
-      companyId: "c1",
-      companyName: "テックイノベーション株式会社",
-      industry: "IT・Webサービス",
-      studentId: student.id,
-      studentName: student.name,
-      message: offerMessage.trim(),
-    });
+    try {
+      appStore.sendOffer({
+        companyId: "c1",
+        companyName: "テックイノベーション株式会社",
+        industry: "IT・Webサービス",
+        studentId: student.id,
+        studentName: student.name,
+        message: offerMessage.trim(),
+      });
 
-    setIsOfferSent(true);
-    success("オファーを送信しました", `${student.name} さんにスカウトメッセージを送信しました。`);
+      setIsOfferSent(true);
+      success("オファーを送信しました", `${student.name} さんにスカウトメッセージを送信しました。`);
+    } catch (err: any) {
+      alert("【オファー上限到達】\n" + (err.message || "今月のオファー上限枠に達しています。利用状況ページより枠を追加してください。"));
+      router.push("/company/usage");
+    }
   };
 
   const threadId = `thread-${student.id}`;

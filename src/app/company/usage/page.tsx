@@ -170,20 +170,71 @@ export default function CompanyUsagePage() {
               </div>
             </div>
 
-            {/* 枠追加のアナウンス */}
-            <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-              <div className="flex items-center gap-2 text-slate-700">
-                <HelpCircle className="w-4 h-4 text-slate-400 flex-shrink-0" />
-                <span>
-                  オファー枠が不足した場合は、10枠単位でのスポット追加や上位プランへの即時アップグレードが可能です。
-                </span>
+            {/* 枠追加・プラン変更のアクションカード */}
+            <div className="p-5 bg-slate-50 border border-slate-200 rounded-2xl space-y-4 text-xs">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center gap-2 text-slate-800 font-bold text-xs sm:text-sm">
+                  <Sparkles className="w-4 h-4 text-emerald-600" />
+                  <span>オファー枠のスポット追加 ＆ プラン変更</span>
+                </div>
+                <span className="text-[11px] text-slate-500">※即時アカウントに反映されます</span>
               </div>
-              <Link
-                href="/contact"
-                className="px-3.5 py-1.5 bg-white hover:bg-slate-100 text-slate-800 font-bold rounded-md border border-slate-200 transition-colors whitespace-nowrap shadow-2xs"
-              >
-                枠追加・見積もり相談
-              </Link>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {/* 10枠追加 */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    appStore.addOfferQuota(10);
+                    setStats(appStore.getCompanyStats());
+                    alert("オファー枠を +10枠 追加しました！（現在の残り枠: " + (stats.remainingQuota + 10) + "枠）");
+                  }}
+                  className="p-3.5 bg-white border border-slate-200 hover:border-emerald-500 rounded-xl text-left space-y-1.5 transition-all shadow-2xs hover:shadow-xs cursor-pointer group"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-slate-900 group-hover:text-emerald-700">+10枠 スポット追加</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-800 font-bold border border-emerald-200">即時反映</span>
+                  </div>
+                  <p className="text-[11px] text-slate-500">急ぎでスカウトを送りたい企業様向け</p>
+                  <p className="text-xs font-bold text-emerald-800 pt-1">¥5,000 / 回</p>
+                </button>
+
+                {/* 30枠追加 */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    appStore.addOfferQuota(30);
+                    setStats(appStore.getCompanyStats());
+                    alert("オファー枠を +30枠 追加しました！（現在の残り枠: " + (stats.remainingQuota + 30) + "枠）");
+                  }}
+                  className="p-3.5 bg-white border border-slate-200 hover:border-emerald-500 rounded-xl text-left space-y-1.5 transition-all shadow-2xs hover:shadow-xs cursor-pointer group"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-slate-900 group-hover:text-emerald-700">+30枠 まとめ追加</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-800 font-bold border border-blue-200">お得</span>
+                  </div>
+                  <p className="text-[11px] text-slate-500">積極採用シーズンの集中アプローチ用</p>
+                  <p className="text-xs font-bold text-blue-800 pt-1">¥12,000 / 回</p>
+                </button>
+
+                {/* プレミアムプラン変更 */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    appStore.changeCompanyPlan("プレミアムプラン (月150枠)", 150);
+                    setStats(appStore.getCompanyStats());
+                    alert("プレミアムプラン（月150枠）にアップグレードしました！");
+                  }}
+                  className="p-3.5 bg-slate-900 border border-slate-800 text-white rounded-xl text-left space-y-1.5 transition-all shadow-xs hover:bg-slate-800 cursor-pointer"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-white">プレミアムプラン変更</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-700 text-white font-bold">月150枠</span>
+                  </div>
+                  <p className="text-[11px] text-slate-300">専任サポート・特別ルート開放</p>
+                  <p className="text-xs font-bold text-emerald-400 pt-1">月額 ¥49,800</p>
+                </button>
+              </div>
             </div>
           </div>
 

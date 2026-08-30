@@ -241,28 +241,34 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
   // オファー送信を appStore に保存
   const handleSendOffer = () => {
     if (!offerMessage.trim()) return;
-    if (onOffer) {
-      onOffer(currentVideo, offerMessage);
-    }
 
     const companyName = session?.name || "自社採用担当";
     const studentName = currentVideo.student?.fullName || "学生ユーザー";
 
-    appStore.sendOffer({
-      companyId: session?.id || "c1",
-      companyName,
-      industry: "IT / Webサービス",
-      studentId: currentVideo.student?.id || currentVideo.studentId,
-      studentName,
-      message: offerMessage.trim(),
-    });
+    try {
+      if (onOffer) {
+        onOffer(currentVideo, offerMessage);
+      }
 
-    setIsOfferModalOpen(false);
-    setOfferMessage("");
-    success("スカウトオファーを送信しました！", `${studentName} さんに届きました。`);
-    setTimeout(() => {
-      handleNext();
-    }, 600);
+      appStore.sendOffer({
+        companyId: session?.id || "c1",
+        companyName,
+        industry: "IT / Webサービス",
+        studentId: currentVideo.student?.id || currentVideo.studentId,
+        studentName,
+        message: offerMessage.trim(),
+      });
+
+      setIsOfferModalOpen(false);
+      setOfferMessage("");
+      success("スカウトオファーを送信しました！", `${studentName} さんに届きました。`);
+      setTimeout(() => {
+        handleNext();
+      }, 600);
+    } catch (err: any) {
+      setIsOfferModalOpen(false);
+      alert("【オファー上限到達】\n" + (err.message || "今月のオファー上限枠に達しています。利用状況ページより枠を追加してください。"));
+    }
   };
 
   return (

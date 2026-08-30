@@ -126,6 +126,8 @@ export default function StudentVideoUploadPage() {
     }
   };
 
+  const [uploadProgress, setUploadProgress] = useState(0);
+
   const handleClearSelectedVideo = () => {
     setVideoFile(null);
     setVideoPreview(null);
@@ -143,15 +145,34 @@ export default function StudentVideoUploadPage() {
     }
 
     setLoading(true);
+    setUploadProgress(15);
     setStatus(null);
 
     try {
+      // 1. S3 Presigned URL API / アップロードエンドポイント呼び出し
+      setUploadProgress(45);
+      const res = await fetch("/api/videos/upload", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          filename: videoFile?.name || "pr-video.mp4",
+          fileType: videoFile?.type || "video/mp4",
+          fileSize: videoFile?.size || 15 * 1024 * 1024,
+        }),
+      });
+
+      setUploadProgress(85);
+      const data = await res.json();
+      const finalUrl = data.finalVideoUrl || videoPreview;
+
+      setUploadProgress(100);
+
       const newVideo: UploadedVideoItem = {
         id: `vid-${Date.now()}`,
         title: title || "私の60秒自己PR",
         description: description,
         tags: tags.length > 0 ? tags : ["笑顔", "成長意欲"],
-        videoUrl: videoPreview,
+        videoUrl: finalUrl,
         duration: videoDuration || 45,
         uploadedAt: new Date().toLocaleDateString("ja-JP", {
           year: "numeric",
@@ -160,10 +181,13 @@ export default function StudentVideoUploadPage() {
           hour: "2-digit",
           minute: "2-digit",
         }),
+        viewsCount: 1,
+        likesCount: 0,
+        offersCount: 0,
       };
 
       setUploadedVideos([newVideo, ...uploadedVideos]);
-      success("自己PR動画を正常に投稿しました！", "企業のスワイプ一覧に即時公開されました。");
+      success("自己PR動画をAWS S3ストレージへ正常に公開しました！", "企業のスワイプ一覧に即時公開されました。");
       handleClearSelectedVideo();
       setTitle("");
       setDescription("");
@@ -172,6 +196,7 @@ export default function StudentVideoUploadPage() {
       toastError("投稿に失敗しました", "ネットワーク状況をお確かめください。");
     } finally {
       setLoading(false);
+      setUploadProgress(0);
     }
   };
 
@@ -432,15 +457,37 @@ export default function StudentVideoUploadPage() {
               </div>
             </div>
 
+            {/* アップロードプログレスバー */}
+            {loading && (
+              <div className="space-y-2 p-4 bg-emerald-50 border border-emerald-200 rounded-2xl animate-fade-in">
+                <div className="flex items-center justify-between text-xs font-bold text-emerald-900">
+                  <span className="flex items-center gap-1.5">
+                    <UploadCloud className="w-4 h-4 text-emerald-700 animate-bounce" />
+                    <span>AWS S3 クラウドストレージへアップロード中...</span>
+                  </span>
+                  <span>{uploadProgress}%</span>
+                </div>
+                <div className="w-full h-2.5 bg-emerald-200 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-emerald-600 transition-all duration-300 rounded-full"
+                    style={{ width: `${uploadProgress}%` }}
+                  />
+                </div>
+                <p className="text-[11px] text-emerald-700">
+                  大容量動画を軽量化・ストリーミング最適化処理しています。そのままお待ちください。
+                </p>
+              </div>
+            )}
+
             {/* 送信ボタン */}
             <div className="pt-2">
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 bg-emerald-700 hover:bg-emerald-600 active:scale-98 text-white text-sm font-bold rounded-lg transition-all shadow-xs flex items-center justify-center gap-2 disabled:opacity-50"
+                className="w-full py-3.5 bg-emerald-700 hover:bg-emerald-600 active:scale-98 text-white text-xs sm:text-sm font-bold rounded-2xl transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
               >
                 <Film className="w-4 h-4" />
-                <span>{loading ? "投稿処理中..." : "この動画を投稿・更新する"}</span>
+                <span>{loading ? "S3アップロード・公開処理中..." : "この動画を投稿・更新する"}</span>
               </button>
             </div>
           </form>

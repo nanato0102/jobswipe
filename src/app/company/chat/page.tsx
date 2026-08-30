@@ -60,12 +60,48 @@ function ChatContent() {
     }
   }, [isStudent, initialThreadId]);
 
-  // 選択中スレッドのメッセージ読み込み
+  // 選択中スレッドのメッセージ読み込み ＆ リアルタイム同期
   useEffect(() => {
+    const refreshData = () => {
+      const updatedThreads = appStore.getThreads(isStudent);
+      setThreads(updatedThreads);
+
+      if (selectedThreadId) {
+        const latestMsgs = appStore.getMessages(selectedThreadId);
+        setMessages((prev) => {
+          if (JSON.stringify(prev) !== JSON.stringify(latestMsgs)) {
+            return latestMsgs;
+          }
+          return prev;
+        });
+      }
+    };
+
     if (selectedThreadId) {
       setMessages(appStore.getMessages(selectedThreadId));
     }
-  }, [selectedThreadId]);
+
+    // 1. 同一タブ内の即時イベントリスナー
+    const handleSync = () => refreshData();
+    window.addEventListener("jobswipe_sync", handleSync);
+
+    // 2. 別タブ間のストレージイベントリスナー
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === "jobswipe_chat_messages" || e.key === "jobswipe_offers") {
+        refreshData();
+      }
+    };
+    window.addEventListener("storage", handleStorage);
+
+    // 3. 3秒間隔のスマートポーリング
+    const timer = setInterval(refreshData, 3000);
+
+    return () => {
+      window.removeEventListener("jobswipe_sync", handleSync);
+      window.removeEventListener("storage", handleStorage);
+      clearInterval(timer);
+    };
+  }, [selectedThreadId, isStudent]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
