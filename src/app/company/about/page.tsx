@@ -80,7 +80,7 @@ export default function AboutAndLegalPage() {
                     代表責任者
                   </th>
                   <td className="py-3.5 px-5 sm:px-6 text-slate-900">
-                    代表取締役 / プロジェクト代表
+                    -
                   </td>
                 </tr>
 
@@ -89,7 +89,7 @@ export default function AboutAndLegalPage() {
                     所在地
                   </th>
                   <td className="py-3.5 px-5 sm:px-6 text-slate-900">
-                    〒150-0002 東京都渋谷区渋谷2丁目
+                    -
                   </td>
                 </tr>
 
@@ -98,7 +98,7 @@ export default function AboutAndLegalPage() {
                     設立 / 開設
                   </th>
                   <td className="py-3.5 px-5 sm:px-6 text-slate-900">
-                    2026年3月
+                    -
                   </td>
                 </tr>
 
@@ -156,7 +156,7 @@ export default function AboutAndLegalPage() {
                     運営統括責任者
                   </th>
                   <td className="py-3.5 px-5 sm:px-6 text-slate-900">
-                    代表責任者
+                    -
                   </td>
                 </tr>
 
@@ -165,7 +165,7 @@ export default function AboutAndLegalPage() {
                     所在地
                   </th>
                   <td className="py-3.5 px-5 sm:px-6 text-slate-900">
-                    〒150-0002 東京都渋谷区渋谷2丁目（請求があり次第、遅滞なく開示いたします）
+                    -
                   </td>
                 </tr>
 
