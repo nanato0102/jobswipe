@@ -125,7 +125,7 @@ export default function CompanyLoginPage() {
           <p className="text-slate-500">
             まだ企業アカウントをお持ちでないですか？{" "}
             <Link href="/company/register" className="font-bold text-slate-900 hover:underline">
-              企業アカウント新規登録
+              企業利用のお申し込み（無料）
             </Link>
           </p>
         </div>

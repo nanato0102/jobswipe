@@ -651,7 +651,7 @@ export default function HomePage() {
                 className="w-full sm:w-auto px-8 py-4 bg-[#141B2D] hover:bg-[#1D263F] text-slate-200 border border-slate-700/80 hover:border-emerald-500/50 hover:-translate-y-0.5 rounded-2xl text-sm font-bold transition-all flex items-center justify-center gap-2"
               >
                 <Building2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                <span>採用企業様 ログイン・登録</span>
+                <span>採用企業様 ログイン・利用申込</span>
               </Link>
             </div>
           </FadeInView>
