@@ -185,19 +185,19 @@ function ChatContent() {
     : null;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-4 sm:py-6 w-full flex-1 flex flex-col min-h-0">
+    <div className="max-w-5xl mx-auto px-0 sm:px-4 py-0 sm:py-6 w-full flex-1 flex flex-col min-h-0 h-[calc(100dvh-4.5rem)] md:h-[calc(100vh-7.5rem)]">
       {/* メインチャットフレーム */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden flex flex-1 min-h-[560px] max-h-[calc(100dvh-7rem)]">
+      <div className="bg-white rounded-none sm:rounded-2xl border-0 sm:border border-slate-200 shadow-none sm:shadow-xs overflow-hidden flex flex-1 min-h-0 h-full">
         {/* ================= 左カラム: スレッド一覧 ================= */}
         <div
-          className={`w-full md:w-80 lg:w-96 border-r border-slate-200 flex flex-col bg-white ${
+          className={`w-full md:w-80 lg:w-96 border-r border-slate-200 flex flex-col bg-white h-full min-h-0 ${
             selectedThreadId ? "hidden md:flex" : "flex"
           }`}
         >
           {/* スレッドヘッダー */}
-          <div className="p-4 border-b border-slate-100 space-y-3">
+          <div className="p-3.5 sm:p-4 border-b border-slate-100 space-y-2.5 flex-shrink-0">
             <div className="flex items-center justify-between">
-              <h1 className="text-base font-black text-slate-900 flex items-center gap-2">
+              <h1 className="text-sm sm:text-base font-black text-slate-900 flex items-center gap-2">
                 <MessageSquare className="w-4 h-4 text-slate-700" />
                 <span>チャット面談</span>
               </h1>
@@ -211,13 +211,13 @@ function ChatContent() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="名前や所属で検索..."
-                className="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
+                className="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-[16px] sm:text-xs text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
               />
             </div>
           </div>
 
           {/* スレッドリスト */}
-          <div className="flex-1 overflow-y-auto divide-y divide-slate-100">
+          <div className="flex-1 overflow-y-auto divide-y divide-slate-100 overscroll-contain">
             {filteredThreads.map((thread) => {
               const isSelected = thread.id === selectedThreadId;
               return (
@@ -261,19 +261,20 @@ function ChatContent() {
 
         {/* ================= 右カラム: メッセージ詳細 ================= */}
         <div
-          className={`flex-1 flex flex-col bg-slate-50 min-w-0 ${
+          className={`flex-1 flex flex-col bg-slate-50 min-w-0 h-full min-h-0 ${
             !selectedThreadId ? "hidden md:flex" : "flex"
           }`}
         >
           {currentThread ? (
             <>
-              {/* チャットヘッダー */}
-              <div className="px-4 py-3 bg-white border-b border-slate-200 flex items-center justify-between gap-3 shadow-2xs">
-                <div className="flex items-center gap-3 min-w-0">
+              {/* チャットヘッダー（固定） */}
+              <div className="px-3.5 sm:px-4 py-2.5 sm:py-3 bg-white border-b border-slate-200 flex items-center justify-between gap-3 shadow-2xs flex-shrink-0 z-10">
+                <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
                   <button
                     type="button"
                     onClick={() => setSelectedThreadId("")}
-                    className="md:hidden p-1.5 rounded-xl hover:bg-slate-100 text-slate-600"
+                    className="md:hidden p-1.5 -ml-1 rounded-xl hover:bg-slate-100 text-slate-700 cursor-pointer"
+                    title="一覧に戻る"
                   >
                     <ArrowLeft className="w-5 h-5" />
                   </button>
@@ -284,20 +285,20 @@ function ChatContent() {
                         ? `/companies/${currentThread.partnerId}`
                         : `/students/${currentThread.partnerId}`
                     }
-                    className="flex items-center gap-3 min-w-0 group hover:opacity-90 transition-opacity"
+                    className="flex items-center gap-2.5 sm:gap-3 min-w-0 group hover:opacity-90 transition-opacity"
                   >
-                    {renderAvatar(currentThread, "w-10 h-10")}
+                    {renderAvatar(currentThread, "w-9 h-9 sm:w-10 sm:h-10")}
                     <div className="min-w-0">
-                      <h2 className="text-sm font-bold text-slate-900 truncate group-hover:text-blue-700 flex items-center gap-1.5">
+                      <h2 className="text-xs sm:text-sm font-bold text-slate-900 truncate group-hover:text-blue-700 flex items-center gap-1">
                         <span>{currentThread.partnerName}</span>
-                        <span className="text-[11px] font-normal text-blue-700 hidden sm:inline">(詳細 →)</span>
+                        <span className="text-[10px] sm:text-[11px] font-normal text-blue-700 hidden sm:inline">(詳細 →)</span>
                       </h2>
-                      <p className="text-[11px] text-slate-500 truncate">{currentThread.partnerSub}</p>
+                      <p className="text-[10px] sm:text-[11px] text-slate-500 truncate">{currentThread.partnerSub}</p>
                     </div>
                   </Link>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
                   <Link
                     href={
                       currentThread.role === "COMPANY"
@@ -312,7 +313,7 @@ function ChatContent() {
                   <button
                     type="button"
                     onClick={() => setIsReportModalOpen(true)}
-                    className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                    className="p-1.5 sm:p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
                     title="通報する"
                   >
                     <Flag className="w-4 h-4" />
@@ -320,11 +321,11 @@ function ChatContent() {
                 </div>
               </div>
 
-              {/* メッセージタイムライン */}
-              <div className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-4">
+              {/* メッセージタイムライン（ここだけスクロール可能） */}
+              <div className="flex-1 p-3.5 sm:p-6 overflow-y-auto overscroll-contain space-y-3.5 sm:space-y-4 min-h-0">
                 {/* オファー固定カード */}
                 {currentOffer && (
-                  <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-2">
+                  <div className="p-3.5 sm:p-4 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-1.5">
                     <div className="flex items-center justify-between border-b border-slate-100 pb-2">
                       <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
                         <Sparkles className="w-3.5 h-3.5 text-amber-500" />
@@ -349,24 +350,38 @@ function ChatContent() {
                     <div key={m.id} className={`flex flex-col ${isMe ? "items-end" : "items-start"}`}>
                       <span className="text-[10px] text-slate-400 mb-1 px-1">{m.sentAt}</span>
                       <div
-                        className={`max-w-[85%] sm:max-w-md p-3.5 rounded-2xl text-xs sm:text-sm leading-relaxed whitespace-pre-wrap shadow-2xs space-y-2 ${
+                        className={`max-w-[85%] sm:max-w-md p-3 sm:p-3.5 rounded-2xl text-xs sm:text-sm leading-relaxed shadow-2xs ${
                           isMe
-                            ? "bg-slate-900 text-white"
-                            : "bg-white text-slate-900 border border-slate-200"
+                            ? "bg-slate-900 text-white rounded-br-xs"
+                            : "bg-white text-slate-900 border border-slate-200 rounded-bl-xs"
                         }`}
                       >
-                        {/* 添付画像 */}
-                        {m.attachment && m.attachment.type === "image" && (
-                          <div
-                            onClick={() => setPreviewImageModal(m.attachment!.url)}
-                            className="cursor-pointer overflow-hidden rounded-xl border border-slate-700/30 max-w-xs"
-                          >
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={m.attachment.url} alt="添付画像" className="w-full object-cover" />
+                        {m.attachment && (
+                          <div className="mb-2">
+                            {m.attachment.type === "image" ? (
+                              <div className="rounded-xl overflow-hidden border border-white/20">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                  src={m.attachment.url}
+                                  alt={m.attachment.name}
+                                  className="max-w-full max-h-60 object-cover"
+                                />
+                              </div>
+                            ) : (
+                              <a
+                                href={m.attachment.url}
+                                download={m.attachment.name}
+                                className={`flex items-center gap-2 p-2 rounded-xl text-xs font-bold ${
+                                  isMe ? "bg-slate-800 text-white" : "bg-slate-100 text-slate-800"
+                                }`}
+                              >
+                                <Paperclip className="w-4 h-4 flex-shrink-0" />
+                                <span className="truncate">{m.attachment.name}</span>
+                              </a>
+                            )}
                           </div>
                         )}
-
-                        <p>{m.content}</p>
+                        <p className="whitespace-pre-wrap break-words">{m.content}</p>
                       </div>
                     </div>
                   );
@@ -374,8 +389,8 @@ function ChatContent() {
                 <div ref={messagesEndRef} />
               </div>
 
-              {/* メッセージ入力フォーム */}
-              <form onSubmit={handleSendMessage} className="p-3 sm:p-4 bg-white border-t border-slate-200 space-y-2">
+              {/* メッセージ入力フォーム（固定） */}
+              <form onSubmit={handleSendMessage} className="p-2.5 sm:p-4 bg-white border-t border-slate-200 space-y-2 flex-shrink-0 z-10">
                 {selectedFile && (
                   <div className="flex items-center justify-between p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700">
                     <span className="truncate max-w-xs font-medium">📎 {selectedFile.name}</span>
@@ -389,7 +404,7 @@ function ChatContent() {
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
+                    className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer flex-shrink-0"
                     title="ファイルを添付"
                   >
                     <Paperclip className="w-5 h-5" />
@@ -406,14 +421,14 @@ function ChatContent() {
                         handleSendMessage(e);
                       }
                     }}
-                    placeholder="メッセージを入力... (Enterで改行、送信ボタンで送信)"
-                    className="flex-1 p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 resize-none min-h-[42px] max-h-[140px] leading-relaxed"
+                    placeholder="メッセージを入力... (Enterで改行)"
+                    className="flex-1 p-2 sm:p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-[16px] sm:text-xs text-slate-900 placeholder:text-xs focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 resize-none min-h-[40px] max-h-[120px] leading-relaxed"
                   />
 
                   <button
                     type="submit"
                     disabled={!inputText.trim() && !selectedFile}
-                    className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer disabled:opacity-40 self-end mb-0.5"
+                    className="px-3.5 sm:px-4 py-2 sm:py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer disabled:opacity-40 self-end mb-0.5 flex-shrink-0"
                   >
                     <Send className="w-4 h-4" />
                     <span className="hidden sm:inline">送信</span>
