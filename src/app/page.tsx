@@ -183,11 +183,11 @@ export default function HomePage() {
               <div className="relative w-full max-w-[280px] sm:max-w-[310px] aspect-[9/18] rounded-[36px] bg-slate-950 p-2.5 shadow-2xl border-4 border-slate-200">
                 {/* スマホ画面内部 */}
                 <div className="relative w-full h-full rounded-[28px] overflow-hidden bg-slate-900 flex flex-col justify-between p-4 text-white">
-                  {/* 動画背景プレビュー */}
+                  {/* 動画背景プレビュー（佐藤 健太 / 体育会サッカー部主将） */}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80"
-                    alt="自己PR動画プレビュー"
+                    src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600&auto=format&fit=crop&q=80"
+                    alt="佐藤健太の自己PR動画プレビュー"
                     className="absolute inset-0 w-full h-full object-cover opacity-85"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-slate-950/40 pointer-events-none" />
