@@ -25,7 +25,6 @@ import {
   Menu,
   X,
   CreditCard,
-  CheckCircle2,
 } from "lucide-react";
 import { appStore } from "@/lib/appStore";
 
@@ -96,7 +95,7 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* ================= ログイン時の中央ナビゲーション (PC専用) ================= */}
+        {/* ================= ログイン時の中央ナビゲーション (PC専用: md以上) ================= */}
         {isLoggedIn && (
           <nav className="hidden md:flex items-center gap-1 text-xs sm:text-sm font-medium text-slate-700">
             {/* 🎓 学生（STUDENT）メニュー */}
@@ -185,6 +184,18 @@ export default function Navbar() {
                 </Link>
 
                 <Link
+                  href="/company/search"
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors ${
+                    pathname.startsWith("/company/search")
+                      ? "bg-blue-50 text-blue-900 font-bold"
+                      : "hover:bg-slate-100 hover:text-slate-900"
+                  }`}
+                >
+                  <Search className="h-4 w-4 text-blue-700" />
+                  <span>学生検索</span>
+                </Link>
+
+                <Link
                   href="/company/usage"
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors ${
                     pathname.startsWith("/company/usage") || pathname.startsWith("/company/plans")
@@ -236,18 +247,6 @@ export default function Navbar() {
                   </div>
                   <span>通知</span>
                 </Link>
-
-                <Link
-                  href="/company/profile"
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors ${
-                    pathname.startsWith("/company/profile")
-                      ? "bg-blue-50 text-blue-900 font-bold"
-                      : "hover:bg-slate-100 hover:text-slate-900"
-                  }`}
-                >
-                  <Building2 className="h-4 w-4 text-blue-700" />
-                  <span>企業情報</span>
-                </Link>
               </>
             )}
 
@@ -268,9 +267,9 @@ export default function Navbar() {
           </nav>
         )}
 
-        {/* ================= 未ログイン時の中央ナビゲーション (PC専用) ================= */}
+        {/* ================= 未ログイン時の中央ナビゲーション (PC専用: md以上) ================= */}
         {!isLoggedIn && (
-          <nav className="hidden lg:flex items-center gap-6 text-xs sm:text-sm font-bold text-slate-600">
+          <nav className="hidden md:flex items-center gap-6 text-xs sm:text-sm font-bold text-slate-600">
             <Link href="/#features" className="hover:text-emerald-700 transition-colors">
               特徴
             </Link>
@@ -417,6 +416,14 @@ export default function Navbar() {
                         <span>動画スワイプ</span>
                       </Link>
                       <Link
+                        href="/company/search"
+                        onClick={() => setMenuOpen(false)}
+                        className="flex items-center gap-2.5 px-3.5 py-2 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-900 rounded-xl transition-colors font-bold"
+                      >
+                        <Search className="w-4 h-4 text-blue-700" />
+                        <span>学生検索・スカウト</span>
+                      </Link>
+                      <Link
                         href="/company/usage"
                         onClick={() => setMenuOpen(false)}
                         className="flex items-center gap-2.5 px-3.5 py-2 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-900 rounded-xl transition-colors font-bold"
@@ -512,14 +519,14 @@ export default function Navbar() {
             <>
               <Link
                 href="/company/login"
-                className="text-xs font-bold text-slate-600 hover:text-slate-900 hover:underline px-2.5 py-1.5 transition-colors hidden sm:inline-block"
+                className="text-xs font-bold text-slate-600 hover:text-slate-900 hover:underline px-2.5 py-1.5 transition-colors hidden lg:inline-block"
               >
                 採用担当の方はこちら
               </Link>
 
               <Link
                 href="/login"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs sm:text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs sm:text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer"
               >
                 <LogIn className="h-3.5 w-3.5" />
                 <span>ログイン</span>
@@ -527,7 +534,7 @@ export default function Navbar() {
 
               <Link
                 href="/register"
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs sm:text-sm font-bold text-white bg-emerald-700 hover:bg-emerald-600 rounded-xl transition-colors shadow-xs"
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs sm:text-sm font-bold text-white bg-emerald-700 hover:bg-emerald-600 rounded-xl transition-colors shadow-xs cursor-pointer"
               >
                 <UserPlus className="h-3.5 w-3.5" />
                 <span>無料登録</span>
@@ -535,11 +542,11 @@ export default function Navbar() {
             </>
           )}
 
-          {/* ================= モバイルハンバーガーボタン (スマホ専用) ================= */}
+          {/* ================= モバイルハンバーガーボタン (スマホ・タブレット専用: md未満) ================= */}
           <button
             type="button"
             onClick={() => setMobileDrawerOpen(!mobileDrawerOpen)}
-            className="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
+            className="md:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
             aria-label="メニューを開閉"
           >
             {mobileDrawerOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -547,9 +554,9 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* ================= モバイル開閉ドロワーメニュー (スマホ専用) ================= */}
+      {/* ================= モバイル開閉ドロワーメニュー (スマホ専用: md未満) ================= */}
       {mobileDrawerOpen && (
-        <div className="lg:hidden bg-white border-b border-slate-200 px-4 py-6 shadow-xl animate-fade-in space-y-4 max-h-[85vh] overflow-y-auto">
+        <div className="md:hidden bg-white border-b border-slate-200 px-4 py-6 shadow-xl animate-fade-in space-y-4 max-h-[85vh] overflow-y-auto">
           {/* 未ログイン時のモバイルメニュー */}
           {!isLoggedIn ? (
             <div className="space-y-3">
@@ -662,6 +669,10 @@ export default function Navbar() {
                     <Link href="/swipe" className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-blue-50">
                       <Sparkles className="w-4 h-4 text-blue-700" />
                       <span>動画スワイプ</span>
+                    </Link>
+                    <Link href="/company/search" className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-blue-50">
+                      <Search className="w-4 h-4 text-blue-700" />
+                      <span>学生検索・スカウト</span>
                     </Link>
                     <Link href="/company/usage" className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-blue-50">
                       <BarChart3 className="w-4 h-4 text-blue-700" />
