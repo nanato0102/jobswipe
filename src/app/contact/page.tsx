@@ -21,12 +21,13 @@ import {
   Send,
   MessageSquare,
   FileText,
+  Check,
 } from "lucide-react";
 
 export default function ContactPage() {
   const { session, isStudent, isCompany } = useAuth();
   const [userType, setUserType] = useState<"company" | "student">("company");
-  
+
   // 企業用フォームステート
   const [companyName, setCompanyName] = useState("");
   const [repName, setRepName] = useState("");
@@ -94,56 +95,45 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen bg-[#0B0F19] text-white selection:bg-emerald-500 selection:text-white py-12 sm:py-20 px-4 sm:px-6 lg:px-8 overflow-x-hidden relative w-full">
-      {/* 背景の環境光 */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[600px] h-[400px] bg-emerald-600/10 blur-[130px] pointer-events-none rounded-full" />
-
-      <div className="relative mx-auto max-w-4xl w-full space-y-10">
+    <div className="flex-1 flex flex-col min-h-screen bg-slate-50 py-10 sm:py-16 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto w-full space-y-6">
         {/* ヘッダー */}
-        <div className="text-center space-y-3">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold tracking-wide shadow-sm">
-            <MessageSquare className="h-3.5 w-3.5 text-emerald-400" />
-            <span>Contact & Inquiry</span>
+        <div className="text-center space-y-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold shadow-2xs">
+            <Sparkles className="w-3.5 h-3.5 text-emerald-700" />
+            <span>お問い合わせ・ご相談窓口</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-            お問い合わせ・導入相談
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+            お問い合わせ
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto leading-relaxed">
-            採用企業の資料請求・オンラインデモ案内、または学生のご質問を受け付けております。<br className="hidden sm:inline" />
-            専任担当者より、通常1営業日以内にご案内いたします。
+          <p className="text-xs sm:text-sm text-slate-600">
+            サービスに関するご質問・資料請求・導入相談など、お気軽にお問い合わせください。
           </p>
         </div>
 
-        {/* 送信完了表示 */}
+        {/* 完了画面 */}
         {submitted ? (
-          <div className="bg-[#141B2D] rounded-3xl border border-emerald-500/50 p-8 sm:p-12 text-center space-y-6 shadow-2xl animate-fade-in-up">
-            <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto border border-emerald-500/30">
-              <CheckCircle2 className="w-8 h-8" />
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-xs p-8 sm:p-12 text-center space-y-6 animate-scale-up">
+            <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center mx-auto shadow-2xs">
+              <Check className="w-8 h-8 stroke-[2.5]" />
             </div>
-            <div className="space-y-3">
-              <h2 className="text-2xl font-bold text-white">お問い合わせを受け付けました</h2>
-              {receiptNumber && (
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 text-xs font-bold">
-                  <span>受付番号: {receiptNumber}</span>
-                </div>
-              )}
-              <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
-                ご入力いただいたメールアドレス宛に受付確認メールをお送りいたしました。担当者より速やかにご連絡申し上げます。
+
+            <div className="space-y-2">
+              <span className="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-xs font-bold">
+                受付番号: {receiptNumber}
+              </span>
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900">
+                お問い合わせを受け付けました
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
+                お問い合わせいただき誠にありがとうございます。内容を確認のうえ、担当者より原則1〜2営業日以内にご連絡差し上げます。
               </p>
             </div>
+
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
-              {session && (
-                <Link
-                  href={isStudent ? "/student/profile" : isCompany ? "/company/profile" : "/admin-console/dashboard"}
-                  className="w-full sm:w-auto px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold rounded-2xl transition-all shadow-md flex items-center justify-center gap-1.5"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  <span>{isStudent ? "マイページに戻る" : isCompany ? "企業情報に戻る" : "管理画面に戻る"}</span>
-                </Link>
-              )}
               <Link
                 href="/"
-                className="w-full sm:w-auto px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs sm:text-sm font-bold rounded-2xl transition-all shadow-sm flex items-center justify-center"
+                className="w-full sm:w-auto px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-all shadow-xs"
               >
                 トップページへ戻る
               </Link>
@@ -151,72 +141,69 @@ export default function ContactPage() {
                 type="button"
                 onClick={() => {
                   setSubmitted(false);
-                  setReceiptNumber("");
-                  setAgreed(false);
+                  setCompanyName("");
+                  setRepName("");
+                  setCompanyEmail("");
+                  setPhone("");
                   setCompanyMessage("");
+                  setStudentName("");
+                  setStudentEmail("");
                   setStudentMessage("");
+                  setAgreed(false);
                 }}
-                className="w-full sm:w-auto px-5 py-3 text-xs sm:text-sm text-slate-400 hover:text-white transition-colors cursor-pointer"
+                className="w-full sm:w-auto px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all"
               >
                 別のお問い合わせを送信
               </button>
             </div>
           </div>
         ) : (
-          /* メインフォームカード */
-          <div className="bg-[#141B2D] rounded-3xl border border-slate-700/80 p-6 sm:p-10 shadow-2xl space-y-8">
-            {/* 切り替えタブ */}
-            <div className="flex justify-center">
-              <div className="inline-flex p-1 bg-[#0B0F19] rounded-2xl border border-slate-700/60 shadow-inner w-full max-w-md">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setUserType("company");
-                    setError(null);
-                  }}
-                  className={`flex-1 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 ${
-                    userType === "company"
-                      ? "bg-emerald-600 text-white shadow-md"
-                      : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  <Building2 className="w-4 h-4" />
-                  <span>企業・採用担当者様</span>
-                </button>
+          /* お問い合わせフォーム */
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-xs p-6 sm:p-10 space-y-6">
+            {/* 種別タブ切り替え */}
+            <div className="grid grid-cols-2 p-1.5 bg-slate-100 rounded-2xl gap-1">
+              <button
+                type="button"
+                onClick={() => setUserType("company")}
+                className={`py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                  userType === "company"
+                    ? "bg-white text-slate-900 shadow-2xs"
+                    : "text-slate-500 hover:text-slate-800"
+                }`}
+              >
+                <Building2 className="w-4 h-4 text-blue-600" />
+                <span>企業の採用担当者様</span>
+              </button>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    setUserType("student");
-                    setError(null);
-                  }}
-                  className={`flex-1 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 ${
-                    userType === "student"
-                      ? "bg-emerald-600 text-white shadow-md"
-                      : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  <User className="w-4 h-4" />
-                  <span>学生・求職者様</span>
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => setUserType("student")}
+                className={`py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                  userType === "student"
+                    ? "bg-white text-slate-900 shadow-2xs"
+                    : "text-slate-500 hover:text-slate-800"
+                }`}
+              >
+                <User className="w-4 h-4 text-emerald-700" />
+                <span>学生・求職者の方</span>
+              </button>
             </div>
 
             {error && (
-              <div className="p-4 bg-rose-950/40 border border-rose-800/80 rounded-2xl text-rose-300 text-xs flex items-center gap-2.5">
-                <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-400" />
+              <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 text-xs flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 flex-shrink-0" />
                 <span>{error}</span>
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* 企業向けフォーム項目 */}
+            <form onSubmit={handleSubmit} className="space-y-4">
               {userType === "company" ? (
+                /* 企業向け入力項目 */
                 <>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                        貴社名 <span className="text-emerald-400">*</span>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                        法人名・会社名 <span className="text-rose-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -224,103 +211,92 @@ export default function ContactPage() {
                         value={companyName}
                         onChange={(e) => setCompanyName(e.target.value)}
                         placeholder="株式会社〇〇"
-                        className="w-full text-sm border border-slate-700 rounded-2xl px-4 py-2.5 bg-[#0B0F19] text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                        className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                        ご担当者様 氏名 <span className="text-emerald-400">*</span>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                        ご担当者名 <span className="text-rose-500">*</span>
                       </label>
                       <input
                         type="text"
                         required
                         value={repName}
                         onChange={(e) => setRepName(e.target.value)}
-                        placeholder="採用 太郎"
-                        className="w-full text-sm border border-slate-700 rounded-2xl px-4 py-2.5 bg-[#0B0F19] text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                        placeholder="山田 太郎"
+                        className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
                       />
                     </div>
                   </div>
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1.5">部署名・お役職</label>
-                      <input
-                        type="text"
-                        value={department}
-                        onChange={(e) => setDepartment(e.target.value)}
-                        placeholder="人事部 採用グループリーダー"
-                        className="w-full text-sm border border-slate-700 rounded-2xl px-4 py-2.5 bg-[#0B0F19] text-white focus:outline-none focus:border-emerald-500 transition-colors"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1.5">電話番号</label>
-                      <input
-                        type="tel"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="03-1234-5678"
-                        className="w-full text-sm border border-slate-700 rounded-2xl px-4 py-2.5 bg-[#0B0F19] text-white focus:outline-none focus:border-emerald-500 transition-colors"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                        勤務先メールアドレス <span className="text-emerald-400">*</span>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                        メールアドレス <span className="text-rose-500">*</span>
                       </label>
                       <input
                         type="email"
                         required
                         value={companyEmail}
                         onChange={(e) => setCompanyEmail(e.target.value)}
-                        placeholder="recruiter@example.co.jp"
-                        className="w-full text-sm border border-slate-700 rounded-2xl px-4 py-2.5 bg-[#0B0F19] text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                        placeholder="hr@example.com"
+                        className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                        ご相談の種別 <span className="text-emerald-400">*</span>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                        電話番号
                       </label>
-                      <select
-                        value={companyInquiryType}
-                        onChange={(e) => setCompanyInquiryType(e.target.value)}
-                        className="w-full text-sm border border-slate-700 rounded-2xl px-4 py-2.5 bg-[#0B0F19] text-white focus:outline-none focus:border-emerald-500 transition-colors font-medium"
-                      >
-                        <option value="資料請求・サービス概要">資料請求・サービス概要</option>
-                        <option value="料金プラン・見積もり相談">料金プラン・見積もり相談</option>
-                        <option value="オンラインデモ・画面体験希望">オンラインデモ・画面体験希望</option>
-                        <option value="採用母集団・学生層の確認">採用母集団・学生層の確認</option>
-                        <option value="その他のお問い合わせ">その他のお問い合わせ</option>
-                      </select>
+                      <input
+                        type="tel"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder="03-0000-0000"
+                        className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
+                      />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                      お問い合わせ・ご要望詳細 <span className="text-emerald-400">*</span>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      お問い合わせ項目
+                    </label>
+                    <select
+                      value={companyInquiryType}
+                      onChange={(e) => setCompanyInquiryType(e.target.value)}
+                      className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
+                    >
+                      <option value="資料請求・サービス概要">資料請求・サービス概要</option>
+                      <option value="デモ体験・料金プラン相談">デモ体験・料金プラン相談</option>
+                      <option value="オファー枠の追加購入について">オファー枠の追加購入について</option>
+                      <option value="取材・提携について">取材・提携について</option>
+                      <option value="その他">その他</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      お問い合わせ内容 <span className="text-rose-500">*</span>
                     </label>
                     <textarea
-                      required
                       rows={4}
+                      required
                       value={companyMessage}
                       onChange={(e) => setCompanyMessage(e.target.value)}
-                      placeholder="採用予定人数や募集職種（例: 27卒営業職 5名採用）、オンライン面談のご希望日時などをご自由にご記入ください。"
-                      className="w-full text-sm border border-slate-700 rounded-2xl p-4 bg-[#0B0F19] text-white focus:outline-none focus:border-emerald-500 transition-colors leading-relaxed"
+                      placeholder="ご相談内容やご質問を自由にご記入ください。"
+                      className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 leading-relaxed resize-none"
                     />
                   </div>
                 </>
               ) : (
-                /* 学生向けフォーム項目 */
+                /* 学生向け入力項目 */
                 <>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                        お名前 <span className="text-emerald-400">*</span>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                        お名前 <span className="text-rose-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -328,136 +304,100 @@ export default function ContactPage() {
                         value={studentName}
                         onChange={(e) => setStudentName(e.target.value)}
                         placeholder="山田 太郎"
-                        className="w-full text-sm border border-slate-700 rounded-2xl px-4 py-2.5 bg-[#0B0F19] text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                        className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                        大学名 <span className="text-emerald-400">*</span>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                        大学名・学校名
                       </label>
                       <input
                         type="text"
-                        required
                         value={university}
                         onChange={(e) => setUniversity(e.target.value)}
-                        placeholder="早稲田大学"
-                        className="w-full text-sm border border-slate-700 rounded-2xl px-4 py-2.5 bg-[#0B0F19] text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                        placeholder="〇〇大学"
+                        className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
                       />
-                    </div>
-                  </div>
-
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                        メールアドレス <span className="text-emerald-400">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        required
-                        value={studentEmail}
-                        onChange={(e) => setStudentEmail(e.target.value)}
-                        placeholder="student@example.com"
-                        className="w-full text-sm border border-slate-700 rounded-2xl px-4 py-2.5 bg-[#0B0F19] text-white focus:outline-none focus:border-emerald-500 transition-colors"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                        ご相談の種別 <span className="text-emerald-400">*</span>
-                      </label>
-                      <select
-                        value={studentInquiryType}
-                        onChange={(e) => setStudentInquiryType(e.target.value)}
-                        className="w-full text-sm border border-slate-700 rounded-2xl px-4 py-2.5 bg-[#0B0F19] text-white focus:outline-none focus:border-emerald-500 transition-colors font-medium"
-                      >
-                        <option value="利用方法について">利用方法について</option>
-                        <option value="動画撮影・投稿に関する質問">動画撮影・投稿に関する質問</option>
-                        <option value="スカウト・選考に関する質問">スカウト・選考に関する質問</option>
-                        <option value="退会・アカウントについて">退会・アカウントについて</option>
-                        <option value="その他">その他</option>
-                      </select>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                      お問い合わせ内容 <span className="text-emerald-400">*</span>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      メールアドレス <span className="text-rose-500">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      value={studentEmail}
+                      onChange={(e) => setStudentEmail(e.target.value)}
+                      placeholder="student@example.com"
+                      className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      お問い合わせ項目
+                    </label>
+                    <select
+                      value={studentInquiryType}
+                      onChange={(e) => setStudentInquiryType(e.target.value)}
+                      className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
+                    >
+                      <option value="利用方法について">利用方法について</option>
+                      <option value="動画撮影・アップロードについて">動画撮影・アップロードについて</option>
+                      <option value="オファー・チャット面談について">オファー・チャット面談について</option>
+                      <option value="退会・アカウント削除について">退会・アカウント削除について</option>
+                      <option value="その他">その他</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      お問い合わせ内容 <span className="text-rose-500">*</span>
                     </label>
                     <textarea
-                      required
                       rows={4}
+                      required
                       value={studentMessage}
                       onChange={(e) => setStudentMessage(e.target.value)}
-                      placeholder="ご不明な点や質問をご記入ください。"
-                      className="w-full text-sm border border-slate-700 rounded-2xl p-4 bg-[#0B0F19] text-white focus:outline-none focus:border-emerald-500 transition-colors leading-relaxed"
+                      placeholder="ご質問や困っていることをご記入ください。"
+                      className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 leading-relaxed resize-none"
                     />
                   </div>
                 </>
               )}
 
               {/* プライバシーポリシー同意 */}
-              <div className="p-4 bg-[#0B0F19] rounded-2xl border border-slate-700/60 flex items-start gap-3">
-                <input
-                  type="checkbox"
-                  id="privacy-agree"
-                  checked={agreed}
-                  onChange={(e) => setAgreed(e.target.checked)}
-                  className="mt-1 w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 focus:ring-offset-0 bg-[#141B2D] border-slate-600 cursor-pointer"
-                />
-                <label htmlFor="privacy-agree" className="text-xs text-slate-300 leading-relaxed cursor-pointer select-none">
-                  <Link href="/privacy" target="_blank" className="text-emerald-400 hover:underline font-bold">
-                    プライバシーポリシー（個人情報の取り扱い）
-                  </Link>
-                  を確認し、同意の上で送信します。
+              <div className="pt-2">
+                <label className="flex items-start gap-2.5 cursor-pointer text-xs text-slate-600">
+                  <input
+                    type="checkbox"
+                    checked={agreed}
+                    onChange={(e) => setAgreed(e.target.checked)}
+                    className="mt-0.5 w-4 h-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900/20 cursor-pointer"
+                  />
+                  <span>
+                    <Link href="/privacy" target="_blank" className="underline font-bold text-slate-900 hover:text-emerald-700">
+                      プライバシーポリシー
+                    </Link>
+                    に同意して送信する
+                  </span>
                 </label>
               </div>
 
-              {/* 送信ボタン */}
               <button
                 type="submit"
                 disabled={loading || !agreed}
-                className="w-full py-4 px-8 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm sm:text-base font-bold rounded-2xl transition-all shadow-[0_10px_25px_rgba(5,150,105,0.3)] hover:shadow-[0_15px_35px_rgba(5,150,105,0.5)] flex items-center justify-center gap-2 group"
+                className="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs sm:text-sm font-bold transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer disabled:opacity-40"
               >
-                {loading ? (
-                  <span>送信中...</span>
-                ) : (
-                  <>
-                    <Send className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                    <span>送信する</span>
-                  </>
-                )}
+                <Send className="w-4 h-4" />
+                <span>{loading ? "送信中..." : "上記の内容で送信する"}</span>
               </button>
             </form>
           </div>
         )}
-
-        {/* 信頼性・運営情報フッターインフォ */}
-        <div className="grid sm:grid-cols-3 gap-4 text-xs text-slate-400">
-          <div className="p-4 bg-[#141B2D]/60 rounded-2xl border border-slate-800 flex items-center gap-3">
-            <Clock className="w-5 h-5 text-emerald-400 flex-shrink-0" />
-            <div>
-              <p className="font-bold text-slate-200">営業時間</p>
-              <p>平日 10:00 〜 19:00</p>
-            </div>
-          </div>
-
-          <div className="p-4 bg-[#141B2D]/60 rounded-2xl border border-slate-800 flex items-center gap-3">
-            <ShieldCheck className="w-5 h-5 text-emerald-400 flex-shrink-0" />
-            <div>
-              <p className="font-bold text-slate-200">セキュリティ基準</p>
-              <p>IPA安全なウェブ運用準拠</p>
-            </div>
-          </div>
-
-          <div className="p-4 bg-[#141B2D]/60 rounded-2xl border border-slate-800 flex items-center gap-3">
-            <Sparkles className="w-5 h-5 text-emerald-400 flex-shrink-0" />
-            <div>
-              <p className="font-bold text-slate-200">法人審査体制</p>
-              <p>完全審査制プラットフォーム</p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
