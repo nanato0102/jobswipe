@@ -22,6 +22,10 @@ import {
   HelpCircle,
   BarChart3,
   Bell,
+  Menu,
+  X,
+  CreditCard,
+  CheckCircle2,
 } from "lucide-react";
 import { appStore } from "@/lib/appStore";
 
@@ -29,6 +33,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const { session, isStudent, isCompany, isAdmin, isLoggedIn, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -42,18 +47,18 @@ export default function Navbar() {
     }
   }, [pathname, isStudent, isCompany]);
 
-  const isAuthPage =
-    pathname === "/login" ||
-    pathname === "/register" ||
-    pathname === "/company/login" ||
-    pathname === "/company/register";
+  // ページ遷移時にモバイルメニューを閉じる
+  useEffect(() => {
+    setMobileDrawerOpen(false);
+    setMenuOpen(false);
+  }, [pathname]);
 
   const homeRoute = isStudent
     ? "/student/profile"
     : isCompany
     ? "/swipe"
     : isAdmin
-    ? "/admin/dashboard"
+    ? "/admin-console/dashboard"
     : "/";
 
   // 外側クリックでドロップダウンを閉じる
@@ -68,13 +73,13 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 w-full border-b border-slate-200/90 bg-white/95 backdrop-blur-md shadow-2xs">
+    <header className="fixed top-0 left-0 right-0 z-50 w-full border-b border-slate-200 bg-white/95 backdrop-blur-md shadow-2xs">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 h-16 relative">
-        {/* ================= 左側: 公式ロゴ（スマホ・PC共通でホームへ） ================= */}
+        {/* ================= 左側: 公式ロゴ ================= */}
         <Link
           href={homeRoute}
           className="flex items-center gap-2.5 group select-none flex-shrink-0"
-          title="ホームへ戻る"
+          title="JobSwipe ホームへ"
         >
           <div className="relative w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center group-hover:scale-105 transition-transform">
             <Image
@@ -86,7 +91,7 @@ export default function Navbar() {
               priority
             />
           </div>
-          <span className="font-black text-lg sm:text-xl text-slate-900 tracking-tight group-hover:text-emerald-800 transition-colors">
+          <span className="font-black text-lg sm:text-xl text-slate-900 tracking-tight group-hover:text-emerald-700 transition-colors">
             JobSwipe
           </span>
         </Link>
@@ -105,7 +110,7 @@ export default function Navbar() {
                       : "hover:bg-slate-100 hover:text-slate-900"
                   }`}
                 >
-                  <User className="h-4 w-4" />
+                  <User className="h-4 w-4 text-emerald-700" />
                   <span>プロフィール</span>
                 </Link>
 
@@ -182,13 +187,13 @@ export default function Navbar() {
                 <Link
                   href="/company/usage"
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors ${
-                    pathname.startsWith("/company/usage")
+                    pathname.startsWith("/company/usage") || pathname.startsWith("/company/plans")
                       ? "bg-blue-50 text-blue-900 font-bold"
                       : "hover:bg-slate-100 hover:text-slate-900"
                   }`}
                 >
                   <BarChart3 className="h-4 w-4 text-blue-700" />
-                  <span>利用状況</span>
+                  <span>利用状況・プラン</span>
                 </Link>
 
                 <Link
@@ -248,32 +253,51 @@ export default function Navbar() {
 
             {/* 🛡️ 管理者（ADMIN）メニュー */}
             {isAdmin && (
-              <>
-                <Link
-                  href="/admin-console/dashboard"
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors ${
-                    pathname.startsWith("/admin-console")
-                      ? "bg-rose-50 text-rose-900 font-bold"
-                      : "hover:bg-slate-100 hover:text-slate-900"
-                  }`}
-                >
-                  <ShieldCheck className="h-4 w-4 text-rose-600" />
-                  <span>管理コンソール</span>
-                </Link>
-              </>
+              <Link
+                href="/admin-console/dashboard"
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors ${
+                  pathname.startsWith("/admin-console")
+                    ? "bg-rose-50 text-rose-900 font-bold"
+                    : "hover:bg-slate-100 hover:text-slate-900"
+                }`}
+              >
+                <ShieldCheck className="h-4 w-4 text-rose-600" />
+                <span>管理コンソール</span>
+              </Link>
             )}
           </nav>
         )}
 
-        {/* ================= 右側: ユーザー情報 & ドロップダウン / 未ログイン時ボタン ================= */}
+        {/* ================= 未ログイン時の中央ナビゲーション (PC専用) ================= */}
+        {!isLoggedIn && (
+          <nav className="hidden lg:flex items-center gap-6 text-xs sm:text-sm font-bold text-slate-600">
+            <Link href="/#features" className="hover:text-emerald-700 transition-colors">
+              特徴
+            </Link>
+            <Link href="/#how-it-works" className="hover:text-emerald-700 transition-colors">
+              使い方
+            </Link>
+            <Link href="/#pricing" className="hover:text-emerald-700 transition-colors">
+              料金プラン
+            </Link>
+            <Link href="/#faq" className="hover:text-emerald-700 transition-colors">
+              よくある質問
+            </Link>
+            <Link href="/contact" className="hover:text-emerald-700 transition-colors">
+              お問い合わせ
+            </Link>
+          </nav>
+        )}
+
+        {/* ================= 右側: ユーザーメニュー / ログインボタン ================= */}
         <div className="flex items-center gap-2 sm:gap-3">
           {isLoggedIn ? (
-            /* ログイン中: ユーザー名タップでドロップダウン表示 */
+            /* ログイン時: ユーザープロフィールピル ＆ ドロップダウン */
             <div className="relative" ref={menuRef}>
               <button
                 type="button"
                 onClick={() => setMenuOpen(!menuOpen)}
-                className="flex items-center gap-2 pr-2 rounded-full hover:bg-slate-100 transition-colors focus:outline-none"
+                className="flex items-center gap-2 p-1 sm:px-2.5 sm:py-1.5 rounded-full hover:bg-slate-100 transition-colors focus:outline-none cursor-pointer"
                 aria-expanded={menuOpen}
               >
                 {/* 角丸四角アバターまたはロールバッジ */}
@@ -282,7 +306,7 @@ export default function Navbar() {
                     const c = appStore.getCompanyDetails("c1");
                     if (c?.logoUrl) {
                       return (
-                        <div className="w-8 h-8 rounded-full overflow-hidden border border-slate-200 bg-white flex items-center justify-center shadow-sm flex-shrink-0">
+                        <div className="w-8 h-8 rounded-full overflow-hidden border border-slate-200 bg-white flex items-center justify-center shadow-2xs flex-shrink-0">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img src={c.logoUrl} alt="Logo" className="w-full h-full object-contain" />
                         </div>
@@ -299,7 +323,7 @@ export default function Navbar() {
                     const s = appStore.getStudentDetails("s1");
                     if (s?.avatarUrl) {
                       return (
-                        <div className="w-8 h-8 rounded-full overflow-hidden border border-slate-200 bg-slate-100 shadow-sm flex-shrink-0">
+                        <div className="w-8 h-8 rounded-full overflow-hidden border border-slate-200 bg-slate-100 shadow-2xs flex-shrink-0">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img src={s.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
                         </div>
@@ -322,7 +346,7 @@ export default function Navbar() {
                   </div>
                 )}
 
-                <span className="text-xs sm:text-sm font-bold text-slate-800 max-w-[100px] sm:max-w-[150px] truncate">
+                <span className="text-xs sm:text-sm font-bold text-slate-800 max-w-[90px] sm:max-w-[140px] truncate hidden sm:inline">
                   {session?.name || session?.email}
                 </span>
 
@@ -335,9 +359,9 @@ export default function Navbar() {
 
               {/* ドロップダウンメニューパネル */}
               {menuOpen && (
-                <div className="absolute right-0 mt-2 w-60 bg-white rounded-xl border border-slate-200 shadow-xl p-1.5 z-50 animate-fade-in-up space-y-0.5">
+                <div className="absolute right-0 mt-2 w-60 bg-white rounded-2xl border border-slate-200 shadow-xl p-1.5 z-50 animate-fade-in space-y-0.5">
                   {/* ユーザーサマリー情報 */}
-                  <div className="px-3.5 py-2.5 border-b border-slate-100 bg-slate-50 rounded-lg mb-1">
+                  <div className="px-3.5 py-2.5 border-b border-slate-100 bg-slate-50 rounded-xl mb-1">
                     <p className="text-xs font-bold text-slate-900 truncate">
                       {session?.name || "ユーザー"}
                     </p>
@@ -350,34 +374,34 @@ export default function Navbar() {
                       <Link
                         href="/student/profile"
                         onClick={() => setMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-3 py-2 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-900 rounded-md transition-colors font-medium"
+                        className="flex items-center gap-2.5 px-3.5 py-2 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-900 rounded-xl transition-colors font-bold"
                       >
                         <User className="w-4 h-4 text-emerald-700" />
-                        <span>プロフィール</span>
+                        <span>プロフィール設定</span>
                       </Link>
                       <Link
                         href="/student/video"
                         onClick={() => setMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-3 py-2 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-900 rounded-md transition-colors font-medium"
+                        className="flex items-center gap-2.5 px-3.5 py-2 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-900 rounded-xl transition-colors font-bold"
                       >
                         <Film className="w-4 h-4 text-emerald-700" />
-                        <span>動画投稿</span>
+                        <span>動画投稿・管理</span>
                       </Link>
                       <Link
                         href="/student/offers"
                         onClick={() => setMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-3.5 py-2.5 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-900 rounded-xl transition-colors font-medium"
+                        className="flex items-center gap-2.5 px-3.5 py-2 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-900 rounded-xl transition-colors font-bold"
                       >
                         <Sparkles className="w-4 h-4 text-emerald-700" />
-                        <span>オファー</span>
+                        <span>届いたオファー</span>
                       </Link>
                       <Link
                         href="/company/chat"
                         onClick={() => setMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-3.5 py-2.5 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-900 rounded-xl transition-colors font-medium"
+                        className="flex items-center gap-2.5 px-3.5 py-2 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-900 rounded-xl transition-colors font-bold"
                       >
                         <MessageSquare className="w-4 h-4 text-emerald-700" />
-                        <span>チャット</span>
+                        <span>チャット面談</span>
                       </Link>
                     </>
                   )}
@@ -387,7 +411,7 @@ export default function Navbar() {
                       <Link
                         href="/swipe"
                         onClick={() => setMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-3.5 py-2.5 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-900 rounded-xl transition-colors font-medium"
+                        className="flex items-center gap-2.5 px-3.5 py-2 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-900 rounded-xl transition-colors font-bold"
                       >
                         <Sparkles className="w-4 h-4 text-blue-700" />
                         <span>動画スワイプ</span>
@@ -395,15 +419,23 @@ export default function Navbar() {
                       <Link
                         href="/company/usage"
                         onClick={() => setMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-3.5 py-2.5 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-900 rounded-xl transition-colors font-medium"
+                        className="flex items-center gap-2.5 px-3.5 py-2 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-900 rounded-xl transition-colors font-bold"
                       >
                         <BarChart3 className="w-4 h-4 text-blue-700" />
-                        <span>利用状況</span>
+                        <span>利用状況・プラン</span>
+                      </Link>
+                      <Link
+                        href="/company/plans"
+                        onClick={() => setMenuOpen(false)}
+                        className="flex items-center gap-2.5 px-3.5 py-2 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-900 rounded-xl transition-colors font-bold"
+                      >
+                        <CreditCard className="w-4 h-4 text-blue-700" />
+                        <span>プラン変更・増枠</span>
                       </Link>
                       <Link
                         href="/company/likes"
                         onClick={() => setMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-3.5 py-2.5 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-900 rounded-xl transition-colors font-medium"
+                        className="flex items-center gap-2.5 px-3.5 py-2 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-900 rounded-xl transition-colors font-bold"
                       >
                         <Heart className="w-4 h-4 text-blue-700" />
                         <span>気になる一覧</span>
@@ -411,33 +443,31 @@ export default function Navbar() {
                       <Link
                         href="/company/chat"
                         onClick={() => setMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-3.5 py-2.5 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-900 rounded-xl transition-colors font-medium"
+                        className="flex items-center gap-2.5 px-3.5 py-2 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-900 rounded-xl transition-colors font-bold"
                       >
                         <MessageSquare className="w-4 h-4 text-blue-700" />
-                        <span>チャット</span>
+                        <span>チャット面談</span>
                       </Link>
                       <Link
                         href="/company/profile"
                         onClick={() => setMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-3.5 py-2.5 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-900 rounded-xl transition-colors font-medium"
+                        className="flex items-center gap-2.5 px-3.5 py-2 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-900 rounded-xl transition-colors font-bold"
                       >
                         <Building2 className="w-4 h-4 text-blue-700" />
-                        <span>企業情報</span>
+                        <span>企業情報・求人編集</span>
                       </Link>
                     </>
                   )}
 
                   {isAdmin && (
-                    <>
-                      <Link
-                        href="/admin-console/dashboard"
-                        onClick={() => setMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-3.5 py-2.5 text-xs text-rose-700 hover:bg-rose-50 rounded-xl transition-colors font-bold"
-                      >
-                        <ShieldCheck className="w-4 h-4 text-rose-600" />
-                        <span>管理コンソール</span>
-                      </Link>
-                    </>
+                    <Link
+                      href="/admin-console/dashboard"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center gap-2.5 px-3.5 py-2 text-xs text-rose-700 hover:bg-rose-50 rounded-xl transition-colors font-bold"
+                    >
+                      <ShieldCheck className="w-4 h-4 text-rose-600" />
+                      <span>管理コンソール</span>
+                    </Link>
                   )}
 
                   <hr className="border-slate-100 my-1" />
@@ -454,7 +484,7 @@ export default function Navbar() {
                   <Link
                     href="/contact"
                     onClick={() => setMenuOpen(false)}
-                    className="flex items-center gap-2.5 px-3.5 py-2 text-xs text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl transition-colors"
+                    className="flex items-center gap-2.5 px-3.5 py-2 text-xs text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl transition-colors font-medium"
                   >
                     <HelpCircle className="w-4 h-4 text-slate-400" />
                     <span>お問い合わせ・サポート</span>
@@ -469,7 +499,7 @@ export default function Navbar() {
                       setMenuOpen(false);
                       logout();
                     }}
-                    className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs font-bold text-rose-600 hover:bg-rose-50 rounded-xl transition-colors text-left"
+                    className="w-full flex items-center gap-2.5 px-3.5 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50 rounded-xl transition-colors text-left cursor-pointer"
                   >
                     <LogOut className="w-4 h-4" />
                     <span>ログアウト</span>
@@ -481,24 +511,15 @@ export default function Navbar() {
             /* 未ログイン時 */
             <>
               <Link
-                href="/contact"
-                className="text-xs font-semibold text-slate-600 hover:text-emerald-800 px-2 py-1.5 transition-colors hidden md:flex items-center gap-1"
-              >
-                <MessageSquare className="w-3.5 h-3.5 text-slate-500" />
-                <span>お問い合わせ</span>
-              </Link>
-
-              <Link
                 href="/company/login"
-                className="text-xs font-semibold text-slate-600 hover:text-emerald-800 hover:underline px-2 py-1.5 transition-colors hidden sm:flex items-center gap-1"
+                className="text-xs font-bold text-slate-600 hover:text-slate-900 hover:underline px-2.5 py-1.5 transition-colors hidden sm:inline-block"
               >
-                <Building2 className="w-3.5 h-3.5 text-slate-500" />
-                <span>採用担当の方はこちら</span>
+                採用担当の方はこちら
               </Link>
 
               <Link
                 href="/login"
-                className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs sm:text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors"
               >
                 <LogIn className="h-3.5 w-3.5" />
                 <span>ログイン</span>
@@ -506,15 +527,189 @@ export default function Navbar() {
 
               <Link
                 href="/register"
-                className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-white bg-emerald-700 hover:bg-emerald-600 rounded-xl transition-colors shadow-sm"
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs sm:text-sm font-bold text-white bg-emerald-700 hover:bg-emerald-600 rounded-xl transition-colors shadow-xs"
               >
                 <UserPlus className="h-3.5 w-3.5" />
-                <span>新規登録</span>
+                <span>無料登録</span>
               </Link>
             </>
           )}
+
+          {/* ================= モバイルハンバーガーボタン (スマホ専用) ================= */}
+          <button
+            type="button"
+            onClick={() => setMobileDrawerOpen(!mobileDrawerOpen)}
+            className="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
+            aria-label="メニューを開閉"
+          >
+            {mobileDrawerOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
       </div>
+
+      {/* ================= モバイル開閉ドロワーメニュー (スマホ専用) ================= */}
+      {mobileDrawerOpen && (
+        <div className="lg:hidden bg-white border-b border-slate-200 px-4 py-6 shadow-xl animate-fade-in space-y-4 max-h-[85vh] overflow-y-auto">
+          {/* 未ログイン時のモバイルメニュー */}
+          {!isLoggedIn ? (
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-2 pb-3 border-b border-slate-100">
+                <Link
+                  href="/register"
+                  className="py-3 bg-emerald-700 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 shadow-xs"
+                >
+                  <UserPlus className="w-4 h-4" />
+                  <span>学生無料登録</span>
+                </Link>
+                <Link
+                  href="/company/register"
+                  className="py-3 bg-slate-900 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 shadow-xs"
+                >
+                  <Building2 className="w-4 h-4 text-blue-400" />
+                  <span>企業無料登録</span>
+                </Link>
+              </div>
+
+              <div className="space-y-1 text-xs font-bold text-slate-700">
+                <Link
+                  href="/#features"
+                  className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors"
+                >
+                  <span>サービスの特徴</span>
+                  <Sparkles className="w-4 h-4 text-emerald-700" />
+                </Link>
+                <Link
+                  href="/#how-it-works"
+                  className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors"
+                >
+                  <span>使い方・3ステップ</span>
+                  <Film className="w-4 h-4 text-slate-500" />
+                </Link>
+                <Link
+                  href="/#pricing"
+                  className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors"
+                >
+                  <span>料金プラン</span>
+                  <CreditCard className="w-4 h-4 text-slate-500" />
+                </Link>
+                <Link
+                  href="/#faq"
+                  className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors"
+                >
+                  <span>よくある質問 (FAQ)</span>
+                  <HelpCircle className="w-4 h-4 text-slate-500" />
+                </Link>
+                <Link
+                  href="/contact"
+                  className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors"
+                >
+                  <span>お問い合わせ</span>
+                  <MessageSquare className="w-4 h-4 text-slate-500" />
+                </Link>
+              </div>
+
+              <div className="pt-2 border-t border-slate-100 grid grid-cols-2 gap-2 text-center text-xs">
+                <Link
+                  href="/login"
+                  className="py-2.5 bg-slate-100 text-slate-800 font-bold rounded-xl hover:bg-slate-200"
+                >
+                  学生ログイン
+                </Link>
+                <Link
+                  href="/company/login"
+                  className="py-2.5 bg-slate-100 text-slate-800 font-bold rounded-xl hover:bg-slate-200"
+                >
+                  企業ログイン
+                </Link>
+              </div>
+            </div>
+          ) : (
+            /* ログイン時のモバイルメニュー */
+            <div className="space-y-3">
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                <p className="text-xs font-bold text-slate-900">{session?.name || "ユーザー"}</p>
+                <p className="text-[11px] text-slate-500">{session?.email}</p>
+              </div>
+
+              <div className="space-y-1 text-xs font-bold text-slate-700">
+                {isStudent && (
+                  <>
+                    <Link href="/student/profile" className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-emerald-50">
+                      <User className="w-4 h-4 text-emerald-700" />
+                      <span>プロフィール設定</span>
+                    </Link>
+                    <Link href="/student/video" className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-emerald-50">
+                      <Film className="w-4 h-4 text-emerald-700" />
+                      <span>動画投稿・管理</span>
+                    </Link>
+                    <Link href="/student/offers" className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-emerald-50">
+                      <Sparkles className="w-4 h-4 text-emerald-700" />
+                      <span>オファー一覧</span>
+                    </Link>
+                    <Link href="/company/chat" className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-emerald-50">
+                      <MessageSquare className="w-4 h-4 text-emerald-700" />
+                      <span>チャット面談</span>
+                    </Link>
+                    <Link href="/student/notifications" className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-emerald-50">
+                      <Bell className="w-4 h-4 text-emerald-700" />
+                      <span>通知センター</span>
+                    </Link>
+                  </>
+                )}
+
+                {isCompany && (
+                  <>
+                    <Link href="/swipe" className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-blue-50">
+                      <Sparkles className="w-4 h-4 text-blue-700" />
+                      <span>動画スワイプ</span>
+                    </Link>
+                    <Link href="/company/usage" className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-blue-50">
+                      <BarChart3 className="w-4 h-4 text-blue-700" />
+                      <span>利用状況・プラン</span>
+                    </Link>
+                    <Link href="/company/plans" className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-blue-50">
+                      <CreditCard className="w-4 h-4 text-blue-700" />
+                      <span>料金プラン変更・増枠</span>
+                    </Link>
+                    <Link href="/company/likes" className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-blue-50">
+                      <Heart className="w-4 h-4 text-blue-700" />
+                      <span>気になる一覧</span>
+                    </Link>
+                    <Link href="/company/chat" className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-blue-50">
+                      <MessageSquare className="w-4 h-4 text-blue-700" />
+                      <span>チャット面談</span>
+                    </Link>
+                    <Link href="/company/profile" className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-blue-50">
+                      <Building2 className="w-4 h-4 text-blue-700" />
+                      <span>企業情報・求人編集</span>
+                    </Link>
+                  </>
+                )}
+
+                <hr className="border-slate-100 my-2" />
+
+                <Link href="/settings" className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-slate-50">
+                  <Settings className="w-4 h-4 text-slate-500" />
+                  <span>各種設定</span>
+                </Link>
+                <Link href="/contact" className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-slate-50">
+                  <HelpCircle className="w-4 h-4 text-slate-500" />
+                  <span>お問い合わせ</span>
+                </Link>
+
+                <button
+                  type="button"
+                  onClick={() => logout()}
+                  className="w-full flex items-center gap-2.5 p-3 text-rose-600 rounded-xl hover:bg-rose-50 text-left cursor-pointer"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>ログアウト</span>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </header>
   );
 }

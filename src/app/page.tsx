@@ -21,6 +21,8 @@ import {
   MessageSquare,
   Award,
   Check,
+  CreditCard,
+  Layers,
 } from "lucide-react";
 
 export default function HomePage() {
@@ -43,6 +45,50 @@ export default function HomePage() {
     "不動産・PropTech",
     "ブライダル・ホテル・観光",
     "エンタメ・メディア",
+  ];
+
+  const pricingPlans = [
+    {
+      name: "ライトプラン",
+      price: "3,800",
+      quota: "30",
+      description: "まずは気軽に新卒スカウトを試したい企業様向け",
+      features: [
+        "月間オファー 30枠付与",
+        "自己PR動画スワイプ閲覧 無制限",
+        "ダイレクトチャット面談",
+        "メールサポート",
+      ],
+      popular: false,
+    },
+    {
+      name: "スタンダードプラン",
+      price: "9,800",
+      quota: "100",
+      description: "積極的な母集団形成・毎月安定してスカウトしたい企業様向け",
+      features: [
+        "月間オファー 100枠付与",
+        "自己PR動画スワイプ閲覧 無制限",
+        "ダイレクトチャット面談",
+        "優先チャットサポート",
+        "オファー承諾率アナリティクス",
+      ],
+      popular: true,
+    },
+    {
+      name: "プレミアムプラン",
+      price: "24,800",
+      quota: "300",
+      description: "複数職種や大量採用をスピード重視で行う企業様向け",
+      features: [
+        "月間オファー 300枠付与",
+        "自己PR動画スワイプ閲覧 無制限",
+        "ダイレクトチャット面談",
+        "専任カスタマーサクセス",
+        "スカウト文面添削サポート",
+      ],
+      popular: false,
+    },
   ];
 
   const faqs = [
@@ -73,7 +119,7 @@ export default function HomePage() {
       {/* ========================================================================= */}
       {/* 1. ヒーローセクション（白基調 ＋ 明るいエメラルドアクセント ＋ スマホモック） */}
       {/* ========================================================================= */}
-      <section className="relative overflow-hidden pt-12 pb-16 sm:pt-20 sm:pb-24 lg:pt-24 lg:pb-32 bg-white">
+      <section className="relative overflow-hidden pt-8 pb-16 sm:pt-16 sm:pb-24 lg:pt-20 lg:pb-28 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             {/* 左側：キャッチコピー ＆ CTA */}
@@ -99,7 +145,7 @@ export default function HomePage() {
               <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4">
                 <Link
                   href="/register"
-                  className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-sm shadow-xs transition-all flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-sm shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <User className="w-4 h-4" />
                   <span>動画を撮ってスカウトを待つ（無料）</span>
@@ -108,7 +154,7 @@ export default function HomePage() {
 
                 <Link
                   href="/swipe"
-                  className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow-xs transition-all flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Building2 className="w-4 h-4 text-blue-400" />
                   <span>企業向けスワイプを体験する</span>
@@ -203,9 +249,9 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 2. 「JobSwipeが解決する就活・採用の課題」セクション (極薄スレート背景) */}
+      {/* 2. 「JobSwipeが解決する就活・採用の課題」セクション (id="features") */}
       {/* ========================================================================= */}
-      <section className="py-16 sm:py-24 bg-slate-50 border-y border-slate-200">
+      <section id="features" className="py-16 sm:py-24 bg-slate-50 border-y border-slate-200 scroll-mt-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="text-center space-y-3 max-w-2xl mx-auto">
             <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest block">
@@ -257,9 +303,9 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 3. 「3つのステップで始まる逆求人」セクション (白背景) */}
+      {/* 3. 「3つのステップで始まる逆求人」セクション (id="how-it-works") */}
       {/* ========================================================================= */}
-      <section className="py-16 sm:py-24 bg-white">
+      <section id="how-it-works" className="py-16 sm:py-24 bg-white scroll-mt-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="text-center space-y-3 max-w-2xl mx-auto">
             <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest block">
@@ -320,9 +366,92 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 4. 「注目の参画業界・求める人物像」セクション (極薄スレート背景) */}
+      {/* 4. 「企業の料金プラン」セクション (id="pricing") */}
       {/* ========================================================================= */}
-      <section className="py-16 sm:py-24 bg-slate-50 border-y border-slate-200">
+      <section id="pricing" className="py-16 sm:py-24 bg-slate-50 border-y border-slate-200 scroll-mt-16">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          <div className="text-center space-y-3 max-w-2xl mx-auto">
+            <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest block">
+              PRICING PLANS
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
+              導入しやすい透明な料金体系
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600">
+              学生・求職者は完全無料。企業様は採用規模に応じて月額 3,800円〜 スタート可能です。
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-3 gap-6">
+            {pricingPlans.map((plan, idx) => (
+              <div
+                key={idx}
+                className={`bg-white rounded-3xl border p-6 sm:p-7 space-y-5 flex flex-col justify-between relative shadow-xs ${
+                  plan.popular
+                    ? "border-blue-600 ring-2 ring-blue-600/20"
+                    : "border-slate-200"
+                }`}
+              >
+                {plan.popular && (
+                  <span className="absolute -top-3 right-6 px-3 py-0.5 rounded-full bg-slate-900 text-white font-bold text-[10px] shadow-2xs">
+                    一番人気・推奨
+                  </span>
+                )}
+
+                <div className="space-y-3">
+                  <div>
+                    <h3 className="font-bold text-slate-900 text-base">{plan.name}</h3>
+                    <p className="text-xs text-slate-500 mt-1">{plan.description}</p>
+                  </div>
+
+                  <div className="py-3 border-y border-slate-100">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-3xl font-black text-slate-900">¥{plan.price}</span>
+                      <span className="text-xs text-slate-500 font-bold">/月 (税別)</span>
+                    </div>
+                    <p className="text-xs font-bold text-blue-700 mt-1">月間 {plan.quota}枠 付与</p>
+                  </div>
+
+                  <ul className="space-y-2 text-xs text-slate-600">
+                    {plan.features.map((feat, fIdx) => (
+                      <li key={fIdx} className="flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <Link
+                  href="/company/register"
+                  className={`w-full py-3 rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer ${
+                    plan.popular
+                      ? "bg-slate-900 hover:bg-slate-800 text-white"
+                      : "bg-slate-100 hover:bg-slate-200 text-slate-800"
+                  }`}
+                >
+                  <span>このプランで無料登録</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            ))}
+          </div>
+
+          <div className="p-4 bg-white rounded-2xl border border-slate-200 text-center text-xs text-slate-500 space-y-1">
+            <p>※追加のオファー枠（スポット増枠：+20枠 2,500円〜）はマイページよりいつでも購入可能です。</p>
+            <p>
+              <Link href="/tokusho" className="underline font-bold text-slate-700 hover:text-slate-900">
+                特定商取引法に基づく表記（お支払い方法・解約特約等） ↗
+              </Link>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 5. 「注目の参画業界」セクション */}
+      {/* ========================================================================= */}
+      <section className="py-16 sm:py-24 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="text-center space-y-3 max-w-2xl mx-auto">
             <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest block">
@@ -350,9 +479,9 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 5. 「よくあるご質問（FAQ）」セクション (白背景) */}
+      {/* 6. 「よくあるご質問（FAQ）」セクション (id="faq") */}
       {/* ========================================================================= */}
-      <section className="py-16 sm:py-24 bg-white">
+      <section id="faq" className="py-16 sm:py-24 bg-slate-50 border-y border-slate-200 scroll-mt-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="text-center space-y-3">
             <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest block">
@@ -400,9 +529,9 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 6. 最下部CTAセクション (白基調の爽やかなデュアルカード) */}
+      {/* 7. 最下部CTAセクション (白基調の爽やかなデュアルカード) */}
       {/* ========================================================================= */}
-      <section className="py-16 sm:py-24 bg-slate-50 border-t border-slate-200">
+      <section className="py-16 sm:py-24 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid sm:grid-cols-2 gap-6">
             {/* 学生向けカード */}
@@ -423,7 +552,7 @@ export default function HomePage() {
 
               <Link
                 href="/register"
-                className="w-full py-3.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl text-xs sm:text-sm font-bold transition-all shadow-xs flex items-center justify-center gap-2"
+                className="w-full py-3.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl text-xs sm:text-sm font-bold transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>無料会員登録して動画を投稿する</span>
                 <ArrowRight className="w-4 h-4" />
@@ -442,13 +571,13 @@ export default function HomePage() {
                   採用のミスマッチを劇的に削減。
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  月額 9,800円（100枠）からスタート可能。まずはデモ環境で動画スワイプの操作性をぜひ体験してください。
+                  月額 3,800円〜（標準プラン 100枠/9,800円）。まずはデモ環境で動画スワイプの操作性をぜひ体験してください。
                 </p>
               </div>
 
               <Link
                 href="/company/register"
-                className="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs sm:text-sm font-bold transition-all shadow-xs flex items-center justify-center gap-2"
+                className="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs sm:text-sm font-bold transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>企業アカウントを作成する</span>
                 <ArrowRight className="w-4 h-4 text-blue-400" />
