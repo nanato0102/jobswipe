@@ -198,57 +198,64 @@ export default function HomePage() {
             <div className="lg:col-span-5 flex justify-center">
               <FadeInView delay={200}>
                 <div className="relative w-full max-w-[280px] sm:max-w-[310px] aspect-[9/18] rounded-[36px] bg-slate-950 p-2.5 shadow-2xl border-4 border-slate-200">
-                  {/* スマホ画面内部 */}
+                  {/* スマホ画面内部（宣材写真なしのクリーンなUIグラフィック） */}
                   <div className="relative w-full h-full rounded-[28px] overflow-hidden bg-slate-900 flex flex-col justify-between p-4 text-white">
-                    {/* 動画背景プレビュー（佐藤 健太 / 体育会サッカー部主将） */}
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600&auto=format&fit=crop&q=80"
-                      alt="佐藤健太の自己PR動画プレビュー"
-                      className="absolute inset-0 w-full h-full object-cover opacity-85"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-slate-950/40 pointer-events-none" />
-
                     {/* 上部ステータス */}
-                    <div className="relative z-10 flex items-center justify-between">
-                      <span className="px-2.5 py-1 rounded-full bg-slate-900/60 backdrop-blur-md text-[10px] font-bold text-white border border-white/20">
+                    <div className="flex items-center justify-between">
+                      <span className="px-2.5 py-1 rounded-full bg-slate-800 text-[10px] font-bold text-slate-300 border border-slate-700">
                         自己PR動画 0:45 / 1:00
                       </span>
                       <span className="px-2 py-0.5 rounded-md bg-emerald-700 text-[10px] font-bold">LIVE</span>
                     </div>
 
-                    {/* 中央再生アイコン */}
-                    <div className="relative z-10 self-center w-12 h-12 rounded-full bg-white/90 text-slate-900 flex items-center justify-center shadow-lg">
-                      <Play className="w-5 h-5 ml-0.5 fill-current" />
+                    {/* 中央：クリーンなアバター ＆ 音声認識波形ビジュアライザー */}
+                    <div className="flex flex-col items-center justify-center space-y-3 my-auto">
+                      <div className="w-16 h-16 rounded-2xl bg-slate-800 border border-slate-700 text-slate-300 flex items-center justify-center shadow-lg">
+                        <User className="w-8 h-8 stroke-[2]" />
+                      </div>
+
+                      {/* 音声波形イコライザーバー */}
+                      <div className="flex items-center gap-1 h-6">
+                        <span className="w-1 h-3 bg-emerald-500 rounded-full animate-pulse" />
+                        <span className="w-1 h-5 bg-emerald-400 rounded-full animate-pulse delay-100" />
+                        <span className="w-1 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                        <span className="w-1 h-6 bg-emerald-400 rounded-full animate-pulse delay-200" />
+                        <span className="w-1 h-4 bg-emerald-500 rounded-full animate-pulse delay-100" />
+                        <span className="w-1 h-2 bg-emerald-400 rounded-full animate-pulse" />
+                      </div>
+
+                      <div className="w-10 h-10 rounded-full bg-white text-slate-900 flex items-center justify-center shadow-md">
+                        <Play className="w-4 h-4 ml-0.5 fill-current" />
+                      </div>
                     </div>
 
                     {/* 下部プロフィール情報 */}
-                    <div className="relative z-10 space-y-2">
-                      <div>
+                    <div className="space-y-2">
+                      <div className="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700/60">
                         <div className="flex items-center gap-2">
-                          <span className="font-black text-base text-white">佐藤 健太</span>
+                          <span className="font-black text-sm text-white">佐藤 健太</span>
                           <span className="text-[10px] text-slate-300">早稲田大学 (27卒)</span>
                         </div>
-                        <p className="text-[11px] text-slate-200 line-clamp-1 mt-0.5">
+                        <p className="text-[10px] text-slate-300 line-clamp-1 mt-0.5">
                           「体育会サッカー部主将。チームを巻き込む推進力が武器です！」
                         </p>
                       </div>
 
                       <div className="flex flex-wrap gap-1">
-                        <span className="px-2 py-0.5 bg-emerald-900/80 text-emerald-300 text-[9px] font-bold rounded">
+                        <span className="px-2 py-0.5 bg-slate-800 text-slate-300 border border-slate-700 text-[9px] font-bold rounded">
                           #リーダーシップ
                         </span>
-                        <span className="px-2 py-0.5 bg-emerald-900/80 text-emerald-300 text-[9px] font-bold rounded">
+                        <span className="px-2 py-0.5 bg-slate-800 text-slate-300 border border-slate-700 text-[9px] font-bold rounded">
                           #行動力
                         </span>
-                        <span className="px-2 py-0.5 bg-emerald-900/80 text-emerald-300 text-[9px] font-bold rounded">
+                        <span className="px-2 py-0.5 bg-slate-800 text-slate-300 border border-slate-700 text-[9px] font-bold rounded">
                           #ポジティブ
                         </span>
                       </div>
 
                       {/* スワイプアクションボタン */}
                       <div className="flex items-center justify-between pt-1 gap-2">
-                        <div className="flex-1 py-2 rounded-xl bg-slate-900/80 text-slate-300 text-[11px] font-bold flex items-center justify-center gap-1 border border-white/10">
+                        <div className="flex-1 py-2 rounded-xl bg-slate-800 text-slate-400 text-[11px] font-bold flex items-center justify-center gap-1 border border-slate-700">
                           <X className="w-3.5 h-3.5" />
                           <span>スキップ</span>
                         </div>
@@ -267,25 +274,25 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 2. 実績・信頼性指標カウンター (4大KPIカード) */}
+      {/* 2. 実績・信頼性指標カウンター (4大KPIカード: 単位色統一) */}
       {/* ========================================================================= */}
       <section className="py-8 bg-slate-50 border-y border-slate-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="bg-white p-5 rounded-2xl border border-slate-200 text-center shadow-2xs space-y-1">
-              <span className="text-2xl sm:text-3xl font-black text-slate-900">70<span className="text-emerald-700">%</span></span>
+              <span className="text-2xl sm:text-3xl font-black text-slate-900">70%</span>
               <p className="text-xs text-slate-500 font-bold">面接前ミスマッチ削減</p>
             </div>
             <div className="bg-white p-5 rounded-2xl border border-slate-200 text-center shadow-2xs space-y-1">
-              <span className="text-2xl sm:text-3xl font-black text-slate-900">85<span className="text-blue-700">%</span></span>
+              <span className="text-2xl sm:text-3xl font-black text-slate-900">85%</span>
               <p className="text-xs text-slate-500 font-bold">スカウト承諾率</p>
             </div>
             <div className="bg-white p-5 rounded-2xl border border-slate-200 text-center shadow-2xs space-y-1">
-              <span className="text-2xl sm:text-3xl font-black text-slate-900">94<span className="text-emerald-700">%</span></span>
+              <span className="text-2xl sm:text-3xl font-black text-slate-900">94%</span>
               <p className="text-xs text-slate-500 font-bold">登録学生 満足度</p>
             </div>
             <div className="bg-white p-5 rounded-2xl border border-slate-200 text-center shadow-2xs space-y-1">
-              <span className="text-2xl sm:text-3xl font-black text-slate-900">500<span className="text-slate-700">+</span></span>
+              <span className="text-2xl sm:text-3xl font-black text-slate-900">500+</span>
               <p className="text-xs text-slate-500 font-bold">厳選審査 参画企業数</p>
             </div>
           </div>
