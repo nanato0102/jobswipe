@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
-import { LogIn, AlertCircle, Building2 } from "lucide-react";
+import { LogIn, AlertCircle, Building2, Zap } from "lucide-react";
 
 export default function CompanyLoginPage() {
   const { login } = useAuth();
@@ -141,7 +141,8 @@ export default function CompanyLoginPage() {
             }}
             className="w-full py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-200 text-xs font-bold rounded-2xl transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-2xs"
           >
-            <span>⚡ 企業デモアカウントでワンクリックログイン</span>
+            <Zap className="w-3.5 h-3.5 text-blue-700" />
+            <span>企業デモアカウントでワンクリックログイン</span>
           </button>
         </div>
 
