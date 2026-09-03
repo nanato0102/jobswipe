@@ -184,18 +184,6 @@ export default function Navbar() {
                 </Link>
 
                 <Link
-                  href="/company/search"
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors ${
-                    pathname.startsWith("/company/search")
-                      ? "bg-blue-50 text-blue-900 font-bold"
-                      : "hover:bg-slate-100 hover:text-slate-900"
-                  }`}
-                >
-                  <Search className="h-4 w-4 text-blue-700" />
-                  <span>学生検索</span>
-                </Link>
-
-                <Link
                   href="/company/usage"
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors ${
                     pathname.startsWith("/company/usage") || pathname.startsWith("/company/plans")
@@ -411,14 +399,6 @@ export default function Navbar() {
                       >
                         <Sparkles className="w-4 h-4 text-blue-700" />
                         <span>動画スワイプ</span>
-                      </Link>
-                      <Link
-                        href="/company/search"
-                        onClick={() => setMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-3.5 py-2 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-900 rounded-xl transition-colors font-bold"
-                      >
-                        <Search className="w-4 h-4 text-blue-700" />
-                        <span>学生検索・スカウト</span>
                       </Link>
                       <Link
                         href="/company/usage"
@@ -659,10 +639,6 @@ export default function Navbar() {
                     <Link href="/swipe" className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-blue-50">
                       <Sparkles className="w-4 h-4 text-blue-700" />
                       <span>動画スワイプ</span>
-                    </Link>
-                    <Link href="/company/search" className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-blue-50">
-                      <Search className="w-4 h-4 text-blue-700" />
-                      <span>学生検索・スカウト</span>
                     </Link>
                     <Link href="/company/usage" className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-blue-50">
                       <BarChart3 className="w-4 h-4 text-blue-700" />
