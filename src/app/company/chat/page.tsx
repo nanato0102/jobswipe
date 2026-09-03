@@ -38,7 +38,7 @@ function ChatContent() {
   const [previewImageModal, setPreviewImageModal] = useState<string | null>(null);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   // 初期スレッド読み込み
   useEffect(() => {
@@ -79,8 +79,10 @@ function ChatContent() {
   }, [isStudent, selectedThreadId]);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
+  }, [messages, selectedThreadId]);
 
   const currentThread = threads.find((t) => t.id === selectedThreadId);
 
@@ -322,7 +324,10 @@ function ChatContent() {
               </div>
 
               {/* メッセージタイムライン（ここだけスクロール可能） */}
-              <div className="flex-1 p-3.5 sm:p-6 overflow-y-auto overscroll-contain space-y-3.5 sm:space-y-4 min-h-0">
+              <div
+                ref={messagesContainerRef}
+                className="flex-1 p-3.5 sm:p-6 overflow-y-auto overscroll-contain space-y-3.5 sm:space-y-4 min-h-0"
+              >
                 {/* オファー固定カード */}
                 {currentOffer && (
                   <div className="p-3.5 sm:p-4 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-1.5">
@@ -386,7 +391,6 @@ function ChatContent() {
                     </div>
                   );
                 })}
-                <div ref={messagesEndRef} />
               </div>
 
               {/* メッセージ入力フォーム（固定） */}
