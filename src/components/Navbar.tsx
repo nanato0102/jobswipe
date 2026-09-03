@@ -276,9 +276,6 @@ export default function Navbar() {
             <Link href="/#how-it-works" className="hover:text-emerald-700 transition-colors">
               使い方
             </Link>
-            <Link href="/#pricing" className="hover:text-emerald-700 transition-colors">
-              料金プラン
-            </Link>
             <Link href="/#faq" className="hover:text-emerald-700 transition-colors">
               よくある質問
             </Link>
@@ -591,13 +588,6 @@ export default function Navbar() {
                 >
                   <span>使い方・3ステップ</span>
                   <Film className="w-4 h-4 text-slate-500" />
-                </Link>
-                <Link
-                  href="/#pricing"
-                  className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors"
-                >
-                  <span>料金プラン</span>
-                  <CreditCard className="w-4 h-4 text-slate-500" />
                 </Link>
                 <Link
                   href="/#faq"

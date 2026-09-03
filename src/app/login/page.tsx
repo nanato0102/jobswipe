@@ -119,30 +119,7 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* ワンクリック・デモログイン */}
-        <div className="mt-5 pt-5 border-t border-slate-100 space-y-2">
-          <p className="text-[11px] text-center text-slate-400 font-bold">デモ体験用ショートカット</p>
-          <button
-            type="button"
-            onClick={() => {
-              setEmail("student@example.com");
-              setPassword("password123");
-              login({
-                id: "s1",
-                email: "student@example.com",
-                name: "佐藤 健太",
-                userType: "STUDENT",
-              });
-              window.location.href = "/student/profile";
-            }}
-            className="w-full py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-bold rounded-2xl transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-2xs"
-          >
-            <Zap className="w-3.5 h-3.5 text-emerald-700" />
-            <span>学生デモアカウントでワンクリックログイン</span>
-          </button>
-        </div>
-
-        <div className="mt-4 pt-4 border-t border-slate-100 text-center text-xs">
+        <div className="mt-6 pt-6 border-t border-slate-100 text-center text-xs">
           <p className="text-slate-500">
             アカウントをお持ちでないですか？{" "}
             <Link href="/register" className="font-bold text-emerald-800 hover:underline">

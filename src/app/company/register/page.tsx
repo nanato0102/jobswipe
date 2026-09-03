@@ -33,7 +33,7 @@ export default function CompanyRegisterPage() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [hiringPurpose, setHiringPurpose] = useState("新卒採用（本選考・早期選考）");
-  const [planType, setPlanType] = useState("無料トライアル希望（デモ体験）");
+  const [planType, setPlanType] = useState("スタンダードプラン希望");
   const [message, setMessage] = useState("");
   const [agreed, setAgreed] = useState(false);
 
@@ -82,7 +82,7 @@ export default function CompanyRegisterPage() {
         repName: `${repName.trim()} (${repNameKana.trim() || "カナ未記入"})`,
         department: department.trim() || "採用担当",
         phone: phone.trim(),
-        inquiryType: "企業利用・トライアルお申し込み",
+        inquiryType: "企業利用お申し込み",
         message: `【ご利用目的】${hiringPurpose}\n【希望プラン】${planType}\n【業種】${industry}\n【ご要望・質問】\n${message.trim() || "特になし"}`,
       });
 
@@ -192,7 +192,7 @@ export default function CompanyRegisterPage() {
                 href="/contact"
                 className="px-6 py-3 bg-white hover:bg-slate-50 text-slate-800 rounded-2xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 border border-slate-200 transition-colors cursor-pointer"
               >
-                <span>お急ぎ・デモ体験のお問い合わせ</span>
+                <span>お急ぎ・導入のお問い合わせ</span>
                 <ArrowRight className="w-4 h-4 text-slate-400" />
               </Link>
             </div>
@@ -214,13 +214,13 @@ export default function CompanyRegisterPage() {
               </div>
               <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-blue-50 text-blue-800 text-[11px] font-bold border border-blue-200">
                 <Building2 className="w-3.5 h-3.5" />
-                <span>採用企業様向け ご利用・トライアル申請</span>
+                <span>採用企業様向け ご利用申請</span>
               </div>
               <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
                 企業利用のお申し込み
               </h1>
               <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
-                学生の人柄が60秒でわかる逆求人プラットフォーム「JobSwipe」の導入・無料トライアルのお申し込みフォームです。
+                学生の人柄が60秒でわかる逆求人プラットフォーム「JobSwipe」の企業利用お申し込みフォームです。
               </p>
             </div>
 
@@ -391,15 +391,16 @@ export default function CompanyRegisterPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">ご希望の導入種別</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">ご希望の導入プラン</label>
                     <select
                       value={planType}
                       onChange={(e) => setPlanType(e.target.value)}
                       className="w-full text-xs sm:text-sm border border-slate-300 rounded-xl px-3.5 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 bg-white"
                     >
-                      <option value="無料トライアル希望（デモ体験）">無料トライアル希望（機能体験）</option>
-                      <option value="サービス資料請求・オンライン相談">サービス資料請求・オンライン相談</option>
-                      <option value="スタンダードプランでの本契約">スタンダードプランでの本契約</option>
+                      <option value="スタンダードプラン希望">スタンダードプラン希望 (月間100枠 / 9,800円)</option>
+                      <option value="ライトプラン希望">ライトプラン希望 (月間30枠 / 3,800円)</option>
+                      <option value="プレミアムプラン希望">プレミアムプラン希望 (月間300枠 / 24,800円)</option>
+                      <option value="まずはサービス説明・オンライン相談希望">まずはサービス説明・オンライン相談希望</option>
                     </select>
                   </div>
                 </div>

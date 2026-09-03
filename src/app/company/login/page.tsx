@@ -123,30 +123,7 @@ export default function CompanyLoginPage() {
           </button>
         </form>
 
-        {/* ワンクリック・デモログイン */}
-        <div className="mt-5 pt-5 border-t border-slate-100 space-y-2">
-          <p className="text-[11px] text-center text-slate-400 font-bold">デモ体験用ショートカット</p>
-          <button
-            type="button"
-            onClick={() => {
-              setEmail("company@example.com");
-              setPassword("password123");
-              login({
-                id: "c1",
-                email: "company@example.com",
-                name: "株式会社サイバーグロース 採用担当",
-                userType: "COMPANY",
-              });
-              window.location.href = "/swipe";
-            }}
-            className="w-full py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-200 text-xs font-bold rounded-2xl transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-2xs"
-          >
-            <Zap className="w-3.5 h-3.5 text-blue-700" />
-            <span>企業デモアカウントでワンクリックログイン</span>
-          </button>
-        </div>
-
-        <div className="mt-4 pt-4 border-t border-slate-100 text-center text-xs">
+        <div className="mt-6 pt-6 border-t border-slate-100 text-center text-xs">
           <p className="text-slate-500">
             まだ企業アカウントをお持ちでないですか？{" "}
             <Link href="/company/register" className="font-bold text-slate-900 hover:underline">

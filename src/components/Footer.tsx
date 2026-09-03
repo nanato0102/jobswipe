@@ -74,18 +74,13 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/#pricing" className="hover:text-slate-900 transition-colors">
-                  料金プラン（月9,800円〜）
-                </Link>
-              </li>
-              <li>
                 <Link href="/swipe" className="hover:text-slate-900 transition-colors">
-                  動画スワイプ体験
+                  学生動画スワイプ
                 </Link>
               </li>
               <li>
-                <Link href="/company/plans" className="hover:text-slate-900 transition-colors">
-                  プラン変更・増枠
+                <Link href="/company/search" className="hover:text-slate-900 transition-colors">
+                  学生検索・スカウト
                 </Link>
               </li>
             </ul>

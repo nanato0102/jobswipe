@@ -8,10 +8,8 @@ import {
   User,
   Building2,
   ArrowRight,
-  CheckCircle2,
   HelpCircle,
   Zap,
-  TrendingUp,
   ShieldCheck,
   ChevronDown,
   ChevronUp,
@@ -20,16 +18,11 @@ import {
   Heart,
   X,
   MessageSquare,
-  Award,
   Check,
-  CreditCard,
-  Layers,
   Smile,
   Mic,
   Flame,
   Users,
-  Target,
-  BarChart2,
 } from "lucide-react";
 
 export default function HomePage() {
@@ -58,50 +51,6 @@ export default function HomePage() {
     "エンタメ・メディア",
     "メーカー・日用品",
     "企画・クリエイティブ",
-  ];
-
-  const pricingPlans = [
-    {
-      name: "ライトプラン",
-      price: "3,800",
-      quota: "30",
-      description: "まずは気軽に新卒スカウトを試したい企業様向け",
-      features: [
-        "月間オファー 30枠付与",
-        "自己PR動画スワイプ閲覧 無制限",
-        "ダイレクトチャット面談",
-        "メールサポート",
-      ],
-      popular: false,
-    },
-    {
-      name: "スタンダードプラン",
-      price: "9,800",
-      quota: "100",
-      description: "積極的な母集団形成・毎月安定してスカウトしたい企業様向け",
-      features: [
-        "月間オファー 100枠付与",
-        "自己PR動画スワイプ閲覧 無制限",
-        "ダイレクトチャット面談",
-        "優先チャットサポート",
-        "オファー承諾率アナリティクス",
-      ],
-      popular: true,
-    },
-    {
-      name: "プレミアムプラン",
-      price: "24,800",
-      quota: "300",
-      description: "複数職種や大量採用をスピード重視で行う企業様向け",
-      features: [
-        "月間オファー 300枠付与",
-        "自己PR動画スワイプ閲覧 無制限",
-        "ダイレクトチャット面談",
-        "専任カスタマーサクセス",
-        "スカウト文面添削サポート",
-      ],
-      popular: false,
-    },
   ];
 
   const faqs = [
@@ -169,11 +118,11 @@ export default function HomePage() {
                   </Link>
 
                   <Link
-                    href="/swipe"
+                    href="/company/register"
                     className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <Building2 className="w-4 h-4 text-blue-400" />
-                    <span>企業向けスワイプを体験する</span>
+                    <span>企業アカウントで始める</span>
                   </Link>
                 </div>
 
@@ -221,7 +170,7 @@ export default function HomePage() {
                         <span className="w-1 h-2 bg-emerald-500 rounded-full animate-pulse" />
                         <span className="w-1 h-6 bg-emerald-400 rounded-full animate-pulse delay-200" />
                         <span className="w-1 h-4 bg-emerald-500 rounded-full animate-pulse delay-100" />
-                        <span className="w-1 h-2 bg-emerald-400 rounded-full animate-pulse" />
+                        <span className="w-1 h-2 bg-emerald-500 rounded-full animate-pulse" />
                       </div>
 
                       <div className="w-10 h-10 rounded-full bg-white text-slate-900 flex items-center justify-center shadow-md">
@@ -410,9 +359,9 @@ export default function HomePage() {
                 <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-900 border border-blue-200 flex items-center justify-center font-black text-sm">
                   03
                 </div>
-                <h3 className="font-bold text-slate-900 text-base">月額9,800円〜の低リスク導入</h3>
+                <h3 className="font-bold text-slate-900 text-base">人柄重視の効率的な採用</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  高額な初期費用は不要。月100枠の充実したスカウト枠で、欲しい人材を効率よく集めることができます。
+                  学歴や資格の文字情報だけでは見抜けない、自社のカルチャーにマッチしたポテンシャル層を効率よく採用できます。
                 </p>
               </div>
             </div>
@@ -555,7 +504,7 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 6. 「注目の参画業界」無限ティッカースクロール（Marqueeアニメーション完全復元） */}
+      {/* 6. 「注目の参画業界」無限ティッカースクロール（Marqueeアニメーション） */}
       {/* ========================================================================= */}
       <section className="py-16 sm:py-24 bg-slate-50 border-y border-slate-200 overflow-hidden">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
@@ -609,95 +558,9 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 7. 「企業の料金プラン」セクション (id="pricing") */}
+      {/* 7. 「よくあるご質問（FAQ）」セクション (id="faq") */}
       {/* ========================================================================= */}
-      <section id="pricing" className="py-16 sm:py-24 bg-white scroll-mt-16">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          <FadeInView>
-            <div className="text-center space-y-3 max-w-2xl mx-auto">
-              <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest block">
-                PRICING PLANS
-              </span>
-              <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                導入しやすい透明な料金体系
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-600">
-                学生・求職者は完全無料。企業様は採用規模に応じて月額 3,800円〜 スタート可能です。
-              </p>
-            </div>
-          </FadeInView>
-
-          <div className="grid sm:grid-cols-3 gap-6">
-            {pricingPlans.map((plan, idx) => (
-              <FadeInView key={idx} delay={idx * 100}>
-                <div
-                  className={`bg-white rounded-3xl border p-6 sm:p-7 space-y-5 flex flex-col justify-between relative shadow-xs h-full ${
-                    plan.popular
-                      ? "border-blue-600 ring-2 ring-blue-600/20"
-                      : "border-slate-200"
-                  }`}
-                >
-                  {plan.popular && (
-                    <span className="absolute -top-3 right-6 px-3 py-0.5 rounded-full bg-slate-900 text-white font-bold text-[10px] shadow-2xs">
-                      一番人気・推奨
-                    </span>
-                  )}
-
-                  <div className="space-y-3">
-                    <div>
-                      <h3 className="font-bold text-slate-900 text-base">{plan.name}</h3>
-                      <p className="text-xs text-slate-500 mt-1">{plan.description}</p>
-                    </div>
-
-                    <div className="py-3 border-y border-slate-100">
-                      <div className="flex items-baseline gap-1">
-                        <span className="text-3xl font-black text-slate-900">¥{plan.price}</span>
-                        <span className="text-xs text-slate-500 font-bold">/月 (税別)</span>
-                      </div>
-                      <p className="text-xs font-bold text-blue-700 mt-1">月間 {plan.quota}枠 付与</p>
-                    </div>
-
-                    <ul className="space-y-2 text-xs text-slate-600">
-                      {plan.features.map((feat, fIdx) => (
-                        <li key={fIdx} className="flex items-center gap-2">
-                          <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                          <span>{feat}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <Link
-                    href="/company/register"
-                    className={`w-full py-3 rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer ${
-                      plan.popular
-                        ? "bg-slate-900 hover:bg-slate-800 text-white"
-                        : "bg-slate-100 hover:bg-slate-200 text-slate-800"
-                    }`}
-                  >
-                    <span>このプランで無料登録</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
-              </FadeInView>
-            ))}
-          </div>
-
-          <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-center text-xs text-slate-500 space-y-1">
-            <p>※追加のオファー枠（スポット増枠：+20枠 2,500円〜）はマイページよりいつでも購入可能です。</p>
-            <p>
-              <Link href="/tokusho" className="underline font-bold text-slate-700 hover:text-slate-900">
-                特定商取引法に基づく表記（お支払い方法・解約特約等） ↗
-              </Link>
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================================================= */}
-      {/* 8. 「よくあるご質問（FAQ）」セクション (id="faq") */}
-      {/* ========================================================================= */}
-      <section id="faq" className="py-16 sm:py-24 bg-slate-50 border-y border-slate-200 scroll-mt-16">
+      <section id="faq" className="py-16 sm:py-24 bg-white scroll-mt-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <FadeInView>
             <div className="text-center space-y-3">
@@ -716,12 +579,12 @@ export default function HomePage() {
               return (
                 <div
                   key={index}
-                  className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden transition-colors"
+                  className="bg-slate-50 rounded-2xl border border-slate-200 shadow-xs overflow-hidden transition-colors"
                 >
                   <button
                     type="button"
                     onClick={() => toggleFaq(index)}
-                    className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-xs sm:text-sm cursor-pointer hover:bg-slate-50 transition-colors"
+                    className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-xs sm:text-sm cursor-pointer hover:bg-slate-100 transition-colors"
                   >
                     <span className="flex items-center gap-2.5">
                       <HelpCircle className="w-4 h-4 text-emerald-700 flex-shrink-0" />
@@ -735,7 +598,7 @@ export default function HomePage() {
                   </button>
 
                   {isOpen && (
-                    <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-slate-50/50">
+                    <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-200 bg-white">
                       {faq.a}
                     </div>
                   )}
@@ -747,9 +610,9 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 9. ファイナルCTAセクション */}
+      {/* 8. ファイナルCTAセクション */}
       {/* ========================================================================= */}
-      <section className="py-16 sm:py-24 bg-white">
+      <section className="py-16 sm:py-24 bg-slate-50 border-t border-slate-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid sm:grid-cols-2 gap-6">
             {/* 学生向けカード */}
@@ -792,7 +655,7 @@ export default function HomePage() {
                     採用のミスマッチを劇的に削減。
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                    月額 3,800円〜（標準プラン 100枠/9,800円）。まずはデモ環境で動画スワイプの操作性をぜひ体験してください。
+                    文字情報ではわからないリアルな人柄・熱量を把握。貴社のカルチャーにマッチした優秀な人材を直感的にスカウトできます。
                   </p>
                 </div>
 

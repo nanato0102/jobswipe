@@ -269,7 +269,7 @@ export default function ContactPage() {
                       className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
                     >
                       <option value="資料請求・サービス概要">資料請求・サービス概要</option>
-                      <option value="デモ体験・料金プラン相談">デモ体験・料金プラン相談</option>
+                      <option value="導入のご相談・料金プランについて">導入のご相談・料金プランについて</option>
                       <option value="オファー枠の追加購入について">オファー枠の追加購入について</option>
                       <option value="取材・提携について">取材・提携について</option>
                       <option value="その他">その他</option>
