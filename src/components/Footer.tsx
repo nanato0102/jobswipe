@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Sparkles, ShieldCheck, Heart, ArrowUpRight } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 
 export default function Footer() {
   return (
     <footer className="border-t border-slate-200 bg-white text-slate-600 text-xs py-12 sm:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-8">
-          {/* ブランド概要 */}
+          {/* 1. ブランド概要 */}
           <div className="col-span-2 space-y-4">
             <Link href="/" className="flex items-center gap-2.5 group inline-block">
               <div className="relative w-8 h-8 flex items-center justify-center">
@@ -32,7 +32,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* 学生・求職者向け */}
+          {/* 2. 学生・求職者向け */}
           <div className="space-y-3">
             <h4 className="font-black text-slate-900 text-xs tracking-wider uppercase">学生・求職者の方</h4>
             <ul className="space-y-2 text-xs">
@@ -46,20 +46,10 @@ export default function Footer() {
                   学生ログイン
                 </Link>
               </li>
-              <li>
-                <Link href="/student/video" className="hover:text-emerald-700 transition-colors">
-                  動画投稿・自己PR
-                </Link>
-              </li>
-              <li>
-                <Link href="/student/offers" className="hover:text-emerald-700 transition-colors">
-                  オファー一覧
-                </Link>
-              </li>
             </ul>
           </div>
 
-          {/* 企業向け */}
+          {/* 3. 企業向け */}
           <div className="space-y-3">
             <h4 className="font-black text-slate-900 text-xs tracking-wider uppercase">企業の採用担当者様</h4>
             <ul className="space-y-2 text-xs">
@@ -73,26 +63,43 @@ export default function Footer() {
                   企業ログイン
                 </Link>
               </li>
+            </ul>
+          </div>
+
+          {/* 4. サービス案内 */}
+          <div className="space-y-3">
+            <h4 className="font-black text-slate-900 text-xs tracking-wider uppercase">サービス案内</h4>
+            <ul className="space-y-2 text-xs">
               <li>
-                <Link href="/swipe" className="hover:text-slate-900 transition-colors">
-                  学生動画スワイプ
+                <Link href="/#features" className="hover:text-slate-900 transition-colors">
+                  サービスの特徴
                 </Link>
               </li>
               <li>
-                <Link href="/company/search" className="hover:text-slate-900 transition-colors">
-                  学生検索・スカウト
+                <Link href="/#how-it-works" className="hover:text-slate-900 transition-colors">
+                  使い方・3ステップ
+                </Link>
+              </li>
+              <li>
+                <Link href="/#faq" className="hover:text-slate-900 transition-colors">
+                  よくあるご質問 (FAQ)
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* サポート・法的情報 */}
-          <div className="space-y-3">
+          {/* 5. サポート・法的情報 */}
+          <div className="space-y-3 col-span-2 sm:col-span-1">
             <h4 className="font-black text-slate-900 text-xs tracking-wider uppercase">サポート・法的表記</h4>
             <ul className="space-y-2 text-xs">
               <li>
                 <Link href="/contact" className="hover:text-slate-900 transition-colors">
                   お問い合わせ・ご相談
+                </Link>
+              </li>
+              <li>
+                <Link href="/company/about" className="hover:text-slate-900 transition-colors">
+                  運営会社概要
                 </Link>
               </li>
               <li>
