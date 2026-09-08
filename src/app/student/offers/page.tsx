@@ -176,7 +176,7 @@ export default function StudentOffersPage() {
 
                       {offer.status === "ACCEPTED" && (
                         <Link
-                          href={`/company/chat?tab=${offer.id}`}
+                          href={`/company/chat?threadId=thread-${offer.companyId}`}
                           className="px-4 py-1.5 text-xs font-bold text-white bg-emerald-700 hover:bg-emerald-600 rounded-xl shadow-2xs transition-all flex items-center gap-1.5"
                         >
                           <MessageSquare className="w-3.5 h-3.5" />
@@ -218,9 +218,9 @@ export default function StudentOffersPage() {
                 <button
                   type="button"
                   onClick={() => {
-                    const id = acceptedModalOffer.id;
+                    const compId = acceptedModalOffer.companyId;
                     setAcceptedModalOffer(null);
-                    router.push(`/company/chat?tab=${id}`);
+                    router.push(`/company/chat?threadId=thread-${compId}`);
                   }}
                   className="flex-1 py-2.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
                 >

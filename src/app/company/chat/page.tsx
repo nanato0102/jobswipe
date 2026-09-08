@@ -19,6 +19,8 @@ import {
   Download,
   X,
   Flag,
+  Calendar,
+  Zap,
 } from "lucide-react";
 import StudentMobileTabs from "@/components/StudentMobileTabs";
 import CompanyMobileTabs from "@/components/CompanyMobileTabs";
@@ -394,7 +396,54 @@ function ChatContent() {
               </div>
 
               {/* メッセージ入力フォーム（固定） */}
-              <form onSubmit={handleSendMessage} className="p-2.5 sm:p-4 bg-white border-t border-slate-200 space-y-2 flex-shrink-0 z-10">
+              <form onSubmit={handleSendMessage} className="p-2.5 sm:p-4 bg-white border-t border-slate-200 space-y-2.5 flex-shrink-0 z-10">
+                {/* 定型文テンプレートピル */}
+                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs no-scrollbar">
+                  <span className="text-[10px] font-bold text-slate-400 whitespace-nowrap flex items-center gap-1">
+                    <Zap className="w-3 h-3 text-amber-500" />
+                    <span>定型文:</span>
+                  </span>
+                  {(isStudent
+                    ? [
+                        {
+                          label: "お礼と挨拶",
+                          text: "オファーをいただき誠にありがとうございます！自己PR動画をご覧いただき大変光栄です。ぜひ一度オンラインでお話しさせていただけますと幸いです。",
+                        },
+                        {
+                          label: "日程承諾",
+                          text: "ご提示いただいた日程のうち、【〇月〇日（〇）〇:〇〜】で参加可能です。当日はどうぞよろしくお願いいたします。",
+                        },
+                        {
+                          label: "日程再調整",
+                          text: "ご連絡ありがとうございます。大変恐縮ながらご提示いただいた日程のご都合が難しく、恐れ入りますが以下候補日でのご調整は可能でしょうか？\n・〇月〇日（〇）〇:〇〜\n・〇月〇日（〇）〇:〇〜",
+                        },
+                      ]
+                    : [
+                        {
+                          label: "面談のお誘い",
+                          text: "オファーをご承諾いただきありがとうございます！ぜひ一度、カジュアルなオンライン面談（30分程度）でお話しできればと考えております。差し支えなければ、直近のご都合の良い日時を2〜3候補ほどご教示いただけますでしょうか？",
+                        },
+                        {
+                          label: "日程確定",
+                          text: "日程調整にご協力いただきありがとうございます！それでは【〇月〇日（〇）〇:〇〜〇:〇】にてオンライン面談を設定いたしました。接続URLは追ってご案内いたします。当日お話しできることを楽しみにしております。",
+                        },
+                        {
+                          label: "次回選考案内",
+                          text: "先日はお忙しい中カジュアル面談にご参加いただきありがとうございました！ぜひ次のステップとして本選考（一次面接）に進んでいただきたく存じます。選考詳細についてご案内いたします。",
+                        },
+                      ]
+                  ).map((tmpl, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setInputText(tmpl.text)}
+                      className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-medium whitespace-nowrap transition-colors cursor-pointer border border-slate-200"
+                    >
+                      + {tmpl.label}
+                    </button>
+                  ))}
+                </div>
+
                 {selectedFile && (
                   <div className="flex items-center justify-between p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700">
                     <span className="truncate max-w-xs font-medium">📎 {selectedFile.name}</span>

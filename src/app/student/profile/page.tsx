@@ -19,6 +19,8 @@ import {
   Compass,
   MapPin,
   Camera,
+  FileText,
+  Lightbulb,
 } from "lucide-react";
 import ImageCropperModal from "@/components/ImageCropperModal";
 
@@ -178,6 +180,39 @@ export default function StudentProfilePage() {
     "飲食・フードサービス",
     "医療・ヘルスケア",
   ];
+
+  const BIO_TEMPLATES = [
+    {
+      category: "体育会・部活動",
+      catchphrase: "体育会サッカー部主将！チームを前に進める行動力と泥臭い粘り強さが強みです",
+      bio: "大学3年間、体育会サッカー部に所属し主将を務めました。\n部員80名の意識改革を行い、創部初の全国大会出場を達成。\n泥臭い課題解決とチームビルディングには絶対の自信があります。",
+      tags: ["体育会系・リーダーシップ", "粘り強い・やり切る力", "フットワーク軽い", "協調性・気配り"],
+    },
+    {
+      category: "留学・国際経験",
+      catchphrase: "語学留学と国際交流で培った適応力と異文化コミュニケーション力",
+      bio: "大学2年次にカナダへ1年間留学し、多国籍な環境でのディスカッションや共同プロジェクト推進を経験しました。\n多様な価値観を受け入れながら合意形成を図る対人力と、主体的な行動力が強みです。",
+      tags: ["英語・語学力", "フットワーク軽い", "素直・謙虚", "協調性・気配り"],
+    },
+    {
+      category: "エンジニア・開発",
+      catchphrase: "Webサービス開発に熱中！技術探求心と自走力で課題を解決します",
+      bio: "大学で情報工学を専攻し、独学でReact/TypeScriptを用いたWebアプリを複数開発・リリースしました。\nユーザー目線に立ったUI/UX設計と、新しい技術をキャッチアップして形にするスピード感に自信があります。",
+      tags: ["論理的思考力", "クリエイティブ", "粘り強い・やり切る力", "フットワーク軽い"],
+    },
+    {
+      category: "アルバイト・接客",
+      catchphrase: "カフェ時間帯責任者！相手のニーズを先回りするホスピタリティと課題発見力",
+      bio: "カフェでの3年間のアルバイトで時間帯責任者を務め、新人育成マニュアルの刷新とリピート率15%向上を実現しました。\n現場を観察して課題を見つけ、自ら改善策を実行する推進力が強みです。",
+      tags: ["明るい・笑顔", "協調性・気配り", "リーダーシップ", "素直・謙虚"],
+    },
+  ];
+
+  const handleApplyTemplate = (tmpl: typeof BIO_TEMPLATES[0]) => {
+    setCatchphrase(tmpl.catchphrase);
+    setBio(tmpl.bio);
+    setPersonalityTags(tmpl.tags);
+  };
 
   return (
     <RoleGuard allowedRoles={["STUDENT", "ADMIN"]}>
@@ -397,10 +432,45 @@ export default function StudentProfilePage() {
 
             {/* ================= ブロック3: 自己PR・人柄タグ ================= */}
             <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 sm:p-6 space-y-4">
-              <h2 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-emerald-700" />
-                <span>3. 人柄タグ・自己PR</span>
-              </h2>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-emerald-700" />
+                  <span>3. 人柄タグ・自己PR</span>
+                </h2>
+                <span className="text-[11px] text-slate-400 font-medium">
+                  迷ったら例文テンプレートをワンタップで引用できます
+                </span>
+              </div>
+
+              {/* 例文テンプレート選択バー */}
+              <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
+                  <Lightbulb className="w-3.5 h-3.5 text-amber-500" />
+                  <span>自己PR例文テンプレートをワンタップで反映:</span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {BIO_TEMPLATES.map((tmpl) => (
+                    <button
+                      key={tmpl.category}
+                      type="button"
+                      onClick={() => handleApplyTemplate(tmpl)}
+                      className="p-2.5 bg-white hover:bg-emerald-50/60 border border-slate-200 hover:border-emerald-300 rounded-xl text-left transition-all cursor-pointer shadow-2xs group"
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-[11px] font-bold text-slate-900 group-hover:text-emerald-800">
+                          {tmpl.category}
+                        </span>
+                        <span className="text-[9px] text-emerald-700 font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                          適用 ↵
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-slate-500 line-clamp-1">
+                        {tmpl.catchphrase}
+                      </p>
+                    </button>
+                  ))}
+                </div>
+              </div>
 
               {/* ひとことスローガン */}
               <div className="space-y-1.5">

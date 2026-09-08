@@ -51,6 +51,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
   // 動画再生・音声状態
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
+  const [playbackRate, setPlaybackRate] = useState<number>(1.0);
   const [likedMap, setLikedMap] = useState<Record<string, boolean>>({});
 
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -123,11 +124,12 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
+      videoRef.current.playbackRate = playbackRate;
       if (isPlaying) {
         videoRef.current.play().catch(() => {});
       }
     }
-  }, [currentIndex]);
+  }, [currentIndex, playbackRate]);
 
   if (!videos || videos.length === 0 || !currentVideo) {
     return (
@@ -216,6 +218,19 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
     const newMuted = !isMuted;
     videoRef.current.muted = newMuted;
     setIsMuted(newMuted);
+  };
+
+  // 倍速再生切り替え（1.0x -> 1.25x -> 1.5x -> 2.0x）
+  const togglePlaybackRate = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const rates = [1.0, 1.25, 1.5, 2.0];
+    const currentRateIdx = rates.indexOf(playbackRate);
+    const nextRate = rates[(currentRateIdx + 1) % rates.length];
+    setPlaybackRate(nextRate);
+    if (videoRef.current) {
+      videoRef.current.playbackRate = nextRate;
+    }
+    info(`再生速度: ${nextRate}x`);
   };
 
   // いいね（気になる）を appStore に保存
@@ -323,11 +338,14 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                 ref={videoRef}
                 key={currentVideo.id}
                 src={currentVideo.videoUrl}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover select-none"
                 playsInline
                 loop
                 autoPlay
                 muted={isMuted}
+                controlsList="nodownload"
+                disablePictureInPicture
+                onContextMenu={(e) => e.preventDefault()}
               />
             ) : (
               <div className="flex flex-col items-center justify-center text-slate-500 p-6 text-center">
@@ -345,9 +363,9 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
               </div>
             )}
 
-            {/* ヘッダーオーバーレイ（ミュート、Undo、カウンター） */}
+            {/* ヘッダーオーバーレイ（ミュート、倍速、Undo、カウンター） */}
             <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-auto z-20">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2">
                 <button
                   type="button"
                   onClick={toggleMute}
@@ -355,6 +373,15 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                   title={isMuted ? "ミュート解除" : "ミュート"}
                 >
                   {isMuted ? <VolumeX className="w-4 h-4 text-rose-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={togglePlaybackRate}
+                  className="px-2.5 py-1.5 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-md text-white text-[11px] font-bold border border-white/20 transition-all cursor-pointer shadow-lg flex items-center gap-0.5"
+                  title="再生速度を切り替え（1.0x / 1.25x / 1.5x / 2.0x）"
+                >
+                  <span className="text-emerald-400 font-mono">{playbackRate.toFixed(playbackRate === 1 ? 1 : 2)}x</span>
                 </button>
 
                 {historyStack.length > 0 && (

@@ -155,11 +155,14 @@ export default function StudentDetailPage({ params }: Props) {
               <video
                 ref={videoRef}
                 src={student.videoUrl}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover select-none"
                 loop
                 playsInline
                 muted={isMuted}
                 onClick={togglePlay}
+                controlsList="nodownload"
+                disablePictureInPicture
+                onContextMenu={(e) => e.preventDefault()}
               />
 
               {/* 再生オーバーレイ */}

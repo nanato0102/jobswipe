@@ -113,7 +113,7 @@ export default function StudentMobileTabs({ children }: StudentMobileTabsProps) 
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      className="flex-1 flex flex-col w-full min-h-[calc(100dvh-4rem)] md:min-h-0 pb-20 md:pb-6"
+      className="flex-1 flex flex-col w-full min-h-[calc(100dvh-4rem)] md:min-h-0 pb-24 md:pb-6"
     >
       {/* 画面コンテンツ（スワイプ時の滑らかな変位トランジション） */}
       <div
@@ -137,7 +137,7 @@ export default function StudentMobileTabs({ children }: StudentMobileTabsProps) 
       {/* 📱 スマホ専用: 固定ボトムナビゲーションバー（赤点バッジ対応） */}
       {/* ========================================================================= */}
       <nav
-        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur border-t border-slate-200/90 shadow-[0_-4px_16px_rgba(0,0,0,0.04)] px-1 py-1.5"
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur border-t border-slate-200/90 shadow-[0_-4px_16px_rgba(0,0,0,0.04)] px-1 pt-1.5 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))]"
         aria-label="モバイル下部ナビゲーション"
       >
         <div className="grid grid-cols-5 gap-0.5 max-w-md mx-auto">

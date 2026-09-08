@@ -1067,7 +1067,15 @@ export default function AdminConsoleDashboardPage() {
                 </button>
               </div>
               <div className="rounded-2xl overflow-hidden bg-black aspect-[9/16] max-h-96 mx-auto">
-                <video src={previewVideo} controls autoPlay className="w-full h-full object-cover" />
+                <video
+                  src={previewVideo}
+                  controls
+                  autoPlay
+                  controlsList="nodownload"
+                  disablePictureInPicture
+                  onContextMenu={(e) => e.preventDefault()}
+                  className="w-full h-full object-cover select-none"
+                />
               </div>
             </div>
           </div>

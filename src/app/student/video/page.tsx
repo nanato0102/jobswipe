@@ -18,6 +18,9 @@ import {
   Heart,
   TrendingUp,
   Clock,
+  Lightbulb,
+  Check,
+  ShieldCheck,
 } from "lucide-react";
 
 interface UploadedVideoItem {
@@ -209,7 +212,12 @@ export default function StudentVideoUploadPage() {
                     onClick={() => setPreviewModalVideo(video.videoUrl)}
                     className="w-20 h-28 sm:w-24 sm:h-32 rounded-xl bg-slate-900 overflow-hidden relative group cursor-pointer flex-shrink-0 shadow-2xs border border-slate-200"
                   >
-                    <video src={video.videoUrl} className="w-full h-full object-cover" preload="metadata" />
+                    <video
+                      src={video.videoUrl}
+                      className="w-full h-full object-cover select-none pointer-events-none"
+                      preload="metadata"
+                      onContextMenu={(e) => e.preventDefault()}
+                    />
                     <div className="absolute inset-0 bg-slate-900/30 group-hover:bg-slate-900/10 flex items-center justify-center transition-colors">
                       <div className="w-8 h-8 rounded-full bg-white/90 text-slate-900 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
                         <Play className="w-4 h-4 ml-0.5 fill-current" />
@@ -259,6 +267,81 @@ export default function StudentVideoUploadPage() {
             ))}
           </div>
 
+          {/* ================= 60秒自己PR動画の撮影のコツ & 構成ガイド ================= */}
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 sm:p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <Lightbulb className="w-4 h-4 text-amber-500" />
+                <span>60秒自己PR動画の構成例 ＆ 撮影のコツ</span>
+              </h2>
+              <span className="text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                スカウト獲得率UP
+              </span>
+            </div>
+
+            {/* 3ステップ構成 */}
+            <div className="grid sm:grid-cols-3 gap-3 text-xs">
+              <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-emerald-800 bg-emerald-100/70 px-1.5 py-0.5 rounded text-[10px]">
+                    01. 冒頭 (約5秒)
+                  </span>
+                  <span className="text-slate-400 text-[10px]">第一印象</span>
+                </div>
+                <p className="font-bold text-slate-900 pt-1">挨拶 ＋ 強みの結論</p>
+                <p className="text-slate-500 text-[11px] leading-relaxed">
+                  「〇〇大学の佐藤です。私の強みはチームを前に進める行動力です！」など簡潔に。
+                </p>
+              </div>
+
+              <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-blue-800 bg-blue-100/70 px-1.5 py-0.5 rounded text-[10px]">
+                    02. 本論 (約45秒)
+                  </span>
+                  <span className="text-slate-400 text-[10px]">具体エピソード</span>
+                </div>
+                <p className="font-bold text-slate-900 pt-1">実体験・課題解決</p>
+                <p className="text-slate-500 text-[11px] leading-relaxed">
+                  部活・研究・インターン・アルバイトで直面した課題と、自分が工夫した行動を話します。
+                </p>
+              </div>
+
+              <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-amber-800 bg-amber-100/70 px-1.5 py-0.5 rounded text-[10px]">
+                    03. 結び (約10秒)
+                  </span>
+                  <span className="text-slate-400 text-[10px]">意気込み</span>
+                </div>
+                <p className="font-bold text-slate-900 pt-1">面談へのメッセージ</p>
+                <p className="text-slate-500 text-[11px] leading-relaxed">
+                  「ぜひ一度カジュアル面談でお話しできるのを楽しみにしています！」と笑顔で締めます。
+                </p>
+              </div>
+            </div>
+
+            {/* 撮影ポイントリスト */}
+            <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center gap-x-6 gap-y-2 text-[11px] text-slate-600">
+              <span className="flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-emerald-700 flex-shrink-0" />
+                <span>スマホ縦向き（9:16）で自撮り</span>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-emerald-700 flex-shrink-0" />
+                <span>目線はインカメラを意識</span>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-emerald-700 flex-shrink-0" />
+                <span>明るい室内・静かな環境</span>
+              </span>
+              <span className="flex items-center gap-1.5 text-slate-400 ml-auto">
+                <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
+                <span>動画は完全審査制で保護管理</span>
+              </span>
+            </div>
+          </div>
+
           {/* ================= 新規動画アップロードフォーム ================= */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 sm:p-6 space-y-5">
             <h2 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
@@ -287,7 +370,14 @@ export default function StudentVideoUploadPage() {
                 {videoPreview ? (
                   <div className="space-y-3">
                     <div className="w-24 h-36 rounded-xl bg-slate-900 overflow-hidden mx-auto shadow-md">
-                      <video src={videoPreview} className="w-full h-full object-cover" controls />
+                      <video
+                        src={videoPreview}
+                        className="w-full h-full object-cover select-none"
+                        controls
+                        controlsList="nodownload"
+                        disablePictureInPicture
+                        onContextMenu={(e) => e.preventDefault()}
+                      />
                     </div>
                     <p className="text-xs font-bold text-emerald-800">動画が選択されました（クリックで変更）</p>
                   </div>
@@ -382,7 +472,15 @@ export default function StudentVideoUploadPage() {
                 <X className="w-4 h-4" />
               </button>
               <div className="aspect-[9/16] rounded-2xl overflow-hidden bg-black">
-                <video src={previewModalVideo} className="w-full h-full object-cover" autoPlay controls />
+                <video
+                  src={previewModalVideo}
+                  className="w-full h-full object-cover select-none"
+                  autoPlay
+                  controls
+                  controlsList="nodownload"
+                  disablePictureInPicture
+                  onContextMenu={(e) => e.preventDefault()}
+                />
               </div>
             </div>
           </div>
