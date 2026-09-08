@@ -579,10 +579,15 @@ export default function Navbar() {
                 </Link>
                 <Link
                   href="/for-company"
-                  className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors text-blue-900 bg-blue-50/50"
+                  className="flex items-center justify-between p-3 rounded-xl border border-blue-200 bg-blue-50/80 hover:bg-blue-100/80 transition-colors text-blue-900 shadow-2xs"
                 >
-                  <span className="font-bold">企業向けサービス案内</span>
-                  <Building2 className="w-4 h-4 text-blue-700" />
+                  <div className="flex items-center gap-2">
+                    <Building2 className="w-4 h-4 text-blue-700" />
+                    <span className="font-bold">採用ご担当者様向け案内</span>
+                  </div>
+                  <span className="text-[10px] bg-blue-700 text-white font-bold px-2 py-0.5 rounded-full">
+                    企業専用
+                  </span>
                 </Link>
                 <Link
                   href="/contact"
