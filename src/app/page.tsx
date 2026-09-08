@@ -406,7 +406,7 @@ export default function HomePage() {
                   <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center justify-center font-black text-sm mx-auto shadow-2xs">
                     01
                   </div>
-                  <h3 className="font-bold text-slate-900 text-base">ES文章力や学歴で落とされない</h3>
+                  <h3 className="font-bold text-slate-900 text-sm sm:text-base whitespace-nowrap">ESや学歴で落とされない</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">
                     文章のテクニックや大学名ではなく、声のトーンや思考の深さ、普段のあなたの人柄の雰囲気が直接評価されます。
                   </p>
@@ -418,7 +418,7 @@ export default function HomePage() {
                   <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center justify-center font-black text-sm mx-auto shadow-2xs">
                     02
                   </div>
-                  <h3 className="font-bold text-slate-900 text-base">動画を1本投稿して待つだけ</h3>
+                  <h3 className="font-bold text-slate-900 text-sm sm:text-base whitespace-nowrap">動画1本を投稿して待つだけ</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">
                     何十社も同じようなエントリーシートを書き直す必要はありません。スマホで自撮りした納得の60秒動画でスカウトを待てます。
                   </p>
@@ -430,7 +430,7 @@ export default function HomePage() {
                   <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center justify-center font-black text-sm mx-auto shadow-2xs">
                     03
                   </div>
-                  <h3 className="font-bold text-slate-900 text-base">カルチャーの合う企業からオファー</h3>
+                  <h3 className="font-bold text-slate-900 text-sm sm:text-base whitespace-nowrap">社風の合う企業からオファー</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">
                     あなたの雰囲気や熱量、価値観に魅力を感じた企業から直接届くため、面接時のミスマッチが大幅に減ります。
                   </p>
@@ -445,7 +445,7 @@ export default function HomePage() {
                   <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-900 border border-blue-200 flex items-center justify-center font-black text-sm mx-auto shadow-2xs">
                     01
                   </div>
-                  <h3 className="font-bold text-slate-900 text-base">面接前のミスマッチを劇的削減</h3>
+                  <h3 className="font-bold text-slate-900 text-sm sm:text-base whitespace-nowrap">面接前のミスマッチを削減</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">
                     文字の履歴書ではわからない候補者のリアルな雰囲気・熱量・論理的思考力を把握でき、「会ってみたら違った」を防げます。
                   </p>
@@ -457,7 +457,7 @@ export default function HomePage() {
                   <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-900 border border-blue-200 flex items-center justify-center font-black text-sm mx-auto shadow-2xs">
                     02
                   </div>
-                  <h3 className="font-bold text-slate-900 text-base">スワイプで直感的なスカウト</h3>
+                  <h3 className="font-bold text-slate-900 text-sm sm:text-base whitespace-nowrap">スワイプで直感スカウト</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">
                     隙間時間に学生の自己PR動画を縦スワイプでサクサク閲覧。自社に合う学生にその場でオファーを送信できます。
                   </p>
@@ -469,7 +469,7 @@ export default function HomePage() {
                   <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-900 border border-blue-200 flex items-center justify-center font-black text-sm mx-auto shadow-2xs">
                     03
                   </div>
-                  <h3 className="font-bold text-slate-900 text-base">人柄重視の効率的な採用</h3>
+                  <h3 className="font-bold text-slate-900 text-sm sm:text-base whitespace-nowrap">人柄重視の効率的な採用</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">
                     学歴や資格の文字情報だけでは見抜けない、自社のカルチャーにマッチしたポテンシャル層を効率よく採用できます。
                   </p>
