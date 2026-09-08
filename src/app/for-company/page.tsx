@@ -76,9 +76,10 @@ export default function ForCompanyPage() {
               </FadeInView>
 
               <FadeInView delay={100}>
-                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.18] text-slate-900">
-                  面接で、<br />
-                  <span className="text-blue-700">「思っていた人と違った」</span>をゼロに。
+                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.2] text-slate-900">
+                  <span className="block sm:inline">面接で、</span>
+                  <span className="text-blue-700 inline-block">「思っていた人と違った」</span>
+                  <span className="inline-block">をゼロに。</span>
                 </h1>
               </FadeInView>
 
@@ -213,7 +214,8 @@ export default function ForCompanyPage() {
                 PAIN & SOLUTION
               </span>
               <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                新卒採用における「構造的な課題」を解決
+                <span className="inline-block">新卒採用における</span>
+                <span className="inline-block">「構造的な課題」を解決</span>
               </h2>
               <p className="text-xs sm:text-sm text-slate-600">
                 従来の文字選考では見抜けなかったミスマッチを、60秒動画が解消します。
@@ -314,7 +316,8 @@ export default function ForCompanyPage() {
                 EVALUATION AXIS
               </span>
               <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                60秒動画で可視化される、4つの採用指標
+                <span className="inline-block">60秒動画で可視化される、</span>
+                <span className="inline-block">4つの採用指標</span>
               </h2>
               <p className="text-xs sm:text-sm text-slate-600">
                 学歴や資格の文字情報だけでは見抜けない、ビジネスで活躍するポテンシャルを多角的に評価できます。
@@ -377,7 +380,8 @@ export default function ForCompanyPage() {
                 HOW TO START
               </span>
               <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                導入からスカウト送信までの3ステップ
+                <span className="inline-block">導入からスカウト送信までの</span>
+                <span className="inline-block">3ステップ</span>
               </h2>
               <p className="text-xs sm:text-sm text-slate-600">
                 最短1営業日でアカウント発行。すぐに学生の自己PR動画を閲覧し、スカウトを開始できます。
@@ -438,7 +442,8 @@ export default function ForCompanyPage() {
                 </div>
                 <div>
                   <h3 className="text-lg sm:text-xl font-black text-slate-900">
-                    安心・安全の完全審査制 ＆ 非公開動画管理
+                    <span className="inline-block">安心・安全の完全審査制 ＆</span>
+                    <span className="inline-block">非公開動画管理</span>
                   </h3>
                   <p className="text-xs text-slate-500">
                     学生と参画企業の信頼を守るための厳格なガバナンス体制
@@ -546,9 +551,9 @@ export default function ForCompanyPage() {
                   <Building2 className="w-3.5 h-3.5" />
                   <span>企業利用お申し込み受付中</span>
                 </span>
-                <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-white">
-                  60秒動画で、<br />
-                  人柄マッチする優秀な人材と出会う。
+                <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-white leading-tight">
+                  <span className="inline-block">60秒動画で、</span>
+                  <span className="inline-block">人柄マッチする優秀な人材と出会う。</span>
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-lg mx-auto">
                   文字だけの書類選考を脱却し、熱量とポテンシャルを持った学生をスワイプで直感スカウト。まずは無料の企業利用申請からスタートしてください。

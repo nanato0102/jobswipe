@@ -105,9 +105,9 @@ export default function HomePage() {
               </FadeInView>
 
               <FadeInView delay={100}>
-                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.18] text-slate-900">
-                  履歴書を、<br />
-                  <span className="text-emerald-700">スワイプする時代へ。</span>
+                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.2] text-slate-900">
+                  <span className="block sm:inline">履歴書を、</span>
+                  <span className="text-emerald-700 inline-block">スワイプする時代へ。</span>
                 </h1>
               </FadeInView>
 
@@ -289,7 +289,8 @@ export default function HomePage() {
                 WHY JOBSWIPE
               </span>
               <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                なぜ、今「動画逆求人」なのか？
+                <span className="inline-block">なぜ、今</span>
+                <span className="inline-block">「動画逆求人」なのか？</span>
               </h2>
               <p className="text-xs sm:text-sm text-slate-600">
                 学生と企業、それぞれの就活・採用の課題を動画の力で解決します。
@@ -410,7 +411,8 @@ export default function HomePage() {
                 HOW IT WORKS
               </span>
               <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                オファー獲得までの3ステップ
+                <span className="inline-block">オファー獲得までの</span>
+                <span className="inline-block">3ステップ</span>
               </h2>
               <p className="text-xs sm:text-sm text-slate-600">
                 スマートフォンひとつで完結。初めて動画を撮る方でも安心してスタートできます。
@@ -512,7 +514,8 @@ export default function HomePage() {
                 EVALUATION CRITERIA
               </span>
               <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                外見ではなく「内面と熱量」を正当に評価
+                <span className="inline-block">外見ではなく</span>
+                <span className="inline-block">「内面と熱量」を正当に評価</span>
               </h2>
               <p className="text-xs sm:text-sm text-slate-600">
                 単なる容姿の選別ではありません。動画だからこそ伝わる『話す内容の論理性』『行動への熱量』『カルチャーマッチ』を評価する仕組みです。
@@ -575,7 +578,8 @@ export default function HomePage() {
                 TARGET INDUSTRIES
               </span>
               <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                人柄と熱量を重視する多彩な業界が参画中
+                <span className="inline-block">人柄と熱量を重視する</span>
+                <span className="inline-block">多彩な業界が参画中</span>
               </h2>
               <p className="text-xs sm:text-sm text-slate-600">
                 急成長ベンチャーから大手グループまで、あなたのポテンシャルを求める企業がオファーを送っています。
@@ -682,9 +686,9 @@ export default function HomePage() {
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>完全無料で今日からスタート</span>
                 </span>
-                <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                  60秒の動画で、<br />
-                  あなたに惹かれる企業と出会う。
+                <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+                  <span className="inline-block">60秒の動画で、</span>
+                  <span className="inline-block">あなたに惹かれる企業と出会う。</span>
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-lg mx-auto">
                   登録・動画投稿・オファー受信まですべて完全無料。スマホひとつで、あなたの熱量と人柄を評価する優良企業からのスカウトを受け取りましょう。
