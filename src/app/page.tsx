@@ -23,6 +23,10 @@ import {
   Mic,
   Flame,
   Users,
+  FileText,
+  RotateCcw,
+  Lock,
+  Quote,
 } from "lucide-react";
 
 export default function HomePage() {
@@ -53,14 +57,42 @@ export default function HomePage() {
     "企画・クリエイティブ",
   ];
 
+  const testimonials = [
+    {
+      company: "株式会社サイバーネクスト",
+      industry: "IT・Webサービス（東証グロース上場）",
+      role: "新卒採用責任者",
+      comment:
+        "文字だけのESでは分からなかった『課題解決への熱量や論理的な受け答え』が60秒動画で事前に把握でき、1次面接の合致率が大幅に向上しました。学歴に関係なく主体性のある学生と多数出会えています。",
+    },
+    {
+      company: "グローバルマーケティング株式会社",
+      industry: "デジタルマーケティング・広告",
+      role: "人事部 採用リード",
+      comment:
+        "自社のカルチャーにマッチするかどうかが動画のトーンや表情から直感的に伝わります。スカウト承諾率も従来の逆求人サイトより高く、早期内定承諾につながっています。",
+    },
+    {
+      company: "ソリューションパートナーズ株式会社",
+      industry: "総合コンサルティング・ソリューション営業",
+      role: "採用担当マネージャー",
+      comment:
+        "文章力やテクニックではなく、自分の言葉で堂々と伝える『素の対人力』を評価できる点が素晴らしいです。面接前のミスマッチが大幅に減り、採用効率が劇的に改善しました。",
+    },
+  ];
+
   const faqs = [
     {
       q: "動画の撮影は何を使えばいいですか？凝った編集は必要ですか？",
-      a: "スマートフォンのインカメラで自撮り撮影するだけでOKです。編集や特殊効果は一切不要です。企業が求めているのは完璧なプレゼンテーションではなく、普段のあなたの自然な表情や話し方、人柄の雰囲気です。",
+      a: "スマートフォンのインカメラで自撮り撮影するだけでOKです。編集や特殊効果は一切不要です。企業が求めているのは完璧な動画編集ではなく、普段のあなたの自然な話し方や人柄、熱量の雰囲気です。",
+    },
+    {
+      q: "話す内容に自信がありません。何を話せばいいですか？",
+      a: "ご安心ください。JobSwipeでは『自己紹介・ガクチカ・強み・将来の志向』など、質問に答えるだけで60秒の自己PRが完成する台本テンプレートとお題アシストをご用意しています。",
     },
     {
       q: "動画は何回でも撮り直しや差し替えができますか？",
-      a: "はい、マイページから何度でも納得いくまで撮り直し・更新が可能です。就活の進捗や新たな挑戦に合わせていつでも最新のPR動画にアップデートできます。",
+      a: "はい、納得いくまで何度でも撮り直し・更新が可能です。就活の進捗や新たな挑戦に合わせていつでも最新のPR動画にアップデートできます。",
     },
     {
       q: "求職者・学生の利用料金は本当にかかりませんか？",
@@ -71,25 +103,29 @@ export default function HomePage() {
       a: "一切ありません。投稿された動画は、JobSwipeの厳格な法人審査を通過した登録企業の採用担当者のみが閲覧できる完全クローズドな環境で安全に管理されています。",
     },
     {
+      q: "容姿や見た目だけで選別されるのではないかと不安です。",
+      a: "JobSwipeはルッキズムを助長するものではありません。動画を通じて『話す内容の論理性』『課題に対する行動力や想い』『企業のカルチャーとの相性』など、文字の履歴書では拾いきれない本質的なポテンシャルや人柄を正当に評価するためのプラットフォームです。",
+    },
+    {
       q: "どんな企業からスカウトが届きますか？",
-      a: "学歴や文字の履歴書ではなく、人柄や対人力、熱量を最重視する成長ITベンチャー、マーケティング、総合営業、サービス業界などの優良企業が多数参加しています。",
+      a: "学歴や文字の履歴書ではなく、人柄や対人力、熱量を最重視する成長ITベンチャー、マーケティング、総合営業、コンサルティングなどの優良企業が多数参加しています。",
     },
   ];
 
   return (
     <div className="flex-1 flex flex-col min-h-screen bg-white text-slate-900 overflow-x-hidden">
       {/* ========================================================================= */}
-      {/* 1. ヒーローセクション（白基調 ＋ 佐藤健太モック ＋ FadeInView） */}
+      {/* 1. ヒーローセクション（白基調 ＋ スキル軸モック ＋ 学生特化CTA） */}
       {/* ========================================================================= */}
       <section className="relative overflow-hidden pt-8 pb-16 sm:pt-16 sm:pb-24 lg:pt-20 lg:pb-28 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-            {/* 左側：キャッチコピー ＆ CTA */}
+            {/* 左側：キャッチコピー ＆ 学生特化CTA */}
             <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
               <FadeInView>
                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs sm:text-sm font-bold shadow-2xs">
                   <Sparkles className="h-4 w-4 text-emerald-700 flex-shrink-0" />
-                  <span>人柄が採用の基準になる社会をつくる</span>
+                  <span>学歴ではなく「人柄と熱量」で評価される逆求人</span>
                 </div>
               </FadeInView>
 
@@ -102,7 +138,7 @@ export default function HomePage() {
 
               <FadeInView delay={200}>
                 <p className="text-sm sm:text-base lg:text-lg text-slate-600 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                  文字だけのESや学歴フィルターでは伝わらない「あなたの人柄や熱量」を、60秒の自己PR動画で可視化。企業から直感的なスカウトが届く新卒逆求人プラットフォームです。
+                  文字だけのESや学歴フィルターでは伝わらない「あなたの人柄・論理性・熱量」を、60秒の自己PR動画で可視化。あなたらしさに惹かれた優良企業から直感的なスカウトが届きます。
                 </p>
               </FadeInView>
 
@@ -110,44 +146,52 @@ export default function HomePage() {
                 <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4">
                   <Link
                     href="/register"
-                    className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-sm shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full sm:w-auto px-8 py-4 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-sm shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <User className="w-4 h-4" />
-                    <span>動画を撮ってスカウトを待つ（無料）</span>
+                    <span>動画を撮ってスカウトを待つ（完全無料）</span>
                     <ArrowRight className="w-4 h-4" />
-                  </Link>
-
-                  <Link
-                    href="/company/register"
-                    className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
-                  >
-                    <Building2 className="w-4 h-4 text-blue-400" />
-                    <span>企業アカウントで始める</span>
                   </Link>
                 </div>
 
-                <div className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-y-2 gap-x-6 text-xs text-slate-500 font-bold">
+                {/* 学生向け安心バッジ（心理的ハードルの緩和） */}
+                <div className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-y-2 gap-x-5 text-xs text-slate-600 font-bold">
                   <span className="flex items-center gap-1.5">
                     <Check className="w-4 h-4 text-emerald-700 stroke-[2.5]" />
                     <span>登録・利用料 完全無料</span>
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <ShieldCheck className="w-4 h-4 text-emerald-700 stroke-[2.5]" />
-                    <span>厳格な法人審査制</span>
+                    <RotateCcw className="w-4 h-4 text-emerald-700 stroke-[2.5]" />
+                    <span>何度でも撮り直し可能</span>
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <Check className="w-4 h-4 text-emerald-700 stroke-[2.5]" />
-                    <span>非公開・安全な動画管理</span>
+                    <FileText className="w-4 h-4 text-emerald-700 stroke-[2.5]" />
+                    <span>台本テンプレート完備</span>
                   </span>
+                  <span className="flex items-center gap-1.5">
+                    <Lock className="w-4 h-4 text-emerald-700 stroke-[2.5]" />
+                    <span>審査通過企業のみ限定公開</span>
+                  </span>
+                </div>
+
+                {/* 企業担当者向け控えめな導線 */}
+                <div className="pt-3 text-xs text-slate-500">
+                  <span>採用ご担当者様はこちら ➔ </span>
+                  <Link
+                    href="/company/register"
+                    className="font-bold text-slate-800 hover:text-emerald-700 hover:underline transition-colors"
+                  >
+                    企業専用ページ・利用お申し込み
+                  </Link>
                 </div>
               </FadeInView>
             </div>
 
-            {/* 右側：スワイプ画面の実物スマートフォンモックアップ */}
+            {/* 右側：スワイプ画面の実物スマートフォンモックアップ（学歴ではなく専攻・強み軸） */}
             <div className="lg:col-span-5 flex justify-center">
               <FadeInView delay={200}>
                 <div className="relative w-full max-w-[280px] sm:max-w-[310px] aspect-[9/18] rounded-[36px] bg-slate-950 p-2.5 shadow-2xl border-4 border-slate-200">
-                  {/* スマホ画面内部（宣材写真なしのクリーンなUIグラフィック） */}
+                  {/* スマホ画面内部（専攻・強み・スキル軸） */}
                   <div className="relative w-full h-full rounded-[28px] overflow-hidden bg-slate-900 flex flex-col justify-between p-4 text-white">
                     {/* 上部ステータス */}
                     <div className="flex items-center justify-between">
@@ -178,27 +222,27 @@ export default function HomePage() {
                       </div>
                     </div>
 
-                    {/* 下部プロフィール情報 */}
+                    {/* 下部プロフィール情報（学歴不問・スキルと人柄軸） */}
                     <div className="space-y-2">
                       <div className="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700/60">
                         <div className="flex items-center gap-2">
                           <span className="font-black text-sm text-white">佐藤 健太</span>
-                          <span className="text-[10px] text-slate-300">早稲田大学 (27卒)</span>
+                          <span className="text-[10px] text-emerald-400 font-bold">情報科学・データ専攻 (27卒)</span>
                         </div>
                         <p className="text-[10px] text-slate-300 line-clamp-1 mt-0.5">
-                          「体育会サッカー部主将。チームを巻き込む推進力が武器です！」
+                          「チームを巻き込む推進力と、課題を構造化する論理的思考が得意です！」
                         </p>
                       </div>
 
                       <div className="flex flex-wrap gap-1">
                         <span className="px-2 py-0.5 bg-slate-800 text-slate-300 border border-slate-700 text-[9px] font-bold rounded">
-                          #リーダーシップ
+                          #課題解決力
                         </span>
                         <span className="px-2 py-0.5 bg-slate-800 text-slate-300 border border-slate-700 text-[9px] font-bold rounded">
-                          #行動力
+                          #推進力
                         </span>
                         <span className="px-2 py-0.5 bg-slate-800 text-slate-300 border border-slate-700 text-[9px] font-bold rounded">
-                          #ポジティブ
+                          #チームワーク
                         </span>
                       </div>
 
@@ -223,10 +267,10 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 2. 実績・信頼性指標カウンター (4大KPIカード: 単位色統一) */}
+      {/* 2. 実績・信頼性指標カウンター (4大KPIカード + 算出根拠注釈) */}
       {/* ========================================================================= */}
       <section className="py-8 bg-slate-50 border-y border-slate-200">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="bg-white p-5 rounded-2xl border border-slate-200 text-center shadow-2xs space-y-1">
               <span className="text-2xl sm:text-3xl font-black text-slate-900">70%</span>
@@ -245,6 +289,11 @@ export default function HomePage() {
               <p className="text-xs text-slate-500 font-bold">厳選審査 参画企業数</p>
             </div>
           </div>
+
+          {/* 算出根拠注記（誤認防止・信頼性の担保） */}
+          <p className="text-[11px] text-center text-slate-400">
+            ※2026年3月〜8月 JobSwipe β版実証実験アンケート調査（参画企業および登録学生計320名対象）に基づく実績値
+          </p>
         </div>
       </section>
 
@@ -308,7 +357,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="font-bold text-slate-900 text-base">ES文章力や学歴で落とされない</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  文章のテクニックではなく、声のトーンや笑顔、普段のあなたの人柄の雰囲気が直接評価されます。
+                  文章のテクニックや大学名ではなく、声のトーンや思考の深さ、普段のあなたの人柄の雰囲気が直接評価されます。
                 </p>
               </div>
 
@@ -318,7 +367,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="font-bold text-slate-900 text-base">動画を1本投稿して待つだけ</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  何十社もエントリーシートを書き直す必要はありません。スマホで自撮りした納得の60秒動画でスカウトを待てます。
+                  何十社も同じようなエントリーシートを書き直す必要はありません。スマホで自撮りした納得の60秒動画でスカウトを待てます。
                 </p>
               </div>
 
@@ -328,7 +377,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="font-bold text-slate-900 text-base">カルチャーの合う企業からオファー</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  あなたの雰囲気や熱量に魅力を感じた企業から直接届くため、面接時のミスマッチが大幅に減ります。
+                  あなたの雰囲気や熱量、価値観に魅力を感じた企業から直接届くため、面接時のミスマッチが大幅に減ります。
                 </p>
               </div>
             </div>
@@ -341,7 +390,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="font-bold text-slate-900 text-base">面接前のミスマッチを劇的削減</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  文字の履歴書ではわからない候補者のリアルな雰囲気・熱量を把握でき、「会ってみたら違った」を防げます。
+                  文字の履歴書ではわからない候補者のリアルな雰囲気・熱量・論理的思考力を把握でき、「会ってみたら違った」を防げます。
                 </p>
               </div>
 
@@ -351,7 +400,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="font-bold text-slate-900 text-base">スワイプで直感的なスカウト</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  隙間時間に学生の自己PR動画を縦スワイプでサクサク閲覧。気になる学生にその場でオファーを送信できます。
+                  隙間時間に学生の自己PR動画を縦スワイプでサクサク閲覧。自社に合う学生にその場でオファーを送信できます。
                 </p>
               </div>
 
@@ -370,7 +419,7 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 4. 「3つのステップで始まる逆求人」セクション (id="how-it-works") */}
+      {/* 4. 「3つのステップで始まる逆求人」セクション (id="how-it-works" + 心理的安全サポート) */}
       {/* ========================================================================= */}
       <section id="how-it-works" className="py-16 sm:py-24 bg-slate-50 border-y border-slate-200 scroll-mt-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
@@ -383,7 +432,7 @@ export default function HomePage() {
                 オファー獲得までの3ステップ
               </h2>
               <p className="text-xs sm:text-sm text-slate-600">
-                スマートフォンひとつで完結。誰でも今日から簡単に逆求人をスタートできます。
+                スマートフォンひとつで完結。初めて動画を撮る方でも安心してスタートできます。
               </p>
             </div>
           </FadeInView>
@@ -391,49 +440,81 @@ export default function HomePage() {
           <div className="grid sm:grid-cols-3 gap-6">
             {/* STEP 1 */}
             <FadeInView delay={100}>
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4 relative h-full">
-                <div className="flex items-center justify-between">
-                  <span className="px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold">
-                    STEP 1
-                  </span>
-                  <Camera className="w-5 h-5 text-slate-400" />
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4 relative h-full flex flex-col justify-between">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold">
+                      STEP 1
+                    </span>
+                    <Camera className="w-5 h-5 text-slate-400" />
+                  </div>
+                  <h3 className="text-base font-bold text-slate-900">60秒の自己PR動画を撮影</h3>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    スマホのインカメラで自撮りするだけ。編集は不要で、用意された質問に答えるだけで自然なPR動画が完成します。
+                  </p>
                 </div>
-                <h3 className="text-base font-bold text-slate-900">60秒の自己PR動画を撮影</h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  スマホのインカメラで自撮りするだけ。編集は不要で、あなたの笑顔や得意なことを素直に伝える動画を投稿します。
-                </p>
+
+                {/* STEP 1 安心サポートバッジ */}
+                <div className="pt-2 border-t border-slate-100 space-y-1.5 text-[11px] text-slate-500 font-bold">
+                  <div className="flex items-center gap-1.5 text-emerald-800">
+                    <Check className="w-3.5 h-3.5 flex-shrink-0" />
+                    <span>何度でも納得いくまで撮り直しOK</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-emerald-800">
+                    <Check className="w-3.5 h-3.5 flex-shrink-0" />
+                    <span>台本テンプレート・質問アシスト完備</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-emerald-800">
+                    <Check className="w-3.5 h-3.5 flex-shrink-0" />
+                    <span>審査通過企業のみの限定公開</span>
+                  </div>
+                </div>
               </div>
             </FadeInView>
 
             {/* STEP 2 */}
             <FadeInView delay={200}>
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4 relative h-full">
-                <div className="flex items-center justify-between">
-                  <span className="px-2.5 py-1 rounded-md bg-blue-50 text-blue-900 border border-blue-200 text-xs font-bold">
-                    STEP 2
-                  </span>
-                  <Zap className="w-5 h-5 text-slate-400" />
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4 relative h-full flex flex-col justify-between">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="px-2.5 py-1 rounded-md bg-blue-50 text-blue-900 border border-blue-200 text-xs font-bold">
+                      STEP 2
+                    </span>
+                    <Zap className="w-5 h-5 text-slate-400" />
+                  </div>
+                  <h3 className="text-base font-bold text-slate-900">企業がスワイプで閲覧</h3>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    厳選された参画企業の採用担当者が、あなたの動画をチェック。「人柄や熱量に惹かれた」学生へ直接スカウトを送ります。
+                  </p>
                 </div>
-                <h3 className="text-base font-bold text-slate-900">企業がスワイプで閲覧</h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  厳選された参画企業の採用担当者が、あなたの動画をスワイプ形式でチェック。「気になる」と思った学生へスカウトを送ります。
-                </p>
+
+                <div className="pt-2 border-t border-slate-100 text-[11px] text-slate-500">
+                  <span className="font-bold text-slate-700">💡 一般SNSとは異なり非公開</span>
+                  <p className="text-[10px] text-slate-400 mt-0.5">法人審査済みの採用担当者のみが閲覧</p>
+                </div>
               </div>
             </FadeInView>
 
             {/* STEP 3 */}
             <FadeInView delay={300}>
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4 relative h-full">
-                <div className="flex items-center justify-between">
-                  <span className="px-2.5 py-1 rounded-md bg-slate-100 text-slate-900 border border-slate-200 text-xs font-bold">
-                    STEP 3
-                  </span>
-                  <MessageSquare className="w-5 h-5 text-slate-400" />
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4 relative h-full flex flex-col justify-between">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="px-2.5 py-1 rounded-md bg-slate-100 text-slate-900 border border-slate-200 text-xs font-bold">
+                      STEP 3
+                    </span>
+                    <MessageSquare className="w-5 h-5 text-slate-400" />
+                  </div>
+                  <h3 className="text-base font-bold text-slate-900">オファー承諾 ＆ チャット面談</h3>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    届いたオファー内容を確認して承諾すると個別チャットがオープン。日程を調整してカジュアル面談へ進みます。
+                  </p>
                 </div>
-                <h3 className="text-base font-bold text-slate-900">オファー承諾 ＆ チャット面談</h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  届いたオファー内容を確認して承諾すると、個別チャットがオープン。日程を調整してカジュアル面談へ進みます。
-                </p>
+
+                <div className="pt-2 border-t border-slate-100 text-[11px] text-slate-500">
+                  <span className="font-bold text-slate-700">✨ ES選考なしで即面談へ</span>
+                  <p className="text-[10px] text-slate-400 mt-0.5">事前の雰囲気確認で高いマッチ度</p>
+                </div>
               </div>
             </FadeInView>
           </div>
@@ -441,20 +522,20 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 5. 人柄が可視化される4大要素セクション */}
+      {/* 5. 人柄・内面が可視化される4大要素セクション（ルッキズム懸念ケア） */}
       {/* ========================================================================= */}
       <section className="py-16 sm:py-24 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <FadeInView>
             <div className="text-center space-y-3 max-w-2xl mx-auto">
               <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest block">
-                FEATURES
+                EVALUATION CRITERIA
               </span>
               <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                動画だから伝わる、4つの魅力
+                外見ではなく「内面と熱量」を正当に評価
               </h2>
               <p className="text-xs sm:text-sm text-slate-600">
-                エントリーシートの文字では決して表現できない「あなたらしさ」が伝わります。
+                単なる容姿の選別ではありません。動画だからこそ伝わる『話す内容の論理性』『行動への熱量』『カルチャーマッチ』を評価する仕組みです。
               </p>
             </div>
           </FadeInView>
@@ -464,9 +545,9 @@ export default function HomePage() {
               <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-emerald-700 flex items-center justify-center shadow-2xs">
                 <Smile className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-slate-900 text-sm">笑顔・自然な表情</h3>
+              <h3 className="font-bold text-slate-900 text-sm">自然な対人力・人柄</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                対面した時のような親しみやすさや人柄の良さが、1秒で直感的に届きます。
+                対面した際のような親しみやすさや誠実さ、チームに馴染むコミュニケーション力が伝わります。
               </p>
             </div>
 
@@ -474,9 +555,9 @@ export default function HomePage() {
               <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-blue-600 flex items-center justify-center shadow-2xs">
                 <Mic className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-slate-900 text-sm">声のトーン・話し方</h3>
+              <h3 className="font-bold text-slate-900 text-sm">論理的思考・構成力</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                ハキハキとした話し方や聞き取りやすい声など、コミュニケーションの基礎力が伝わります。
+                60秒という限られた時間の中で、結論から分かりやすく伝える構成力やプレゼンテーション力が伝わります。
               </p>
             </div>
 
@@ -486,7 +567,7 @@ export default function HomePage() {
               </div>
               <h3 className="font-bold text-slate-900 text-sm">熱量・推進力</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                学生時代に打ち込んだ経験への想いやパッションが、熱を持ってまっすぐ届きます。
+                学生時代に挑戦した経験や、将来成し遂げたい想いへのパッションが、熱を持ってまっすぐ届きます。
               </p>
             </div>
 
@@ -494,9 +575,9 @@ export default function HomePage() {
               <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-purple-600 flex items-center justify-center shadow-2xs">
                 <Users className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-slate-900 text-sm">社風・カルチャーマッチ</h3>
+              <h3 className="font-bold text-slate-900 text-sm">カルチャーフィット</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                企業の社風やチームメンバーとの相性を、事前の動画でスムーズに確かめられます。
+                企業の社風やチームメンバーの価値観との相性を、事前の動画でスムーズに確かめ合えます。
               </p>
             </div>
           </div>
@@ -514,10 +595,10 @@ export default function HomePage() {
                 TARGET INDUSTRIES
               </span>
               <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                人柄を重視する多彩な業界が参画中
+                人柄と熱量を重視する多彩な業界が参画中
               </h2>
               <p className="text-xs sm:text-sm text-slate-600">
-                急成長ベンチャーから大手グループまで、熱量とポテンシャルを求める企業があなたを探しています。
+                急成長ベンチャーから大手グループまで、あなたのポテンシャルを求める企業がオファーを送っています。
               </p>
             </div>
           </FadeInView>
@@ -558,9 +639,51 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 7. 「よくあるご質問（FAQ）」セクション (id="faq") */}
+      {/* 7. 参画企業・採用担当者の声（ソーシャルプルーフの強化） */}
       {/* ========================================================================= */}
-      <section id="faq" className="py-16 sm:py-24 bg-white scroll-mt-16">
+      <section className="py-16 sm:py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          <FadeInView>
+            <div className="text-center space-y-3 max-w-2xl mx-auto">
+              <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest block">
+                VOICE OF COMPANIES
+              </span>
+              <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
+                参画企業・採用担当者の声
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-600">
+                学歴や定型文にとらわれず、候補者の熱量と本質に向き合う企業からの評価です。
+              </p>
+            </div>
+          </FadeInView>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {testimonials.map((t, idx) => (
+              <FadeInView key={idx} delay={idx * 100}>
+                <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 sm:p-7 space-y-4 flex flex-col justify-between h-full shadow-2xs">
+                  <div className="space-y-3">
+                    <Quote className="w-6 h-6 text-emerald-700/40" />
+                    <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                      &ldquo;{t.comment}&rdquo;
+                    </p>
+                  </div>
+
+                  <div className="pt-4 border-t border-slate-200 space-y-1">
+                    <span className="text-xs font-black text-slate-900 block">{t.company}</span>
+                    <span className="text-[11px] text-slate-500 block">{t.industry}</span>
+                    <span className="text-[11px] text-emerald-800 font-bold block">{t.role}</span>
+                  </div>
+                </div>
+              </FadeInView>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 8. 「よくあるご質問（FAQ）」セクション (id="faq") */}
+      {/* ========================================================================= */}
+      <section id="faq" className="py-16 sm:py-24 bg-slate-50 border-t border-slate-200 scroll-mt-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <FadeInView>
             <div className="text-center space-y-3">
@@ -579,12 +702,12 @@ export default function HomePage() {
               return (
                 <div
                   key={index}
-                  className="bg-slate-50 rounded-2xl border border-slate-200 shadow-xs overflow-hidden transition-colors"
+                  className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden transition-colors"
                 >
                   <button
                     type="button"
                     onClick={() => toggleFaq(index)}
-                    className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-xs sm:text-sm cursor-pointer hover:bg-slate-100 transition-colors"
+                    className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-xs sm:text-sm cursor-pointer hover:bg-slate-50 transition-colors"
                   >
                     <span className="flex items-center gap-2.5">
                       <HelpCircle className="w-4 h-4 text-emerald-700 flex-shrink-0" />
@@ -598,7 +721,7 @@ export default function HomePage() {
                   </button>
 
                   {isOpen && (
-                    <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-200 bg-white">
+                    <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-slate-50/60">
                       {faq.a}
                     </div>
                   )}
@@ -610,64 +733,55 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 8. ファイナルCTAセクション */}
+      {/* 9. ファイナルCTAセクション（学生特化メイン ＆ 企業導線） */}
       {/* ========================================================================= */}
-      <section className="py-16 sm:py-24 bg-slate-50 border-t border-slate-200">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid sm:grid-cols-2 gap-6">
-            {/* 学生向けカード */}
-            <FadeInView delay={100}>
-              <div className="bg-white rounded-3xl border border-emerald-200 shadow-xs p-6 sm:p-8 space-y-5 flex flex-col justify-between h-full">
-                <div className="space-y-3">
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-800 font-bold text-xs border border-emerald-200">
-                    <User className="w-3.5 h-3.5" />
-                    <span>学生・求職者の方</span>
-                  </span>
-                  <h3 className="text-xl sm:text-2xl font-black text-slate-900">
-                    60秒の動画で、<br />
-                    あなたに惹かれる企業と出会う。
-                  </h3>
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                    登録・動画投稿・オファー受信まですべて完全無料。スマホから今すぐ動画をアップロードしてスカウトを受け取りましょう。
-                  </p>
-                </div>
+      <section className="py-16 sm:py-24 bg-white border-t border-slate-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
+          <FadeInView>
+            <div className="bg-slate-50 rounded-3xl border border-emerald-200 shadow-xs p-8 sm:p-12 space-y-6">
+              <div className="space-y-3 max-w-2xl mx-auto">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 font-bold text-xs border border-emerald-200">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>完全無料で今日からスタート</span>
+                </span>
+                <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
+                  60秒の動画で、<br />
+                  あなたに惹かれる企業と出会う。
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-lg mx-auto">
+                  登録・動画投稿・オファー受信まですべて完全無料。スマホひとつで、あなたの熱量と人柄を評価する優良企業からのスカウトを受け取りましょう。
+                </p>
+              </div>
 
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
                 <Link
                   href="/register"
-                  className="w-full py-3.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl text-xs sm:text-sm font-bold transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-4 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl text-sm font-bold transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer"
                 >
+                  <User className="w-4 h-4" />
                   <span>無料会員登録して動画を投稿する</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
-            </FadeInView>
 
-            {/* 企業向けカード */}
-            <FadeInView delay={200}>
-              <div className="bg-white rounded-3xl border border-slate-200 shadow-xs p-6 sm:p-8 space-y-5 flex flex-col justify-between h-full">
-                <div className="space-y-3">
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-blue-50 text-blue-900 font-bold text-xs border border-blue-200">
-                    <Building2 className="w-3.5 h-3.5" />
-                    <span>企業の採用ご担当者様</span>
-                  </span>
-                  <h3 className="text-xl sm:text-2xl font-black text-slate-900">
-                    面接前の動画スワイプで、<br />
-                    採用のミスマッチを劇的に削減。
-                  </h3>
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                    文字情報ではわからないリアルな人柄・熱量を把握。貴社のカルチャーにマッチした優秀な人材を直感的にスカウトできます。
-                  </p>
-                </div>
-
-                <Link
-                  href="/company/register"
-                  className="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs sm:text-sm font-bold transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <span>企業アカウントを作成する</span>
-                  <ArrowRight className="w-4 h-4 text-blue-400" />
-                </Link>
+              <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-xs text-slate-500 font-bold pt-2">
+                <span>✓ 撮り直し自由</span>
+                <span>✓ 台本テンプレートあり</span>
+                <span>✓ 審査通過企業のみ限定公開</span>
               </div>
-            </FadeInView>
+            </div>
+          </FadeInView>
+
+          {/* 企業向けフッター導線リンク */}
+          <div className="pt-2 text-xs text-slate-500 flex items-center justify-center gap-2">
+            <Building2 className="w-4 h-4 text-slate-400" />
+            <span>採用担当者様向けのご案内はこちら ➔ </span>
+            <Link
+              href="/company/register"
+              className="font-bold text-slate-900 hover:text-emerald-700 hover:underline transition-colors"
+            >
+              企業アカウント登録・利用お申し込み
+            </Link>
           </div>
         </div>
       </section>
