@@ -5,27 +5,24 @@ import Link from "next/link";
 import FadeInView from "@/components/FadeInView";
 import {
   Building2,
-  Sparkles,
   ArrowRight,
   ShieldCheck,
   Check,
-  Zap,
-  MessageSquare,
-  Users,
-  Mic,
   Smile,
+  Mic,
   Flame,
-  HelpCircle,
-  ChevronDown,
-  ChevronUp,
+  Users,
+  Play,
+  Heart,
+  X,
+  User,
   Clock,
   Lock,
-  Layers,
-  FileCheck,
-  X,
-  Heart,
-  Play,
-  User,
+  ChevronDown,
+  ChevronUp,
+  HelpCircle,
+  MessageSquare,
+  Zap,
 } from "lucide-react";
 
 export default function ForCompanyPage() {
@@ -37,24 +34,24 @@ export default function ForCompanyPage() {
 
   const companyFaqs = [
     {
-      q: "利用申請からアカウント発行までどのくらい時間がかかりますか？",
-      a: "通常、Webフォームからの申請後、1〜2営業日以内に運営事務局による法人掲載審査を実施いたします。審査完了後、ご登録のメールアドレス宛にログイン情報を即時発行いたします。",
+      q: "どのような学生が登録していますか？",
+      a: "学歴や資格の文字情報だけでなく、自身の『人柄・熱量・対話力』を強みとして企業にアピールしたい意欲的な学生（主に26卒・27卒・28卒の大学生・大学院生）が多数登録しています。",
     },
     {
-      q: "どのような学生・求職者が登録していますか？",
-      a: "文字の履歴書や学歴フィルターにとらわれず、自身の『人柄・熱量・対人力』で勝負したい全国の意欲的な学生（主に26卒・27卒の新卒就活生・インターン志望者）が登録しています。",
+      q: "導入までにどのくらいの期間がかかりますか？",
+      a: "Webフォームからのお申し込み後、最短1営業日で法人審査が完了し、即日アカウントを発行いたします。発行後はすぐに学生のPR動画をスワイプ閲覧・オファー送信していただけます。",
     },
     {
-      q: "動画の閲覧やスカウト機能の推奨動作環境を教えてください。",
-      a: "Google Chrome、Safari、Microsoft Edgeなどの最新ブラウザに対応しています。PCの大画面はもちろん、採用担当者様のスマートフォン・タブレットからも隙間時間にサクサク縦スワイプで閲覧・オファー送信が可能です。",
+      q: "学生の動画は社外に流出したりSNS等で拡散されたりしませんか？",
+      a: "一切ありません。JobSwipeに登録された動画は、厳格な法人審査を通過した登録企業の採用担当者のみがアクセスできる完全非公開・高セキュリティ環境で管理されています。",
     },
     {
-      q: "利用お申し込みや審査に費用は発生しますか？",
-      a: "企業アカウントの利用お申し込みおよび掲載審査は完全無料です。費用が発生する有料プランや増枠については、ログイン後の管理画面でご納得いただいた上でご契約いただけます。",
+      q: "初期費用や利用開始時の料金体系はどうなっていますか？",
+      a: "企業利用のお申し込みおよびアカウント開設・掲載審査は完全無料です。具体的なプラン詳細や料金体系につきましては、審査通過後の専用管理画面にてご確認いただくか、お問い合わせフォームより資料をご請求ください。",
     },
     {
-      q: "学生の動画が外部に流出するリスクはありませんか？",
-      a: "一切ございません。学生が投稿した自己PR動画は、JobSwipeの厳格な法人審査を通過した正規の採用担当者のみがアクセスできる完全クローズドなセキュア環境で暗号化管理されています。",
+      q: "スカウト送信後の選考フローはどう進めればよいですか？",
+      a: "学生がオファーを承諾すると、システム内で個別チャットが利用可能になります。チャット上でカジュアル面談や会社説明会、1次選考の日程調整をスムーズに進めていただけます。",
     },
   ];
 
@@ -71,7 +68,7 @@ export default function ForCompanyPage() {
               <FadeInView>
                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-900 text-xs sm:text-sm font-bold shadow-2xs">
                   <Building2 className="h-4 w-4 text-blue-700 flex-shrink-0" />
-                  <span>新卒・ポテンシャル採用の面接前ミスマッチを解消</span>
+                  <span>【採用DX】1次面接のミスマッチを根絶する動画スワイプ採用</span>
                 </div>
               </FadeInView>
 
@@ -85,7 +82,7 @@ export default function ForCompanyPage() {
 
               <FadeInView delay={200}>
                 <p className="text-sm sm:text-base lg:text-lg text-slate-600 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                  60秒の自己PR動画を縦スワイプ。ESの定型文や学歴フィルターでは見抜けない「リアルな人柄・熱量・対人力」を面接前に可視化する新卒逆求人プラットフォームです。
+                  AI生成ESによる書類選考の形骸化を打破。通勤・移動の隙間時間に縦スワイプで候補者の表情・論理性・熱量を即断し、カルチャーマッチする優秀層をダイレクトスカウト。
                 </p>
               </FadeInView>
 
@@ -204,7 +201,7 @@ export default function ForCompanyPage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 2. 採用現場が抱える3大ペインとJobSwipeでの解決 */}
+      {/* 2. 【対比構造】従来の採用現場のペイン vs JobSwipeによる解決（Before / After） */}
       {/* ========================================================================= */}
       <section className="py-16 sm:py-24 bg-slate-50 border-b border-slate-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
@@ -218,7 +215,7 @@ export default function ForCompanyPage() {
                 <span className="inline-block">「構造的な課題」を解決</span>
               </h2>
               <p className="text-xs sm:text-sm text-slate-600">
-                従来の文字選考では見抜けなかったミスマッチを、60秒動画が解消します。
+                従来の文字選考・形骸化した書類選考のムダを、60秒動画が根本から解消します。
               </p>
             </div>
           </FadeInView>
@@ -232,7 +229,7 @@ export default function ForCompanyPage() {
                     採用課題 01
                   </span>
                   <h3 className="text-base font-bold text-slate-900">
-                    ESの定型文・AI文章では「素の対人力」が見えない
+                    AI生成ESでは「素の対人力」が見えない
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                     文章作成テクニックに長けた候補者を書類通過させても、1次面接で落とす工数と時間のロスが膨大に。
@@ -243,8 +240,8 @@ export default function ForCompanyPage() {
                     <Check className="w-4 h-4 text-blue-700 stroke-[2.5]" />
                     <span>JobSwipeの解決策</span>
                   </span>
-                  <p className="text-[11px] text-blue-900 leading-relaxed">
-                    声のトーンや表情、論理構成力を1分で直感的に確認。会う前に素のコミュニケーション力を把握できます。
+                  <p className="text-xs text-blue-900 leading-relaxed font-bold">
+                    【素の対人力チェック】声のトーンや表情、60秒の構成力を直感的に確認。会う前に確信を持てます。
                   </p>
                 </div>
               </div>
@@ -269,8 +266,8 @@ export default function ForCompanyPage() {
                     <Check className="w-4 h-4 text-blue-700 stroke-[2.5]" />
                     <span>JobSwipeの解決策</span>
                   </span>
-                  <p className="text-[11px] text-blue-900 leading-relaxed">
-                    自社のカルチャーや求める人物像との相性を事前に見極めてオファーするため、高い面談合致率を実現。
+                  <p className="text-xs text-blue-900 leading-relaxed font-bold">
+                    【カルチャーマッチ確信】求める人物像との相性を事前に見極めてオファーするため、高い面談合致率を実現。
                   </p>
                 </div>
               </div>
@@ -295,8 +292,8 @@ export default function ForCompanyPage() {
                     <Check className="w-4 h-4 text-blue-700 stroke-[2.5]" />
                     <span>JobSwipeの解決策</span>
                   </span>
-                  <p className="text-[11px] text-blue-900 leading-relaxed">
-                    隙間時間に縦スワイプでサクサク閲覧し、気になる学生に直感的にアプローチできる圧倒的スピード感。
+                  <p className="text-xs text-blue-900 leading-relaxed font-bold">
+                    【スワイプ即スカウト】隙間時間にサクサク閲覧し、気になる学生に直感的にアプローチできる圧倒的スピード。
                   </p>
                 </div>
               </div>
@@ -326,44 +323,52 @@ export default function ForCompanyPage() {
           </FadeInView>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 shadow-2xs">
-              <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-blue-600 flex items-center justify-center shadow-2xs">
-                <Smile className="w-5 h-5" />
+            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between">
+              <div className="space-y-2.5">
+                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-blue-600 flex items-center justify-center shadow-2xs">
+                  <Smile className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-slate-900 text-sm">対面コミュニケーション力</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  笑顔や自然な表情、第一印象の良さなど、顧客やチームメンバーに信頼される人柄の基礎力が伝わります。
+                </p>
               </div>
-              <h3 className="font-bold text-slate-900 text-sm">対面コミュニケーション力</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                笑顔や自然な表情、第一印象の良さなど、顧客やチームメンバーに信頼される人柄の基礎力が伝わります。
-              </p>
             </div>
 
-            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 shadow-2xs">
-              <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-emerald-700 flex items-center justify-center shadow-2xs">
-                <Mic className="w-5 h-5" />
+            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between">
+              <div className="space-y-2.5">
+                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-emerald-700 flex items-center justify-center shadow-2xs">
+                  <Mic className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-slate-900 text-sm">論理的思考・要約力</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  60秒で結論から要点を整理して伝える構成力や、ビジネスにおける基礎的なプレゼンテーション能力を判定。
+                </p>
               </div>
-              <h3 className="font-bold text-slate-900 text-sm">論理的思考・要約力</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                60秒で結論から要点を整理して伝える構成力や、ビジネスにおける基礎的なプレゼンテーション能力を判定。
-              </p>
             </div>
 
-            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 shadow-2xs">
-              <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-amber-600 flex items-center justify-center shadow-2xs">
-                <Flame className="w-5 h-5" />
+            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between">
+              <div className="space-y-2.5">
+                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-amber-600 flex items-center justify-center shadow-2xs">
+                  <Flame className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-slate-900 text-sm">行動への熱量・主体性</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  学生時代に挑戦した経験や挫折を乗り越えた想いへのパッションなど、文字では伝わらない熱量が届きます。
+                </p>
               </div>
-              <h3 className="font-bold text-slate-900 text-sm">行動への熱量・主体性</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                学生時代に挑戦した経験や挫折を乗り越えた想いへのパッションなど、文字では伝わらない熱量が届きます。
-              </p>
             </div>
 
-            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 shadow-2xs">
-              <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-purple-600 flex items-center justify-center shadow-2xs">
-                <Users className="w-5 h-5" />
+            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between">
+              <div className="space-y-2.5">
+                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-purple-600 flex items-center justify-center shadow-2xs">
+                  <Users className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-slate-900 text-sm">自社カルチャーマッチ</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  自社の社風やチームメンバーの価値観にフィットするかどうかを、事前の動画でスムーズに確かめ合えます。
+                </p>
               </div>
-              <h3 className="font-bold text-slate-900 text-sm">自社カルチャーマッチ</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                自社の社風やチームメンバーの価値観にフィットするかどうかを、事前の動画でスムーズに確かめ合えます。
-              </p>
             </div>
           </div>
         </div>
@@ -391,38 +396,44 @@ export default function ForCompanyPage() {
 
           <div className="grid sm:grid-cols-3 gap-6">
             <FadeInView delay={100}>
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-3.5 h-full">
-                <span className="px-2.5 py-1 rounded-md bg-blue-50 text-blue-900 border border-blue-200 text-xs font-bold">
-                  STEP 01
-                </span>
-                <h3 className="text-base font-bold text-slate-900">Webフォームから利用申請</h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  会社名、ご担当者情報、ご連絡先を入力して送信（所要時間約1分）。利用申請・審査は完全無料です。
-                </p>
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-3.5 h-full flex flex-col justify-between">
+                <div className="space-y-3">
+                  <span className="px-2.5 py-1 rounded-md bg-blue-50 text-blue-900 border border-blue-200 text-xs font-bold">
+                    STEP 01
+                  </span>
+                  <h3 className="text-base font-bold text-slate-900">Webフォームから利用申請</h3>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    会社名、ご担当者情報、ご連絡先を入力して送信（所要時間約1分）。利用申請・審査は完全無料です。
+                  </p>
+                </div>
               </div>
             </FadeInView>
 
             <FadeInView delay={200}>
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-3.5 h-full">
-                <span className="px-2.5 py-1 rounded-md bg-blue-50 text-blue-900 border border-blue-200 text-xs font-bold">
-                  STEP 02
-                </span>
-                <h3 className="text-base font-bold text-slate-900">掲載審査 ＆ アカウント発行</h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  運営事務局による法人確認審査（通常1〜2営業日）完了後、専用ログイン情報をメールにてご案内します。
-                </p>
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-3.5 h-full flex flex-col justify-between">
+                <div className="space-y-3">
+                  <span className="px-2.5 py-1 rounded-md bg-blue-50 text-blue-900 border border-blue-200 text-xs font-bold">
+                    STEP 02
+                  </span>
+                  <h3 className="text-base font-bold text-slate-900">掲載審査 ＆ アカウント発行</h3>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    運営事務局による法人確認審査（通常1〜2営業日）完了後、専用ログイン情報をメールにてご案内します。
+                  </p>
+                </div>
               </div>
             </FadeInView>
 
             <FadeInView delay={300}>
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-3.5 h-full">
-                <span className="px-2.5 py-1 rounded-md bg-slate-900 text-white text-xs font-bold">
-                  STEP 03
-                </span>
-                <h3 className="text-base font-bold text-slate-900">スワイプ閲覧 ＆ スカウト送信</h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  候補者のPR動画を縦スワイプで閲覧。気になる学生にオファーを送り、承諾後は個別チャットで日程調整へ。
-                </p>
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-3.5 h-full flex flex-col justify-between">
+                <div className="space-y-3">
+                  <span className="px-2.5 py-1 rounded-md bg-slate-900 text-white text-xs font-bold">
+                    STEP 03
+                  </span>
+                  <h3 className="text-base font-bold text-slate-900">スワイプ閲覧 ＆ スカウト送信</h3>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    候補者のPR動画を縦スワイプで閲覧。気になる学生にオファーを送り、承諾後は個別チャットで日程調整へ。
+                  </p>
+                </div>
               </div>
             </FadeInView>
           </div>
@@ -584,10 +595,10 @@ export default function ForCompanyPage() {
             <User className="w-4 h-4 text-emerald-700" />
             <span>学生・求職者の方はこちら ➔ </span>
             <Link
-              href="/register"
+              href="/"
               className="font-bold text-slate-900 hover:text-emerald-700 hover:underline transition-colors"
             >
-              学生無料会員登録・動画投稿
+              学生向けトップページ
             </Link>
           </div>
         </div>

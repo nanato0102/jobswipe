@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, FileText, Home, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, FileText, Home, ShieldCheck, Lock } from "lucide-react";
 
 export default function TermsPage() {
   const router = useRouter();
@@ -26,7 +26,7 @@ export default function TermsPage() {
             className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-800 hover:bg-slate-100 hover:text-slate-900 transition-colors shadow-2xs cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4 text-slate-600" />
-            <span>前の画面（登録画面）に戻る</span>
+            <span>前の画面に戻る</span>
           </button>
 
           <Link
@@ -41,15 +41,15 @@ export default function TermsPage() {
         {/* ページタイトルヘッダー */}
         <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
-              <FileText className="w-6 h-6 text-slate-700" />
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center justify-center flex-shrink-0">
+              <FileText className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-2xl font-black text-slate-900 tracking-tight">
-                JobSwipe 利用規約
+              <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                JobSwipe 利用規約・動画管理方針
               </h1>
-              <p className="text-xs sm:text-sm text-slate-500">
-                制定日：2026年3月1日 / 最終改定日：2026年8月30日
+              <p className="text-xs text-slate-500">
+                制定日：2026年3月1日 / 最終改定日：2026年9月8日
               </p>
             </div>
           </div>
@@ -81,46 +81,57 @@ export default function TermsPage() {
 
           <section className="space-y-2">
             <h2 className="text-sm sm:text-base font-bold text-slate-900 pb-1 border-b border-slate-100">
-              第3条（自己PR動画の投稿・権利の帰属）
+              第3条（自己PR動画の権利帰属・肖像権保護・転載禁止）
             </h2>
             <p>
-              1. 学生ユーザーが本サービスに投稿する自己PR動画（以下「投稿動画」）の著作権は、投稿した学生ユーザー本人に帰属します。
+              1. 学生ユーザーが本サービスに投稿する自己PR動画（以下「投稿動画」）の著作権および肖像権は、投稿した学生ユーザー本人に帰属します。
               <br />
-              2. 学生ユーザーは、当事務局および本サービスに登録する審査済み企業ユーザーに対し、採用選考およびマッチングを目的として投稿動画を閲覧・利用することを許諾するものとします。
+              2. 学生ユーザーは、当事務局および本サービスの審査を通過した企業ユーザーに対し、採用選考およびマッチングを目的とした限定的な環境においてのみ、投稿動画を閲覧・利用することを許諾するものとします。
               <br />
-              3. 投稿動画は、JobSwipeの審査を通過した企業ユーザーのみが閲覧できる安全な環境で管理されます。
+              3. 企業ユーザーを含むすべての第三者は、投稿動画の画面録画（キャプチャ）、ダウンロード、外部SNSへの転載、第三者への開示・共有を固く禁止されます。違反行為が確認された場合、アカウントの即時永久停止に加え、損害賠償請求および刑事告訴等の法的措置を講じます。
             </p>
           </section>
 
           <section className="space-y-2">
             <h2 className="text-sm sm:text-base font-bold text-slate-900 pb-1 border-b border-slate-100">
-              第4条（禁止事項）
+              第4条（動画の削除権・退会時の完全消去保証）
+            </h2>
+            <p>
+              1. 学生ユーザーは、マイページよりいつでも投稿動画の撮り直し、差し替え、非公開化、または完全削除を行うことができます。
+              <br />
+              2. 学生ユーザーが本サービスを退会した場合、登録された動画データおよび個人情報は、法令に基づく保持義務があるものを除き、サーバー上から安全かつ完全に消去されます。
+            </p>
+          </section>
+
+          <section className="space-y-2">
+            <h2 className="text-sm sm:text-base font-bold text-slate-900 pb-1 border-b border-slate-100">
+              第5条（禁止事項）
             </h2>
             <p>ユーザーは、本サービスの利用にあたり以下の行為を行ってはなりません：</p>
             <ul className="list-disc pl-5 space-y-1 text-slate-600">
-              <li>虚偽の経歴・プロフィール情報または動画を投稿する行為</li>
+              <li>虚偽の経歴・プロフィール情報または偽装・加工動画（ディープフェイク等を含む）を投稿する行為</li>
               <li>公序良俗に反する動画・メッセージを投稿・送信する行為</li>
               <li>他のユーザー、企業、第三者の著作権、肖像権、プライバシーを侵害する行為</li>
               <li>本サービスを通じて取得した個人情報・企業情報を採用活動以外の目的で利用または漏洩する行為</li>
-              <li>求人・就職活動の目的を逸脱した営業・勧誘・迷惑行為</li>
+              <li>求人・就職活動の目的を逸脱した営業・勧誘・ハラスメント等の迷惑行為</li>
               <li>不正アクセス、リバースエンジニアリング、サーバーに過度な負荷をかける行為</li>
             </ul>
           </section>
 
           <section className="space-y-2">
             <h2 className="text-sm sm:text-base font-bold text-slate-900 pb-1 border-b border-slate-100">
-              第5条（オファーおよびチャットの利用規律）
+              第6条（職業安定法の遵守と募集情報等の適正管理）
             </h2>
             <p>
-              1. 企業ユーザーは、学生ユーザーの動画・プロフィールを確認の上、誠実な採用選考を目的としてオファーを送信するものとします。
+              1. 当事務局は、2022年改正職業安定法（募集情報等提供事業者に関する規律）および関係法令を遵守し、求人企業および求職者に関する情報の適正な管理と正確性の確保に努めます。
               <br />
-              2. チャット機能において、ハラスメント行為、差別的言動、労働条件の虚偽提示等は厳格に禁止され、違反が認められた場合は即時アカウント停止処分となります。
+              2. 企業ユーザーは、労働基準法、職業安定法等の労働関係法令に準拠した適正な求人条件を提示するものとします。
             </p>
           </section>
 
           <section className="space-y-2">
             <h2 className="text-sm sm:text-base font-bold text-slate-900 pb-1 border-b border-slate-100">
-              第6条（免責事項）
+              第7条（免責事項）
             </h2>
             <p>
               1. 当事務局は、本サービスを通じて行われる企業と学生の間の採用選考、内定、雇用契約の成立を保証するものではありません。
@@ -133,7 +144,7 @@ export default function TermsPage() {
         {/* ページ下部：戻るCTAカード */}
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-slate-600 font-medium">
-            利用規約の確認が完了しましたら、元の登録画面へお戻りください。
+            利用規約の確認が完了しましたら、元の画面へお戻りください。
           </p>
           <button
             type="button"
@@ -141,23 +152,8 @@ export default function TermsPage() {
             className="w-full sm:w-auto px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>登録画面に戻る</span>
+            <span>前の画面に戻る</span>
           </button>
-        </div>
-
-        {/* 関連リンク */}
-        <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500 pt-2 pb-6">
-          <Link href="/company/about" className="hover:text-slate-900 underline">
-            会社概要・特定商取引法
-          </Link>
-          <span>•</span>
-          <Link href="/privacy" className="hover:text-slate-900 underline">
-            プライバシーポリシー
-          </Link>
-          <span>•</span>
-          <Link href="/contact" className="hover:text-slate-900 underline">
-            お問い合わせ・サポート
-          </Link>
         </div>
       </div>
     </div>

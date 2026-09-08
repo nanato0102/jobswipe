@@ -3,8 +3,8 @@ import Link from "next/link";
 import { ArrowLeft, Scale, ShieldCheck, Mail, Building, FileText, CheckCircle2 } from "lucide-react";
 
 export const metadata = {
-  title: "特定商取引法に基づく表記 | JobSwipe",
-  description: "JobSwipe（ジョブスワイプ）の特定商取引法に基づく表記に関するページです。",
+  title: "特定商取引法および職業安定法に基づく表記 | JobSwipe",
+  description: "JobSwipe（ジョブスワイプ）の特定商取引法および職業安定法に基づく表記に関するページです。",
 };
 
 export default function TokushoPage() {
@@ -14,7 +14,7 @@ export default function TokushoPage() {
       value: "JobSwipe（ジョブスワイプ）",
     },
     {
-      label: "販売事業者名",
+      label: "販売・運営事業者名",
       value: "JobSwipe 運営事務局 / 株式会社JobSwipe（準備室）",
     },
     {
@@ -42,6 +42,21 @@ export default function TokushoPage() {
             </Link>
           </p>
           <p className="text-[11px] text-slate-500">※お電話によるお問い合わせ窓口は設置しておりません。フォームまたはメールにて承ります（営業時間: 平日 10:00〜18:00）。</p>
+        </div>
+      ),
+    },
+    {
+      label: "募集情報等提供事業者としての適正運営方針",
+      value: (
+        <div className="space-y-1 text-slate-700">
+          <p>
+            当事務局は、2022年改正職業安定法（第32条の7等）に準拠し、募集情報等提供事業者として以下の措置を適切に講じています：
+          </p>
+          <ul className="list-disc list-inside space-y-0.5 text-xs text-slate-600">
+            <li>求人企業の実在性確認および掲載前の厳格な法人審査</li>
+            <li>求職者（学生）の個人情報および自己PR動画の適正管理・非公開ストリーミング</li>
+            <li>苦情および相談に対する迅速な窓口対応体制の整備（お問い合わせフォームより受付）</li>
+          </ul>
         </div>
       ),
     },
@@ -128,7 +143,7 @@ export default function TokushoPage() {
             <ArrowLeft className="w-4 h-4" />
             <span>トップページに戻る</span>
           </Link>
-          <span className="text-xs text-slate-400 font-medium">最終改定日: 2026年8月30日</span>
+          <span className="text-xs text-slate-400 font-medium">最終改定日: 2026年9月8日</span>
         </div>
 
         {/* ヘッダーカード */}
@@ -138,10 +153,10 @@ export default function TokushoPage() {
             <span>Legal Disclosure</span>
           </div>
           <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-            特定商取引法に基づく表記
+            特定商取引法および職業安定法に基づく表記
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-            「特定商取引に関する法律」第11条（通信販売についての広告）に基づき、以下の通り販売条件および事業者の情報を表示いたします。
+            「特定商取引に関する法律」第11条（通信販売についての広告）および「職業安定法」に基づく募集情報等提供事業者としての適正な運営方針を表示いたします。
           </p>
         </div>
 
@@ -161,24 +176,6 @@ export default function TokushoPage() {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* フッターリンク */}
-        <div className="p-6 bg-slate-100 rounded-2xl border border-slate-200 flex flex-wrap items-center justify-between gap-4 text-xs text-slate-600">
-          <span>JobSwipe (ジョブスワイプ) 運営事務局</span>
-          <div className="flex items-center gap-4 font-bold">
-            <Link href="/terms" className="hover:text-emerald-800 hover:underline">
-              利用規約
-            </Link>
-            <span>•</span>
-            <Link href="/privacy" className="hover:text-emerald-800 hover:underline">
-              プライバシーポリシー
-            </Link>
-            <span>•</span>
-            <Link href="/contact" className="hover:text-emerald-800 hover:underline">
-              お問い合わせ
-            </Link>
-          </div>
         </div>
       </div>
     </div>
