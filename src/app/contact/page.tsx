@@ -131,30 +131,31 @@ export default function ContactPage() {
             </div>
 
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+              {userType === "company" ? (
+                <Link
+                  href="/company/register"
+                  className="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2"
+                >
+                  <Building2 className="w-3.5 h-3.5" />
+                  <span>企業利用の無料お申し込みへ進む</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              ) : (
+                <Link
+                  href="/register"
+                  className="w-full sm:w-auto px-6 py-3 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2"
+                >
+                  <User className="w-3.5 h-3.5" />
+                  <span>学生の無料会員登録へ進む</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              )}
               <Link
                 href="/"
-                className="w-full sm:w-auto px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-all shadow-xs"
-              >
-                トップページへ戻る
-              </Link>
-              <button
-                type="button"
-                onClick={() => {
-                  setSubmitted(false);
-                  setCompanyName("");
-                  setRepName("");
-                  setCompanyEmail("");
-                  setPhone("");
-                  setCompanyMessage("");
-                  setStudentName("");
-                  setStudentEmail("");
-                  setStudentMessage("");
-                  setAgreed(false);
-                }}
                 className="w-full sm:w-auto px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all"
               >
-                別のお問い合わせを送信
-              </button>
+                トップページへ
+              </Link>
             </div>
           </div>
         ) : (

@@ -496,9 +496,10 @@ export default function Navbar() {
             <>
               <Link
                 href="/for-company"
-                className="text-xs font-bold text-slate-600 hover:text-slate-900 hover:underline px-2.5 py-1.5 transition-colors hidden lg:inline-block"
+                className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-colors shadow-2xs"
               >
-                採用担当の方はこちら
+                <Building2 className="w-3.5 h-3.5" />
+                <span>採用企業の方はこちら</span>
               </Link>
 
               <Link
