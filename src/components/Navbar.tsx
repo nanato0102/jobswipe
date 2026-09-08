@@ -577,6 +577,13 @@ export default function Navbar() {
                   <HelpCircle className="w-4 h-4 text-slate-500" />
                 </Link>
                 <Link
+                  href="/for-company"
+                  className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors text-blue-900 bg-blue-50/50"
+                >
+                  <span className="font-bold">企業向けサービス案内</span>
+                  <Building2 className="w-4 h-4 text-blue-700" />
+                </Link>
+                <Link
                   href="/contact"
                   className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors"
                 >
