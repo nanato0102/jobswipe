@@ -164,8 +164,12 @@ export default function ForCompanyPage() {
                     {/* 下部プロフィール ＆ アクション */}
                     <div className="space-y-2">
                       <div className="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700/60">
-                        <div className="flex items-center gap-2">
-                          <span className="font-black text-sm text-white">佐藤 健太</span>
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="font-black text-sm text-white">S.Kさん</span>
+                          <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-slate-900/90 text-amber-300 border border-amber-400/30 text-[9px] font-bold">
+                            <Lock className="w-2.5 h-2.5" />
+                            <span>承諾後開示</span>
+                          </span>
                           <span className="text-[10px] text-blue-300 font-bold">情報科学専攻 (27卒)</span>
                         </div>
                         <p className="text-[10px] text-slate-300 line-clamp-1 mt-0.5">
