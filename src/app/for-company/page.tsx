@@ -526,27 +526,50 @@ export default function ForCompanyPage() {
               return (
                 <div
                   key={index}
-                  className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden transition-colors"
+                  className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
+                    isOpen
+                      ? "border-blue-400/80 bg-white shadow-sm ring-1 ring-blue-300/40"
+                      : "border-slate-200 bg-white hover:border-slate-300 shadow-2xs"
+                  }`}
                 >
                   <button
                     type="button"
                     onClick={() => toggleFaq(index)}
-                    className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-xs sm:text-sm cursor-pointer hover:bg-slate-50 transition-colors"
+                    className="w-full p-4 sm:p-5 text-left flex items-start sm:items-center justify-between gap-4 cursor-pointer transition-colors"
                   >
-                    <span className="flex items-center gap-2.5">
-                      <HelpCircle className="w-4 h-4 text-blue-700 flex-shrink-0" />
-                      <span>{faq.q}</span>
-                    </span>
-                    {isOpen ? (
-                      <ChevronUp className="w-4 h-4 text-slate-400 flex-shrink-0" />
-                    ) : (
-                      <ChevronDown className="w-4 h-4 text-slate-400 flex-shrink-0" />
-                    )}
+                    <div className="flex items-start sm:items-center gap-3">
+                      <span
+                        className={`w-6 h-6 rounded-lg text-xs font-black flex items-center justify-center flex-shrink-0 transition-colors mt-0.5 sm:mt-0 ${
+                          isOpen
+                            ? "bg-blue-700 text-white"
+                            : "bg-blue-50 text-blue-800 border border-blue-200"
+                        }`}
+                      >
+                        Q
+                      </span>
+                      <span className="font-bold text-slate-900 text-xs sm:text-sm leading-snug">
+                        {faq.q}
+                      </span>
+                    </div>
+                    <div
+                      className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 transition-transform duration-200 ${
+                        isOpen ? "bg-blue-50 text-blue-700 rotate-180" : "bg-slate-100 text-slate-400"
+                      }`}
+                    >
+                      <ChevronDown className="w-4 h-4" />
+                    </div>
                   </button>
 
                   {isOpen && (
-                    <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-slate-50/60">
-                      {faq.a}
+                    <div className="px-4 sm:px-5 pb-5 pt-3.5 border-t border-slate-100 bg-slate-50/70 animate-fade-in">
+                      <div className="flex items-start gap-3">
+                        <span className="w-6 h-6 rounded-lg bg-slate-900 text-white text-xs font-black flex items-center justify-center flex-shrink-0 shadow-2xs mt-0.5">
+                          A
+                        </span>
+                        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed pt-0.5">
+                          {faq.a}
+                        </p>
+                      </div>
                     </div>
                   )}
                 </div>
