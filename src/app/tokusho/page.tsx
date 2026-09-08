@@ -147,15 +147,15 @@ export default function TokushoPage() {
         </div>
 
         {/* ヘッダーカード */}
-        <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-xs space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
+        <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-xs space-y-3 text-center flex flex-col items-center justify-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200 shadow-2xs">
             <Scale className="w-4 h-4 text-emerald-700" />
             <span>Legal Disclosure</span>
           </div>
           <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
             特定商取引法および職業安定法に基づく表記
           </h1>
-          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-2xl mx-auto">
             「特定商取引に関する法律」第11条（通信販売についての広告）および「職業安定法」に基づく募集情報等提供事業者としての適正な運営方針を表示いたします。
           </p>
         </div>

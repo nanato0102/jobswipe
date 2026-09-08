@@ -401,9 +401,9 @@ export default function HomePage() {
           {activeTab === "student" ? (
             /* 学生向けカード3枚 */
             <div className="grid sm:grid-cols-3 gap-6 animate-fade-in">
-              <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 space-y-3.5 flex flex-col justify-between">
-                <div className="space-y-3">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center justify-center font-black text-sm">
+              <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 sm:p-7 space-y-3.5 text-center flex flex-col items-center justify-between shadow-2xs">
+                <div className="space-y-3 flex flex-col items-center">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center justify-center font-black text-sm mx-auto shadow-2xs">
                     01
                   </div>
                   <h3 className="font-bold text-slate-900 text-base">ES文章力や学歴で落とされない</h3>
@@ -413,9 +413,9 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 space-y-3.5 flex flex-col justify-between">
-                <div className="space-y-3">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center justify-center font-black text-sm">
+              <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 sm:p-7 space-y-3.5 text-center flex flex-col items-center justify-between shadow-2xs">
+                <div className="space-y-3 flex flex-col items-center">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center justify-center font-black text-sm mx-auto shadow-2xs">
                     02
                   </div>
                   <h3 className="font-bold text-slate-900 text-base">動画を1本投稿して待つだけ</h3>
@@ -425,9 +425,9 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 space-y-3.5 flex flex-col justify-between">
-                <div className="space-y-3">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center justify-center font-black text-sm">
+              <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 sm:p-7 space-y-3.5 text-center flex flex-col items-center justify-between shadow-2xs">
+                <div className="space-y-3 flex flex-col items-center">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center justify-center font-black text-sm mx-auto shadow-2xs">
                     03
                   </div>
                   <h3 className="font-bold text-slate-900 text-base">カルチャーの合う企業からオファー</h3>
@@ -440,9 +440,9 @@ export default function HomePage() {
           ) : (
             /* 企業向けカード3枚 */
             <div className="grid sm:grid-cols-3 gap-6 animate-fade-in">
-              <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 space-y-3.5 flex flex-col justify-between">
-                <div className="space-y-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-900 border border-blue-200 flex items-center justify-center font-black text-sm">
+              <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 sm:p-7 space-y-3.5 text-center flex flex-col items-center justify-between shadow-2xs">
+                <div className="space-y-3 flex flex-col items-center">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-900 border border-blue-200 flex items-center justify-center font-black text-sm mx-auto shadow-2xs">
                     01
                   </div>
                   <h3 className="font-bold text-slate-900 text-base">面接前のミスマッチを劇的削減</h3>
@@ -452,9 +452,9 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 space-y-3.5 flex flex-col justify-between">
-                <div className="space-y-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-900 border border-blue-200 flex items-center justify-center font-black text-sm">
+              <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 sm:p-7 space-y-3.5 text-center flex flex-col items-center justify-between shadow-2xs">
+                <div className="space-y-3 flex flex-col items-center">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-900 border border-blue-200 flex items-center justify-center font-black text-sm mx-auto shadow-2xs">
                     02
                   </div>
                   <h3 className="font-bold text-slate-900 text-base">スワイプで直感的なスカウト</h3>
@@ -464,9 +464,9 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 space-y-3.5 flex flex-col justify-between">
-                <div className="space-y-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-900 border border-blue-200 flex items-center justify-center font-black text-sm">
+              <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 sm:p-7 space-y-3.5 text-center flex flex-col items-center justify-between shadow-2xs">
+                <div className="space-y-3 flex flex-col items-center">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-900 border border-blue-200 flex items-center justify-center font-black text-sm mx-auto shadow-2xs">
                     03
                   </div>
                   <h3 className="font-bold text-slate-900 text-base">人柄重視の効率的な採用</h3>
@@ -503,13 +503,11 @@ export default function HomePage() {
           <div className="grid sm:grid-cols-3 gap-6">
             {/* STEP 1 */}
             <FadeInView delay={100}>
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4 relative h-full flex flex-col justify-between">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold">
-                      STEP 1
-                    </span>
-                    <Camera className="w-5 h-5 text-slate-400" />
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 sm:p-7 space-y-4 relative h-full flex flex-col items-center text-center justify-between">
+                <div className="space-y-3 flex flex-col items-center">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold">
+                    <Camera className="w-3.5 h-3.5" />
+                    <span>STEP 1</span>
                   </div>
                   <h3 className="text-base font-bold text-slate-900">60秒の自己PR動画を自撮り</h3>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
@@ -517,18 +515,18 @@ export default function HomePage() {
                   </p>
                 </div>
 
-                <div className="pt-2 border-t border-slate-100 space-y-1.5 text-[11px] text-slate-500 font-bold">
+                <div className="pt-3 border-t border-slate-100 w-full space-y-1.5 text-[11px] text-slate-600 font-bold text-left max-w-[240px] mx-auto">
                   <div className="flex items-center gap-1.5 text-emerald-800">
                     <Check className="w-3.5 h-3.5 flex-shrink-0" />
-                    <span>何度でも納得いくまで撮り直しOK</span>
+                    <span>何度でも撮り直しOK</span>
                   </div>
                   <div className="flex items-center gap-1.5 text-emerald-800">
                     <Check className="w-3.5 h-3.5 flex-shrink-0" />
-                    <span>台本テンプレート・質問アシスト完備</span>
+                    <span>台本テンプレート完備</span>
                   </div>
                   <div className="flex items-center gap-1.5 text-emerald-800">
                     <Check className="w-3.5 h-3.5 flex-shrink-0" />
-                    <span>審査通過企業のみの限定公開</span>
+                    <span>審査通過企業のみ限定公開</span>
                   </div>
                 </div>
               </div>
@@ -536,13 +534,11 @@ export default function HomePage() {
 
             {/* STEP 2 */}
             <FadeInView delay={200}>
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4 relative h-full flex flex-col justify-between">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="px-2.5 py-1 rounded-md bg-blue-50 text-blue-900 border border-blue-200 text-xs font-bold">
-                      STEP 2
-                    </span>
-                    <Zap className="w-5 h-5 text-slate-400" />
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 sm:p-7 space-y-4 relative h-full flex flex-col items-center text-center justify-between">
+                <div className="space-y-3 flex flex-col items-center">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-blue-50 text-blue-900 border border-blue-200 text-xs font-bold">
+                    <Zap className="w-3.5 h-3.5" />
+                    <span>STEP 2</span>
                   </div>
                   <h3 className="text-base font-bold text-slate-900">企業がスワイプで閲覧</h3>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
@@ -550,22 +546,20 @@ export default function HomePage() {
                   </p>
                 </div>
 
-                <div className="pt-2 border-t border-slate-100 text-[11px] text-slate-500">
-                  <span className="font-bold text-slate-700">💡 一般SNSとは異なり非公開</span>
-                  <p className="text-[10px] text-slate-400 mt-0.5">法人審査済みの採用担当者のみが閲覧</p>
+                <div className="pt-3 border-t border-slate-100 w-full text-[11px] text-slate-500 text-center">
+                  <span className="font-bold text-slate-700">安心の非公開管理</span>
+                  <p className="text-[10px] text-slate-400 mt-0.5">法人審査済みの採用担当者のみ閲覧</p>
                 </div>
               </div>
             </FadeInView>
 
             {/* STEP 3 */}
             <FadeInView delay={300}>
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4 relative h-full flex flex-col justify-between">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="px-2.5 py-1 rounded-md bg-slate-100 text-slate-900 border border-slate-200 text-xs font-bold">
-                      STEP 3
-                    </span>
-                    <MessageSquare className="w-5 h-5 text-slate-400" />
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 sm:p-7 space-y-4 relative h-full flex flex-col items-center text-center justify-between">
+                <div className="space-y-3 flex flex-col items-center">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-100 text-slate-900 border border-slate-200 text-xs font-bold">
+                    <MessageSquare className="w-3.5 h-3.5" />
+                    <span>STEP 3</span>
                   </div>
                   <h3 className="text-base font-bold text-slate-900">オファー承諾 ＆ チャット面談</h3>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
@@ -573,9 +567,9 @@ export default function HomePage() {
                   </p>
                 </div>
 
-                <div className="pt-2 border-t border-slate-100 text-[11px] text-slate-500">
-                  <span className="font-bold text-slate-700">✨ ES選考なしで即面談へ</span>
-                  <p className="text-[10px] text-slate-400 mt-0.5">事前の雰囲気確認で高いマッチ度</p>
+                <div className="pt-3 border-t border-slate-100 w-full text-[11px] text-slate-500 text-center">
+                  <span className="font-bold text-slate-700">ES選考なしで即面談</span>
+                  <p className="text-[10px] text-slate-400 mt-0.5">事前の雰囲気確認で高マッチ率</p>
                 </div>
               </div>
             </FadeInView>
@@ -604,9 +598,9 @@ export default function HomePage() {
           </FadeInView>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between">
-              <div className="space-y-2.5">
-                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-emerald-700 flex items-center justify-center shadow-2xs">
+            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-3 text-center flex flex-col items-center justify-between shadow-2xs">
+              <div className="space-y-2.5 flex flex-col items-center">
+                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-emerald-700 flex items-center justify-center shadow-2xs mx-auto">
                   <Smile className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-slate-900 text-sm">自然な対人力・人柄</h3>
@@ -616,9 +610,9 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between">
-              <div className="space-y-2.5">
-                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-blue-600 flex items-center justify-center shadow-2xs">
+            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-3 text-center flex flex-col items-center justify-between shadow-2xs">
+              <div className="space-y-2.5 flex flex-col items-center">
+                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-blue-600 flex items-center justify-center shadow-2xs mx-auto">
                   <Mic className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-slate-900 text-sm">論理的思考・構成力</h3>
@@ -628,9 +622,9 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between">
-              <div className="space-y-2.5">
-                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-amber-600 flex items-center justify-center shadow-2xs">
+            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-3 text-center flex flex-col items-center justify-between shadow-2xs">
+              <div className="space-y-2.5 flex flex-col items-center">
+                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-amber-600 flex items-center justify-center shadow-2xs mx-auto">
                   <Flame className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-slate-900 text-sm">熱量・推進力</h3>
@@ -640,9 +634,9 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between">
-              <div className="space-y-2.5">
-                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-purple-600 flex items-center justify-center shadow-2xs">
+            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-3 text-center flex flex-col items-center justify-between shadow-2xs">
+              <div className="space-y-2.5 flex flex-col items-center">
+                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-purple-600 flex items-center justify-center shadow-2xs mx-auto">
                   <Users className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-slate-900 text-sm">カルチャーフィット</h3>

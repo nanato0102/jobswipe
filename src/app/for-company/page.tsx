@@ -223,8 +223,8 @@ export default function ForCompanyPage() {
           <div className="grid md:grid-cols-3 gap-6">
             {/* 課題1 */}
             <FadeInView delay={100}>
-              <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-7 space-y-4 shadow-2xs h-full flex flex-col justify-between">
-                <div className="space-y-3">
+              <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-7 space-y-4 shadow-2xs h-full flex flex-col justify-between text-center items-center">
+                <div className="space-y-3 w-full">
                   <span className="inline-block px-2.5 py-1 rounded-md bg-rose-50 text-rose-800 text-xs font-bold border border-rose-200">
                     採用課題 01
                   </span>
@@ -235,8 +235,8 @@ export default function ForCompanyPage() {
                     文章作成テクニックに長けた候補者を書類通過させても、1次面接で落とす工数と時間のロスが膨大に。
                   </p>
                 </div>
-                <div className="p-3.5 bg-blue-50 rounded-xl border border-blue-200 space-y-1">
-                  <span className="text-xs font-bold text-blue-950 flex items-center gap-1.5">
+                <div className="w-full p-3.5 bg-blue-50 rounded-xl border border-blue-200 space-y-1 text-center">
+                  <span className="text-xs font-bold text-blue-950 flex items-center justify-center gap-1.5">
                     <Check className="w-4 h-4 text-blue-700 stroke-[2.5]" />
                     <span>JobSwipeの解決策</span>
                   </span>
@@ -249,8 +249,8 @@ export default function ForCompanyPage() {
 
             {/* 課題2 */}
             <FadeInView delay={200}>
-              <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-7 space-y-4 shadow-2xs h-full flex flex-col justify-between">
-                <div className="space-y-3">
+              <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-7 space-y-4 shadow-2xs h-full flex flex-col justify-between text-center items-center">
+                <div className="space-y-3 w-full">
                   <span className="inline-block px-2.5 py-1 rounded-md bg-rose-50 text-rose-800 text-xs font-bold border border-rose-200">
                     採用課題 02
                   </span>
@@ -261,8 +261,8 @@ export default function ForCompanyPage() {
                     「会ってみたら雰囲気が違った」「社風に合わない」という理由で、選考終盤での辞退やミスマッチが発生。
                   </p>
                 </div>
-                <div className="p-3.5 bg-blue-50 rounded-xl border border-blue-200 space-y-1">
-                  <span className="text-xs font-bold text-blue-950 flex items-center gap-1.5">
+                <div className="w-full p-3.5 bg-blue-50 rounded-xl border border-blue-200 space-y-1 text-center">
+                  <span className="text-xs font-bold text-blue-950 flex items-center justify-center gap-1.5">
                     <Check className="w-4 h-4 text-blue-700 stroke-[2.5]" />
                     <span>JobSwipeの解決策</span>
                   </span>
@@ -275,8 +275,8 @@ export default function ForCompanyPage() {
 
             {/* 課題3 */}
             <FadeInView delay={300}>
-              <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-7 space-y-4 shadow-2xs h-full flex flex-col justify-between">
-                <div className="space-y-3">
+              <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-7 space-y-4 shadow-2xs h-full flex flex-col justify-between text-center items-center">
+                <div className="space-y-3 w-full">
                   <span className="inline-block px-2.5 py-1 rounded-md bg-rose-50 text-rose-800 text-xs font-bold border border-rose-200">
                     採用課題 03
                   </span>
@@ -287,8 +287,8 @@ export default function ForCompanyPage() {
                     候補者ごとに長文メッセージを作成する負担が重く、採用担当者のコア業務が圧迫されている。
                   </p>
                 </div>
-                <div className="p-3.5 bg-blue-50 rounded-xl border border-blue-200 space-y-1">
-                  <span className="text-xs font-bold text-blue-950 flex items-center gap-1.5">
+                <div className="w-full p-3.5 bg-blue-50 rounded-xl border border-blue-200 space-y-1 text-center">
+                  <span className="text-xs font-bold text-blue-950 flex items-center justify-center gap-1.5">
                     <Check className="w-4 h-4 text-blue-700 stroke-[2.5]" />
                     <span>JobSwipeの解決策</span>
                   </span>
@@ -323,9 +323,9 @@ export default function ForCompanyPage() {
           </FadeInView>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between">
-              <div className="space-y-2.5">
-                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-blue-600 flex items-center justify-center shadow-2xs">
+            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between text-center items-center">
+              <div className="space-y-2.5 w-full">
+                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-blue-600 flex items-center justify-center shadow-2xs mx-auto">
                   <Smile className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-slate-900 text-sm">対面コミュニケーション力</h3>
@@ -335,9 +335,9 @@ export default function ForCompanyPage() {
               </div>
             </div>
 
-            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between">
-              <div className="space-y-2.5">
-                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-emerald-700 flex items-center justify-center shadow-2xs">
+            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between text-center items-center">
+              <div className="space-y-2.5 w-full">
+                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-emerald-700 flex items-center justify-center shadow-2xs mx-auto">
                   <Mic className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-slate-900 text-sm">論理的思考・要約力</h3>
@@ -347,9 +347,9 @@ export default function ForCompanyPage() {
               </div>
             </div>
 
-            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between">
-              <div className="space-y-2.5">
-                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-amber-600 flex items-center justify-center shadow-2xs">
+            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between text-center items-center">
+              <div className="space-y-2.5 w-full">
+                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-amber-600 flex items-center justify-center shadow-2xs mx-auto">
                   <Flame className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-slate-900 text-sm">行動への熱量・主体性</h3>
@@ -359,9 +359,9 @@ export default function ForCompanyPage() {
               </div>
             </div>
 
-            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between">
-              <div className="space-y-2.5">
-                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-purple-600 flex items-center justify-center shadow-2xs">
+            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between text-center items-center">
+              <div className="space-y-2.5 w-full">
+                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-purple-600 flex items-center justify-center shadow-2xs mx-auto">
                   <Users className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-slate-900 text-sm">自社カルチャーマッチ</h3>
@@ -396,9 +396,9 @@ export default function ForCompanyPage() {
 
           <div className="grid sm:grid-cols-3 gap-6">
             <FadeInView delay={100}>
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-3.5 h-full flex flex-col justify-between">
-                <div className="space-y-3">
-                  <span className="px-2.5 py-1 rounded-md bg-blue-50 text-blue-900 border border-blue-200 text-xs font-bold">
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-3.5 h-full flex flex-col justify-between text-center items-center">
+                <div className="space-y-3 w-full">
+                  <span className="inline-block px-2.5 py-1 rounded-md bg-blue-50 text-blue-900 border border-blue-200 text-xs font-bold">
                     STEP 01
                   </span>
                   <h3 className="text-base font-bold text-slate-900">Webフォームから利用申請</h3>
@@ -410,9 +410,9 @@ export default function ForCompanyPage() {
             </FadeInView>
 
             <FadeInView delay={200}>
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-3.5 h-full flex flex-col justify-between">
-                <div className="space-y-3">
-                  <span className="px-2.5 py-1 rounded-md bg-blue-50 text-blue-900 border border-blue-200 text-xs font-bold">
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-3.5 h-full flex flex-col justify-between text-center items-center">
+                <div className="space-y-3 w-full">
+                  <span className="inline-block px-2.5 py-1 rounded-md bg-blue-50 text-blue-900 border border-blue-200 text-xs font-bold">
                     STEP 02
                   </span>
                   <h3 className="text-base font-bold text-slate-900">掲載審査 ＆ アカウント発行</h3>
@@ -424,9 +424,9 @@ export default function ForCompanyPage() {
             </FadeInView>
 
             <FadeInView delay={300}>
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-3.5 h-full flex flex-col justify-between">
-                <div className="space-y-3">
-                  <span className="px-2.5 py-1 rounded-md bg-slate-900 text-white text-xs font-bold">
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-3.5 h-full flex flex-col justify-between text-center items-center">
+                <div className="space-y-3 w-full">
+                  <span className="inline-block px-2.5 py-1 rounded-md bg-slate-900 text-white text-xs font-bold">
                     STEP 03
                   </span>
                   <h3 className="text-base font-bold text-slate-900">スワイプ閲覧 ＆ スカウト送信</h3>
@@ -447,8 +447,8 @@ export default function ForCompanyPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <FadeInView>
             <div className="bg-slate-50 rounded-3xl border border-slate-200 p-6 sm:p-10 lg:p-12 space-y-8 shadow-xs">
-              <div className="flex flex-col sm:flex-row sm:items-center gap-4 border-b border-slate-200/80 pb-6">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-blue-50 text-blue-700 border border-blue-200 flex items-center justify-center flex-shrink-0 shadow-2xs">
+              <div className="flex flex-col items-center text-center gap-4 border-b border-slate-200/80 pb-6">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-blue-50 text-blue-700 border border-blue-200 flex items-center justify-center flex-shrink-0 shadow-2xs mx-auto">
                   <ShieldCheck className="w-6 h-6 sm:w-7 sm:h-7 stroke-[2.2]" />
                 </div>
                 <div className="space-y-1">
@@ -463,9 +463,9 @@ export default function ForCompanyPage() {
               </div>
 
               <div className="grid sm:grid-cols-3 gap-5">
-                <div className="p-5 sm:p-6 bg-white rounded-2xl border border-slate-200 space-y-2.5 shadow-2xs flex flex-col justify-between">
-                  <div className="space-y-2">
-                    <span className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+                <div className="p-5 sm:p-6 bg-white rounded-2xl border border-slate-200 space-y-2.5 shadow-2xs flex flex-col justify-between text-center items-center">
+                  <div className="space-y-2 w-full">
+                    <span className="font-bold text-slate-900 text-sm sm:text-base flex items-center justify-center gap-2">
                       <Check className="w-4 h-4 text-emerald-700 stroke-[2.5] flex-shrink-0" />
                       <span>厳格な法人審査</span>
                     </span>
@@ -475,9 +475,9 @@ export default function ForCompanyPage() {
                   </div>
                 </div>
 
-                <div className="p-5 sm:p-6 bg-white rounded-2xl border border-slate-200 space-y-2.5 shadow-2xs flex flex-col justify-between">
-                  <div className="space-y-2">
-                    <span className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+                <div className="p-5 sm:p-6 bg-white rounded-2xl border border-slate-200 space-y-2.5 shadow-2xs flex flex-col justify-between text-center items-center">
+                  <div className="space-y-2 w-full">
+                    <span className="font-bold text-slate-900 text-sm sm:text-base flex items-center justify-center gap-2">
                       <Check className="w-4 h-4 text-emerald-700 stroke-[2.5] flex-shrink-0" />
                       <span>クローズド動画配信</span>
                     </span>
@@ -487,9 +487,9 @@ export default function ForCompanyPage() {
                   </div>
                 </div>
 
-                <div className="p-5 sm:p-6 bg-white rounded-2xl border border-slate-200 space-y-2.5 shadow-2xs flex flex-col justify-between">
-                  <div className="space-y-2">
-                    <span className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+                <div className="p-5 sm:p-6 bg-white rounded-2xl border border-slate-200 space-y-2.5 shadow-2xs flex flex-col justify-between text-center items-center">
+                  <div className="space-y-2 w-full">
+                    <span className="font-bold text-slate-900 text-sm sm:text-base flex items-center justify-center gap-2">
                       <Check className="w-4 h-4 text-emerald-700 stroke-[2.5] flex-shrink-0" />
                       <span>IPAセキュリティ準拠</span>
                     </span>

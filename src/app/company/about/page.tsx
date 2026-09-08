@@ -70,19 +70,17 @@ export default function AboutPage() {
         </div>
 
         {/* ページタイトルヘッダー */}
-        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-2xs space-y-2">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-700 border border-blue-200 flex items-center justify-center flex-shrink-0">
-              <Building2 className="w-5 h-5" />
-            </div>
-            <div>
-              <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                運営組織・会社概要
-              </h1>
-              <p className="text-xs text-slate-500">
-                JobSwipe 運営組織情報
-              </p>
-            </div>
+        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-2xs space-y-2 text-center flex flex-col items-center justify-center">
+          <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-700 border border-blue-200 flex items-center justify-center shadow-2xs">
+            <Building2 className="w-6 h-6" />
+          </div>
+          <div>
+            <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+              運営組織・会社概要
+            </h1>
+            <p className="text-xs text-slate-500 mt-1">
+              JobSwipe 運営組織情報
+            </p>
           </div>
         </div>
 

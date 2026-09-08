@@ -39,19 +39,17 @@ export default function TermsPage() {
         </div>
 
         {/* ページタイトルヘッダー */}
-        <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center justify-center flex-shrink-0">
-              <FileText className="w-5 h-5" />
-            </div>
-            <div>
-              <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                JobSwipe 利用規約・動画管理方針
-              </h1>
-              <p className="text-xs text-slate-500">
-                制定日：2026年3月1日 / 最終改定日：2026年9月8日
-              </p>
-            </div>
+        <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-2 text-center flex flex-col items-center justify-center">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center justify-center shadow-2xs">
+            <FileText className="w-6 h-6" />
+          </div>
+          <div>
+            <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+              JobSwipe 利用規約・動画管理方針
+            </h1>
+            <p className="text-xs text-slate-500 mt-1">
+              制定日：2026年3月1日 / 最終改定日：2026年9月8日
+            </p>
           </div>
         </div>
 

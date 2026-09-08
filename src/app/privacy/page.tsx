@@ -39,19 +39,17 @@ export default function PrivacyPage() {
         </div>
 
         {/* ページタイトルヘッダー */}
-        <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
-              <Lock className="w-6 h-6 text-slate-700" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-black text-slate-900 tracking-tight">
-                JobSwipe プライバシーポリシー
-              </h1>
-              <p className="text-xs sm:text-sm text-slate-500">
-                制定日：2026年3月1日 / 最終改定日：2026年8月30日
-              </p>
-            </div>
+        <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-2 text-center flex flex-col items-center justify-center">
+          <div className="w-12 h-12 rounded-2xl bg-slate-100 text-slate-800 border border-slate-200 flex items-center justify-center shadow-2xs">
+            <Lock className="w-6 h-6" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-black text-slate-900 tracking-tight">
+              JobSwipe プライバシーポリシー
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1">
+              制定日：2026年3月1日 / 最終改定日：2026年8月30日
+            </p>
           </div>
         </div>
 
