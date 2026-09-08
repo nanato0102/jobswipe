@@ -6,7 +6,8 @@ import RoleGuard from "@/components/RoleGuard";
 import CompanyMobileTabs from "@/components/CompanyMobileTabs";
 import { appStore, StoredLike } from "@/lib/appStore";
 import { useAuth } from "@/context/AuthContext";
-import { Heart, Send, User, X, Sparkles, CheckCircle, ArrowRight } from "lucide-react";
+import { Heart, Send, User, X, Sparkles, CheckCircle, ArrowRight, Lock } from "lucide-react";
+import { getMaskedStudentName } from "@/components/SwipeCard";
 
 export default function CompanyLikesPage() {
   const { session } = useAuth();
@@ -127,9 +128,13 @@ export default function CompanyLikesPage() {
                         <div className="space-y-0.5">
                           <Link
                             href={`/students/${item.studentId}`}
-                            className="text-base font-bold text-slate-900 hover:text-blue-700 hover:underline tracking-tight flex items-center gap-1.5 group"
+                            className="text-base font-bold text-slate-900 hover:text-blue-700 hover:underline tracking-tight flex items-center gap-2 group"
                           >
-                            <span>{item.studentName}</span>
+                            <span>{getMaskedStudentName(item.studentName)}</span>
+                            <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 text-[10px] font-bold">
+                              <Lock className="w-2.5 h-2.5 text-slate-500" />
+                              <span>承諾後開示</span>
+                            </span>
                             <span className="text-[11px] font-normal text-blue-700 opacity-0 group-hover:opacity-100 transition-opacity">
                               (プロフィール →)
                             </span>
@@ -152,20 +157,38 @@ export default function CompanyLikesPage() {
                       </p>
                     </div>
 
-                    <div className="flex items-center justify-between pt-2 border-t border-slate-100 flex-wrap gap-2">
-                      <span className="text-[11px] text-slate-400">追加日: {item.createdAt}</span>
+                    {/* ひとこと紹介 */}
+                    <p className="text-xs text-slate-600 leading-relaxed line-clamp-2">
+                      {item.bio}
+                    </p>
+
+                    {/* タグ & アクション */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-slate-100">
+                      <div className="flex flex-wrap gap-1.5">
+                        {item.tags?.map((t, idx) => (
+                          <span
+                            key={idx}
+                            className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[11px] font-bold"
+                          >
+                            #{t}
+                          </span>
+                        ))}
+                      </div>
 
                       <div className="flex items-center gap-2">
                         <Link
                           href={`/students/${item.studentId}`}
-                          className="px-3.5 py-1.5 text-xs font-bold text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors"
+                          className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors"
                         >
-                          動画を観る
+                          詳細を見る
                         </Link>
                         <button
                           type="button"
-                          onClick={() => setSelectedStudent(item)}
-                          className="px-4 py-1.5 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl shadow-2xs transition-colors flex items-center gap-1.5 cursor-pointer"
+                          onClick={() => {
+                            setSelectedStudent(item);
+                            setOfferText("");
+                          }}
+                          className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer"
                         >
                           <Send className="w-3.5 h-3.5 text-blue-400" />
                           <span>オファーを送る</span>
@@ -179,21 +202,24 @@ export default function CompanyLikesPage() {
           )}
         </div>
 
-        {/* オファー送信モーダル */}
+        {/* ================= オファー送信モーダル ================= */}
         {selectedStudent && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in">
-            <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-slate-200 space-y-5 animate-scale-in">
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl p-6 sm:p-7 max-w-lg w-full shadow-2xl border border-slate-200 animate-scale-up space-y-4">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                <div className="space-y-0.5">
-                  <span className="text-[11px] font-bold text-blue-700">スカウトメッセージ送信</span>
-                  <h3 className="text-lg font-bold text-slate-900">
-                    {selectedStudent.studentName} さんへオファー
+                <div className="flex items-center gap-2">
+                  <h3 className="text-base font-bold text-slate-900">
+                    {getMaskedStudentName(selectedStudent.studentName)} へオファーを送信
                   </h3>
+                  <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 text-[10px] font-bold">
+                    <Lock className="w-2.5 h-2.5" />
+                    <span>承諾後本名開示</span>
+                  </span>
                 </div>
                 <button
                   type="button"
                   onClick={() => setSelectedStudent(null)}
-                  className="p-1.5 rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+                  className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -205,7 +231,7 @@ export default function CompanyLikesPage() {
                     <CheckCircle className="w-7 h-7" />
                   </div>
                   <h4 className="text-base font-bold text-slate-900">オファーを送信しました！</h4>
-                  <p className="text-xs text-slate-500">学生が承諾するとチャット面談が開始されます。</p>
+                  <p className="text-xs text-slate-500">学生が承諾すると本名が開示され、チャット面談が開始されます。</p>
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -217,7 +243,7 @@ export default function CompanyLikesPage() {
                       rows={5}
                       value={offerText}
                       onChange={(e) => setOfferText(e.target.value)}
-                      placeholder={`${selectedStudent.studentName}さんの自己PR動画を拝見し、ぜひ一度カジュアルにお話ししたくオファーをお送りいたしました...`}
+                      placeholder={`${getMaskedStudentName(selectedStudent.studentName)}の自己PR動画を拝見し、ぜひ一度カジュアルにお話ししたくオファーをお送りいたしました...`}
                       className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-700/20 focus:border-blue-700 leading-relaxed"
                     />
                   </div>

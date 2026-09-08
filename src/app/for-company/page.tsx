@@ -50,6 +50,10 @@ export default function ForCompanyPage() {
       a: "企業利用のお申し込みおよびアカウント開設・掲載審査は完全無料です。具体的なプラン詳細や料金体系につきましては、審査通過後の専用管理画面にてご確認いただくか、お問い合わせフォームより資料をご請求ください。",
     },
     {
+      q: "候補者の本名や連絡先はいつ確認できますか？",
+      a: "スワイプ閲覧・オファー送信の段階では、学生のプライバシー保護のためイニシャル表示（例：S.Kさん）となります。学生が貴社からのオファーを承諾した時点でフルネーム（本名）が開示され、個別チャットにて面談日程をスムーズに調整いただけます。",
+    },
+    {
       q: "スカウト送信後の選考フローはどう進めればよいですか？",
       a: "学生がオファーを承諾すると、システム内で個別チャットが利用可能になります。チャット上でカジュアル面談や会社説明会、1次選考の日程調整をスムーズに進めていただけます。",
     },
@@ -462,38 +466,50 @@ export default function ForCompanyPage() {
                 </div>
               </div>
 
-              <div className="grid sm:grid-cols-3 gap-5">
-                <div className="p-5 sm:p-6 bg-white rounded-2xl border border-slate-200 space-y-2.5 shadow-2xs flex flex-col justify-between text-center items-center">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div className="p-5 bg-white rounded-2xl border border-slate-200 space-y-2.5 shadow-2xs flex flex-col justify-between text-center items-center">
                   <div className="space-y-2 w-full">
-                    <span className="font-bold text-slate-900 text-sm sm:text-base flex items-center justify-center gap-2">
+                    <span className="font-bold text-slate-900 text-sm flex items-center justify-center gap-1.5">
                       <Check className="w-4 h-4 text-emerald-700 stroke-[2.5] flex-shrink-0" />
                       <span>厳格な法人審査</span>
                     </span>
-                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    <p className="text-xs text-slate-600 leading-relaxed">
                       登記情報の実在性および採用活動実績を確認した適格な法人企業のみにアカウントを発行します。
                     </p>
                   </div>
                 </div>
 
-                <div className="p-5 sm:p-6 bg-white rounded-2xl border border-slate-200 space-y-2.5 shadow-2xs flex flex-col justify-between text-center items-center">
+                <div className="p-5 bg-white rounded-2xl border border-slate-200 space-y-2.5 shadow-2xs flex flex-col justify-between text-center items-center">
                   <div className="space-y-2 w-full">
-                    <span className="font-bold text-slate-900 text-sm sm:text-base flex items-center justify-center gap-2">
+                    <span className="font-bold text-slate-900 text-sm flex items-center justify-center gap-1.5">
                       <Check className="w-4 h-4 text-emerald-700 stroke-[2.5] flex-shrink-0" />
                       <span>クローズド動画配信</span>
                     </span>
-                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    <p className="text-xs text-slate-600 leading-relaxed">
                       一般SNSのような外部公開や拡散を完全防止。審査通過企業の人事担当者のみが限定閲覧できます。
                     </p>
                   </div>
                 </div>
 
-                <div className="p-5 sm:p-6 bg-white rounded-2xl border border-slate-200 space-y-2.5 shadow-2xs flex flex-col justify-between text-center items-center">
+                <div className="p-5 bg-white rounded-2xl border border-slate-200 space-y-2.5 shadow-2xs flex flex-col justify-between text-center items-center">
                   <div className="space-y-2 w-full">
-                    <span className="font-bold text-slate-900 text-sm sm:text-base flex items-center justify-center gap-2">
+                    <span className="font-bold text-slate-900 text-sm flex items-center justify-center gap-1.5">
+                      <Check className="w-4 h-4 text-emerald-700 stroke-[2.5] flex-shrink-0" />
+                      <span>段階的プライバシー保護</span>
+                    </span>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      スワイプ時はイニシャル表示。学生がオファーを承諾した時点でフルネームが開示される適正管理。
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-5 bg-white rounded-2xl border border-slate-200 space-y-2.5 shadow-2xs flex flex-col justify-between text-center items-center">
+                  <div className="space-y-2 w-full">
+                    <span className="font-bold text-slate-900 text-sm flex items-center justify-center gap-1.5">
                       <Check className="w-4 h-4 text-emerald-700 stroke-[2.5] flex-shrink-0" />
                       <span>IPAセキュリティ準拠</span>
                     </span>
-                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    <p className="text-xs text-slate-600 leading-relaxed">
                       「安全なウェブサイトの作り方」に準拠した通信暗号化（SSL/TLS）および堅牢なアクセス制御を実施。
                     </p>
                   </div>

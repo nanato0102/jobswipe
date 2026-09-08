@@ -83,6 +83,10 @@ export default function HomePage() {
       a: "JobSwipeはルッキズムを助長するものではありません。動画を通じて『話す内容の論理性』『課題に対する行動力や想い』『企業のカルチャーとの相性』など、文字の履歴書では拾いきれない本質的なポテンシャルや人柄を正当に評価するためのプラットフォームです。",
     },
     {
+      q: "大学の友人や知人、インターン先の企業に身バレしませんか？",
+      a: "ご安心ください。スワイプ閲覧・オファー送信の段階では、お名前はプライバシー保護のためイニシャル（例：S.Kさん）で表示されます。あなたが企業のオファーを承諾して個別チャットに進むまで本名は開示されません。また、厳格な法人審査を通過した企業のみがアクセスできる完全非公開環境で安全に管理されています。",
+    },
+    {
       q: "どんな企業からスカウトが届きますか？",
       a: "学歴や文字の履歴書ではなく、人柄や対人力、熱量を最重視する成長ITベンチャー、マーケティング、総合営業、コンサルティングなどの優良企業が多数参加しています。",
     },
@@ -137,6 +141,10 @@ export default function HomePage() {
                     <span>登録・利用料 完全無料</span>
                   </span>
                   <span className="flex items-center gap-1.5">
+                    <Lock className="w-4 h-4 text-emerald-700 stroke-[2.5]" />
+                    <span>承諾まで本名非公開（イニシャル表示）</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
                     <RotateCcw className="w-4 h-4 text-emerald-700 stroke-[2.5]" />
                     <span>何度でも撮り直し可能</span>
                   </span>
@@ -145,7 +153,7 @@ export default function HomePage() {
                     <span>台本テンプレート完備</span>
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <Lock className="w-4 h-4 text-emerald-700 stroke-[2.5]" />
+                    <ShieldCheck className="w-4 h-4 text-emerald-700 stroke-[2.5]" />
                     <span>審査通過企業のみ限定公開</span>
                   </span>
                 </div>

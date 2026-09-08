@@ -21,6 +21,7 @@ import {
   Camera,
   FileText,
   Lightbulb,
+  Lock,
 } from "lucide-react";
 import ImageCropperModal from "@/components/ImageCropperModal";
 
@@ -260,6 +261,22 @@ export default function StudentProfilePage() {
               <span>プロフィールを保存しました！動画を投稿して企業からのオファーを待ちましょう。</span>
             </div>
           )}
+
+          {/* プライバシー保護・段階的情報開示の安心案内 */}
+          <div className="p-4 bg-blue-50/80 border border-blue-200 rounded-2xl flex items-start gap-3 shadow-2xs">
+            <div className="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <Lock className="w-4 h-4" />
+            </div>
+            <div className="space-y-0.5">
+              <h3 className="text-xs font-bold text-blue-950 flex items-center gap-1.5">
+                <span>安心のプライバシー保護（段階的情報開示）</span>
+                <span className="px-2 py-0.5 rounded-full bg-blue-200 text-blue-900 text-[10px] font-bold">有効</span>
+              </h3>
+              <p className="text-[11px] text-blue-800 leading-relaxed">
+                企業がスワイプ閲覧・オファー送信する段階では、あなたのお名前は<strong>イニシャル（例: S.Kさん）</strong>で安全に表示されます。あなたがオファーを承諾して個別チャットに進むまで、本名は企業に開示されません。
+              </p>
+            </div>
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* ================= ブロック1: プロフィール写真 & 性別 ================= */}

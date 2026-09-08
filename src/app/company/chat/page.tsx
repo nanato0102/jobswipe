@@ -21,6 +21,7 @@ import {
   Flag,
   Calendar,
   Zap,
+  ShieldCheck,
 } from "lucide-react";
 import StudentMobileTabs from "@/components/StudentMobileTabs";
 import CompanyMobileTabs from "@/components/CompanyMobileTabs";
@@ -293,10 +294,18 @@ function ChatContent() {
                   >
                     {renderAvatar(currentThread, "w-9 h-9 sm:w-10 sm:h-10")}
                     <div className="min-w-0">
-                      <h2 className="text-xs sm:text-sm font-bold text-slate-900 truncate group-hover:text-blue-700 flex items-center gap-1">
-                        <span>{currentThread.partnerName}</span>
-                        <span className="text-[10px] sm:text-[11px] font-normal text-blue-700 hidden sm:inline">(詳細 →)</span>
-                      </h2>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <h2 className="text-xs sm:text-sm font-bold text-slate-900 truncate group-hover:text-blue-700 flex items-center gap-1">
+                          <span>{currentThread.partnerName}</span>
+                          <span className="text-[10px] sm:text-[11px] font-normal text-blue-700 hidden sm:inline">(詳細 →)</span>
+                        </h2>
+                        {currentThread.role !== "COMPANY" && (
+                          <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold">
+                            <ShieldCheck className="w-3 h-3 text-emerald-700 stroke-[2.5]" />
+                            <span>承諾済・本名開示</span>
+                          </span>
+                        )}
+                      </div>
                       <p className="text-[10px] sm:text-[11px] text-slate-500 truncate">{currentThread.partnerSub}</p>
                     </div>
                   </Link>

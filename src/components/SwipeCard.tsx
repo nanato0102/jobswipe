@@ -23,9 +23,29 @@ import {
   Building2,
   RotateCcw,
   Flag,
+  Lock,
 } from "lucide-react";
 import type { VideoData } from "@/types";
 import ReportModal from "@/components/ReportModal";
+
+// 段階的情報開示（イニシャル変換ヘルパー）
+export function getMaskedStudentName(fullName?: string | null): string {
+  if (!fullName) return "学生ユーザー";
+  const nameMap: Record<string, string> = {
+    "佐藤 健太": "S.Kさん",
+    "田中 美咲": "M.Tさん",
+    "鈴木 拓海": "T.Sさん",
+    "高橋 陽菜": "H.Tさん",
+    "伊藤 翔平": "S.Iさん",
+    "渡辺 葵": "A.Wさん",
+  };
+  if (nameMap[fullName]) return nameMap[fullName];
+  const parts = fullName.trim().split(/\s+/);
+  if (parts.length >= 2) {
+    return `${parts[0][0]}.${parts[1][0]}さん`;
+  }
+  return `${fullName[0]}..さん`;
+}
 
 interface SwipeCardProps {
   videos: VideoData[];
@@ -490,10 +510,14 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
               onClick={(e) => e.stopPropagation()}
               className="absolute left-0 right-16 bottom-0 p-4 sm:p-5 bg-black/75 backdrop-blur-xs rounded-t-2xl space-y-1.5 pointer-events-auto"
             >
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="text-base font-bold text-white flex items-center gap-1.5">
                   <User className="w-4 h-4 text-emerald-400" />
-                  {currentVideo.student?.fullName || "学生ユーザー"}
+                  {getMaskedStudentName(currentVideo.student?.fullName)}
+                </span>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-800/90 text-amber-300 border border-amber-400/30 text-[10px] font-bold">
+                  <Lock className="w-2.5 h-2.5" />
+                  <span>承諾後本名開示</span>
                 </span>
                 {currentVideo.student?.graduationYear && (
                   <span className="text-[11px] bg-white/20 text-slate-200 px-2 py-0.5 rounded-full font-medium flex items-center gap-1">
@@ -580,9 +604,15 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                 })()}
 
                 <div>
-                  <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                    <span>{currentVideo.student?.fullName || "学生ユーザー"}</span>
-                  </h2>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h2 className="text-xl font-bold text-slate-900">
+                      <span>{getMaskedStudentName(currentVideo.student?.fullName)}</span>
+                    </h2>
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-300 text-[10px] font-bold">
+                      <Lock className="w-3 h-3 text-slate-500" />
+                      <span>オファー承諾後に本名開示</span>
+                    </span>
+                  </div>
                   <p className="text-xs text-slate-500 mt-0.5">
                     {currentVideo.student?.university} • {currentVideo.student?.graduationYear}年卒
                   </p>
@@ -676,7 +706,13 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
           <div className="bg-white rounded-xl p-6 max-w-lg w-full shadow-2xl border border-slate-200 max-h-[85vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
               <div>
-                <h3 className="text-base font-bold text-slate-900">{currentVideo.student.fullName} さんの詳細</h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-base font-bold text-slate-900">{getMaskedStudentName(currentVideo.student.fullName)} の詳細</h3>
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-300 text-[10px] font-bold">
+                    <Lock className="w-2.5 h-2.5" />
+                    <span>承諾後開示</span>
+                  </span>
+                </div>
                 <p className="text-xs text-slate-500">{currentVideo.student.university} / {currentVideo.student.graduationYear}年卒</p>
               </div>
               <button
@@ -749,8 +785,8 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-200">
             <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
-              <h3 className="text-base font-bold text-slate-900">
-                {currentVideo.student?.fullName || "学生"} さんへオファーを送信
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <span>{getMaskedStudentName(currentVideo.student?.fullName)} へオファーを送信</span>
               </h3>
               <button
                 onClick={() => setIsOfferModalOpen(false)}
