@@ -444,53 +444,59 @@ export default function ForCompanyPage() {
       {/* 5. 安心の法人審査制 ＆ セキュリティ方針 */}
       {/* ========================================================================= */}
       <section className="py-16 sm:py-24 bg-white border-b border-slate-200">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <FadeInView>
-            <div className="bg-slate-50 rounded-3xl border border-slate-200 p-8 sm:p-10 space-y-6">
-              <div className="flex items-center gap-3 border-b border-slate-200 pb-4">
-                <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-700 border border-blue-200 flex items-center justify-center flex-shrink-0">
-                  <ShieldCheck className="w-6 h-6" />
+            <div className="bg-slate-50 rounded-3xl border border-slate-200 p-6 sm:p-10 lg:p-12 space-y-8 shadow-xs">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 border-b border-slate-200/80 pb-6">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-blue-50 text-blue-700 border border-blue-200 flex items-center justify-center flex-shrink-0 shadow-2xs">
+                  <ShieldCheck className="w-6 h-6 sm:w-7 sm:h-7 stroke-[2.2]" />
                 </div>
-                <div>
-                  <h3 className="text-lg sm:text-xl font-black text-slate-900">
+                <div className="space-y-1">
+                  <h3 className="text-xl sm:text-2xl lg:text-3xl font-black text-slate-900 tracking-tight">
                     <span className="inline-block">安心・安全の完全審査制 ＆</span>
                     <span className="inline-block">非公開動画管理</span>
                   </h3>
-                  <p className="text-xs text-slate-500">
-                    学生と参画企業の信頼を守るための厳格なガバナンス体制
+                  <p className="text-xs sm:text-sm lg:text-base text-slate-600 leading-relaxed">
+                    学生と参画企業双方の信頼とプライバシーを保護するための厳格なガバナンス体制
                   </p>
                 </div>
               </div>
 
-              <div className="grid sm:grid-cols-3 gap-4 text-xs">
-                <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-1.5 shadow-2xs">
-                  <span className="font-bold text-slate-900 flex items-center gap-1.5">
-                    <Check className="w-3.5 h-3.5 text-emerald-700 stroke-[2.5]" />
-                    <span>厳格な法人審査</span>
-                  </span>
-                  <p className="text-slate-600 leading-relaxed">
-                    実在性および採用活動実績を確認した法人企業のみにアカウントを発行。
-                  </p>
+              <div className="grid sm:grid-cols-3 gap-5">
+                <div className="p-5 sm:p-6 bg-white rounded-2xl border border-slate-200 space-y-2.5 shadow-2xs flex flex-col justify-between">
+                  <div className="space-y-2">
+                    <span className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+                      <Check className="w-4 h-4 text-emerald-700 stroke-[2.5] flex-shrink-0" />
+                      <span>厳格な法人審査</span>
+                    </span>
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                      登記情報の実在性および採用活動実績を確認した適格な法人企業のみにアカウントを発行します。
+                    </p>
+                  </div>
                 </div>
 
-                <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-1.5 shadow-2xs">
-                  <span className="font-bold text-slate-900 flex items-center gap-1.5">
-                    <Check className="w-3.5 h-3.5 text-emerald-700 stroke-[2.5]" />
-                    <span>クローズド動画配信</span>
-                  </span>
-                  <p className="text-slate-600 leading-relaxed">
-                    一般公開やSNS拡散を完全防止。審査通過企業の人事担当者のみが閲覧可能。
-                  </p>
+                <div className="p-5 sm:p-6 bg-white rounded-2xl border border-slate-200 space-y-2.5 shadow-2xs flex flex-col justify-between">
+                  <div className="space-y-2">
+                    <span className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+                      <Check className="w-4 h-4 text-emerald-700 stroke-[2.5] flex-shrink-0" />
+                      <span>クローズド動画配信</span>
+                    </span>
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                      一般SNSのような外部公開や拡散を完全防止。審査通過企業の人事担当者のみが限定閲覧できます。
+                    </p>
+                  </div>
                 </div>
 
-                <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-1.5 shadow-2xs">
-                  <span className="font-bold text-slate-900 flex items-center gap-1.5">
-                    <Check className="w-3.5 h-3.5 text-emerald-700 stroke-[2.5]" />
-                    <span>IPAセキュリティ準拠</span>
-                  </span>
-                  <p className="text-slate-600 leading-relaxed">
-                    「安全なウェブサイトの作り方」に準拠した通信暗号化およびデータ保護。
-                  </p>
+                <div className="p-5 sm:p-6 bg-white rounded-2xl border border-slate-200 space-y-2.5 shadow-2xs flex flex-col justify-between">
+                  <div className="space-y-2">
+                    <span className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+                      <Check className="w-4 h-4 text-emerald-700 stroke-[2.5] flex-shrink-0" />
+                      <span>IPAセキュリティ準拠</span>
+                    </span>
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                      「安全なウェブサイトの作り方」に準拠した通信暗号化（SSL/TLS）および堅牢なアクセス制御を実施。
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
