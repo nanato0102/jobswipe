@@ -54,8 +54,13 @@ export default function Footer() {
             <h4 className="font-black text-slate-900 text-xs tracking-wider uppercase">企業の採用担当者様</h4>
             <ul className="space-y-2 text-xs">
               <li>
+                <Link href="/for-company" className="hover:text-slate-900 transition-colors">
+                  企業向けサービス案内
+                </Link>
+              </li>
+              <li>
                 <Link href="/company/register" className="hover:text-slate-900 transition-colors">
-                  企業アカウント登録
+                  企業利用お申し込み
                 </Link>
               </li>
               <li>

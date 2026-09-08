@@ -26,7 +26,6 @@ import {
   FileText,
   RotateCcw,
   Lock,
-  Quote,
 } from "lucide-react";
 
 export default function HomePage() {
@@ -55,30 +54,6 @@ export default function HomePage() {
     "エンタメ・メディア",
     "メーカー・日用品",
     "企画・クリエイティブ",
-  ];
-
-  const testimonials = [
-    {
-      company: "株式会社サイバーネクスト",
-      industry: "IT・Webサービス（東証グロース上場）",
-      role: "新卒採用責任者",
-      comment:
-        "文字だけのESでは分からなかった『課題解決への熱量や論理的な受け答え』が60秒動画で事前に把握でき、1次面接の合致率が大幅に向上しました。学歴に関係なく主体性のある学生と多数出会えています。",
-    },
-    {
-      company: "グローバルマーケティング株式会社",
-      industry: "デジタルマーケティング・広告",
-      role: "人事部 採用リード",
-      comment:
-        "自社のカルチャーにマッチするかどうかが動画のトーンや表情から直感的に伝わります。スカウト承諾率も従来の逆求人サイトより高く、早期内定承諾につながっています。",
-    },
-    {
-      company: "ソリューションパートナーズ株式会社",
-      industry: "総合コンサルティング・ソリューション営業",
-      role: "採用担当マネージャー",
-      comment:
-        "文章力やテクニックではなく、自分の言葉で堂々と伝える『素の対人力』を評価できる点が素晴らしいです。面接前のミスマッチが大幅に減り、採用効率が劇的に改善しました。",
-    },
   ];
 
   const faqs = [
@@ -154,7 +129,7 @@ export default function HomePage() {
                   </Link>
                 </div>
 
-                {/* 学生向け安心バッジ（心理的ハードルの緩和） */}
+                {/* 学生向け安心バッジ */}
                 <div className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-y-2 gap-x-5 text-xs text-slate-600 font-bold">
                   <span className="flex items-center gap-1.5">
                     <Check className="w-4 h-4 text-emerald-700 stroke-[2.5]" />
@@ -174,24 +149,23 @@ export default function HomePage() {
                   </span>
                 </div>
 
-                {/* 企業担当者向け控えめな導線 */}
+                {/* 企業担当者向け専用導線 */}
                 <div className="pt-3 text-xs text-slate-500">
                   <span>採用ご担当者様はこちら ➔ </span>
                   <Link
-                    href="/company/register"
+                    href="/for-company"
                     className="font-bold text-slate-800 hover:text-emerald-700 hover:underline transition-colors"
                   >
-                    企業専用ページ・利用お申し込み
+                    企業向けサービスのご案内（企業専用ページ）
                   </Link>
                 </div>
               </FadeInView>
             </div>
 
-            {/* 右側：スワイプ画面の実物スマートフォンモックアップ（学歴ではなく専攻・強み軸） */}
+            {/* 右側：スワイプ画面の実物スマートフォンモックアップ（専攻・強み軸） */}
             <div className="lg:col-span-5 flex justify-center">
               <FadeInView delay={200}>
                 <div className="relative w-full max-w-[280px] sm:max-w-[310px] aspect-[9/18] rounded-[36px] bg-slate-950 p-2.5 shadow-2xl border-4 border-slate-200">
-                  {/* スマホ画面内部（専攻・強み・スキル軸） */}
                   <div className="relative w-full h-full rounded-[28px] overflow-hidden bg-slate-900 flex flex-col justify-between p-4 text-white">
                     {/* 上部ステータス */}
                     <div className="flex items-center justify-between">
@@ -201,13 +175,12 @@ export default function HomePage() {
                       <span className="px-2 py-0.5 rounded-md bg-emerald-700 text-[10px] font-bold">LIVE</span>
                     </div>
 
-                    {/* 中央：クリーンなアバター ＆ 音声認識波形ビジュアライザー */}
+                    {/* 中央：アバター ＆ 音声波形 */}
                     <div className="flex flex-col items-center justify-center space-y-3 my-auto">
                       <div className="w-16 h-16 rounded-2xl bg-slate-800 border border-slate-700 text-slate-300 flex items-center justify-center shadow-lg">
                         <User className="w-8 h-8 stroke-[2]" />
                       </div>
 
-                      {/* 音声波形イコライザーバー */}
                       <div className="flex items-center gap-1 h-6">
                         <span className="w-1 h-3 bg-emerald-500 rounded-full animate-pulse" />
                         <span className="w-1 h-5 bg-emerald-400 rounded-full animate-pulse delay-100" />
@@ -222,7 +195,7 @@ export default function HomePage() {
                       </div>
                     </div>
 
-                    {/* 下部プロフィール情報（学歴不問・スキルと人柄軸） */}
+                    {/* 下部プロフィール情報（専攻・強み軸） */}
                     <div className="space-y-2">
                       <div className="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700/60">
                         <div className="flex items-center gap-2">
@@ -267,33 +240,41 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 2. 実績・信頼性指標カウンター (4大KPIカード + 算出根拠注釈) */}
+      {/* 2. JobSwipeが選ばれる3大バリュー（定性的な提供価値・安心機能） */}
       {/* ========================================================================= */}
-      <section className="py-8 bg-slate-50 border-y border-slate-200">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 text-center shadow-2xs space-y-1">
-              <span className="text-2xl sm:text-3xl font-black text-slate-900">70%</span>
-              <p className="text-xs text-slate-500 font-bold">面接前ミスマッチ削減</p>
+      <section className="py-10 bg-slate-50 border-y border-slate-200">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid sm:grid-cols-3 gap-4">
+            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
+              <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center justify-center">
+                <Check className="w-4 h-4 stroke-[2.5]" />
+              </div>
+              <h3 className="text-sm font-bold text-slate-900">登録・利用料 完全無料</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                動画投稿からオファー受信、チャット面談まですべての機能を完全無料でご利用いただけます。
+              </p>
             </div>
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 text-center shadow-2xs space-y-1">
-              <span className="text-2xl sm:text-3xl font-black text-slate-900">85%</span>
-              <p className="text-xs text-slate-500 font-bold">スカウト承諾率</p>
+
+            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
+              <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center justify-center">
+                <RotateCcw className="w-4 h-4 stroke-[2.5]" />
+              </div>
+              <h3 className="text-sm font-bold text-slate-900">何度でも撮り直し自由</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                スマホで納得いくまで撮影可能。就活の成長に合わせていつでも最新動画にアップデートできます。
+              </p>
             </div>
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 text-center shadow-2xs space-y-1">
-              <span className="text-2xl sm:text-3xl font-black text-slate-900">94%</span>
-              <p className="text-xs text-slate-500 font-bold">登録学生 満足度</p>
-            </div>
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 text-center shadow-2xs space-y-1">
-              <span className="text-2xl sm:text-3xl font-black text-slate-900">500+</span>
-              <p className="text-xs text-slate-500 font-bold">厳選審査 参画企業数</p>
+
+            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
+              <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center justify-center">
+                <Lock className="w-4 h-4 stroke-[2.5]" />
+              </div>
+              <h3 className="text-sm font-bold text-slate-900">審査通過企業のみ限定公開</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                一般SNSのような拡散リスクは一切なし。厳格な審査を通過した企業の人事担当者のみが閲覧します。
+              </p>
             </div>
           </div>
-
-          {/* 算出根拠注記（誤認防止・信頼性の担保） */}
-          <p className="text-[11px] text-center text-slate-400">
-            ※2026年3月〜8月 JobSwipe β版実証実験アンケート調査（参画企業および登録学生計320名対象）に基づく実績値
-          </p>
         </div>
       </section>
 
@@ -419,7 +400,7 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 4. 「3つのステップで始まる逆求人」セクション (id="how-it-works" + 心理的安全サポート) */}
+      {/* 4. 「3つのステップで始まる逆求人」セクション (id="how-it-works") */}
       {/* ========================================================================= */}
       <section id="how-it-works" className="py-16 sm:py-24 bg-slate-50 border-y border-slate-200 scroll-mt-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
@@ -454,7 +435,6 @@ export default function HomePage() {
                   </p>
                 </div>
 
-                {/* STEP 1 安心サポートバッジ */}
                 <div className="pt-2 border-t border-slate-100 space-y-1.5 text-[11px] text-slate-500 font-bold">
                   <div className="flex items-center gap-1.5 text-emerald-800">
                     <Check className="w-3.5 h-3.5 flex-shrink-0" />
@@ -522,7 +502,7 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 5. 人柄・内面が可視化される4大要素セクション（ルッキズム懸念ケア） */}
+      {/* 5. 人柄・内面が可視化される4大要素セクション */}
       {/* ========================================================================= */}
       <section className="py-16 sm:py-24 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
@@ -639,51 +619,9 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 7. 参画企業・採用担当者の声（ソーシャルプルーフの強化） */}
+      {/* 7. 「よくあるご質問（FAQ）」セクション (id="faq") */}
       {/* ========================================================================= */}
-      <section className="py-16 sm:py-24 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          <FadeInView>
-            <div className="text-center space-y-3 max-w-2xl mx-auto">
-              <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest block">
-                VOICE OF COMPANIES
-              </span>
-              <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                参画企業・採用担当者の声
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-600">
-                学歴や定型文にとらわれず、候補者の熱量と本質に向き合う企業からの評価です。
-              </p>
-            </div>
-          </FadeInView>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((t, idx) => (
-              <FadeInView key={idx} delay={idx * 100}>
-                <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 sm:p-7 space-y-4 flex flex-col justify-between h-full shadow-2xs">
-                  <div className="space-y-3">
-                    <Quote className="w-6 h-6 text-emerald-700/40" />
-                    <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                      &ldquo;{t.comment}&rdquo;
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t border-slate-200 space-y-1">
-                    <span className="text-xs font-black text-slate-900 block">{t.company}</span>
-                    <span className="text-[11px] text-slate-500 block">{t.industry}</span>
-                    <span className="text-[11px] text-emerald-800 font-bold block">{t.role}</span>
-                  </div>
-                </div>
-              </FadeInView>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================================================= */}
-      {/* 8. 「よくあるご質問（FAQ）」セクション (id="faq") */}
-      {/* ========================================================================= */}
-      <section id="faq" className="py-16 sm:py-24 bg-slate-50 border-t border-slate-200 scroll-mt-16">
+      <section id="faq" className="py-16 sm:py-24 bg-white scroll-mt-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <FadeInView>
             <div className="text-center space-y-3">
@@ -702,12 +640,12 @@ export default function HomePage() {
               return (
                 <div
                   key={index}
-                  className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden transition-colors"
+                  className="bg-slate-50 rounded-2xl border border-slate-200 shadow-xs overflow-hidden transition-colors"
                 >
                   <button
                     type="button"
                     onClick={() => toggleFaq(index)}
-                    className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-xs sm:text-sm cursor-pointer hover:bg-slate-50 transition-colors"
+                    className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-xs sm:text-sm cursor-pointer hover:bg-slate-100 transition-colors"
                   >
                     <span className="flex items-center gap-2.5">
                       <HelpCircle className="w-4 h-4 text-emerald-700 flex-shrink-0" />
@@ -721,7 +659,7 @@ export default function HomePage() {
                   </button>
 
                   {isOpen && (
-                    <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-slate-50/60">
+                    <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-200 bg-white">
                       {faq.a}
                     </div>
                   )}
@@ -733,12 +671,12 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 9. ファイナルCTAセクション（学生特化メイン ＆ 企業導線） */}
+      {/* 8. ファイナルCTAセクション（学生特化メイン ＆ 企業専用LP導線） */}
       {/* ========================================================================= */}
-      <section className="py-16 sm:py-24 bg-white border-t border-slate-200">
+      <section className="py-16 sm:py-24 bg-slate-50 border-t border-slate-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
           <FadeInView>
-            <div className="bg-slate-50 rounded-3xl border border-emerald-200 shadow-xs p-8 sm:p-12 space-y-6">
+            <div className="bg-white rounded-3xl border border-emerald-200 shadow-xs p-8 sm:p-12 space-y-6">
               <div className="space-y-3 max-w-2xl mx-auto">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 font-bold text-xs border border-emerald-200">
                   <Sparkles className="w-3.5 h-3.5" />
@@ -772,15 +710,15 @@ export default function HomePage() {
             </div>
           </FadeInView>
 
-          {/* 企業向けフッター導線リンク */}
+          {/* 企業向け専用LP導線 */}
           <div className="pt-2 text-xs text-slate-500 flex items-center justify-center gap-2">
             <Building2 className="w-4 h-4 text-slate-400" />
             <span>採用担当者様向けのご案内はこちら ➔ </span>
             <Link
-              href="/company/register"
+              href="/for-company"
               className="font-bold text-slate-900 hover:text-emerald-700 hover:underline transition-colors"
             >
-              企業アカウント登録・利用お申し込み
+              企業向けサービスのご案内（企業専用ページ）
             </Link>
           </div>
         </div>

@@ -495,7 +495,7 @@ export default function Navbar() {
             /* 未ログイン時 */
             <>
               <Link
-                href="/company/login"
+                href="/for-company"
                 className="text-xs font-bold text-slate-600 hover:text-slate-900 hover:underline px-2.5 py-1.5 transition-colors hidden lg:inline-block"
               >
                 採用担当の方はこちら
