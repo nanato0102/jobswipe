@@ -76,10 +76,10 @@ export default function ForCompanyPage() {
               </FadeInView>
 
               <FadeInView delay={100}>
-                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.2] text-slate-900">
+                <h1 className="text-2xl min-[390px]:text-[26px] sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-slate-900">
                   <span className="block sm:inline">面接で、</span>
-                  <span className="text-blue-700 inline-block">「思っていた人と違った」</span>
-                  <span className="inline-block">をゼロに。</span>
+                  <span className="text-blue-700 whitespace-nowrap inline-block">「思っていた人と違った」</span>
+                  <span className="whitespace-nowrap inline-block">をゼロに。</span>
                 </h1>
               </FadeInView>
 

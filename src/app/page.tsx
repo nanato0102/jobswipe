@@ -105,9 +105,9 @@ export default function HomePage() {
               </FadeInView>
 
               <FadeInView delay={100}>
-                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.2] text-slate-900">
+                <h1 className="text-2xl min-[390px]:text-[26px] sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-slate-900">
                   <span className="block sm:inline">履歴書を、</span>
-                  <span className="text-emerald-700 inline-block">スワイプする時代へ。</span>
+                  <span className="text-emerald-700 whitespace-nowrap inline-block">スワイプする時代へ。</span>
                 </h1>
               </FadeInView>
 
