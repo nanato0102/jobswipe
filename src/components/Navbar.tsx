@@ -281,23 +281,23 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => setMenuOpen(!menuOpen)}
-                className="flex items-center gap-2 p-1 sm:px-2.5 sm:py-1.5 rounded-full hover:bg-slate-100 transition-colors focus:outline-none cursor-pointer"
+                className="flex items-center gap-2 p-1 sm:px-2.5 sm:py-1.5 rounded-md hover:bg-slate-100 transition-colors focus:outline-none cursor-pointer"
                 aria-expanded={menuOpen}
               >
-                {/* 角丸四角アバターまたはロールバッジ */}
+                {/* 角丸アバターまたはロールバッジ */}
                 {isCompany ? (
                   (() => {
                     const c = appStore.getCompanyDetails("c1");
                     if (c?.logoUrl) {
                       return (
-                        <div className="w-8 h-8 rounded-full overflow-hidden border border-slate-200 bg-white flex items-center justify-center shadow-2xs flex-shrink-0">
+                        <div className="w-8 h-8 rounded-md overflow-hidden border border-slate-200 bg-white flex items-center justify-center shadow-2xs flex-shrink-0">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img src={c.logoUrl} alt="Logo" className="w-full h-full object-contain" />
                         </div>
                       );
                     }
                     return (
-                      <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-900 flex items-center justify-center font-bold text-xs border border-blue-200">
+                      <div className="w-8 h-8 rounded-md bg-blue-100 text-blue-900 flex items-center justify-center font-bold text-xs border border-blue-200">
                         企
                       </div>
                     );
@@ -307,7 +307,7 @@ export default function Navbar() {
                     const s = appStore.getStudentDetails("s1");
                     if (s?.avatarUrl) {
                       return (
-                        <div className="w-8 h-8 rounded-full overflow-hidden border border-slate-200 bg-slate-100 shadow-2xs flex-shrink-0">
+                        <div className="w-8 h-8 rounded-md overflow-hidden border border-slate-200 bg-slate-100 shadow-2xs flex-shrink-0">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img src={s.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
                         </div>
@@ -316,7 +316,7 @@ export default function Navbar() {
                     const isFemale = s?.gender === "FEMALE";
                     return (
                       <div
-                        className={`w-8 h-8 rounded-full flex items-center justify-center text-white ${
+                        className={`w-8 h-8 rounded-md flex items-center justify-center text-white ${
                           isFemale ? "bg-rose-500" : "bg-blue-600"
                         }`}
                       >
@@ -325,7 +325,7 @@ export default function Navbar() {
                     );
                   })()
                 ) : (
-                  <div className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xs">
+                  <div className="w-8 h-8 rounded-md bg-slate-900 text-white flex items-center justify-center font-bold text-xs">
                     管
                   </div>
                 )}
@@ -343,13 +343,13 @@ export default function Navbar() {
 
               {/* ドロップダウンメニューパネル */}
               {menuOpen && (
-                <div className="absolute right-0 mt-2 w-60 bg-white rounded-2xl border border-slate-200 shadow-xl p-1.5 z-50 animate-fade-in space-y-0.5">
+                <div className="absolute right-0 mt-2 w-60 bg-white rounded-lg border border-slate-200 shadow-xl p-1.5 z-50 animate-fade-in space-y-0.5">
                   {/* ユーザーサマリー情報 */}
-                  <div className="px-3.5 py-2.5 border-b border-slate-100 bg-slate-50 rounded-xl mb-1">
+                  <div className="px-3.5 py-2.5 border-b border-slate-100 bg-slate-50 rounded-md mb-1">
                     <p className="text-xs font-bold text-slate-900 truncate">
                       {session?.name || "ユーザー"}
                     </p>
-                    <p className="text-[11px] text-slate-500 truncate">{session?.email}</p>
+                    <p className="text-xs text-slate-500 truncate">{session?.email}</p>
                   </div>
 
                   {/* マイページ・主要リンク */}
