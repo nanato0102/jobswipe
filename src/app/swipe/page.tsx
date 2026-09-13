@@ -10,8 +10,8 @@ import { SlidersHorizontal, Check, RefreshCw } from "lucide-react";
 import type { VideoData } from "@/types";
 
 export default function SwipePage() {
-  const [videos, setVideos] = useState<VideoData[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [videos, setVideos] = useState<VideoData[]>(() => appStore.getDemoVideos());
+  const [loading, setLoading] = useState(false);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
   useEffect(() => {
@@ -23,17 +23,10 @@ export default function SwipePage() {
           const list = Array.isArray(data) ? data : data.videos || [];
           if (list.length > 0) {
             setVideos(list);
-          } else {
-            setVideos(appStore.getDemoVideos());
           }
-        } else {
-          setVideos(appStore.getDemoVideos());
         }
       } catch (err) {
-        console.error("Failed to fetch videos, using fallback demo videos", err);
-        setVideos(appStore.getDemoVideos());
-      } finally {
-        setLoading(false);
+        console.warn("Using local demo videos", err);
       }
     }
     fetchVideos();
