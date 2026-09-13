@@ -13,14 +13,11 @@ import {
   Volume2,
   VolumeX,
   Play,
-  Pause,
   ChevronUp,
   ChevronDown,
   Info,
   X,
-  Award,
   Briefcase,
-  Building2,
   RotateCcw,
   Flag,
   Lock,
@@ -66,7 +63,6 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
 
   // スワイプフィードバックスタンプ（LIKE / SKIP）
   const [swipeFeedback, setSwipeFeedback] = useState<"LIKE" | "SKIP" | null>(null);
-  const [playFeedback, setPlayFeedback] = useState<"PLAY" | "PAUSE" | null>(null);
 
   // 動画再生・音声状態
   const [isPlaying, setIsPlaying] = useState(true);
@@ -76,9 +72,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const touchStartY = useRef<number | null>(null);
-  const touchStartX = useRef<number | null>(null);
   const touchEndY = useRef<number | null>(null);
-  const touchEndX = useRef<number | null>(null);
 
   const currentVideo = videos && videos.length > 0 ? videos[currentIndex % videos.length] : null;
   const isLiked = currentVideo ? !!likedMap[currentVideo.id] : false;
@@ -118,28 +112,6 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
     info("前の動画に戻りました");
   };
 
-  // キーボードショートカット（↑ / ↓ / Space）
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // 入力フォームにフォーカス中はスキップ
-      if (["INPUT", "TEXTAREA"].includes((e.target as HTMLElement).tagName)) return;
-
-      if (e.key === "ArrowDown" || e.key === "PageDown") {
-        e.preventDefault();
-        handleNext();
-      } else if (e.key === "ArrowUp" || e.key === "PageUp") {
-        e.preventDefault();
-        handlePrev();
-      } else if (e.key === " ") {
-        e.preventDefault();
-        togglePlay();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleNext, handlePrev, isPlaying]);
-
   // インデックス変更時に動画を再ロード・再生
   useEffect(() => {
     if (videoRef.current) {
@@ -151,13 +123,46 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
     }
   }, [currentIndex, playbackRate]);
 
+  // キーボードショートカット（PC操作性向上: ↑↓, J/K, Space, L）
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // テキスト入力中またはモーダルオープン中はキーボードショートカットを無効化
+      if (
+        document.activeElement?.tagName === "INPUT" ||
+        document.activeElement?.tagName === "TEXTAREA" ||
+        isOfferModalOpen ||
+        isProfileModalOpen ||
+        isReportModalOpen
+      ) {
+        return;
+      }
+
+      if (e.key === "ArrowDown" || e.key === "j" || e.key === "J" || e.key === "PageDown") {
+        e.preventDefault();
+        handleNext();
+      } else if (e.key === "ArrowUp" || e.key === "k" || e.key === "K" || e.key === "PageUp") {
+        e.preventDefault();
+        handlePrev();
+      } else if (e.key === " ") {
+        e.preventDefault();
+        togglePlay();
+      } else if (e.key === "l" || e.key === "L") {
+        e.preventDefault();
+        handleLike();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleNext, handlePrev, isPlaying, isOfferModalOpen, isProfileModalOpen, isReportModalOpen]);
+
   if (!videos || videos.length === 0 || !currentVideo) {
     return (
-      <div className="flex flex-col items-center justify-center p-12 bg-white border border-slate-200 rounded-3xl shadow-sm text-center max-w-md mx-auto my-8">
-        <div className="w-14 h-14 bg-slate-100 rounded-full flex items-center justify-center mb-4 text-slate-400">
-          <Sparkles className="w-7 h-7" />
+      <div className="flex flex-col items-center justify-center p-12 bg-white border border-slate-200/90 rounded-xl shadow-xs text-center max-w-md mx-auto my-8">
+        <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mb-4 text-slate-400">
+          <Sparkles className="w-6 h-6" />
         </div>
-        <h3 className="text-lg font-bold text-slate-900 mb-1">動画は以上です</h3>
+        <h3 className="text-base font-bold text-slate-900 mb-1">動画は以上です</h3>
         <p className="text-sm text-slate-500">現在表示できる学生PR動画がありません。後ほど再度ご確認ください。</p>
       </div>
     );
@@ -186,38 +191,6 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
     touchStartY.current = null;
     touchEndY.current = null;
   };
-
-  // キーボードショートカット（PC操作性向上: ↑↓, J/K, Space, L）
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // テキスト入力中またはモーダルオープン中はキーボードショートカットを無効化
-      if (
-        document.activeElement?.tagName === "INPUT" ||
-        document.activeElement?.tagName === "TEXTAREA" ||
-        isOfferModalOpen ||
-        isProfileModalOpen
-      ) {
-        return;
-      }
-
-      if (e.key === "ArrowDown" || e.key === "j" || e.key === "J") {
-        e.preventDefault();
-        handleNext();
-      } else if (e.key === "ArrowUp" || e.key === "k" || e.key === "K") {
-        e.preventDefault();
-        handlePrev();
-      } else if (e.key === " ") {
-        e.preventDefault();
-        togglePlay();
-      } else if (e.key === "l" || e.key === "L") {
-        e.preventDefault();
-        handleLike();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [currentIndex, isPlaying, isOfferModalOpen, isProfileModalOpen, currentVideo]);
 
   // タップで再生 / 一時停止
   const togglePlay = () => {
@@ -314,9 +287,9 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
     <div className="relative w-full max-w-5xl mx-auto flex flex-col items-center select-none">
       {/* ステータス通知トースト */}
       {statusMessage && (
-        <div className="fixed top-20 z-50 bg-slate-900/95 text-white text-xs px-5 py-3 rounded-full shadow-2xl flex items-center gap-2 border border-slate-700 animate-fade-in backdrop-blur">
+        <div className="fixed top-20 z-50 bg-slate-900/95 text-white text-xs px-4 py-2.5 rounded-md shadow-xl flex items-center gap-2 border border-slate-700 animate-fade-in backdrop-blur">
           <Check className="w-4 h-4 text-emerald-400" />
-          <span className="font-bold">{statusMessage}</span>
+          <span className="font-semibold">{statusMessage}</span>
         </div>
       )}
 
@@ -327,7 +300,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
-          className="lg:col-span-7 w-full max-w-full sm:max-w-md mx-auto bg-black text-white rounded-xl overflow-hidden shadow-2xl border border-slate-800 flex flex-col h-[70dvh] sm:h-[74vh] min-h-[480px] sm:min-h-[580px] max-h-[720px] relative touch-pan-y select-none"
+          className="lg:col-span-7 w-full max-w-full sm:max-w-md mx-auto bg-black text-white rounded-xl overflow-hidden shadow-xl border border-slate-800 flex flex-col h-[70dvh] sm:h-[74vh] min-h-[480px] sm:min-h-[580px] max-h-[720px] relative touch-pan-y select-none"
         >
           {/* 動画表示エリア */}
           <div
@@ -337,8 +310,8 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
             {/* スワイプフィードバックスタンプ（LIKE / SKIP） */}
             {swipeFeedback === "LIKE" && (
               <div className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none animate-scale-up">
-                <div className="px-6 py-3 rounded-2xl bg-rose-500/90 text-white font-black text-2xl tracking-widest border-2 border-white shadow-2xl flex items-center gap-2 rotate-[-12deg]">
-                  <Heart className="w-8 h-8 fill-white" />
+                <div className="px-5 py-2.5 rounded-lg bg-rose-500/95 text-white font-black text-2xl tracking-wider border-2 border-white shadow-2xl flex items-center gap-2 rotate-[-8deg]">
+                  <Heart className="w-7 h-7 fill-white" />
                   <span>LIKE!</span>
                 </div>
               </div>
@@ -346,8 +319,8 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
 
             {swipeFeedback === "SKIP" && (
               <div className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none animate-scale-up">
-                <div className="px-6 py-3 rounded-2xl bg-slate-900/90 text-white font-black text-2xl tracking-widest border-2 border-slate-400 shadow-2xl flex items-center gap-2 rotate-[12deg]">
-                  <X className="w-8 h-8 text-slate-300" />
+                <div className="px-5 py-2.5 rounded-lg bg-slate-900/95 text-white font-black text-2xl tracking-wider border-2 border-slate-400 shadow-2xl flex items-center gap-2 rotate-[8deg]">
+                  <X className="w-7 h-7 text-slate-300" />
                   <span>SKIP</span>
                 </div>
               </div>
@@ -369,7 +342,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
               />
             ) : (
               <div className="flex flex-col items-center justify-center text-slate-500 p-6 text-center">
-                <Sparkles className="w-12 h-12 mb-2 text-slate-400" />
+                <Sparkles className="w-10 h-10 mb-2 text-slate-400" />
                 <p className="text-sm">動画プレビュー準備中</p>
               </div>
             )}
@@ -377,19 +350,19 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
             {/* 一時停止アイコン */}
             {!isPlaying && (
               <div className="absolute inset-0 bg-black/40 flex items-center justify-center pointer-events-none">
-                <div className="w-16 h-16 rounded-full bg-slate-900/80 backdrop-blur flex items-center justify-center text-white shadow-xl animate-scale-up">
-                  <Play className="w-8 h-8 ml-1 fill-white" />
+                <div className="w-14 h-14 rounded-full bg-slate-900/80 backdrop-blur flex items-center justify-center text-white shadow-xl animate-scale-up">
+                  <Play className="w-7 h-7 ml-1 fill-white" />
                 </div>
               </div>
             )}
 
             {/* ヘッダーオーバーレイ（ミュート、倍速、Undo、カウンター） */}
-            <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-auto z-20">
+            <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between pointer-events-auto z-20">
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <button
                   type="button"
                   onClick={toggleMute}
-                  className="p-2 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-md text-white border border-white/20 transition-all cursor-pointer shadow-lg"
+                  className="p-2 rounded-md bg-black/60 hover:bg-black/80 backdrop-blur-md text-white border border-white/20 transition-all cursor-pointer shadow-md"
                   title={isMuted ? "ミュート解除" : "ミュート"}
                 >
                   {isMuted ? <VolumeX className="w-4 h-4 text-rose-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
@@ -398,7 +371,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                 <button
                   type="button"
                   onClick={togglePlaybackRate}
-                  className="px-2.5 py-1.5 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-md text-white text-[11px] font-bold border border-white/20 transition-all cursor-pointer shadow-lg flex items-center gap-0.5"
+                  className="px-2.5 py-1.5 rounded-md bg-black/60 hover:bg-black/80 backdrop-blur-md text-white text-xs font-bold border border-white/20 transition-all cursor-pointer shadow-md flex items-center gap-0.5"
                   title="再生速度を切り替え（1.0x / 1.25x / 1.5x / 2.0x）"
                 >
                   <span className="text-emerald-400 font-mono">{playbackRate.toFixed(playbackRate === 1 ? 1 : 2)}x</span>
@@ -411,7 +384,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                       e.stopPropagation();
                       handleUndo();
                     }}
-                    className="px-2.5 py-1.5 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-md text-white text-[11px] font-bold border border-white/20 transition-all cursor-pointer shadow-lg flex items-center gap-1"
+                    className="px-2.5 py-1.5 rounded-md bg-black/60 hover:bg-black/80 backdrop-blur-md text-white text-xs font-semibold border border-white/20 transition-all cursor-pointer shadow-md flex items-center gap-1"
                     title="1つ前の動画に戻る"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
@@ -420,7 +393,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                 )}
               </div>
 
-              <div className="bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-white border border-white/20 shadow-lg">
+              <div className="bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-md text-xs font-semibold text-white border border-white/20 shadow-md">
                 {(currentIndex % videos.length) + 1} / {videos.length}
               </div>
             </div>
@@ -441,15 +414,15 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                 title="気になる！"
               >
                 <div
-                  className={`w-12 h-12 rounded-full flex items-center justify-center transition-all active:scale-90 shadow-lg ${
+                  className={`w-11 h-11 rounded-lg flex items-center justify-center transition-all active:scale-90 shadow-lg ${
                     isLiked
                       ? "bg-rose-600 text-white"
                       : "bg-black/60 backdrop-blur border border-white/20 text-white hover:bg-rose-600 hover:text-white"
                   }`}
                 >
-                  <Heart className={`w-6 h-6 ${isLiked ? "fill-white" : ""}`} />
+                  <Heart className={`w-5 h-5 ${isLiked ? "fill-white" : ""}`} />
                 </div>
-                <span className="text-[10px] font-bold text-white drop-shadow">Like</span>
+                <span className="text-xs font-semibold text-white drop-shadow">Like</span>
               </button>
 
               {/* オファーボタン */}
@@ -459,10 +432,10 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                 className="flex flex-col items-center gap-1 group cursor-pointer"
                 title="オファーを送る"
               >
-                <div className="w-12 h-12 rounded-full bg-emerald-700 hover:bg-emerald-600 active:scale-90 text-white flex items-center justify-center shadow-lg transition-all">
+                <div className="w-11 h-11 rounded-lg bg-emerald-700 hover:bg-emerald-600 active:scale-90 text-white flex items-center justify-center shadow-lg transition-all">
                   <Send className="w-5 h-5 ml-0.5" />
                 </div>
-                <span className="text-[10px] font-bold text-white drop-shadow">オファー</span>
+                <span className="text-xs font-semibold text-white drop-shadow">オファー</span>
               </button>
 
               {/* スキップボタン */}
@@ -472,10 +445,10 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                 className="flex flex-col items-center gap-1 group cursor-pointer"
                 title="スキップして次へ"
               >
-                <div className="w-10 h-10 rounded-full bg-black/60 backdrop-blur border border-white/20 hover:bg-black/80 active:scale-90 text-slate-300 hover:text-white flex items-center justify-center shadow-lg transition-all">
-                  <X className="w-5 h-5" />
+                <div className="w-10 h-10 rounded-lg bg-black/60 backdrop-blur border border-white/20 hover:bg-black/80 active:scale-90 text-slate-300 hover:text-white flex items-center justify-center shadow-lg transition-all">
+                  <X className="w-4 h-4" />
                 </div>
-                <span className="text-[10px] font-bold text-slate-300 drop-shadow">Skip</span>
+                <span className="text-xs font-semibold text-slate-300 drop-shadow">Skip</span>
               </button>
 
               {/* スマホ用詳細ボタン */}
@@ -485,10 +458,10 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                 className="lg:hidden flex flex-col items-center gap-1 group cursor-pointer"
                 title="プロフィール詳細"
               >
-                <div className="w-10 h-10 rounded-full bg-black/60 backdrop-blur border border-white/20 hover:bg-black/80 active:scale-90 text-white flex items-center justify-center shadow-lg transition-all">
+                <div className="w-10 h-10 rounded-lg bg-black/60 backdrop-blur border border-white/20 hover:bg-black/80 active:scale-90 text-white flex items-center justify-center shadow-lg transition-all">
                   <Info className="w-4 h-4 text-slate-200" />
                 </div>
-                <span className="text-[10px] font-bold text-white drop-shadow">詳細</span>
+                <span className="text-xs font-semibold text-white drop-shadow">詳細</span>
               </button>
 
               {/* 通報ボタン */}
@@ -498,45 +471,45 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                 className="flex flex-col items-center gap-1 group cursor-pointer opacity-70 hover:opacity-100 transition-opacity"
                 title="不適切なコンテンツを通報"
               >
-                <div className="w-9 h-9 rounded-full bg-black/50 backdrop-blur border border-white/10 hover:bg-rose-950/80 hover:border-rose-500/50 active:scale-90 text-slate-300 hover:text-rose-400 flex items-center justify-center shadow-md transition-all">
+                <div className="w-8 h-8 rounded-lg bg-black/50 backdrop-blur border border-white/10 hover:bg-rose-950/80 hover:border-rose-500/50 active:scale-90 text-slate-300 hover:text-rose-400 flex items-center justify-center shadow-md transition-all">
                   <Flag className="w-3.5 h-3.5" />
                 </div>
-                <span className="text-[9px] font-medium text-slate-300 drop-shadow">通報</span>
+                <span className="text-[11px] font-medium text-slate-300 drop-shadow">通報</span>
               </button>
             </div>
 
             {/* 下部情報オーバーレイ */}
             <div
               onClick={(e) => e.stopPropagation()}
-              className="absolute left-0 right-16 bottom-0 p-4 sm:p-5 bg-black/75 backdrop-blur-xs rounded-t-2xl space-y-1.5 pointer-events-auto"
+              className="absolute left-0 right-16 bottom-0 p-4 bg-black/80 backdrop-blur-xs rounded-t-lg space-y-1.5 pointer-events-auto"
             >
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-base font-bold text-white flex items-center gap-1.5">
                   <User className="w-4 h-4 text-emerald-400" />
                   {getMaskedStudentName(currentVideo.student?.fullName)}
                 </span>
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-800/90 text-amber-300 border border-amber-400/30 text-[10px] font-bold">
-                  <Lock className="w-2.5 h-2.5" />
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-800/90 text-amber-300 border border-amber-400/30 text-xs font-semibold">
+                  <Lock className="w-3 h-3" />
                   <span>承諾後本名開示</span>
                 </span>
                 {currentVideo.student?.graduationYear && (
-                  <span className="text-[11px] bg-white/20 text-slate-200 px-2 py-0.5 rounded-full font-medium flex items-center gap-1">
+                  <span className="text-xs bg-white/20 text-slate-200 px-2 py-0.5 rounded-md font-medium flex items-center gap-1">
                     <GraduationCap className="w-3 h-3" />
                     {currentVideo.student.graduationYear}卒
                   </span>
                 )}
               </div>
               {currentVideo.student?.university && (
-                <p className="text-xs text-slate-300">{currentVideo.student.university}</p>
+                <p className="text-xs sm:text-sm text-slate-300">{currentVideo.student.university}</p>
               )}
-              <h3 className="text-xs font-semibold text-slate-100 line-clamp-1">{currentVideo.title}</h3>
+              <h3 className="text-xs sm:text-sm font-semibold text-slate-100 line-clamp-1">{currentVideo.title}</h3>
 
               {tagsList.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 pt-0.5">
                   {tagsList.map((tag, idx) => (
                     <span
                       key={idx}
-                      className="text-[10px] bg-black/50 text-emerald-300 px-2 py-0.5 rounded-md border border-emerald-500/30 font-medium"
+                      className="text-xs bg-black/50 text-emerald-300 px-2 py-0.5 rounded-md border border-emerald-500/30 font-medium"
                     >
                       #{tag}
                     </span>
@@ -549,13 +522,13 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
           {/* 上下送りナビゲーションバー（キーボード案内付き） */}
           <div className="bg-slate-900 border-t border-slate-800 p-3 flex items-center justify-between px-4">
             <span className="text-xs text-slate-400 hidden sm:inline">
-              キーボードの <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-[10px] text-slate-200">↑</kbd> <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-[10px] text-slate-200">↓</kbd> またはスワイプで移動
+              キーボードの <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-xs text-slate-200 font-mono">↑</kbd> <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-xs text-slate-200 font-mono">↓</kbd> またはスワイプで移動
             </span>
             <span className="text-xs text-slate-400 sm:hidden">上下スワイプで移動</span>
             <div className="flex items-center gap-2">
               <button
                 onClick={handlePrev}
-                className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs flex items-center gap-1 border border-slate-700"
+                className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-md text-xs flex items-center gap-1 border border-slate-700 cursor-pointer"
                 title="前の動画 (↑)"
               >
                 <ChevronUp className="w-4 h-4" />
@@ -564,7 +537,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
               <button
                 type="button"
                 onClick={() => handleNext()}
-                className="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-lg text-xs font-semibold flex items-center gap-1 shadow-sm cursor-pointer"
+                className="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-md text-xs font-semibold flex items-center gap-1 shadow-xs cursor-pointer"
                 title="次の動画 (↓)"
               >
                 <span>次へ</span>
@@ -575,7 +548,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
         </div>
 
         {/* 右側：PC専用 学生詳細プロフィールパネル（5カラム） */}
-        <div className="hidden lg:flex lg:col-span-5 flex-col bg-white rounded-3xl border border-slate-200 shadow-xl p-6 h-[74vh] min-h-[580px] max-h-[720px] overflow-y-auto space-y-5">
+        <div className="hidden lg:flex lg:col-span-5 flex-col bg-white rounded-xl border border-slate-200/90 shadow-sm p-6 h-[74vh] min-h-[580px] max-h-[720px] overflow-y-auto space-y-5">
           <div className="border-b border-slate-100 pb-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -585,7 +558,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                   const name = currentVideo.student?.fullName || "学生ユーザー";
                   if (sDetail?.avatarUrl) {
                     return (
-                      <div className="w-12 h-12 rounded-xl overflow-hidden border border-slate-200 bg-slate-100 shadow-2xs flex-shrink-0">
+                      <div className="w-12 h-12 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shadow-2xs flex-shrink-0">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={sDetail.avatarUrl} alt={name} className="w-full h-full object-cover" />
                       </div>
@@ -594,7 +567,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                   const isFemale = sDetail?.gender === "FEMALE" || name.includes("美咲");
                   return (
                     <div
-                      className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-2xs flex-shrink-0 text-white border border-white/20 ${
+                      className={`w-12 h-12 rounded-lg flex items-center justify-center shadow-2xs flex-shrink-0 text-white border border-white/20 ${
                         isFemale ? "bg-rose-500" : "bg-blue-600"
                       }`}
                     >
@@ -605,15 +578,15 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
 
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
-                    <h2 className="text-xl font-bold text-slate-900">
+                    <h2 className="text-lg font-bold text-slate-900">
                       <span>{getMaskedStudentName(currentVideo.student?.fullName)}</span>
                     </h2>
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-300 text-[10px] font-bold">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-300 text-xs font-semibold">
                       <Lock className="w-3 h-3 text-slate-500" />
-                      <span>オファー承諾後に本名開示</span>
+                      <span>承諾後に開示</span>
                     </span>
                   </div>
-                  <p className="text-xs text-slate-500 mt-0.5">
+                  <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
                     {currentVideo.student?.university} • {currentVideo.student?.graduationYear}年卒
                   </p>
                 </div>
@@ -621,7 +594,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
 
               <button
                 onClick={handleLike}
-                className={`p-2.5 rounded-full border transition-all ${
+                className={`p-2.5 rounded-md border transition-all cursor-pointer ${
                   isLiked
                     ? "bg-rose-50 border-rose-200 text-rose-600"
                     : "bg-slate-50 border-slate-200 text-slate-400 hover:text-rose-600 hover:bg-rose-50"
@@ -636,7 +609,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
           {/* ひとことスローガン */}
           <div>
             <span className="text-xs font-bold text-slate-800 block mb-1.5">ひとことスローガン</span>
-            <div className="p-3 bg-emerald-50/60 rounded-lg border border-emerald-100 text-xs font-bold text-emerald-950 leading-relaxed">
+            <div className="p-3.5 bg-emerald-50/60 rounded-lg border border-emerald-100 text-sm font-semibold text-emerald-950 leading-relaxed">
               {currentVideo.student?.bio || "笑顔と前向きな姿勢でチームに貢献します！"}
             </div>
           </div>
@@ -652,7 +625,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                 {currentVideo.student.skills.split(",").map((s, idx) => (
                   <span
                     key={idx}
-                    className="bg-emerald-50 text-emerald-900 border border-emerald-200 px-2.5 py-0.5 rounded-md text-xs font-bold shadow-2xs"
+                    className="bg-emerald-50 text-emerald-900 border border-emerald-200 px-2.5 py-1 rounded-md text-xs font-semibold"
                   >
                     #{s.trim()}
                   </span>
@@ -672,7 +645,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                 {currentVideo.student.experience.split(",").map((ind, idx) => (
                   <span
                     key={idx}
-                    className="bg-slate-100 text-slate-700 border border-slate-200 px-2.5 py-0.5 rounded-md text-xs font-semibold"
+                    className="bg-slate-100 text-slate-700 border border-slate-200 px-2.5 py-1 rounded-md text-xs font-semibold"
                   >
                     {ind.trim()}
                   </span>
@@ -685,13 +658,13 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
           <div className="mt-auto pt-4 border-t border-slate-100 flex gap-2.5">
             <Link
               href={`/students/${currentVideo.student?.id || currentVideo.studentId || "s1"}`}
-              className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-colors flex items-center justify-center"
+              className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-md transition-colors flex items-center justify-center"
             >
               詳細
             </Link>
             <button
               onClick={() => setIsOfferModalOpen(true)}
-              className="flex-1 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer"
+              className="flex-1 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold rounded-md flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer"
             >
               <Send className="w-4 h-4 text-blue-400" />
               <span>オファーを送る</span>
@@ -708,25 +681,25 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="text-base font-bold text-slate-900">{getMaskedStudentName(currentVideo.student.fullName)} の詳細</h3>
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-300 text-[10px] font-bold">
-                    <Lock className="w-2.5 h-2.5" />
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-300 text-xs font-semibold">
+                    <Lock className="w-3 h-3 text-slate-500" />
                     <span>承諾後開示</span>
                   </span>
                 </div>
-                <p className="text-xs text-slate-500">{currentVideo.student.university} / {currentVideo.student.graduationYear}年卒</p>
+                <p className="text-xs sm:text-sm text-slate-500 mt-0.5">{currentVideo.student.university} / {currentVideo.student.graduationYear}年卒</p>
               </div>
               <button
                 onClick={() => setIsProfileModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 p-1"
+                className="text-slate-400 hover:text-slate-600 p-1 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="space-y-4 text-xs text-slate-700">
+            <div className="space-y-4 text-sm text-slate-700">
               <div>
                 <span className="font-bold text-slate-900 block mb-1">ひとことスローガン</span>
-                <p className="p-3.5 bg-emerald-50/60 text-emerald-950 rounded-2xl border border-emerald-100 font-bold leading-relaxed">
+                <p className="p-3.5 bg-emerald-50/60 text-emerald-950 rounded-lg border border-emerald-100 font-semibold leading-relaxed">
                   {currentVideo.student.bio || "笑顔と前向きな姿勢でチームに貢献します！"}
                 </p>
               </div>
@@ -736,7 +709,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                   <span className="font-bold text-slate-900 block mb-1">人柄・強みタグ</span>
                   <div className="flex flex-wrap gap-1.5">
                     {currentVideo.student.skills.split(",").map((s, idx) => (
-                      <span key={idx} className="bg-emerald-50 text-emerald-900 border border-emerald-200 px-3 py-1 rounded-full font-bold shadow-sm">
+                      <span key={idx} className="bg-emerald-50 text-emerald-900 border border-emerald-200 px-2.5 py-1 rounded-md text-xs font-semibold">
                         #{s.trim()}
                       </span>
                     ))}
@@ -749,7 +722,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                   <span className="font-bold text-slate-900 block mb-1">興味のある業界</span>
                   <div className="flex flex-wrap gap-1.5">
                     {currentVideo.student.experience.split(",").map((ind, idx) => (
-                      <span key={idx} className="bg-slate-100 text-slate-700 border border-slate-200 px-3 py-1 rounded-full font-semibold">
+                      <span key={idx} className="bg-slate-100 text-slate-700 border border-slate-200 px-2.5 py-1 rounded-md text-xs font-semibold">
                         {ind.trim()}
                       </span>
                     ))}
@@ -761,7 +734,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
             <div className="mt-6 pt-4 border-t border-slate-100 flex gap-2 justify-end">
               <button
                 onClick={() => setIsProfileModalOpen(false)}
-                className="px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 rounded-xl"
+                className="px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 rounded-md cursor-pointer"
               >
                 閉じる
               </button>
@@ -770,7 +743,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                   setIsProfileModalOpen(false);
                   setIsOfferModalOpen(true);
                 }}
-                className="px-4 py-2 text-xs font-semibold bg-emerald-700 text-white rounded-xl hover:bg-emerald-600 flex items-center gap-1.5 shadow-sm"
+                className="px-4 py-2 text-sm font-semibold bg-emerald-700 text-white rounded-md hover:bg-emerald-600 flex items-center gap-1.5 shadow-xs cursor-pointer"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>オファーを送る</span>
@@ -782,21 +755,21 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
 
       {/* スカウトオファー送信モーダル */}
       {isOfferModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-200">
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl p-6 max-w-md w-full shadow-2xl border border-slate-200">
             <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
               <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
                 <span>{getMaskedStudentName(currentVideo.student?.fullName)} へオファーを送信</span>
               </h3>
               <button
                 onClick={() => setIsOfferModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 p-1"
+                className="text-slate-400 hover:text-slate-600 p-1 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <p className="text-xs text-slate-600 mb-3">
+            <p className="text-sm text-slate-600 mb-3">
               動画を見て興味を持った理由や、オファーしたいポジション・面談メッセージを入力してください。
             </p>
 
@@ -805,20 +778,20 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
               onChange={(e) => setOfferMessage(e.target.value)}
               placeholder="例: 自己PR動画を拝見し、明るく主体的な人柄に非常に惹かれました。ぜひ一度オンラインでお話ししませんか？"
               rows={4}
-              className="w-full text-sm border border-slate-300 rounded-2xl p-3.5 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent text-slate-900"
+              className="w-full text-sm border border-slate-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900 text-slate-900"
             />
 
-            <div className="mt-4 flex gap-2 justify-end">
+            <div className="mt-4 flex gap-2.5 justify-end">
               <button
                 onClick={() => setIsOfferModalOpen(false)}
-                className="px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 rounded-xl"
+                className="px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 rounded-md cursor-pointer"
               >
                 キャンセル
               </button>
               <button
                 onClick={handleSendOffer}
                 disabled={!offerMessage.trim()}
-                className="px-4 py-2 text-xs font-semibold bg-emerald-700 text-white rounded-xl hover:bg-emerald-600 disabled:opacity-50 flex items-center gap-1.5 shadow-sm"
+                className="px-4 py-2 text-sm font-semibold bg-emerald-700 text-white rounded-md hover:bg-emerald-600 disabled:opacity-50 flex items-center gap-1.5 shadow-xs cursor-pointer"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>送信する</span>

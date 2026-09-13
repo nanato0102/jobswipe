@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
-import { UserPlus, AlertCircle, CheckCircle, ShieldCheck, FileText } from "lucide-react";
+import { UserPlus, AlertCircle, CheckCircle, Lock } from "lucide-react";
 
 export default function RegisterPage() {
   const { login } = useAuth();
@@ -57,7 +57,7 @@ export default function RegisterPage() {
     }
 
     if (!agreed) {
-      setError("利用規約・プライバシーポリシーおよび誓約事項への同意が必要です。");
+      setError("利用規約・プライバシーポリシーへの同意が必要です。");
       return;
     }
 
@@ -95,40 +95,41 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex-1 flex items-center justify-center p-4 py-12">
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 sm:p-8 max-w-md w-full">
-        <div className="text-center mb-6 flex flex-col items-center">
-          <div className="w-14 h-14 mb-3 flex items-center justify-center">
+    <div className="flex-1 flex items-center justify-center p-4 py-12 bg-slate-50">
+      <div className="bg-white rounded-xl border border-slate-200/90 shadow-sm p-6 sm:p-8 max-w-md w-full space-y-6">
+        {/* ロゴ & タイトル */}
+        <div className="text-center space-y-2 flex flex-col items-center">
+          <div className="w-12 h-12 flex items-center justify-center">
             <Image
               src="/logo.png"
               alt="JobSwipe Logo"
-              width={56}
-              height={56}
+              width={48}
+              height={48}
               className="object-contain"
               priority
             />
           </div>
-          <h1 className="text-xl font-bold text-slate-900">新規会員登録</h1>
-          <p className="text-xs text-slate-500 mt-1">動画を投稿して企業からスカウトを受け取ろう</p>
+          <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">新規会員登録</h1>
+          <p className="text-xs sm:text-sm text-slate-600 font-normal">動画を投稿して企業からスカウトを受け取ろう</p>
         </div>
 
         {error && (
-          <div className="mb-4 p-3.5 bg-rose-50 border border-rose-200 rounded-2xl text-rose-700 text-xs font-bold flex items-center gap-2 animate-fade-in-up">
+          <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-md text-rose-700 text-xs sm:text-sm font-semibold flex items-center gap-2">
             <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-600" />
             <span>{error}</span>
           </div>
         )}
 
         {success && (
-          <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 text-xs flex items-center gap-2">
-            <CheckCircle className="w-4 h-4 flex-shrink-0" />
+          <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-md text-emerald-800 text-xs sm:text-sm font-semibold flex items-center gap-2">
+            <CheckCircle className="w-4 h-4 flex-shrink-0 text-emerald-700" />
             <span>登録が完了しました！プロフィール画面へ移動します...</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">
+            <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-1">
               氏名 <span className="text-rose-500">*</span>
             </label>
             <input
@@ -137,13 +138,13 @@ export default function RegisterPage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="山田 太郎"
-              className="w-full text-sm border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 font-medium"
+              className="w-full text-sm border border-slate-300 rounded-md px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 font-medium"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
+              <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-1">
                 大学名 <span className="text-rose-500">*</span>
               </label>
               <input
@@ -152,15 +153,15 @@ export default function RegisterPage() {
                 value={university}
                 onChange={(e) => setUniversity(e.target.value)}
                 placeholder="早稲田大学"
-                className="w-full text-sm border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 font-medium"
+                className="w-full text-sm border border-slate-300 rounded-md px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 font-medium"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">卒業年</label>
+              <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-1">卒業年</label>
               <select
                 value={graduationYear}
                 onChange={(e) => setGraduationYear(Number(e.target.value))}
-                className="w-full text-sm border border-slate-300 rounded-xl px-3 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 bg-white font-medium cursor-pointer"
+                className="w-full text-sm border border-slate-300 rounded-md px-3 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 bg-white font-medium cursor-pointer"
               >
                 <option value={2027}>2027年卒</option>
                 <option value={2028}>2028年卒</option>
@@ -171,7 +172,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">
+            <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-1">
               メールアドレス <span className="text-rose-500">*</span>
             </label>
             <input
@@ -180,13 +181,13 @@ export default function RegisterPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="student@example.com"
-              className="w-full text-sm border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+              className="w-full text-sm border border-slate-300 rounded-md px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">
-              パスワード（ローマ字・数字を含む8文字以上） <span className="text-rose-500">*</span>
+            <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-1">
+              パスワード（半角英字・数字を含む8文字以上） <span className="text-rose-500">*</span>
             </label>
             <input
               type="password"
@@ -194,21 +195,21 @@ export default function RegisterPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="半角英字と数字を含む8文字以上"
-              className={`w-full text-sm border rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 ${
+              className={`w-full text-sm border rounded-md px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 ${
                 password && !isPasswordValid
-                  ? "border-rose-400 focus:ring-rose-500 bg-rose-50/20"
+                  ? "border-rose-400 focus:ring-rose-500 bg-rose-50/30"
                   : "border-slate-300 focus:ring-emerald-700"
               }`}
             />
 
             {/* リアルタイム要件チェックリスト */}
             {password && (
-              <div className="space-y-1 pt-1.5">
-                <div className="flex flex-wrap gap-2 text-[11px]">
+              <div className="space-y-1.5 pt-2">
+                <div className="flex flex-wrap gap-2 text-xs">
                   <span
                     className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-semibold ${
                       hasMinLength
-                        ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                        ? "bg-slate-100 text-emerald-800 border border-slate-200"
                         : "bg-rose-50 text-rose-700 border border-rose-200"
                     }`}
                   >
@@ -217,16 +218,16 @@ export default function RegisterPage() {
                   <span
                     className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-semibold ${
                       hasLetter
-                        ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                        ? "bg-slate-100 text-emerald-800 border border-slate-200"
                         : "bg-rose-50 text-rose-700 border border-rose-200"
                     }`}
                   >
-                    {hasLetter ? "✓" : "✗"} ローマ字（英字）
+                    {hasLetter ? "✓" : "✗"} 英字
                   </span>
                   <span
                     className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-semibold ${
                       hasNumber
-                        ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                        ? "bg-slate-100 text-emerald-800 border border-slate-200"
                         : "bg-rose-50 text-rose-700 border border-rose-200"
                     }`}
                   >
@@ -235,8 +236,8 @@ export default function RegisterPage() {
                 </div>
 
                 {!isPasswordValid && (
-                  <p className="text-[11px] text-rose-600 font-bold pt-0.5">
-                    ※ ローマ字（半角英字）と数字を両方含む8文字以上で入力してください。
+                  <p className="text-xs text-rose-600 font-semibold pt-0.5">
+                    ※ 半角英字と数字を両方含む8文字以上で入力してください。
                   </p>
                 )}
               </div>
@@ -244,7 +245,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">
+            <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-1">
               パスワード（確認用） <span className="text-rose-500">*</span>
             </label>
             <input
@@ -253,14 +254,14 @@ export default function RegisterPage() {
               value={passwordConfirm}
               onChange={(e) => setPasswordConfirm(e.target.value)}
               placeholder="パスワードを再入力"
-              className={`w-full text-sm border rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 ${
+              className={`w-full text-sm border rounded-md px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 ${
                 passwordConfirm && !isMatch
-                  ? "border-rose-400 focus:ring-rose-500 bg-rose-50/20"
+                  ? "border-rose-400 focus:ring-rose-500 bg-rose-50/30"
                   : "border-slate-300 focus:ring-emerald-700"
               }`}
             />
             {passwordConfirm && !isMatch && (
-              <p className="text-[11px] text-rose-600 font-bold pt-1">
+              <p className="text-xs text-rose-600 font-semibold pt-1">
                 ※ パスワードが一致していません。
               </p>
             )}
@@ -268,8 +269,8 @@ export default function RegisterPage() {
 
           {/* 誓約書・規約同意チェックボックス */}
           <div className="pt-2">
-            <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
-              <label className="flex items-start gap-2.5 cursor-pointer text-xs select-none">
+            <div className="p-3 bg-slate-50 border border-slate-200 rounded-md">
+              <label className="flex items-start gap-2.5 cursor-pointer text-xs sm:text-sm select-none">
                 <input
                   type="checkbox"
                   required
@@ -277,15 +278,15 @@ export default function RegisterPage() {
                   onChange={(e) => setAgreed(e.target.checked)}
                   className="mt-0.5 w-4 h-4 rounded border-slate-300 text-emerald-700 focus:ring-emerald-600 cursor-pointer"
                 />
-                <span className="text-slate-700 leading-relaxed font-medium">
-                  <Link href="/terms" target="_blank" className="font-bold text-emerald-800 underline hover:text-emerald-700">
+                <span className="text-slate-700 leading-relaxed font-normal">
+                  <Link href="/terms" target="_blank" className="font-bold text-slate-900 underline hover:text-emerald-700">
                     利用規約
                   </Link>
                   {" "}および{" "}
-                  <Link href="/privacy" target="_blank" className="font-bold text-emerald-800 underline hover:text-emerald-700">
+                  <Link href="/privacy" target="_blank" className="font-bold text-slate-900 underline hover:text-emerald-700">
                     プライバシーポリシー
                   </Link>
-                  {" "}を確認し、誓約事項に同意します <span className="text-rose-500">*</span>
+                  {" "}に同意します <span className="text-rose-500">*</span>
                 </span>
               </label>
             </div>
@@ -294,17 +295,17 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-emerald-700 hover:bg-emerald-600 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-md active:scale-95 disabled:opacity-50 text-sm flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full bg-emerald-700 hover:bg-emerald-600 text-white font-bold py-3.5 px-4 rounded-md transition-colors shadow-xs disabled:opacity-50 text-sm sm:text-base flex items-center justify-center gap-2 cursor-pointer"
           >
             <UserPlus className="w-4 h-4" />
             <span>{loading ? "登録処理中..." : "アカウントを作成する"}</span>
           </button>
         </form>
 
-        <div className="mt-6 pt-6 border-t border-slate-100 text-center text-xs">
-          <p className="text-slate-500">
+        <div className="pt-4 border-t border-slate-100 text-center text-xs sm:text-sm">
+          <p className="text-slate-500 font-normal">
             既にアカウントをお持ちですか？{" "}
-            <Link href="/login" className="font-bold text-emerald-800 hover:underline">
+            <Link href="/login" className="font-bold text-slate-900 hover:text-emerald-700 hover:underline">
               ログイン
             </Link>
           </p>

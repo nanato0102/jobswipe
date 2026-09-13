@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
-import { LogIn, AlertCircle, Zap } from "lucide-react";
+import { LogIn, AlertCircle, Check } from "lucide-react";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -50,51 +50,56 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex-1 flex items-center justify-center p-4 py-12">
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 sm:p-8 max-w-md w-full">
+    <div className="flex-1 flex items-center justify-center p-4 py-12 bg-slate-50">
+      <div className="bg-white rounded-xl border border-slate-200/90 shadow-sm p-6 sm:p-8 max-w-md w-full">
         {/* ロゴ & タイトル */}
         <div className="text-center mb-6 flex flex-col items-center">
-          <div className="w-14 h-14 mb-3 flex items-center justify-center">
+          <div className="w-12 h-12 mb-3 flex items-center justify-center">
             <Image
               src="/logo.png"
               alt="JobSwipe Logo"
-              width={56}
-              height={56}
+              width={48}
+              height={48}
               className="object-contain"
               priority
             />
           </div>
-          <h1 className="text-xl font-bold text-slate-900">ログイン</h1>
-          <p className="text-xs text-slate-500 mt-1">メールアドレスとパスワードを入力してください</p>
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 mb-2">
+            学生専用ログイン
+          </span>
+          <h1 className="text-xl font-bold text-slate-900 tracking-tight">ログイン</h1>
+          <p className="text-sm text-slate-500 mt-1">メールアドレスとパスワードを入力してください</p>
         </div>
 
         {error && (
-          <div className="mb-4 p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 text-xs flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+          <div className="mb-5 p-3.5 bg-rose-50 border border-rose-200 rounded-md text-rose-700 text-sm flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-600" />
             <span>{error}</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">メールアドレス</label>
+            <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+              メールアドレス
+            </label>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="student@example.com"
-              className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+              className="w-full text-sm border border-slate-300 rounded-md px-3.5 py-2.5 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900"
             />
           </div>
 
           <div>
-            <div className="flex items-center justify-between mb-1">
-              <label className="block text-xs font-bold text-slate-700">パスワード</label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-sm font-semibold text-slate-700">パスワード</label>
               <button
                 type="button"
                 onClick={() => setIsResetModalOpen(true)}
-                className="text-[11px] text-emerald-800 hover:underline font-semibold cursor-pointer"
+                className="text-xs text-emerald-800 hover:text-emerald-900 hover:underline font-semibold cursor-pointer"
               >
                 パスワードをお忘れですか？
               </button>
@@ -105,24 +110,24 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full text-sm border border-slate-300 rounded-2xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+              className="w-full text-sm border border-slate-300 rounded-md px-3.5 py-2.5 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-2xl transition-colors disabled:opacity-50 shadow-md flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold rounded-md transition-colors disabled:opacity-50 shadow-xs flex items-center justify-center gap-2 cursor-pointer mt-2"
           >
             <LogIn className="w-4 h-4" />
             <span>{loading ? "ログイン中..." : "ログイン"}</span>
           </button>
         </form>
 
-        <div className="mt-6 pt-6 border-t border-slate-100 text-center text-xs">
+        <div className="mt-6 pt-6 border-t border-slate-100 text-center text-sm">
           <p className="text-slate-500">
             アカウントをお持ちでないですか？{" "}
-            <Link href="/register" className="font-bold text-emerald-800 hover:underline">
+            <Link href="/register" className="font-semibold text-emerald-800 hover:underline">
               新規登録（無料）
             </Link>
           </p>
@@ -132,7 +137,7 @@ export default function LoginPage() {
       {/* パスワード再設定モーダル */}
       {isResetModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-md w-full p-6 sm:p-8 space-y-4 animate-scale-up">
+          <div className="bg-white rounded-xl border border-slate-200 shadow-xl max-w-md w-full p-6 space-y-4 animate-scale-up">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-base font-bold text-slate-900">パスワードの再設定</h3>
               <button
@@ -141,7 +146,7 @@ export default function LoginPage() {
                   setIsResetModalOpen(false);
                   setResetSent(false);
                 }}
-                className="text-slate-400 hover:text-slate-700 cursor-pointer"
+                className="text-slate-400 hover:text-slate-700 cursor-pointer p-1"
               >
                 ✕
               </button>
@@ -149,11 +154,11 @@ export default function LoginPage() {
 
             {resetSent ? (
               <div className="py-4 text-center space-y-3">
-                <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold">
-                  ✓
+                <div className="w-10 h-10 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full flex items-center justify-center mx-auto">
+                  <Check className="w-5 h-5" />
                 </div>
-                <h4 className="text-sm font-bold text-slate-900">再設定メールを送信しました</h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <h4 className="text-base font-bold text-slate-900">再設定メールを送信しました</h4>
+                <p className="text-sm text-slate-600 leading-relaxed">
                   <strong>{resetEmail}</strong> 宛にパスワード再設定用の案内メールを送信しました。メール内のリンクより再設定を行ってください。
                 </p>
                 <button
@@ -162,7 +167,7 @@ export default function LoginPage() {
                     setIsResetModalOpen(false);
                     setResetSent(false);
                   }}
-                  className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-colors cursor-pointer"
+                  className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-md text-sm font-semibold transition-colors cursor-pointer"
                 >
                   閉じる
                 </button>
@@ -175,33 +180,35 @@ export default function LoginPage() {
                     setResetSent(true);
                   }
                 }}
-                className="space-y-3 pt-1"
+                className="space-y-3.5 pt-1"
               >
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-sm text-slate-600 leading-relaxed">
                   ご登録のメールアドレスを入力してください。パスワード再設定用のリンクをお送りします。
                 </p>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">メールアドレス</label>
+                  <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+                    メールアドレス
+                  </label>
                   <input
                     type="email"
                     required
                     value={resetEmail}
                     onChange={(e) => setResetEmail(e.target.value)}
                     placeholder="student@example.com"
-                    className="w-full text-xs sm:text-sm border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+                    className="w-full text-sm border border-slate-300 rounded-md px-3.5 py-2.5 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900"
                   />
                 </div>
-                <div className="pt-2 flex gap-2">
+                <div className="pt-2 flex gap-2.5">
                   <button
                     type="button"
                     onClick={() => setIsResetModalOpen(false)}
-                    className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+                    className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md text-sm font-semibold transition-colors cursor-pointer"
                   >
                     キャンセル
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 py-2.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold transition-colors shadow-xs cursor-pointer"
+                    className="flex-1 py-2.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-md text-sm font-semibold transition-colors shadow-xs cursor-pointer"
                   >
                     送信する
                   </button>

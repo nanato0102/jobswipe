@@ -13,13 +13,8 @@ import {
   Save,
   CheckCircle,
   Video,
-  ArrowRight,
   X,
-  Plus,
-  Compass,
-  MapPin,
   Camera,
-  FileText,
   Lightbulb,
   Lock,
 } from "lucide-react";
@@ -89,7 +84,6 @@ export default function StudentProfilePage() {
         setIsCropperOpen(true);
       };
       reader.readAsDataURL(file);
-      // 同じファイルを再度選択できるようにリセット
       e.target.value = "";
     }
   };
@@ -119,16 +113,6 @@ export default function StudentProfilePage() {
 
   const handleRemoveTag = (tagToRemove: string) => {
     setPersonalityTags(personalityTags.filter((t) => t !== tagToRemove));
-  };
-
-  const toggleIndustry = (ind: string) => {
-    if (targetIndustries.includes(ind)) {
-      setTargetIndustries(targetIndustries.filter((i) => i !== ind));
-    } else {
-      if (targetIndustries.length < 5) {
-        setTargetIndustries([...targetIndustries, ind]);
-      }
-    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -167,19 +151,6 @@ export default function StudentProfilePage() {
     "クリエイティブ",
     "協調性・気配り",
     "負けず嫌い",
-  ];
-
-  const INDUSTRY_OPTIONS = [
-    "IT・Web・通信",
-    "人材・コンサルティング",
-    "メーカー・商社",
-    "金融・FinTech",
-    "広告・メディア",
-    "不動産・建設",
-    "ベンチャー・スタートアップ",
-    "エンタメ・イベント",
-    "飲食・フードサービス",
-    "医療・ヘルスケア",
   ];
 
   const BIO_TEMPLATES = [
@@ -222,14 +193,14 @@ export default function StudentProfilePage() {
           {/* ================= 統一ページヘッダー ================= */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="space-y-1">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
                 <User className="w-3.5 h-3.5" />
                 <span>学生マイページ</span>
               </span>
-              <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
                 プロフィール設定
               </h1>
-              <p className="text-xs sm:text-sm text-slate-500">
+              <p className="text-sm text-slate-500">
                 長文のESは不要です。人柄や強みがひと目で伝わるプロフィールを設定しましょう。
               </p>
             </div>
@@ -237,7 +208,7 @@ export default function StudentProfilePage() {
             <div className="flex items-center gap-2.5 flex-shrink-0">
               <Link
                 href="/student/video"
-                className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors flex items-center gap-1.5"
+                className="px-3.5 py-2 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition-colors flex items-center gap-1.5"
               >
                 <Video className="w-4 h-4 text-slate-600" />
                 <span>動画投稿へ</span>
@@ -246,7 +217,7 @@ export default function StudentProfilePage() {
                 type="button"
                 onClick={handleSubmit}
                 disabled={loading}
-                className="px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
+                className="px-4 py-2 rounded-md bg-emerald-700 hover:bg-emerald-600 text-white text-sm font-semibold transition-all shadow-xs flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
               >
                 <Save className="w-4 h-4" />
                 <span>{loading ? "保存中..." : "保存する"}</span>
@@ -256,23 +227,23 @@ export default function StudentProfilePage() {
 
           {/* 保存成功フィードバック */}
           {saved && (
-            <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 text-xs font-bold flex items-center gap-2 animate-fade-in shadow-2xs">
+            <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-md text-emerald-800 text-sm font-semibold flex items-center gap-2 animate-fade-in shadow-2xs">
               <CheckCircle className="w-4 h-4 flex-shrink-0 text-emerald-700" />
               <span>プロフィールを保存しました！動画を投稿して企業からのオファーを待ちましょう。</span>
             </div>
           )}
 
           {/* プライバシー保護・段階的情報開示の安心案内 */}
-          <div className="p-4 bg-blue-50/80 border border-blue-200 rounded-2xl flex items-start gap-3 shadow-2xs">
-            <div className="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center flex-shrink-0 mt-0.5">
+          <div className="p-4 bg-blue-50/70 border border-blue-200/90 rounded-lg flex items-start gap-3 shadow-2xs">
+            <div className="w-8 h-8 rounded-md bg-blue-100 text-blue-700 flex items-center justify-center flex-shrink-0 mt-0.5">
               <Lock className="w-4 h-4" />
             </div>
             <div className="space-y-0.5">
-              <h3 className="text-xs font-bold text-blue-950 flex items-center gap-1.5">
+              <h3 className="text-sm font-bold text-blue-950 flex items-center gap-1.5">
                 <span>安心のプライバシー保護（段階的情報開示）</span>
-                <span className="px-2 py-0.5 rounded-full bg-blue-200 text-blue-900 text-[10px] font-bold">有効</span>
+                <span className="px-2 py-0.5 rounded-md bg-blue-200 text-blue-900 text-xs font-semibold">有効</span>
               </h3>
-              <p className="text-[11px] text-blue-800 leading-relaxed">
+              <p className="text-xs sm:text-sm text-blue-800 leading-relaxed">
                 企業がスワイプ閲覧・オファー送信する段階では、あなたのお名前は<strong>イニシャル（例: S.Kさん）</strong>で安全に表示されます。あなたがオファーを承諾して個別チャットに進むまで、本名は企業に開示されません。
               </p>
             </div>
@@ -280,8 +251,8 @@ export default function StudentProfilePage() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* ================= ブロック1: プロフィール写真 & 性別 ================= */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 sm:p-6 space-y-5">
-              <h2 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
+            <div className="bg-white rounded-xl border border-slate-200/90 shadow-sm p-5 sm:p-6 space-y-5">
+              <h2 className="text-base font-bold text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
                 <Camera className="w-4 h-4 text-emerald-700" />
                 <span>1. アイコン写真・性別設定</span>
               </h2>
@@ -290,13 +261,13 @@ export default function StudentProfilePage() {
                 {/* 四角アバタープレビュー */}
                 <div className="flex-shrink-0">
                   {avatarUrl ? (
-                    <div className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-slate-200 shadow-xs bg-slate-100">
+                    <div className="w-20 h-20 rounded-lg overflow-hidden border-2 border-slate-200 shadow-xs bg-slate-100">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={avatarUrl} alt="プロフィール写真" className="w-full h-full object-cover" />
                     </div>
                   ) : (
                     <div
-                      className={`w-20 h-20 rounded-2xl flex flex-col items-center justify-center shadow-xs text-white border-2 border-white/40 ${
+                      className={`w-20 h-20 rounded-lg flex flex-col items-center justify-center shadow-xs text-white border-2 border-white/40 ${
                         gender === "FEMALE"
                           ? "bg-rose-500"
                           : gender === "MALE"
@@ -305,7 +276,7 @@ export default function StudentProfilePage() {
                       }`}
                     >
                       <User className="w-9 h-9 stroke-[2.2]" />
-                      <span className="text-[10px] font-bold mt-0.5 opacity-90">
+                      <span className="text-xs font-semibold mt-0.5 opacity-90">
                         {gender === "FEMALE" ? "女性" : gender === "MALE" ? "男性" : "学生"}
                       </span>
                     </div>
@@ -314,13 +285,13 @@ export default function StudentProfilePage() {
 
                 <div className="space-y-2 flex-1">
                   <div>
-                    <p className="text-xs font-bold text-slate-900">顔写真（四角切り抜き）</p>
-                    <p className="text-[11px] text-slate-500">
+                    <p className="text-sm font-bold text-slate-900">顔写真（四角切り抜き）</p>
+                    <p className="text-xs text-slate-500">
                       未設定時は、選択した性別カラー（青/ピンク）の人型アバターが表示されます。
                     </p>
                   </div>
                   <div className="flex items-center gap-2.5">
-                    <label className="cursor-pointer px-3.5 py-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-bold rounded-xl shadow-2xs transition-colors inline-block">
+                    <label className="cursor-pointer px-3.5 py-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-semibold rounded-md shadow-2xs transition-colors inline-block">
                       <span>写真を選択</span>
                       <input type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" />
                     </label>
@@ -328,7 +299,7 @@ export default function StudentProfilePage() {
                       <button
                         type="button"
                         onClick={handleRemoveAvatar}
-                        className="px-2.5 py-1.5 text-xs text-rose-600 hover:underline font-bold"
+                        className="px-2.5 py-1.5 text-xs text-rose-600 hover:underline font-semibold"
                       >
                         写真を削除
                       </button>
@@ -339,12 +310,12 @@ export default function StudentProfilePage() {
 
               {/* 性別選択 */}
               <div className="pt-4 border-t border-slate-100 space-y-2">
-                <label className="block text-xs font-bold text-slate-700">性別</label>
+                <label className="block text-sm font-semibold text-slate-700">性別</label>
                 <div className="grid grid-cols-3 gap-2.5 sm:max-w-md">
                   <button
                     type="button"
                     onClick={() => setGender("MALE")}
-                    className={`py-2 px-3 text-xs font-bold rounded-xl border transition-all flex items-center justify-center gap-2 whitespace-nowrap ${
+                    className={`py-2 px-3 text-xs sm:text-sm font-semibold rounded-md border transition-all flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer ${
                       gender === "MALE"
                         ? "border-2 border-blue-600 bg-blue-50 text-blue-900 shadow-2xs"
                         : "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
@@ -357,7 +328,7 @@ export default function StudentProfilePage() {
                   <button
                     type="button"
                     onClick={() => setGender("FEMALE")}
-                    className={`py-2 px-3 text-xs font-bold rounded-xl border transition-all flex items-center justify-center gap-2 whitespace-nowrap ${
+                    className={`py-2 px-3 text-xs sm:text-sm font-semibold rounded-md border transition-all flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer ${
                       gender === "FEMALE"
                         ? "border-2 border-rose-500 bg-rose-50 text-rose-900 shadow-2xs"
                         : "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
@@ -370,7 +341,7 @@ export default function StudentProfilePage() {
                   <button
                     type="button"
                     onClick={() => setGender("OTHER")}
-                    className={`py-2 px-3 text-xs font-bold rounded-xl border transition-all flex items-center justify-center gap-2 whitespace-nowrap ${
+                    className={`py-2 px-3 text-xs sm:text-sm font-semibold rounded-md border transition-all flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer ${
                       gender === "OTHER"
                         ? "border-2 border-slate-800 bg-slate-100 text-slate-900 shadow-2xs"
                         : "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
@@ -384,15 +355,15 @@ export default function StudentProfilePage() {
             </div>
 
             {/* ================= ブロック2: 基本プロフィール ================= */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 sm:p-6 space-y-4">
-              <h2 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
+            <div className="bg-white rounded-xl border border-slate-200/90 shadow-sm p-5 sm:p-6 space-y-4">
+              <h2 className="text-base font-bold text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
                 <GraduationCap className="w-4 h-4 text-emerald-700" />
                 <span>2. 基本プロフィール</span>
               </h2>
 
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="block text-xs font-bold text-slate-700">
+                  <label className="block text-sm font-semibold text-slate-700">
                     氏名 <span className="text-rose-500">*</span>
                   </label>
                   <input
@@ -400,18 +371,18 @@ export default function StudentProfilePage() {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     required
-                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-700/20 focus:border-emerald-700"
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-md text-sm font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="block text-xs font-bold text-slate-700">
+                  <label className="block text-sm font-semibold text-slate-700">
                     卒業年（就職活動年） <span className="text-rose-500">*</span>
                   </label>
                   <select
                     value={graduationYear}
                     onChange={(e) => setGraduationYear(e.target.value)}
-                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-700/20 focus:border-emerald-700 cursor-pointer"
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-md text-sm font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900 cursor-pointer"
                   >
                     <option value="2026">2026年卒（大学4年生 / 院2年）</option>
                     <option value="2027">2027年卒（大学3年生 / 院1年）</option>
@@ -421,7 +392,7 @@ export default function StudentProfilePage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="block text-xs font-bold text-slate-700">
+                  <label className="block text-sm font-semibold text-slate-700">
                     在籍大学名 <span className="text-rose-500">*</span>
                   </label>
                   <input
@@ -430,38 +401,38 @@ export default function StudentProfilePage() {
                     onChange={(e) => setUniversity(e.target.value)}
                     required
                     placeholder="例: 早稲田大学"
-                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-700/20 focus:border-emerald-700"
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-md text-sm font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="block text-xs font-bold text-slate-700">学部・学科名</label>
+                  <label className="block text-sm font-semibold text-slate-700">学部・学科名</label>
                   <input
                     type="text"
                     value={faculty}
                     onChange={(e) => setFaculty(e.target.value)}
                     placeholder="例: 商学部 経営学科"
-                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-700/20 focus:border-emerald-700"
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-md text-sm font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900"
                   />
                 </div>
               </div>
             </div>
 
             {/* ================= ブロック3: 自己PR・人柄タグ ================= */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 sm:p-6 space-y-4">
+            <div className="bg-white rounded-xl border border-slate-200/90 shadow-sm p-5 sm:p-6 space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
-                <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-emerald-700" />
                   <span>3. 人柄タグ・自己PR</span>
                 </h2>
-                <span className="text-[11px] text-slate-400 font-medium">
+                <span className="text-xs text-slate-400 font-medium">
                   迷ったら例文テンプレートをワンタップで引用できます
                 </span>
               </div>
 
               {/* 例文テンプレート選択バー */}
-              <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
+              <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-lg space-y-2">
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-700">
                   <Lightbulb className="w-3.5 h-3.5 text-amber-500" />
                   <span>自己PR例文テンプレートをワンタップで反映:</span>
                 </div>
@@ -471,17 +442,17 @@ export default function StudentProfilePage() {
                       key={tmpl.category}
                       type="button"
                       onClick={() => handleApplyTemplate(tmpl)}
-                      className="p-2.5 bg-white hover:bg-emerald-50/60 border border-slate-200 hover:border-emerald-300 rounded-xl text-left transition-all cursor-pointer shadow-2xs group"
+                      className="p-2.5 bg-white hover:bg-emerald-50/60 border border-slate-200 hover:border-emerald-300 rounded-md text-left transition-all cursor-pointer shadow-2xs group"
                     >
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-[11px] font-bold text-slate-900 group-hover:text-emerald-800">
+                        <span className="text-xs font-bold text-slate-900 group-hover:text-emerald-800">
                           {tmpl.category}
                         </span>
-                        <span className="text-[9px] text-emerald-700 font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className="text-xs text-emerald-700 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
                           適用 ↵
                         </span>
                       </div>
-                      <p className="text-[10px] text-slate-500 line-clamp-1">
+                      <p className="text-xs text-slate-500 line-clamp-1">
                         {tmpl.catchphrase}
                       </p>
                     </button>
@@ -491,7 +462,7 @@ export default function StudentProfilePage() {
 
               {/* ひとことスローガン */}
               <div className="space-y-1.5">
-                <label className="block text-xs font-bold text-slate-700">
+                <label className="block text-sm font-semibold text-slate-700">
                   ひとことキャッチコピー（動画スワイプ時に大きく表示）
                 </label>
                 <input
@@ -499,13 +470,13 @@ export default function StudentProfilePage() {
                   value={catchphrase}
                   onChange={(e) => setCatchphrase(e.target.value)}
                   placeholder="例: 行動力と笑顔でチームを推進します！"
-                  className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-700/20 focus:border-emerald-700"
+                  className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-md text-sm font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900"
                 />
               </div>
 
               {/* 人柄タグ */}
               <div className="space-y-2 pt-2">
-                <label className="block text-xs font-bold text-slate-700">
+                <label className="block text-sm font-semibold text-slate-700">
                   あなたを表す人柄・強みタグ（最大8個）
                 </label>
 
@@ -513,13 +484,13 @@ export default function StudentProfilePage() {
                   {personalityTags.map((tag) => (
                     <span
                       key={tag}
-                      className="inline-flex items-center gap-1 px-3 py-1 bg-emerald-50 text-emerald-800 text-xs font-bold rounded-lg border border-emerald-200"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 text-emerald-800 text-xs font-semibold rounded-md border border-emerald-200"
                     >
                       <span>#{tag}</span>
                       <button
                         type="button"
                         onClick={() => handleRemoveTag(tag)}
-                        className="hover:text-rose-600 p-0.5"
+                        className="hover:text-rose-600 p-0.5 cursor-pointer"
                       >
                         <X className="w-3 h-3" />
                       </button>
@@ -534,12 +505,12 @@ export default function StudentProfilePage() {
                     onChange={(e) => setNewTagInput(e.target.value)}
                     onKeyDown={handleTagKeyDown}
                     placeholder="新しいタグを入力（Enterで追加）"
-                    className="flex-1 p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-700/20 focus:border-emerald-700"
+                    className="flex-1 p-2 bg-slate-50 border border-slate-200 rounded-md text-sm font-medium text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900"
                   />
                   <button
                     type="button"
                     onClick={handleAddTag}
-                    className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-colors"
+                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-md transition-colors cursor-pointer"
                   >
                     追加
                   </button>
@@ -547,7 +518,7 @@ export default function StudentProfilePage() {
 
                 {/* プリセット候補 */}
                 <div className="pt-2">
-                  <span className="text-[11px] text-slate-400 font-bold block mb-1.5">よく選ばれているタグ候補:</span>
+                  <span className="text-xs text-slate-400 font-semibold block mb-1.5">よく選ばれているタグ候補:</span>
                   <div className="flex flex-wrap gap-1.5">
                     {PRESET_TAGS.map((pt) => {
                       const selected = personalityTags.includes(pt);
@@ -561,7 +532,7 @@ export default function StudentProfilePage() {
                               setPersonalityTags([...personalityTags, pt]);
                             }
                           }}
-                          className={`text-[11px] px-2.5 py-1 rounded-lg border transition-colors ${
+                          className={`text-xs px-2.5 py-1 rounded-md border transition-colors ${
                             selected
                               ? "bg-slate-100 text-slate-400 border-slate-200 cursor-default"
                               : "bg-white text-slate-600 border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/50 cursor-pointer"
@@ -577,7 +548,7 @@ export default function StudentProfilePage() {
 
               {/* 自己PR詳細 */}
               <div className="space-y-1.5 pt-2">
-                <label className="block text-xs font-bold text-slate-700">
+                <label className="block text-sm font-semibold text-slate-700">
                   自己PR・学生時代に力を入れたこと（詳細）
                 </label>
                 <textarea
@@ -585,7 +556,7 @@ export default function StudentProfilePage() {
                   onChange={(e) => setBio(e.target.value)}
                   rows={4}
                   placeholder="学生時代に取り組んだ活動や、あなたの強みがわかるエピソードをご記入ください"
-                  className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-700/20 focus:border-emerald-700 leading-relaxed"
+                  className="w-full p-3 bg-slate-50 border border-slate-200 rounded-md text-sm font-medium text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900 leading-relaxed"
                 />
               </div>
             </div>
@@ -595,7 +566,7 @@ export default function StudentProfilePage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full sm:w-auto px-8 py-3 bg-emerald-700 hover:bg-emerald-600 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                className="w-full sm:w-auto px-8 py-2.5 bg-emerald-700 hover:bg-emerald-600 text-white text-sm font-semibold rounded-md transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 <Save className="w-4 h-4" />
                 <span>{loading ? "保存中..." : "変更を保存する"}</span>
