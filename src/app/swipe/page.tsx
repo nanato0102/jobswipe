@@ -20,10 +20,18 @@ export default function SwipePage() {
         const res = await fetch("/api/videos");
         if (res.ok) {
           const data = await res.json();
-          setVideos(data);
+          const list = Array.isArray(data) ? data : data.videos || [];
+          if (list.length > 0) {
+            setVideos(list);
+          } else {
+            setVideos(appStore.getDemoVideos());
+          }
+        } else {
+          setVideos(appStore.getDemoVideos());
         }
       } catch (err) {
-        console.error("Failed to fetch videos", err);
+        console.error("Failed to fetch videos, using fallback demo videos", err);
+        setVideos(appStore.getDemoVideos());
       } finally {
         setLoading(false);
       }

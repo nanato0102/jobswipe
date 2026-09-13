@@ -32,11 +32,11 @@ export function getMaskedStudentName(fullName?: string | null): string {
   if (!fullName) return "学生ユーザー";
   const nameMap: Record<string, string> = {
     "佐藤 健太": "S.Kさん",
-    "田中 美咲": "M.Tさん",
-    "鈴木 拓海": "T.Sさん",
-    "高橋 陽菜": "H.Tさん",
-    "伊藤 翔平": "S.Iさん",
+    "高橋 美咲": "M.Tさん",
+    "伊藤 翼": "T.Iさん",
     "渡辺 葵": "A.Wさん",
+    "鈴木 拓海": "T.Sさん",
+    "小林 結衣": "Y.Kさん",
   };
   if (nameMap[fullName]) return nameMap[fullName];
   const parts = fullName.trim().split(/\s+/);
