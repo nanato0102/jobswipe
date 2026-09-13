@@ -161,6 +161,7 @@ export interface StudentDetail {
   avatarUrl?: string;
   catchphrase: string;
   bio: string;
+  personalityCode?: string;
   personalityTags: string[];
   desiredIndustries: string[];
   desiredLocations: string[];
@@ -791,7 +792,8 @@ export const appStore = {
         avatarUrl: savedAvatar,
         catchphrase: "体育会サッカー部主将。チームを巻き込む推進力と愚直な行動力が武器です！",
         bio: "体育会サッカー部で100名規模の組織主将を務めています。「誰よりも声を出し、背中で引っ張る」を行動指針に、部員一人ひとりと対話を重ねながらリーグ昇格を果たしました。ビジネスの現場でも、失敗を恐れず主体的に行動し、周囲をポジティブに巻き込めるリーダーを目指しています。",
-        personalityTags: ["リーダーシップ", "体育会系", "行動力", "粘り強さ", "ポジティブ", "チームワーク"],
+        personalityCode: "ESTP",
+        personalityTags: ["発信・オープン型", "現実・着実型", "論理・合理型", "柔軟・スピード型"],
         desiredIndustries: ["IT・Webサービス", "ベンチャー・スタートアップ", "総合営業・セールス"],
         desiredLocations: ["東京都", "神奈川県", "リモートワーク可"],
         videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
@@ -810,7 +812,8 @@ export const appStore = {
         avatarUrl: savedAvatar,
         catchphrase: "SNSマーケティング長期インターンで月間100万PV達成！探求心と笑顔が強みです。",
         bio: "大学1年次よりSNSマーケティングベンチャーでインターンを行い、TikTok・Instagramの企画・分析を担当。ユーザーの心理を徹底的に分析し、再現性のあるコンテンツ設計を実践してきました。誠実なコミュニケーションと笑顔で、相手の懐に飛び込むことが得意です。",
-        personalityTags: ["探求心", "笑顔", "コミュニケーション力", "素直さ", "企画提案力"],
+        personalityCode: "ENFJ",
+        personalityTags: ["発信・オープン型", "ビジョン・発想型", "共感・調和型", "計画・完遂型"],
         desiredIndustries: ["マーケティング・PR", "IT・Webサービス", "美容・コスメ"],
         desiredLocations: ["東京都", "リモートワーク可"],
         videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
@@ -829,7 +832,8 @@ export const appStore = {
         avatarUrl: savedAvatar,
         catchphrase: "留学経験と国際交流イベント主催。多様性を受け入れ自ら先頭を走る行動派！",
         bio: "カナダへの1年間留学を経て、大学では留学生支援イベントを企画・運営。言語やバックグラウンドの異なるメンバーと協働し、信頼関係を築いてきました。物事をポジティブに捉え、困難な状況でも周囲を明るく鼓舞することができます。",
-        personalityTags: ["英語対応可", "行動力", "ポジティブ", "傾聴力", "チャレンジ精神"],
+        personalityCode: "ENFP",
+        personalityTags: ["発信・オープン型", "ビジョン・発想型", "共感・調和型", "柔軟・スピード型"],
         desiredIndustries: ["グローバル・商社", "コンサルティング", "ベンチャー"],
         desiredLocations: ["東京都", "海外勤務希望"],
         videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",

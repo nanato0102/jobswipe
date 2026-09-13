@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, KeyboardEvent } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import RoleGuard from "@/components/RoleGuard";
@@ -13,12 +13,18 @@ import {
   Save,
   CheckCircle,
   Video,
-  X,
   Camera,
   Lightbulb,
   Lock,
+  Compass,
 } from "lucide-react";
 import ImageCropperModal from "@/components/ImageCropperModal";
+import {
+  PERSONALITY_AXES,
+  PERSONALITY_16_TYPES,
+  calculatePersonalityCode,
+  getPersonalityLabelsFromCode,
+} from "@/lib/personalityModel";
 
 export default function StudentProfilePage() {
   const { session } = useAuth();
@@ -35,25 +41,31 @@ export default function StudentProfilePage() {
   const [gender, setGender] = useState<"MALE" | "FEMALE" | "OTHER">("MALE");
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>(undefined);
   const [university, setUniversity] = useState("早稲田大学");
-  const [faculty, setFaculty] = useState("商学部");
-  const [graduationYear, setGraduationYear] = useState("2026");
-  const [catchphrase, setCatchphrase] = useState("体育会サッカー部主将！チームを前に進める行動力と泥臭い粘り強さが強みです");
+  const [faculty, setFaculty] = useState("商学部 3年");
+  const [graduationYear, setGraduationYear] = useState("2027");
+  const [catchphrase, setCatchphrase] = useState("体育会サッカー部主将。チームを巻き込む推進力と愚直な行動力が武器です！");
   const [bio, setBio] = useState(
-    "大学3年間、体育会サッカー部に所属し主将を務めました。\n部員80名の意識改革を行い、創部初の全国大会出場を達成。\n泥臭い課題解決とチームビルディングには絶対の自信があります。"
+    "体育会サッカー部で100名規模の組織主将を務めています。「誰よりも声を出し、背中で引っ張る」を行動指針に、部員一人ひとりと対話を重ねながらリーグ昇格を果たしました。ビジネスの現場でも、失敗を恐れず主体的に行動し、周囲をポジティブに巻き込めるリーダーを目指しています。"
   );
-  const [personalityTags, setPersonalityTags] = useState<string[]>([
-    "体育会系・リーダーシップ",
-    "粘り強い",
-    "フットワーク軽い",
-    "笑顔・ポジティブ",
-    "チームワーク重視",
-  ]);
+
+  // MBTI準拠 4軸パーソナリティ選択ステート
+  const [personalitySelections, setPersonalitySelections] = useState<{
+    EI: "E" | "I";
+    SN: "S" | "N";
+    TF: "T" | "F";
+    JP: "J" | "P";
+  }>({
+    EI: "E",
+    SN: "S",
+    TF: "T",
+    JP: "P",
+  });
+
   const [targetIndustries, setTargetIndustries] = useState<string[]>([
-    "IT・Web・通信",
-    "人材・コンサルティング",
-    "メーカー・商社",
+    "IT・Webサービス",
+    "ベンチャー・スタートアップ",
+    "総合営業・セールス",
   ]);
-  const [newTagInput, setNewTagInput] = useState("");
 
   const studentId = session?.userType === "STUDENT" ? "s1" : "s1";
 
@@ -65,12 +77,20 @@ export default function StudentProfilePage() {
       setGender(s.gender || "MALE");
       setAvatarUrl(s.avatarUrl);
       setUniversity(s.university || "早稲田大学");
-      setFaculty(s.faculty || "商学部");
-      setGraduationYear(String(s.graduationYear || "2026"));
+      setFaculty(s.faculty || "商学部 3年");
+      setGraduationYear(String(s.graduationYear || "2027"));
       setCatchphrase(s.catchphrase || "");
       setBio(s.bio || "");
-      setPersonalityTags(s.personalityTags || []);
       setTargetIndustries(s.desiredIndustries || []);
+
+      if (s.personalityCode && s.personalityCode.length === 4) {
+        setPersonalitySelections({
+          EI: s.personalityCode[0] as "E" | "I",
+          SN: s.personalityCode[1] as "S" | "N",
+          TF: s.personalityCode[2] as "T" | "F",
+          JP: s.personalityCode[3] as "J" | "P",
+        });
+      }
     }
   }, [studentId]);
 
@@ -96,24 +116,10 @@ export default function StudentProfilePage() {
     setAvatarUrl(undefined);
   };
 
-  const handleAddTag = () => {
-    const val = newTagInput.trim().replace(/^#/, "");
-    if (val && !personalityTags.includes(val) && personalityTags.length < 8) {
-      setPersonalityTags([...personalityTags, val]);
-      setNewTagInput("");
-    }
-  };
-
-  const handleTagKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleAddTag();
-    }
-  };
-
-  const handleRemoveTag = (tagToRemove: string) => {
-    setPersonalityTags(personalityTags.filter((t) => t !== tagToRemove));
-  };
+  // 現在のMBTIコードと算出タグ
+  const currentCode = calculatePersonalityCode(personalitySelections);
+  const currentProfile = PERSONALITY_16_TYPES[currentCode] || PERSONALITY_16_TYPES.ESTP;
+  const currentTags = getPersonalityLabelsFromCode(currentCode);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -130,7 +136,8 @@ export default function StudentProfilePage() {
         graduationYear: Number(graduationYear),
         catchphrase,
         bio,
-        personalityTags,
+        personalityCode: currentCode,
+        personalityTags: currentTags,
         desiredIndustries: targetIndustries,
       });
 
@@ -140,50 +147,44 @@ export default function StudentProfilePage() {
     }, 400);
   };
 
-  const PRESET_TAGS = [
-    "明るい・笑顔",
-    "リーダーシップ",
-    "論理的思考力",
-    "粘り強い・やり切る力",
-    "素直・謙虚",
-    "フットワーク軽い",
-    "英語・語学力",
-    "クリエイティブ",
-    "協調性・気配り",
-    "負けず嫌い",
-  ];
-
   const BIO_TEMPLATES = [
     {
       category: "体育会・部活動",
-      catchphrase: "体育会サッカー部主将！チームを前に進める行動力と泥臭い粘り強さが強みです",
-      bio: "大学3年間、体育会サッカー部に所属し主将を務めました。\n部員80名の意識改革を行い、創部初の全国大会出場を達成。\n泥臭い課題解決とチームビルディングには絶対の自信があります。",
-      tags: ["体育会系・リーダーシップ", "粘り強い・やり切る力", "フットワーク軽い", "協調性・気配り"],
+      catchphrase: "体育会サッカー部主将！チームを巻き込む推進力と愚直な行動力が武器です",
+      bio: "体育会サッカー部で主将を務め、部員80名の一体感を創出してリーグ昇格を達成しました。誰よりも声を出し、背中で引っ張る行動力と泥臭い課題解決に自信があります。",
+      code: "ESTP",
     },
     {
-      category: "留学・国際経験",
-      catchphrase: "語学留学と国際交流で培った適応力と異文化コミュニケーション力",
-      bio: "大学2年次にカナダへ1年間留学し、多国籍な環境でのディスカッションや共同プロジェクト推進を経験しました。\n多様な価値観を受け入れながら合意形成を図る対人力と、主体的な行動力が強みです。",
-      tags: ["英語・語学力", "フットワーク軽い", "素直・謙虚", "協調性・気配り"],
+      category: "留学・異文化経験",
+      catchphrase: "カナダ留学と国際交流イベント主催。多様性を受け入れ自ら先頭を走る行動派！",
+      bio: "1年間のカナダ留学と留学生支援イベントの企画・運営を経験しました。言語や文化の異なるメンバーと信頼関係を築き、ポジティブに前進する推進力が強みです。",
+      code: "ENFP",
     },
     {
-      category: "エンジニア・開発",
-      catchphrase: "Webサービス開発に熱中！技術探求心と自走力で課題を解決します",
-      bio: "大学で情報工学を専攻し、独学でReact/TypeScriptを用いたWebアプリを複数開発・リリースしました。\nユーザー目線に立ったUI/UX設計と、新しい技術をキャッチアップして形にするスピード感に自信があります。",
-      tags: ["論理的思考力", "クリエイティブ", "粘り強い・やり切る力", "フットワーク軽い"],
+      category: "長期インターン・開発",
+      catchphrase: "SNSマーケティング長期インターンで月間100万PV達成！探求心と笑顔が強みです",
+      bio: "大学1年次よりSNSマーケティングベンチャーでインターンを行い、データ分析とコンテンツ企画を担当。ユーザー目線に立った課題発見と自走力に自信があります。",
+      code: "ENFJ",
     },
     {
       category: "アルバイト・接客",
       catchphrase: "カフェ時間帯責任者！相手のニーズを先回りするホスピタリティと課題発見力",
-      bio: "カフェでの3年間のアルバイトで時間帯責任者を務め、新人育成マニュアルの刷新とリピート率15%向上を実現しました。\n現場を観察して課題を見つけ、自ら改善策を実行する推進力が強みです。",
-      tags: ["明るい・笑顔", "協調性・気配り", "リーダーシップ", "素直・謙虚"],
+      bio: "カフェでの3年間のアルバイトで時間帯責任者を務め、新人育成マニュアルの刷新とリピート率向上を実現しました。現場を観察して自ら改善する推進力が強みです。",
+      code: "ESFJ",
     },
   ];
 
   const handleApplyTemplate = (tmpl: typeof BIO_TEMPLATES[0]) => {
     setCatchphrase(tmpl.catchphrase);
     setBio(tmpl.bio);
-    setPersonalityTags(tmpl.tags);
+    if (tmpl.code && tmpl.code.length === 4) {
+      setPersonalitySelections({
+        EI: tmpl.code[0] as "E" | "I",
+        SN: tmpl.code[1] as "S" | "N",
+        TF: tmpl.code[2] as "T" | "F",
+        JP: tmpl.code[3] as "J" | "P",
+      });
+    }
   };
 
   return (
@@ -384,9 +385,9 @@ export default function StudentProfilePage() {
                     onChange={(e) => setGraduationYear(e.target.value)}
                     className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-md text-sm font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900 cursor-pointer"
                   >
-                    <option value="2026">2026年卒（大学4年生 / 院2年）</option>
                     <option value="2027">2027年卒（大学3年生 / 院1年）</option>
                     <option value="2028">2028年卒（大学2年生）</option>
+                    <option value="2026">2026年卒（大学4年生 / 院2年）</option>
                     <option value="2025">既卒・第二新卒</option>
                   </select>
                 </div>
@@ -418,23 +419,110 @@ export default function StudentProfilePage() {
               </div>
             </div>
 
-            {/* ================= ブロック3: 自己PR・人柄タグ ================= */}
-            <div className="bg-white rounded-xl border border-slate-200/90 shadow-sm p-5 sm:p-6 space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
-                <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-emerald-700" />
-                  <span>3. 人柄タグ・自己PR</span>
-                </h2>
-                <span className="text-xs text-slate-400 font-medium">
-                  迷ったら例文テンプレートをワンタップで引用できます
-                </span>
+            {/* ================= ブロック3: MBTI準拠 4軸人柄・パーソナリティ設定 (完全MECE) ================= */}
+            <div className="bg-white rounded-xl border border-slate-200/90 shadow-sm p-5 sm:p-6 space-y-5">
+              <div className="border-b border-slate-100 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="space-y-0.5">
+                  <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                    <Compass className="w-4 h-4 text-emerald-700" />
+                    <span>3. 人柄・行動特性（4つの二項対立スタンス）</span>
+                  </h2>
+                  <p className="text-xs text-slate-500">
+                    4つの軸から、あなたに最も当てはまるスタンスを1つずつ選択してください（全4軸）。
+                  </p>
+                </div>
+
+                {/* 算出されたパーソナリティタイプカード */}
+                <div className="flex items-center gap-2 bg-slate-900 text-white px-3 py-1.5 rounded-md shadow-xs self-start sm:self-auto">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  <span className="text-xs font-bold font-mono text-emerald-400">{currentCode}</span>
+                  <span className="text-xs font-semibold">{currentProfile.title}</span>
+                </div>
+              </div>
+
+              {/* 4軸の2択セレクター */}
+              <div className="space-y-4">
+                {PERSONALITY_AXES.map((axis) => {
+                  const selectedCode = personalitySelections[axis.id];
+                  const isA = selectedCode === axis.optionA.code;
+                  const isB = selectedCode === axis.optionB.code;
+
+                  return (
+                    <div key={axis.id} className="p-3.5 sm:p-4 bg-slate-50 border border-slate-200 rounded-lg space-y-2.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-slate-800"></span>
+                          <span>{axis.name}</span>
+                        </span>
+                        <span className="text-xs text-slate-400 font-medium hidden sm:inline">{axis.description}</span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        {/* 選択肢 A */}
+                        <button
+                          type="button"
+                          onClick={() => setPersonalitySelections({ ...personalitySelections, [axis.id]: axis.optionA.code })}
+                          className={`p-3 rounded-md text-left transition-all border cursor-pointer ${
+                            isA
+                              ? "bg-white border-2 border-slate-900 shadow-xs ring-2 ring-slate-900/10"
+                              : "bg-white/60 border-slate-200 hover:bg-white hover:border-slate-300 text-slate-600"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                              <span className={`w-2 h-2 rounded-full ${isA ? "bg-slate-900" : "bg-slate-300"}`}></span>
+                              <span>{axis.optionA.label}</span>
+                            </span>
+                            <span className="text-xs font-mono font-bold text-slate-400">{axis.optionA.code}</span>
+                          </div>
+                          <p className="text-xs text-slate-500 leading-relaxed">{axis.optionA.summary}</p>
+                        </button>
+
+                        {/* 選択肢 B */}
+                        <button
+                          type="button"
+                          onClick={() => setPersonalitySelections({ ...personalitySelections, [axis.id]: axis.optionB.code })}
+                          className={`p-3 rounded-md text-left transition-all border cursor-pointer ${
+                            isB
+                              ? "bg-white border-2 border-slate-900 shadow-xs ring-2 ring-slate-900/10"
+                              : "bg-white/60 border-slate-200 hover:bg-white hover:border-slate-300 text-slate-600"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                              <span className={`w-2 h-2 rounded-full ${isB ? "bg-slate-900" : "bg-slate-300"}`}></span>
+                              <span>{axis.optionB.label}</span>
+                            </span>
+                            <span className="text-xs font-mono font-bold text-slate-400">{axis.optionB.code}</span>
+                          </div>
+                          <p className="text-xs text-slate-500 leading-relaxed">{axis.optionB.summary}</p>
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* 選択された4タグのプレビュー */}
+              <div className="pt-2">
+                <span className="text-xs font-semibold text-slate-500 block mb-1.5">設定される人柄タグ（動画スワイプ時に表示）:</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {currentTags.map((tag, idx) => (
+                    <span
+                      key={idx}
+                      className="px-3 py-1 bg-emerald-50 text-emerald-900 border border-emerald-200 rounded-md text-xs font-bold shadow-2xs"
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
               </div>
 
               {/* 例文テンプレート選択バー */}
-              <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-lg space-y-2">
+              <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-lg space-y-2 mt-4">
                 <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-700">
                   <Lightbulb className="w-3.5 h-3.5 text-amber-500" />
-                  <span>自己PR例文テンプレートをワンタップで反映:</span>
+                  <span>自己PR例文テンプレートをワンタップで反映（4軸スタンスも連動）:</span>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {BIO_TEMPLATES.map((tmpl) => (
@@ -452,16 +540,14 @@ export default function StudentProfilePage() {
                           適用 ↵
                         </span>
                       </div>
-                      <p className="text-xs text-slate-500 line-clamp-1">
-                        {tmpl.catchphrase}
-                      </p>
+                      <p className="text-xs text-slate-500 line-clamp-1">{tmpl.catchphrase}</p>
                     </button>
                   ))}
                 </div>
               </div>
 
               {/* ひとことスローガン */}
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 pt-2">
                 <label className="block text-sm font-semibold text-slate-700">
                   ひとことキャッチコピー（動画スワイプ時に大きく表示）
                 </label>
@@ -469,81 +555,9 @@ export default function StudentProfilePage() {
                   type="text"
                   value={catchphrase}
                   onChange={(e) => setCatchphrase(e.target.value)}
-                  placeholder="例: 行動力と笑顔でチームを推進します！"
+                  placeholder="例: 行動力と巻き込み力で組織を力強く推進します！"
                   className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-md text-sm font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900"
                 />
-              </div>
-
-              {/* 人柄タグ */}
-              <div className="space-y-2 pt-2">
-                <label className="block text-sm font-semibold text-slate-700">
-                  あなたを表す人柄・強みタグ（最大8個）
-                </label>
-
-                <div className="flex flex-wrap gap-1.5 mb-2">
-                  {personalityTags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 text-emerald-800 text-xs font-semibold rounded-md border border-emerald-200"
-                    >
-                      <span>#{tag}</span>
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveTag(tag)}
-                        className="hover:text-rose-600 p-0.5 cursor-pointer"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
-                    </span>
-                  ))}
-                </div>
-
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={newTagInput}
-                    onChange={(e) => setNewTagInput(e.target.value)}
-                    onKeyDown={handleTagKeyDown}
-                    placeholder="新しいタグを入力（Enterで追加）"
-                    className="flex-1 p-2 bg-slate-50 border border-slate-200 rounded-md text-sm font-medium text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleAddTag}
-                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-md transition-colors cursor-pointer"
-                  >
-                    追加
-                  </button>
-                </div>
-
-                {/* プリセット候補 */}
-                <div className="pt-2">
-                  <span className="text-xs text-slate-400 font-semibold block mb-1.5">よく選ばれているタグ候補:</span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {PRESET_TAGS.map((pt) => {
-                      const selected = personalityTags.includes(pt);
-                      return (
-                        <button
-                          key={pt}
-                          type="button"
-                          disabled={selected}
-                          onClick={() => {
-                            if (!selected && personalityTags.length < 8) {
-                              setPersonalityTags([...personalityTags, pt]);
-                            }
-                          }}
-                          className={`text-xs px-2.5 py-1 rounded-md border transition-colors ${
-                            selected
-                              ? "bg-slate-100 text-slate-400 border-slate-200 cursor-default"
-                              : "bg-white text-slate-600 border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/50 cursor-pointer"
-                          }`}
-                        >
-                          + #{pt}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
               </div>
 
               {/* 自己PR詳細 */}
