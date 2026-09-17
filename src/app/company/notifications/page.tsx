@@ -25,6 +25,18 @@ export default function CompanyNotificationsPage() {
 
   useEffect(() => {
     loadNotifications();
+
+    const handleSync = () => {
+      loadNotifications();
+    };
+
+    window.addEventListener("jobswipe_sync", handleSync);
+    window.addEventListener("storage", handleSync);
+
+    return () => {
+      window.removeEventListener("jobswipe_sync", handleSync);
+      window.removeEventListener("storage", handleSync);
+    };
   }, []);
 
   const loadNotifications = () => {

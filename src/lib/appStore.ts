@@ -569,8 +569,24 @@ export const appStore = {
 
   updateOfferStatus: (id: string, status: "ACCEPTED" | "DECLINED") => {
     const current = appStore.getOffers();
+    const targetOffer = current.find((o) => o.id === id);
     const updated = current.map((o) => (o.id === id ? { ...o, status } : o));
-    localStorage.setItem("jobswipe_offers", JSON.stringify(updated));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("jobswipe_offers", JSON.stringify(updated));
+
+      if (targetOffer) {
+        if (status === "ACCEPTED") {
+          appStore.addNotification({
+            role: "COMPANY",
+            type: "OFFER_ACCEPTED",
+            title: `${targetOffer.studentName} さんがオファーを承諾しました！`,
+            content: "マッチングが成立しました。チャットで面談日程を調整しましょう。",
+            linkUrl: "/company/chat",
+          });
+        }
+        window.dispatchEvent(new CustomEvent("jobswipe_sync", { detail: { type: "OFFER_UPDATED", offer: { ...targetOffer, status } } }));
+      }
+    }
     return updated;
   },
 
@@ -1052,6 +1068,56 @@ export const appStore = {
     ];
   },
 
+  // 動画一覧取得（投稿済み動画 ＋ デモ動画）
+  getVideos: (): VideoData[] => {
+    const defaultList = appStore.getDemoVideos();
+    if (typeof window === "undefined") return defaultList;
+    const data = localStorage.getItem("jobswipe_videos");
+    if (!data) {
+      localStorage.setItem("jobswipe_videos", JSON.stringify(defaultList));
+      return defaultList;
+    }
+    try {
+      const parsed: VideoData[] = JSON.parse(data);
+      return parsed.length > 0 ? parsed : defaultList;
+    } catch {
+      return defaultList;
+    }
+  },
+
+  // 学生の新規動画を投稿・保存（企業スワイプへ即時反映）
+  addVideo: (video: Omit<VideoData, "id" | "uploadedAt"> & { id?: string }): VideoData => {
+    const current = appStore.getVideos();
+    const newVideo: VideoData = {
+      ...video,
+      id: video.id || `v-std-${Date.now()}`,
+      uploadedAt: new Date().toISOString(),
+    };
+    const updated = [newVideo, ...current];
+    if (typeof window !== "undefined") {
+      localStorage.setItem("jobswipe_videos", JSON.stringify(updated));
+      window.dispatchEvent(new CustomEvent("jobswipe_sync", { detail: { type: "VIDEO_ADDED", video: newVideo } }));
+    }
+    return newVideo;
+  },
+
+  // 動画削除
+  deleteVideo: (videoId: string): VideoData[] => {
+    const current = appStore.getVideos();
+    const updated = current.filter((v) => v.id !== videoId);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("jobswipe_videos", JSON.stringify(updated));
+      window.dispatchEvent(new CustomEvent("jobswipe_sync", { detail: { type: "VIDEO_DELETED", videoId } }));
+    }
+    return updated;
+  },
+
+  // 特定の学生の投稿動画一覧
+  getStudentVideos: (studentId: string): VideoData[] => {
+    const all = appStore.getVideos();
+    return all.filter((v) => v.studentId === studentId || v.student?.id === studentId);
+  },
+
   // 学生プロフィール保存
   saveStudentProfile: (profile: Partial<StudentDetail> & { id: string }) => {
     if (typeof window === "undefined") return;
@@ -1097,7 +1163,18 @@ export const appStore = {
       }),
     };
     const updated = [newLike, ...current];
-    localStorage.setItem("jobswipe_likes", JSON.stringify(updated));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("jobswipe_likes", JSON.stringify(updated));
+      // 学生への通知を自動発行
+      appStore.addNotification({
+        role: "STUDENT",
+        type: "LIKE_RECEIVED",
+        title: `企業があなたの動画に「気になる」を押しました！`,
+        content: `企業がスカウト検討リストに動画「${like.videoTitle || "自己PR動画"}」を追加しました。`,
+        linkUrl: "/student/video",
+      });
+      window.dispatchEvent(new CustomEvent("jobswipe_sync", { detail: { type: "LIKE_ADDED", like: newLike } }));
+    }
     return updated;
   },
 

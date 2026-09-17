@@ -25,6 +25,18 @@ export default function StudentOffersPage() {
 
   useEffect(() => {
     setOffers(appStore.getOffers());
+
+    const handleSync = () => {
+      setOffers(appStore.getOffers());
+    };
+
+    window.addEventListener("jobswipe_sync", handleSync);
+    window.addEventListener("storage", handleSync);
+
+    return () => {
+      window.removeEventListener("jobswipe_sync", handleSync);
+      window.removeEventListener("storage", handleSync);
+    };
   }, []);
 
   const handleStatusChange = (id: string, newStatus: "ACCEPTED" | "DECLINED") => {

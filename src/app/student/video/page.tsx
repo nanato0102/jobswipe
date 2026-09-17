@@ -19,6 +19,8 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
+import { useAuth } from "@/context/AuthContext";
+
 interface UploadedVideoItem {
   id: string;
   title: string;
@@ -33,6 +35,7 @@ interface UploadedVideoItem {
 }
 
 export default function StudentVideoUploadPage() {
+  const { session } = useAuth();
   const { success, error: toastError, info } = useToast();
   const [stats, setStats] = useState<StudentVideoStats | null>(null);
   const [title, setTitle] = useState("");
@@ -44,24 +47,45 @@ export default function StudentVideoUploadPage() {
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const currentStudentId = session?.id || "s1";
+  const studentDetail = appStore.getStudentDetails(currentStudentId);
+
   // 投稿済み動画リスト
-  const [uploadedVideos, setUploadedVideos] = useState<UploadedVideoItem[]>([
-    {
-      id: "vid-1",
-      title: "体育会サッカー部主将としての挑戦と組織推進力",
-      description: "部活動での主将経験を通じて培った、周囲を巻き込んで目標達成する推進力を60秒でアピールしています。",
-      tags: ["リーダーシップ", "体育会", "チーム推進力"],
-      videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-      uploadedAt: "2026年8月29日",
-      viewsCount: 142,
-      likesCount: 18,
-      offersCount: 3,
-    },
-  ]);
+  const [uploadedVideos, setUploadedVideos] = useState<UploadedVideoItem[]>([]);
 
   useEffect(() => {
     setStats(appStore.getStudentVideoStats());
-  }, []);
+    const studentVideos = appStore.getStudentVideos(currentStudentId);
+    if (studentVideos.length > 0) {
+      setUploadedVideos(
+        studentVideos.map((v) => ({
+          id: v.id,
+          title: v.title,
+          description: v.description || "",
+          tags: v.tags ? v.tags.split(",").map((t) => t.trim()).filter(Boolean) : [],
+          videoUrl: v.videoUrl,
+          uploadedAt: new Date(v.uploadedAt).toLocaleDateString("ja-JP"),
+          viewsCount: 142,
+          likesCount: 18,
+          offersCount: 3,
+        }))
+      );
+    } else {
+      setUploadedVideos([
+        {
+          id: "v-s1",
+          title: "体育会サッカー部主将としての挑戦と組織推進力",
+          description: "部活動での主将経験を通じて培った、周囲を巻き込んで目標達成する推進力を60秒でアピールしています。",
+          tags: studentDetail?.personalityTags || ["発信・オープン型", "現実・着実型", "論理・合理型", "柔軟・スピード型"],
+          videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+          uploadedAt: "2026年8月29日",
+          viewsCount: 142,
+          likesCount: 18,
+          offersCount: 3,
+        },
+      ]);
+    }
+  }, [currentStudentId, studentDetail?.personalityTags]);
 
   const [previewModalVideo, setPreviewModalVideo] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -100,7 +124,7 @@ export default function StudentVideoUploadPage() {
     setVideoPreview(objectUrl);
   };
 
-  const handleUpload = (e: React.FormEvent) => {
+  const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!videoFile && !videoPreview) {
       toastError("動画未選択", "動画ファイルを選択してください。");
@@ -113,34 +137,75 @@ export default function StudentVideoUploadPage() {
 
     setLoading(true);
 
-    setTimeout(() => {
-      const newVideo: UploadedVideoItem = {
-        id: `vid-${Date.now()}`,
+    try {
+      const finalVideoUrl = videoPreview || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
+      const combinedTags = Array.from(new Set([...(studentDetail?.personalityTags || []), ...tags]));
+      const tagsString = combinedTags.join(",");
+
+      // appStore に動画を登録（企業スワイプ画面へ即座に反映）
+      const newVideo = appStore.addVideo({
+        studentId: currentStudentId,
         title: title.trim(),
         description: description.trim(),
-        tags: tags.length > 0 ? tags : ["自己PR", "新卒採用"],
-        videoUrl: videoPreview || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        tags: tagsString,
+        videoUrl: finalVideoUrl,
+        thumbnailUrl: null,
+        student: {
+          id: currentStudentId,
+          fullName: session?.name || studentDetail?.name || "学生ユーザー",
+          university: studentDetail?.university || "大学情報",
+          graduationYear: studentDetail?.graduationYear || 2027,
+          bio: studentDetail?.bio || description.trim(),
+          skills: "",
+          experience: "",
+          user: { id: `u-${currentStudentId}`, email: session?.email || "student@example.com" },
+        },
+      });
+
+      // バックエンドAPIへも非同期登録
+      fetch("/api/videos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          studentId: currentStudentId,
+          title: title.trim(),
+          description: description.trim(),
+          tags: tagsString,
+          videoUrl: finalVideoUrl,
+        }),
+      }).catch(() => {});
+
+      const newItem: UploadedVideoItem = {
+        id: newVideo.id,
+        title: newVideo.title,
+        description: newVideo.description || "",
+        tags: combinedTags,
+        videoUrl: newVideo.videoUrl,
         uploadedAt: "たった今",
         viewsCount: 1,
         likesCount: 0,
         offersCount: 0,
       };
 
-      setUploadedVideos([newVideo, ...uploadedVideos]);
-      setLoading(false);
+      setUploadedVideos([newItem, ...uploadedVideos]);
       setTitle("");
       setDescription("");
       setTags([]);
       setVideoFile(null);
       setVideoPreview(null);
-      success("自己PR動画を公開しました！", "企業の動画スワイプ一覧に即時反映されました。");
-    }, 600);
+      success("自己PR動画を公開しました！", "企業の動画スワイプ一覧（/swipe）の先頭に即時反映されました。");
+    } catch (err: any) {
+      toastError("投稿エラー", err.message || "動画の公開に失敗しました。");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDeleteVideo = (id: string) => {
     if (!confirm("この自己PR動画を削除しますか？")) return;
+    appStore.deleteVideo(id);
     setUploadedVideos(uploadedVideos.filter((v) => v.id !== id));
-    info("動画を削除しました。");
+    info("動画を削除しました。企業の動画スワイプ一覧からも即時除外されました。");
   };
 
   return (

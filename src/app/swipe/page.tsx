@@ -10,11 +10,22 @@ import { SlidersHorizontal, Check, RefreshCw } from "lucide-react";
 import type { VideoData } from "@/types";
 
 export default function SwipePage() {
-  const [videos, setVideos] = useState<VideoData[]>(() => appStore.getDemoVideos());
+  const [videos, setVideos] = useState<VideoData[]>(() => appStore.getVideos());
   const [loading, setLoading] = useState(false);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
   useEffect(() => {
+    // リアルタイム同期イベント（学生が動画投稿・削除した時に即時更新）
+    const handleSync = (e: any) => {
+      const type = e?.detail?.type;
+      if (type === "VIDEO_ADDED" || type === "VIDEO_DELETED") {
+        setVideos(appStore.getVideos());
+      }
+    };
+
+    window.addEventListener("jobswipe_sync", handleSync);
+    window.addEventListener("storage", handleSync);
+
     async function fetchVideos() {
       try {
         const res = await fetch("/api/videos");
@@ -22,7 +33,10 @@ export default function SwipePage() {
           const data = await res.json();
           const list = Array.isArray(data) ? data : data.videos || [];
           if (list.length > 0) {
-            setVideos(list);
+            // ローカル投稿動画とサーバー動画を統合
+            const localVideos = appStore.getVideos();
+            const merged = Array.from(new Set([...localVideos, ...list]));
+            setVideos(merged);
           }
         }
       } catch (err) {
@@ -30,6 +44,11 @@ export default function SwipePage() {
       }
     }
     fetchVideos();
+
+    return () => {
+      window.removeEventListener("jobswipe_sync", handleSync);
+      window.removeEventListener("storage", handleSync);
+    };
   }, []);
 
   // 4軸MECE人柄タグによるリアルタイムフィルタリング

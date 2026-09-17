@@ -18,6 +18,18 @@ export default function CompanyLikesPage() {
 
   useEffect(() => {
     setLikes(appStore.getLikes());
+
+    const handleSync = () => {
+      setLikes(appStore.getLikes());
+    };
+
+    window.addEventListener("jobswipe_sync", handleSync);
+    window.addEventListener("storage", handleSync);
+
+    return () => {
+      window.removeEventListener("jobswipe_sync", handleSync);
+      window.removeEventListener("storage", handleSync);
+    };
   }, []);
 
   const handleSendOffer = () => {
