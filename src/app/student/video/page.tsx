@@ -19,6 +19,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
+import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 
 interface UploadedVideoItem {
@@ -212,18 +213,36 @@ export default function StudentVideoUploadPage() {
     <RoleGuard allowedRoles={["STUDENT", "ADMIN"]}>
       <StudentMobileTabs>
         <div className="max-w-4xl mx-auto px-4 py-6 sm:py-8 space-y-6 w-full">
-          {/* ================= 統一ページヘッダー ================= */}
-          <div className="space-y-1">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
-              <Film className="w-3.5 h-3.5" />
-              <span>自己PR動画</span>
-            </span>
-            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
-              動画投稿・管理
-            </h1>
-            <p className="text-sm text-slate-500">
-              60秒の短尺動画であなたの雰囲気・人柄を伝えましょう。スマホ自撮り動画でOKです。
-            </p>
+          {/* ================= 統一ページヘッダー ＆ タブショートカット ================= */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                <Film className="w-3.5 h-3.5" />
+                <span>自己PR動画</span>
+              </span>
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+                動画投稿・管理
+              </h1>
+              <p className="text-sm text-slate-500">
+                60秒の短尺動画であなたの雰囲気・人柄を伝えましょう。スマホ自撮り動画でOKです。
+              </p>
+            </div>
+
+            {/* 上部クイックリンク */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <Link
+                href="/student/profile"
+                className="px-3 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors"
+              >
+                ← プロフィール設定
+              </Link>
+              <Link
+                href="/student/offers"
+                className="px-3 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors"
+              >
+                オファー一覧 →
+              </Link>
+            </div>
           </div>
 
           {/* ================= 動画エンゲージメント指標 ================= */}

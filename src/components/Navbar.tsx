@@ -138,9 +138,9 @@ export default function Navbar() {
                 </Link>
 
                 <Link
-                  href="/company/chat"
+                  href="/student/chat"
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors ${
-                    pathname.startsWith("/company/chat")
+                    pathname.startsWith("/student/chat")
                       ? "bg-emerald-50 text-emerald-800 font-bold"
                       : "hover:bg-slate-100 hover:text-slate-900"
                   }`}
@@ -380,7 +380,7 @@ export default function Navbar() {
                         <span>届いたオファー</span>
                       </Link>
                       <Link
-                        href="/company/chat"
+                        href="/student/chat"
                         onClick={() => setMenuOpen(false)}
                         className="flex items-center gap-2.5 px-3.5 py-2 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-900 rounded-xl transition-colors font-bold"
                       >
@@ -636,7 +636,7 @@ export default function Navbar() {
                       <Sparkles className="w-4 h-4 text-emerald-700" />
                       <span>オファー一覧</span>
                     </Link>
-                    <Link href="/company/chat" className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-emerald-50">
+                    <Link href="/student/chat" className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-emerald-50">
                       <MessageSquare className="w-4 h-4 text-emerald-700" />
                       <span>チャット面談</span>
                     </Link>
