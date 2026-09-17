@@ -49,13 +49,13 @@ export default function StudentVideoUploadPage() {
   const [loading, setLoading] = useState(false);
 
   const currentStudentId = session?.id || "s1";
-  const studentDetail = appStore.getStudentDetails(currentStudentId);
 
   // 投稿済み動画リスト
   const [uploadedVideos, setUploadedVideos] = useState<UploadedVideoItem[]>([]);
 
-  useEffect(() => {
+  const loadData = () => {
     setStats(appStore.getStudentVideoStats());
+    const detail = appStore.getStudentDetails(currentStudentId);
     const studentVideos = appStore.getStudentVideos(currentStudentId);
     if (studentVideos.length > 0) {
       setUploadedVideos(
@@ -77,7 +77,7 @@ export default function StudentVideoUploadPage() {
           id: "v-s1",
           title: "体育会サッカー部主将としての挑戦と組織推進力",
           description: "部活動での主将経験を通じて培った、周囲を巻き込んで目標達成する推進力を60秒でアピールしています。",
-          tags: studentDetail?.personalityTags || ["発信・オープン型", "現実・着実型", "論理・合理型", "柔軟・スピード型"],
+          tags: detail?.personalityTags || ["発信・オープン型", "現実・着実型", "論理・合理型", "柔軟・スピード型"],
           videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
           uploadedAt: "2026年8月29日",
           viewsCount: 142,
@@ -86,7 +86,23 @@ export default function StudentVideoUploadPage() {
         },
       ]);
     }
-  }, [currentStudentId, studentDetail?.personalityTags]);
+  };
+
+  useEffect(() => {
+    loadData();
+
+    const handleSync = () => {
+      loadData();
+    };
+
+    window.addEventListener("jobswipe_sync", handleSync);
+    window.addEventListener("storage", handleSync);
+
+    return () => {
+      window.removeEventListener("jobswipe_sync", handleSync);
+      window.removeEventListener("storage", handleSync);
+    };
+  }, [currentStudentId]);
 
   const [previewModalVideo, setPreviewModalVideo] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -139,8 +155,9 @@ export default function StudentVideoUploadPage() {
     setLoading(true);
 
     try {
+      const detail = appStore.getStudentDetails(currentStudentId);
       const finalVideoUrl = videoPreview || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
-      const combinedTags = Array.from(new Set([...(studentDetail?.personalityTags || []), ...tags]));
+      const combinedTags = Array.from(new Set([...(detail?.personalityTags || []), ...tags]));
       const tagsString = combinedTags.join(",");
 
       // appStore に動画を登録（企業スワイプ画面へ即座に反映）
@@ -153,10 +170,10 @@ export default function StudentVideoUploadPage() {
         thumbnailUrl: null,
         student: {
           id: currentStudentId,
-          fullName: session?.name || studentDetail?.name || "学生ユーザー",
-          university: studentDetail?.university || "大学情報",
-          graduationYear: studentDetail?.graduationYear || 2027,
-          bio: studentDetail?.bio || description.trim(),
+          fullName: session?.name || detail?.name || "学生ユーザー",
+          university: detail?.university || "大学情報",
+          graduationYear: detail?.graduationYear || 2027,
+          bio: detail?.bio || description.trim(),
           skills: "",
           experience: "",
           user: { id: `u-${currentStudentId}`, email: session?.email || "student@example.com" },
