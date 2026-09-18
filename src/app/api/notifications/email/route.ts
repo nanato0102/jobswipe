@@ -26,7 +26,7 @@ export async function POST(req: Request) {
         </div>
 
         <div style="margin-top: 24px;">
-          <a href="https://resilient-maxwell.vercel.app/login" style="display: inline-block; background-color: #047857; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 13px;">
+          <a href="https://jobswipe-app.vercel.app/login" style="display: inline-block; background-color: #0f172a; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 13px;">
             JobSwipeにログインして確認する
           </a>
         </div>
@@ -38,9 +38,9 @@ export async function POST(req: Request) {
 
     console.log(`[Email Notification Triggered] To: ${recipientName} (${recipientRole}), Subject: ${subject}`);
 
-    // 本番環境用 SendGrid / Resend 連携プレースホルダー（API Keyが存在する場合に実送信）
-    const sendgridApiKey = process.env.SENDGRID_API_KEY;
     const resendApiKey = process.env.RESEND_API_KEY;
+    const fromEmail = process.env.RESEND_FROM_EMAIL || "JobSwipe <onboarding@resend.dev>";
+    const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL || "jobswipe.info@gmail.com";
 
     if (resendApiKey) {
       try {
@@ -51,8 +51,8 @@ export async function POST(req: Request) {
             Authorization: `Bearer ${resendApiKey}`,
           },
           body: JSON.stringify({
-            from: "JobSwipe <notifications@jobswipe.jp>",
-            to: ["demo@jobswipe.jp"], // 送信先
+            from: fromEmail,
+            to: [adminEmail],
             subject,
             html: bodyHtml,
           }),

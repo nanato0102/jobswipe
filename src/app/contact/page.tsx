@@ -50,7 +50,7 @@ export default function ContactPage() {
   const [receiptNumber, setReceiptNumber] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
@@ -62,6 +62,9 @@ export default function ContactPage() {
     setLoading(true);
 
     try {
+      let receipt = "";
+      let payload: any = null;
+
       if (userType === "company") {
         const item = appStore.addInquiry({
           userType: "company",
@@ -73,7 +76,18 @@ export default function ContactPage() {
           inquiryType: companyInquiryType,
           message: companyMessage.trim(),
         });
-        setReceiptNumber(item.receiptNumber);
+        receipt = item.receiptNumber;
+        payload = {
+          receiptNumber: item.receiptNumber,
+          userType: "company",
+          senderName: companyName.trim(),
+          repName: repName.trim(),
+          department: department.trim(),
+          email: companyEmail.trim(),
+          phone: phone.trim(),
+          inquiryType: companyInquiryType,
+          message: companyMessage.trim(),
+        };
       } else {
         const item = appStore.addInquiry({
           userType: "student",
@@ -83,7 +97,29 @@ export default function ContactPage() {
           inquiryType: studentInquiryType,
           message: studentMessage.trim(),
         });
-        setReceiptNumber(item.receiptNumber);
+        receipt = item.receiptNumber;
+        payload = {
+          receiptNumber: item.receiptNumber,
+          userType: "student",
+          senderName: studentName.trim(),
+          university: university.trim(),
+          email: studentEmail.trim(),
+          inquiryType: studentInquiryType,
+          message: studentMessage.trim(),
+        };
+      }
+
+      setReceiptNumber(receipt);
+
+      // バックグラウンドでメールAPIを実行（万が一API失敗時でもユーザー送信は成功完了扱い）
+      try {
+        await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      } catch (mailErr) {
+        console.warn("[Contact Email Warning] Mail dispatch failed:", mailErr);
       }
 
       setLoading(false);
