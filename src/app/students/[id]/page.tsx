@@ -20,6 +20,7 @@ import {
   CheckCircle,
   X,
   Flag,
+  Briefcase,
 } from "lucide-react";
 import ReportModal from "@/components/ReportModal";
 
@@ -244,7 +245,27 @@ export default function StudentDetailPage({ params }: Props) {
                 </div>
               )}
 
-              {/* 3. 人柄タグ */}
+              {/* 3. 志望職種・希望ポジション */}
+              {student.desiredRoles && student.desiredRoles.length > 0 && (
+                <div className="space-y-2">
+                  <span className="text-xs font-bold text-slate-700 flex items-center gap-1">
+                    <Briefcase className="w-3.5 h-3.5 text-blue-700" />
+                    <span>志望職種・希望ポジション</span>
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {student.desiredRoles.map((role) => (
+                      <span
+                        key={role}
+                        className="px-3 py-1 bg-blue-50 text-blue-900 text-xs font-bold rounded-lg border border-blue-200"
+                      >
+                        {role}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* 4. 人柄タグ */}
               {student.personalityTags && student.personalityTags.length > 0 && (
                 <div className="space-y-2">
                   <span className="text-xs font-bold text-slate-700 block">人柄・強みタグ</span>
@@ -255,6 +276,23 @@ export default function StudentDetailPage({ params }: Props) {
                         className="px-3 py-1 bg-emerald-50 text-emerald-800 text-xs font-bold rounded-lg border border-emerald-200"
                       >
                         #{t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* 5. 興味のある業界 */}
+              {student.desiredIndustries && student.desiredIndustries.length > 0 && (
+                <div className="space-y-2">
+                  <span className="text-xs font-bold text-slate-700 block">興味のある業界</span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {student.desiredIndustries.map((ind) => (
+                      <span
+                        key={ind}
+                        className="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-bold rounded-lg border border-slate-200"
+                      >
+                        {ind}
                       </span>
                     ))}
                   </div>

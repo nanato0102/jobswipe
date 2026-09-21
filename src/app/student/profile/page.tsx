@@ -17,6 +17,8 @@ import {
   Lightbulb,
   Lock,
   Compass,
+  Briefcase,
+  Check,
 } from "lucide-react";
 import ImageCropperModal from "@/components/ImageCropperModal";
 import {
@@ -25,6 +27,7 @@ import {
   calculatePersonalityCode,
   getPersonalityLabelsFromCode,
 } from "@/lib/personalityModel";
+import { JOB_CATEGORIES } from "@/lib/jobCategories";
 
 export default function StudentProfilePage() {
   const { session } = useAuth();
@@ -47,6 +50,12 @@ export default function StudentProfilePage() {
   const [bio, setBio] = useState(
     "体育会サッカー部で100名規模の組織主将を務めています。「誰よりも声を出し、背中で引っ張る」を行動指針に、部員一人ひとりと対話を重ねながらリーグ昇格を果たしました。ビジネスの現場でも、失敗を恐れず主体的に行動し、周囲をポジティブに巻き込めるリーダーを目指しています。"
   );
+
+  // 志望職種ステート
+  const [targetRoles, setTargetRoles] = useState<string[]>([
+    "法人営業・ソリューション提案",
+    "総合職・ビジネス総合",
+  ]);
 
   // MBTI準拠 4軸パーソナリティ選択ステート
   const [personalitySelections, setPersonalitySelections] = useState<{
@@ -81,6 +90,9 @@ export default function StudentProfilePage() {
       setGraduationYear(String(s.graduationYear || "2027"));
       setCatchphrase(s.catchphrase || "");
       setBio(s.bio || "");
+      if (s.desiredRoles && s.desiredRoles.length > 0) {
+        setTargetRoles(s.desiredRoles);
+      }
       setTargetIndustries(s.desiredIndustries || []);
 
       if (s.personalityCode && s.personalityCode.length === 4) {
@@ -93,6 +105,16 @@ export default function StudentProfilePage() {
       }
     }
   }, [studentId]);
+
+  const toggleRole = (role: string) => {
+    setTargetRoles((prev) =>
+      prev.includes(role)
+        ? prev.length > 1
+          ? prev.filter((r) => r !== role)
+          : prev
+        : [...prev, role]
+    );
+  };
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -138,8 +160,24 @@ export default function StudentProfilePage() {
         bio,
         personalityCode: currentCode,
         personalityTags: currentTags,
+        desiredRoles: targetRoles,
         desiredIndustries: targetIndustries,
       });
+
+      // APIへの非同期保存
+      fetch("/api/profile/student", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName,
+          university,
+          graduationYear: Number(graduationYear),
+          bio,
+          skills: currentTags.join(", "),
+          experience: faculty,
+          desiredRoles: targetRoles.join(", "),
+        }),
+      }).catch((err) => console.warn("API profile save note:", err));
 
       setLoading(false);
       setSaved(true);
@@ -572,6 +610,73 @@ export default function StudentProfilePage() {
                   placeholder="学生時代に取り組んだ活動や、あなたの強みがわかるエピソードをご記入ください"
                   className="w-full p-3 bg-slate-50 border border-slate-200 rounded-md text-sm font-medium text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900 leading-relaxed"
                 />
+              </div>
+            </div>
+
+            {/* ================= ブロック4: 志望職種・希望ポジション（複数選択可） ================= */}
+            <div className="bg-white rounded-xl border border-slate-200/90 shadow-sm p-5 sm:p-6 space-y-4">
+              <div className="border-b border-slate-100 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="space-y-0.5">
+                  <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                    <Briefcase className="w-4 h-4 text-emerald-700" />
+                    <span>4. 志望職種・希望ポジション（複数選択可）</span>
+                  </h2>
+                  <p className="text-xs text-slate-500">
+                    興味のある職種を選択してください（企業の動画スワイプ画面で志望バッジとして表示されます）。
+                  </p>
+                </div>
+
+                <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded border border-emerald-200 self-start sm:self-auto">
+                  {targetRoles.length}件選択中
+                </span>
+              </div>
+
+              {/* 職種選択チップグリッド */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 pt-1">
+                {JOB_CATEGORIES.map((role) => {
+                  const isSelected = targetRoles.includes(role);
+                  return (
+                    <button
+                      key={role}
+                      type="button"
+                      onClick={() => toggleRole(role)}
+                      className={`p-3 rounded-lg border text-left transition-all flex items-center justify-between gap-2 cursor-pointer ${
+                        isSelected
+                          ? "bg-emerald-50/80 border-emerald-500 text-emerald-950 font-bold shadow-2xs ring-1 ring-emerald-400/40"
+                          : "bg-slate-50 hover:bg-slate-100/80 border-slate-200 text-slate-700 font-semibold"
+                      }`}
+                    >
+                      <span className="text-xs sm:text-[13px] leading-snug">{role}</span>
+                      <div
+                        className={`w-4 h-4 rounded flex items-center justify-center flex-shrink-0 transition-colors ${
+                          isSelected
+                            ? "bg-emerald-700 text-white"
+                            : "border border-slate-300 bg-white"
+                        }`}
+                      >
+                        {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* 選択中の志望職種プレビュー */}
+              <div className="pt-2 border-t border-slate-100">
+                <span className="text-xs font-semibold text-slate-500 block mb-1.5">
+                  企業スワイプ画面での表示プレビュー:
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {targetRoles.map((role, idx) => (
+                    <span
+                      key={idx}
+                      className="px-2.5 py-1 bg-slate-900 text-white rounded-md text-xs font-semibold flex items-center gap-1.5 shadow-2xs"
+                    >
+                      <Briefcase className="w-3 h-3 text-emerald-400" />
+                      <span>{role}</span>
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
 

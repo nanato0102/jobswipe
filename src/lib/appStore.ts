@@ -163,6 +163,7 @@ export interface StudentDetail {
   bio: string;
   personalityCode?: string;
   personalityTags: string[];
+  desiredRoles?: string[];
   desiredIndustries: string[];
   desiredLocations: string[];
   videoUrl: string;
@@ -810,6 +811,7 @@ export const appStore = {
         bio: "体育会サッカー部で100名規模の組織主将を務めています。「誰よりも声を出し、背中で引っ張る」を行動指針に、部員一人ひとりと対話を重ねながらリーグ昇格を果たしました。ビジネスの現場でも、失敗を恐れず主体的に行動し、周囲をポジティブに巻き込めるリーダーを目指しています。",
         personalityCode: "ESTP",
         personalityTags: ["発信・オープン型", "現実・着実型", "論理・合理型", "柔軟・スピード型"],
+        desiredRoles: ["法人営業・ソリューション提案", "総合職・ビジネス総合"],
         desiredIndustries: ["IT・Webサービス", "ベンチャー・スタートアップ", "総合営業・セールス"],
         desiredLocations: ["東京都", "神奈川県", "リモートワーク可"],
         videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
@@ -830,6 +832,7 @@ export const appStore = {
         bio: "大学1年次よりSNSマーケティングベンチャーでインターンを行い、TikTok・Instagramの企画・分析を担当。ユーザーの心理を徹底的に分析し、再現性のあるコンテンツ設計を実践してきました。誠実なコミュニケーションと笑顔で、相手の懐に飛び込むことが得意です。",
         personalityCode: "ENFJ",
         personalityTags: ["発信・オープン型", "ビジョン・発想型", "共感・調和型", "計画・完遂型"],
+        desiredRoles: ["マーケティング・SNS・広報", "企画・ディレクター"],
         desiredIndustries: ["マーケティング・PR", "IT・Webサービス", "美容・コスメ"],
         desiredLocations: ["東京都", "リモートワーク可"],
         videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
@@ -850,6 +853,7 @@ export const appStore = {
         bio: "カナダへの1年間留学を経て、大学では留学生支援イベントを企画・運営。言語やバックグラウンドの異なるメンバーと協働し、信頼関係を築いてきました。物事をポジティブに捉え、困難な状況でも周囲を明るく鼓舞することができます。",
         personalityCode: "ENFP",
         personalityTags: ["発信・オープン型", "ビジョン・発想型", "共感・調和型", "柔軟・スピード型"],
+        desiredRoles: ["総合職・ビジネス総合", "法人営業・ソリューション提案"],
         desiredIndustries: ["グローバル・商社", "コンサルティング", "ベンチャー"],
         desiredLocations: ["東京都", "海外勤務希望"],
         videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
@@ -870,6 +874,7 @@ export const appStore = {
         bio: "大学の研究室で機械学習および生成AIアルゴリズムを研究中。学生ハッカソンでは要件定義からバックエンド設計まで主導し最優秀賞を獲得しました。高い集中力と論理的アプローチで複雑な難題を解き明かします。",
         personalityCode: "INTJ",
         personalityTags: ["傾聴・集中型", "ビジョン・発想型", "論理・合理型", "計画・完遂型"],
+        desiredRoles: ["エンジニア・IT技術職", "企画・ディレクター"],
         desiredIndustries: ["IT・Webサービス / AI", "研究開発・R&D", "コンサルティング"],
         desiredLocations: ["東京都", "リモートワーク可"],
         videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4",
@@ -890,6 +895,7 @@ export const appStore = {
         bio: "大学在学中に簿記1級を取得し、フィンテックベンチャーにて財務データの自動集計スクリプトを構築。数字のファクトに基づき、着実かつ誠実に成果を積み上げることが得意です。計画を確実に完遂する推進力があります。",
         personalityCode: "ISTJ",
         personalityTags: ["傾聴・集中型", "現実・着実型", "論理・合理型", "計画・完遂型"],
+        desiredRoles: ["コンサルタント", "事務・バックオフィス"],
         desiredIndustries: ["金融・フィンテック", "戦略コンサルティング", "経営企画・財務"],
         desiredLocations: ["東京都"],
         videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
@@ -910,6 +916,7 @@ export const appStore = {
         bio: "使い手の心理に寄り添う直感的なUI/UXデザインを追求しています。地域活性化プロジェクトにて住民向けモバイルアプリの画面設計を担当し、利用率向上に貢献しました。チームの調和を大切にし、柔軟にアイデアを形にします。",
         personalityCode: "ISFP",
         personalityTags: ["傾聴・集中型", "現実・着実型", "共感・調和型", "柔軟・スピード型"],
+        desiredRoles: ["デザイナー・クリエイティブ", "マーケティング・SNS・広報"],
         desiredIndustries: ["Web・UI/UXデザイン", "メディア・エンタメ", "ライフスタイル"],
         desiredLocations: ["東京都", "リモートワーク可"],
         videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
@@ -962,6 +969,7 @@ export const appStore = {
           bio: "体育会サッカー部で100名規模の組織主将を務めています。「誰よりも声を出し、背中で引っ張る」を行動指針に、部員一人ひとりと対話を重ねながらリーグ昇格を果たしました。",
           skills: "チームリーダーシップ, 営業推進, 目標達成力",
           experience: "体育会サッカー部主将",
+          desiredRoles: "法人営業・ソリューション提案, 総合職・ビジネス総合",
           user: { id: "u-s1", email: "kenta.sato@example.com" },
         },
       },
@@ -982,6 +990,7 @@ export const appStore = {
           bio: "大学1年次よりSNSマーケティングベンチャーでインターンを行い、TikTok・Instagramの企画・分析を担当。ユーザーの心理を徹底的に分析し、再現性のあるコンテンツ設計を実践してきました。",
           skills: "SNSマーケティング, データ分析, コミュニケーション",
           experience: "SNSマーケティングベンチャー インターン1年半",
+          desiredRoles: "マーケティング・SNS・広報, 企画・ディレクター",
           user: { id: "u-s2", email: "misaki.takahashi@example.com" },
         },
       },
@@ -1002,6 +1011,7 @@ export const appStore = {
           bio: "カナダへの1年間留学を経て、大学では留学生支援イベントを企画・運営。言語やバックグラウンドの異なるメンバーと協働し、信頼関係を築いてきました。",
           skills: "日常英会話(TOEIC 860), イベント企画, ファシリテーション",
           experience: "カナダ留学1年間, 国際交流サークル代表",
+          desiredRoles: "総合職・ビジネス総合, 法人営業・ソリューション提案",
           user: { id: "u-s3", email: "tsubasa.ito@example.com" },
         },
       },
@@ -1022,6 +1032,7 @@ export const appStore = {
           bio: "大学の研究室で機械学習および生成AIアルゴリズムを研究中。学生ハッカソンでは要件定義からバックエンド設計まで主導し最優秀賞を獲得しました。",
           skills: "Python, PyTorch, Next.js, アルゴリズム設計",
           experience: "学生AIハッカソン最優秀賞, 研究所インターン",
+          desiredRoles: "エンジニア・IT技術職, 企画・ディレクター",
           user: { id: "u-s4", email: "aoi.watanabe@example.com" },
         },
       },
@@ -1042,6 +1053,7 @@ export const appStore = {
           bio: "大学在学中に簿記1級を取得し、フィンテックベンチャーにて財務データの自動集計スクリプトを構築。数字のファクトに基づき、着実かつ誠実に成果を積み上げることが得意です。",
           skills: "日商簿記1級, 財務モデリング, Python/SQL",
           experience: "フィンテック企業 財務インターン",
+          desiredRoles: "コンサルタント, 事務・バックオフィス",
           user: { id: "u-s5", email: "takumi.suzuki@example.com" },
         },
       },
@@ -1062,6 +1074,7 @@ export const appStore = {
           bio: "使い手の心理に寄り添う直感的なUI/UXデザインを追求しています。地域活性化プロジェクトにて住民向けモバイルアプリの画面設計を担当し、利用率向上に貢献しました。",
           skills: "Figma, UI/UXデザイン, ユーザーインタビュー, プロトタイピング",
           experience: "デザインコンテスト入賞, 自治体連携プロジェクト",
+          desiredRoles: "デザイナー・クリエイティブ, マーケティング・SNS・広報",
           user: { id: "u-s6", email: "yui.kobayashi@example.com" },
         },
       },

@@ -50,6 +50,7 @@ model StudentProfile {
   bio            String?  @db.Text
   skills         String?  @db.Text
   experience     String?  @db.Text
+  desiredRoles   String?  // カンマ区切りの志望職種 (例: "法人営業・ソリューション提案, 総合職・ビジネス総合")
 
   videos         Video[]
   receivedLikes  Like[]

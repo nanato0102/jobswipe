@@ -5,7 +5,7 @@ import { sanitizeString } from "@/lib/sanitizer";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { fullName, university, graduationYear, bio, skills, experience, userId } = body;
+    const { fullName, university, graduationYear, bio, skills, experience, desiredRoles, userId } = body;
 
     try {
       let targetUserId = userId;
@@ -28,6 +28,7 @@ export async function POST(req: Request) {
             bio: sanitizeString(bio),
             skills: sanitizeString(skills),
             experience: sanitizeString(experience),
+            desiredRoles: sanitizeString(desiredRoles),
           },
           create: {
             userId: targetUserId,
@@ -37,6 +38,7 @@ export async function POST(req: Request) {
             bio: sanitizeString(bio),
             skills: sanitizeString(skills),
             experience: sanitizeString(experience),
+            desiredRoles: sanitizeString(desiredRoles),
           },
         });
         return NextResponse.json({ success: true, profile });

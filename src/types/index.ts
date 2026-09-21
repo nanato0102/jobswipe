@@ -18,6 +18,7 @@ export interface StudentProfileData {
   bio: string | null;
   skills: string | null;
   experience: string | null;
+  desiredRoles?: string | null;
   videos?: VideoData[];
 }
 
@@ -47,6 +48,7 @@ export interface VideoData {
     bio: string | null;
     skills: string | null;
     experience: string | null;
+    desiredRoles?: string | null;
     user?: {
       id: string;
       email: string;

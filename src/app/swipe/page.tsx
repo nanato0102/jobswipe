@@ -6,13 +6,15 @@ import RoleGuard from "@/components/RoleGuard";
 import CompanyMobileTabs from "@/components/CompanyMobileTabs";
 import { PERSONALITY_AXES } from "@/lib/personalityModel";
 import { appStore } from "@/lib/appStore";
-import { SlidersHorizontal, Check, RefreshCw } from "lucide-react";
+import { SWIPE_JOB_FILTERS } from "@/lib/jobCategories";
+import { SlidersHorizontal, Check, RefreshCw, Briefcase } from "lucide-react";
 import type { VideoData } from "@/types";
 
 export default function SwipePage() {
   const [videos, setVideos] = useState<VideoData[]>(() => appStore.getVideos());
   const [loading, setLoading] = useState(false);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [selectedRoleFilter, setSelectedRoleFilter] = useState<string>("all");
 
   useEffect(() => {
     // リアルタイム同期イベント（学生が動画投稿・削除した時に即時更新）
@@ -57,21 +59,40 @@ export default function SwipePage() {
     };
   }, []);
 
-  // 4軸MECE人柄タグによるリアルタイムフィルタリング
+  // 職種フィルター ＆ 4軸人柄タグによるリアルタイム絞り込み
   const filteredVideos = useMemo(() => {
-    if (!selectedTag) return videos;
     return videos.filter((v) => {
       const sId = v.student?.id || v.studentId || "s1";
       const detail = appStore.getStudentDetails(sId);
-      const tags =
-        detail?.personalityTags && detail.personalityTags.length > 0
-          ? detail.personalityTags
-          : v.tags
-          ? v.tags.split(",").map((t) => t.trim()).filter(Boolean)
+
+      // 1. 職種フィルター判定
+      if (selectedRoleFilter !== "all") {
+        const activeTab = SWIPE_JOB_FILTERS.find((f) => f.id === selectedRoleFilter);
+        const matchCats = activeTab?.matchCategories || [];
+        const studentRoles = detail?.desiredRoles && detail.desiredRoles.length > 0
+          ? detail.desiredRoles
+          : v.student?.desiredRoles
+          ? v.student.desiredRoles.split(",").map((r) => r.trim()).filter(Boolean)
           : [];
-      return tags.includes(selectedTag);
+
+        const hasRoleMatch = studentRoles.some((r) => matchCats.includes(r));
+        if (!hasRoleMatch) return false;
+      }
+
+      // 2. 人柄タグフィルター判定
+      if (selectedTag) {
+        const tags =
+          detail?.personalityTags && detail.personalityTags.length > 0
+            ? detail.personalityTags
+            : v.tags
+            ? v.tags.split(",").map((t) => t.trim()).filter(Boolean)
+            : [];
+        if (!tags.includes(selectedTag)) return false;
+      }
+
+      return true;
     });
-  }, [videos, selectedTag]);
+  }, [videos, selectedRoleFilter, selectedTag]);
 
   const handleLike = async (video: VideoData) => {
     try {
@@ -108,11 +129,37 @@ export default function SwipePage() {
           <div className="text-center mb-4 max-w-2xl">
             <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">自己PR動画スワイプ</h1>
             <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-              学生の人柄・行動特性（4軸MECE）をもとに、求める人物像に合致する候補者を直感的にスカウトできます。
+              学生の志望職種や人柄・行動特性（4軸MECE）をもとに、求める人物像に合致する候補者を直感的にスカウトできます。
             </p>
           </div>
 
-          {/* MBTI準拠 4軸人柄スマートフィルターバー */}
+          {/* 1. 志望職種 絞り込みタブバー */}
+          <div className="w-full mb-3.5">
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar select-none">
+              <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-lg border border-slate-200">
+                {SWIPE_JOB_FILTERS.map((tab) => {
+                  const isActive = selectedRoleFilter === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      onClick={() => setSelectedRoleFilter(tab.id)}
+                      className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
+                        isActive
+                          ? "bg-slate-900 text-white shadow-xs"
+                          : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
+                      }`}
+                    >
+                      <Briefcase className={`w-3.5 h-3.5 ${isActive ? "text-emerald-400" : "text-slate-400"}`} />
+                      <span>{tab.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* 2. MBTI準拠 4軸人柄スマートフィルターバー */}
           <div className="w-full bg-white border border-slate-200/90 rounded-xl p-3 sm:p-4 mb-5 shadow-xs">
             <div className="flex items-center justify-between gap-2 mb-2.5">
               <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800">
@@ -123,14 +170,17 @@ export default function SwipePage() {
                 <span className="text-xs text-slate-500 font-medium">
                   {filteredVideos.length}名 / 全{videos.length}名
                 </span>
-                {selectedTag && (
+                {(selectedTag || selectedRoleFilter !== "all") && (
                   <button
-                    onClick={() => setSelectedTag(null)}
+                    onClick={() => {
+                      setSelectedTag(null);
+                      setSelectedRoleFilter("all");
+                    }}
                     className="text-xs text-slate-600 hover:text-slate-900 font-semibold flex items-center gap-1 bg-slate-100 hover:bg-slate-200 px-2 py-0.5 rounded cursor-pointer transition-colors"
-                    title="フィルターをクリア"
+                    title="フィルターを全クリア"
                   >
                     <RefreshCw className="w-3 h-3" />
-                    <span>解除</span>
+                    <span>条件クリア</span>
                   </button>
                 )}
               </div>
@@ -147,7 +197,7 @@ export default function SwipePage() {
                     : "bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100"
                 }`}
               >
-                すべて表示
+                全人柄表示
               </button>
 
               {PERSONALITY_AXES.map((axis) => (
@@ -188,8 +238,33 @@ export default function SwipePage() {
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-700 mb-3"></div>
               <p className="text-xs text-slate-500">自己PR動画を読み込み中...</p>
             </div>
+          ) : filteredVideos.length === 0 ? (
+            <div className="w-full max-w-md mx-auto p-8 bg-white border border-slate-200 rounded-xl text-center space-y-3 shadow-xs">
+              <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center mx-auto">
+                <Briefcase className="w-5 h-5 text-slate-500" />
+              </div>
+              <h3 className="text-sm font-bold text-slate-900">該当する候補者動画がありません</h3>
+              <p className="text-xs text-slate-500">
+                選択した職種または人柄条件に一致する学生動画がありません。フィルター条件を緩和してください。
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedTag(null);
+                  setSelectedRoleFilter("all");
+                }}
+                className="px-4 py-2 bg-slate-900 text-white text-xs font-semibold rounded-md hover:bg-slate-800 transition-colors cursor-pointer"
+              >
+                フィルターを解除する
+              </button>
+            </div>
           ) : (
-            <SwipeCard key={selectedTag || "all"} videos={filteredVideos} onLike={handleLike} onOffer={handleOffer} />
+            <SwipeCard
+              key={`${selectedRoleFilter}-${selectedTag || "all"}`}
+              videos={filteredVideos}
+              onLike={handleLike}
+              onOffer={handleOffer}
+            />
           )}
         </div>
       </CompanyMobileTabs>

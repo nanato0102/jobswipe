@@ -6,7 +6,7 @@ import RoleGuard from "@/components/RoleGuard";
 import CompanyMobileTabs from "@/components/CompanyMobileTabs";
 import { appStore, StoredLike } from "@/lib/appStore";
 import { useAuth } from "@/context/AuthContext";
-import { Heart, Send, User, X, Sparkles, CheckCircle, Lock } from "lucide-react";
+import { Heart, Send, User, X, Sparkles, CheckCircle, Lock, Briefcase } from "lucide-react";
 import { getMaskedStudentName } from "@/components/SwipeCard";
 
 export default function CompanyLikesPage() {
@@ -168,6 +168,24 @@ export default function CompanyLikesPage() {
                         {item.videoTitle || "60秒自己PR動画"}
                       </p>
                     </div>
+
+                    {/* 志望職種 */}
+                    {student?.desiredRoles && student.desiredRoles.length > 0 && (
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        <span className="text-xs font-bold text-slate-600 flex items-center gap-1">
+                          <Briefcase className="w-3 h-3 text-blue-700" />
+                          <span>志望職種:</span>
+                        </span>
+                        {student.desiredRoles.map((role, idx) => (
+                          <span
+                            key={idx}
+                            className="bg-blue-50 text-blue-900 border border-blue-200 px-2 py-0.5 rounded-md text-xs font-bold"
+                          >
+                            {role}
+                          </span>
+                        ))}
+                      </div>
+                    )}
 
                     {/* ひとこと紹介 */}
                     <p className="text-sm text-slate-600 leading-relaxed line-clamp-2">

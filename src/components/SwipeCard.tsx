@@ -120,6 +120,14 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
   const personalityCode = studentDetail?.personalityCode || "ESTP";
   const personalityProfile = PERSONALITY_16_TYPES[personalityCode] || PERSONALITY_16_TYPES.ESTP;
 
+  // 志望職種（希望ポジション）の取得
+  const studentRoles =
+    studentDetail?.desiredRoles && studentDetail.desiredRoles.length > 0
+      ? studentDetail.desiredRoles
+      : currentVideo?.student?.desiredRoles
+      ? currentVideo.student.desiredRoles.split(",").map((r) => r.trim()).filter(Boolean)
+      : ["総合職・ビジネス総合"];
+
   const triggerFeedback = (type: "LIKE" | "SKIP") => {
     setSwipeFeedback(type);
     setTimeout(() => {
@@ -579,6 +587,16 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
               )}
               <h3 className="text-xs sm:text-sm font-semibold text-slate-100 line-clamp-1">{currentVideo.title}</h3>
 
+              {/* 志望職種バッジ */}
+              {studentRoles && studentRoles.length > 0 && (
+                <div className="flex flex-wrap gap-1 items-center pt-0.5">
+                  <span className="text-[11px] font-bold text-blue-300 bg-blue-950/80 px-2 py-0.5 rounded-md border border-blue-500/40 flex items-center gap-1">
+                    <Briefcase className="w-3 h-3 text-blue-400" />
+                    <span>志望: {studentRoles.join(" / ")}</span>
+                  </span>
+                </div>
+              )}
+
               {/* 4軸人柄タグ表示 */}
               <div className="flex flex-wrap gap-1.5 pt-1">
                 <span className="text-xs bg-emerald-950/80 text-emerald-300 px-2.5 py-0.5 rounded-md border border-emerald-500/40 font-bold flex items-center gap-1">
@@ -725,6 +743,26 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
             </div>
           </div>
 
+          {/* 志望職種・希望ポジション */}
+          {studentRoles && studentRoles.length > 0 && (
+            <div>
+              <span className="text-xs font-bold text-slate-800 flex items-center gap-1 mb-1.5">
+                <Briefcase className="w-3.5 h-3.5 text-blue-700" />
+                <span>志望職種・希望ポジション</span>
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {studentRoles.map((role, idx) => (
+                  <span
+                    key={idx}
+                    className="bg-blue-50 text-blue-900 border border-blue-200 px-2.5 py-1 rounded-md text-xs font-bold"
+                  >
+                    {role}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* 興味のある業界 */}
           {studentDetail?.desiredIndustries && studentDetail.desiredIndustries.length > 0 && (
             <div>
@@ -811,6 +849,25 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                   ))}
                 </div>
               </div>
+
+              {studentRoles && studentRoles.length > 0 && (
+                <div>
+                  <span className="font-bold text-slate-900 block mb-1 flex items-center gap-1">
+                    <Briefcase className="w-3.5 h-3.5 text-blue-700" />
+                    <span>志望職種・希望ポジション</span>
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {studentRoles.map((role, idx) => (
+                      <span
+                        key={idx}
+                        className="bg-blue-50 text-blue-900 border border-blue-200 px-2.5 py-1 rounded-md text-xs font-bold"
+                      >
+                        {role}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {studentDetail?.desiredIndustries && (
                 <div>
