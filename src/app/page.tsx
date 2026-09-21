@@ -107,14 +107,16 @@ export default function HomePage() {
 
               <FadeInView delay={100}>
                 <h1 className="text-3xl min-[400px]:text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.15] text-slate-900">
-                  履歴書を、<br className="sm:hidden" />
-                  <span className="text-emerald-700">スワイプする時代へ。</span>
+                  <span className="block">履歴書を、</span>
+                  <span className="block text-emerald-700">スワイプする時代へ。</span>
                 </h1>
               </FadeInView>
 
               <FadeInView delay={200}>
                 <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl mx-auto lg:mx-0 font-normal">
-                  AIが量産したテンプレESはもういらない。文字フィルターを超え、スマホ自撮り60秒動画で「素の人柄・熱量・対人力」を可視化。あなたらしさに惹かれた優良企業から直接逆指名オファーが届きます。
+                  AIが量産したテンプレESはもういらない。文字フィルターを超え、<br className="hidden sm:inline" />
+                  スマホ自撮り60秒動画で「素の人柄・熱量・対人力」を可視化。<br className="hidden sm:inline" />
+                  あなたらしさに惹かれた優良企業から直接逆指名オファーが届きます。
                 </p>
               </FadeInView>
 
@@ -256,12 +258,13 @@ export default function HomePage() {
               <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest block">
                 PARADIGM SHIFT
               </span>
-              <h2 className="text-[22px] min-[390px]:text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-snug sm:leading-tight">
-                文字に縛られた就活を、<br className="sm:hidden" />
-                動画で根本から変える
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-snug sm:leading-tight">
+                <span className="block">文字に縛られた就活を、</span>
+                <span className="block">動画で根本から変える</span>
               </h2>
               <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
-                これまでの就活で感じていた理不尽や徒労感を、60秒の自己PR動画が解消します。
+                これまでの就活で感じていた理不尽や徒労感を、<br className="hidden sm:inline" />
+                60秒の自己PR動画が解消します。
               </p>
             </div>
           </FadeInView>
@@ -276,7 +279,8 @@ export default function HomePage() {
                     <span>従来の就活</span>
                   </div>
                   <p className="text-sm text-slate-600 leading-relaxed font-normal line-through decoration-slate-400/60">
-                    大学名やESテクニックで足切りされ、<br className="sm:hidden" />本来の人柄が伝わらない
+                    <span className="block">大学名やESテクニックで足切りされ、</span>
+                    <span className="block">本来の人柄が伝わらない</span>
                   </p>
                 </div>
 
@@ -286,7 +290,8 @@ export default function HomePage() {
                     <span>JobSwipeの変革</span>
                   </div>
                   <h3 className="text-base font-bold text-slate-900 leading-snug">
-                    声のトーンや素の笑顔、<br className="sm:hidden" />表情の熱量で正当に評価
+                    <span className="block">声のトーンや素の笑顔、</span>
+                    <span className="block">表情の熱量で正当に評価</span>
                   </h3>
                   <p className="text-sm text-slate-600 leading-relaxed font-normal">
                     文字の履歴書では絶対に伝わらない、あなたの魅力と対話力がファーストコンタクトで正当に届きます。
@@ -304,7 +309,8 @@ export default function HomePage() {
                     <span>従来の就活</span>
                   </div>
                   <p className="text-sm text-slate-600 leading-relaxed font-normal line-through decoration-slate-400/60">
-                    何十社も同じESを書き直す、<br className="sm:hidden" />膨大な時間と労力の浪費
+                    <span className="block">何十社も同じESを書き直す、</span>
+                    <span className="block">膨大な時間と労力の浪費</span>
                   </p>
                 </div>
 
@@ -314,7 +320,8 @@ export default function HomePage() {
                     <span>JobSwipeの変革</span>
                   </div>
                   <h3 className="text-base font-bold text-slate-900 leading-snug">
-                    納得の60秒動画1本で、<br className="sm:hidden" />優良企業から直接スカウト
+                    <span className="block">納得の60秒動画1本で、</span>
+                    <span className="block">優良企業から直接スカウト</span>
                   </h3>
                   <p className="text-sm text-slate-600 leading-relaxed font-normal">
                     一度ベストな動画を撮影して登録すれば、あなたに魅力を感じた企業からスカウトが届く「待ちの就活」が可能に。
@@ -332,7 +339,8 @@ export default function HomePage() {
                     <span>従来の就活</span>
                   </div>
                   <p className="text-sm text-slate-600 leading-relaxed font-normal line-through decoration-slate-400/60">
-                    面接で緊張して素が出せず、<br className="sm:hidden" />相性が合わずに落とされる
+                    <span className="block">面接で緊張して素が出せず、</span>
+                    <span className="block">相性が合わずに落とされる</span>
                   </p>
                 </div>
 
@@ -342,7 +350,8 @@ export default function HomePage() {
                     <span>JobSwipeの変革</span>
                   </div>
                   <h3 className="text-base font-bold text-slate-900 leading-snug">
-                    あなたの雰囲気に共感する企業と、<br className="sm:hidden" />自然体で対話できる
+                    <span className="block">あなたの雰囲気に共感する企業と、</span>
+                    <span className="block">自然体で対話できる</span>
                   </h3>
                   <p className="text-sm text-slate-600 leading-relaxed font-normal">
                     あらかじめ動画で人柄やテンポを理解した上でオファーされるため、面接時の緊張がほぐれ、高いマッチ率を誇ります。
@@ -365,8 +374,8 @@ export default function HomePage() {
                 WHY JOBSWIPE
               </span>
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-snug sm:leading-tight">
-                なぜ、今<br className="sm:hidden" />
-                「動画逆求人」なのか？
+                <span className="block">なぜ、今</span>
+                <span className="block">「動画逆求人」なのか？</span>
               </h2>
               <p className="text-sm sm:text-base text-slate-600 font-normal">
                 学生と企業、双方のミスマッチと工数を最小化する次世代マッチングの仕組み
@@ -415,8 +424,8 @@ export default function HomePage() {
                     FEATURE 01
                   </span>
                   <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug">
-                    学歴やESの壁を超え、<br className="sm:hidden" />
-                    素の人柄と熱量が正当に届く。
+                    <span className="block">学歴やESの壁を超え、</span>
+                    <span className="block">素の人柄と熱量が正当に届く。</span>
                   </h3>
                   <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
                     文章のテクニックや大学名による書類足切りはありません。声のトーン、思考の深さ、普段のあなたの自然なコミュニケーション力が直接企業に届きます。
@@ -440,7 +449,8 @@ export default function HomePage() {
                     FEATURE 02
                   </span>
                   <h3 className="font-bold text-slate-900 text-base sm:text-lg">
-                    動画1本を投稿して<br className="sm:hidden" />待つだけ
+                    <span className="block">動画1本を投稿して</span>
+                    <span className="block">待つだけ</span>
                   </h3>
                   <p className="text-sm text-slate-600 leading-relaxed font-normal">
                     何十社もエントリーシートを書き直す労力は不要。納得の60秒動画を1本登録すれば、優良企業からスカウトが届きます。
@@ -452,7 +462,8 @@ export default function HomePage() {
                     FEATURE 03
                   </span>
                   <h3 className="font-bold text-slate-900 text-base sm:text-lg">
-                    社風に合う企業から<br className="sm:hidden" />直接オファー
+                    <span className="block">社風に合う企業から</span>
+                    <span className="block">直接オファー</span>
                   </h3>
                   <p className="text-sm text-slate-600 leading-relaxed font-normal">
                     あなたの価値観や雰囲気に惹かれた企業から届くため、面接時のミスマッチや選考辞退が大幅に減少します。
@@ -469,8 +480,8 @@ export default function HomePage() {
                     FOR RECRUITER 01
                   </span>
                   <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug">
-                    面接前のミスマッチを根絶。<br className="sm:hidden" />
-                    会う前に人柄・対人力を確信。
+                    <span className="block">面接前のミスマッチを根絶。</span>
+                    <span className="block">会う前に人柄・対人力を確信。</span>
                   </h3>
                   <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
                     文字の履歴書では見抜けない候補者のリアルな雰囲気・論理的思考力・熱量を60秒で把握。「会ってみたら違った」という採用工数の無駄をゼロにします。
@@ -493,7 +504,8 @@ export default function HomePage() {
                     FOR RECRUITER 02
                   </span>
                   <h3 className="font-bold text-slate-900 text-base sm:text-lg">
-                    縦スワイプで<br className="sm:hidden" />隙間時間に即断
+                    <span className="block">縦スワイプで</span>
+                    <span className="block">隙間時間に即断</span>
                   </h3>
                   <p className="text-sm text-slate-600 leading-relaxed font-normal">
                     移動時間や面接の合間に候補者動画をサクサク閲覧。カルチャーマッチする優秀層へその場でオファーを送信。
@@ -505,7 +517,8 @@ export default function HomePage() {
                     FOR RECRUITER 03
                   </span>
                   <h3 className="font-bold text-slate-900 text-base sm:text-lg">
-                    長文スカウト<br className="sm:hidden" />作成工数の削減
+                    <span className="block">長文スカウト</span>
+                    <span className="block">作成工数の削減</span>
                   </h3>
                   <p className="text-sm text-slate-600 leading-relaxed font-normal">
                     個別メッセージの作成負担を最小化し、本当に自社に合うポテンシャル層とスピーディーに面談日程を設定。
@@ -528,7 +541,8 @@ export default function HomePage() {
                 HOW IT WORKS
               </span>
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-snug sm:leading-tight">
-                オファー獲得までの<br className="sm:hidden" />3ステップ
+                <span className="block">オファー獲得までの</span>
+                <span className="block">3ステップ</span>
               </h2>
               <p className="text-sm sm:text-base text-slate-600 font-normal">
                 スマートフォンひとつで完結。初めて動画を撮る方でも安心してスタートできます。
@@ -548,7 +562,8 @@ export default function HomePage() {
                     </div>
                   </div>
                   <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
-                    60秒の自己PR動画を<br className="sm:hidden" />スマホで撮影
+                    <span className="block">60秒の自己PR動画を</span>
+                    <span className="block">スマホで撮影</span>
                   </h3>
                   <p className="text-sm text-slate-600 leading-relaxed font-normal">
                     スマホのインカメラで自撮りするだけ。編集は一切不要です。台本テンプレートに沿って話すだけで自然なPR動画が完成します。
@@ -579,7 +594,8 @@ export default function HomePage() {
                     </div>
                   </div>
                   <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
-                    審査通過企業が<br className="sm:hidden" />スワイプ閲覧
+                    <span className="block">審査通過企業が</span>
+                    <span className="block">スワイプ閲覧</span>
                   </h3>
                   <p className="text-sm text-slate-600 leading-relaxed font-normal">
                     厳正な法人審査を通過した企業の採用担当者のみが動画をチェック。「人柄や熱量に惹かれた」学生へ直接オファーが届きます。
@@ -610,7 +626,8 @@ export default function HomePage() {
                     </div>
                   </div>
                   <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
-                    オファー承諾 ＆<br className="sm:hidden" />個別チャット面談
+                    <span className="block">オファー承諾 ＆</span>
+                    <span className="block">個別チャット面談</span>
                   </h3>
                   <p className="text-sm text-slate-600 leading-relaxed font-normal">
                     届いたオファー内容を確認して承諾すると個別チャットがオープン。ES選考をスキップしてスムーズにカジュアル面談へ進めます。
@@ -644,10 +661,12 @@ export default function HomePage() {
                 EVALUATION CRITERIA
               </span>
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-snug sm:leading-tight">
-                外見ではなく<br className="sm:hidden" />「内面と熱量」を正当に評価
+                <span className="block">外見ではなく</span>
+                <span className="block">「内面と熱量」を正当に評価</span>
               </h2>
               <p className="text-sm sm:text-base text-slate-600 font-normal">
-                単なる容姿の選別ではありません。動画だからこそ伝わる論理性や熱量、カルチャーフィットを判定します。
+                単なる容姿の選別ではありません。<br className="hidden sm:inline" />
+                動画だからこそ伝わる論理性や熱量、カルチャーフィットを判定します。
               </p>
             </div>
           </FadeInView>
@@ -723,10 +742,12 @@ export default function HomePage() {
                 TARGET INDUSTRIES
               </span>
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-snug sm:leading-tight">
-                人柄と熱量を重視する<br className="sm:hidden" />多彩な業界が参画中
+                <span className="block">人柄と熱量を重視する</span>
+                <span className="block">多彩な業界が参画中</span>
               </h2>
               <p className="text-sm sm:text-base text-slate-600 font-normal">
-                急成長ベンチャーから大手グループまで、あなたのポテンシャルを求める企業がオファーを送っています。
+                急成長ベンチャーから大手グループまで、<br className="hidden sm:inline" />
+                あなたのポテンシャルを求める企業がオファーを送っています。
               </p>
             </div>
           </FadeInView>
@@ -852,11 +873,12 @@ export default function HomePage() {
                   <span>完全無料で今日からスタート</span>
                 </span>
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-snug sm:leading-tight">
-                  60秒の自己PR動画で、<br className="sm:hidden" />
-                  相性抜群の企業と出会う。
+                  <span className="block">60秒の自己PR動画で、</span>
+                  <span className="block">相性抜群の企業と出会う。</span>
                 </h2>
                 <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-lg mx-auto font-normal">
-                  登録・動画投稿・オファー受信まですべて完全無料。スマホひとつで、あなたの熱量と人柄を評価する優良企業からのスカウトを受け取りましょう。
+                  登録・動画投稿・オファー受信まですべて完全無料。<br className="hidden sm:inline" />
+                  スマホひとつで、あなたの熱量と人柄を評価する優良企業からのスカウトを受け取りましょう。
                 </p>
               </div>
 
