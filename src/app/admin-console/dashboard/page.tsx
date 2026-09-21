@@ -198,11 +198,53 @@ export default function AdminConsoleDashboardPage() {
   const [userTypeFilter, setUserTypeFilter] = useState<"ALL" | "STUDENT" | "COMPANY">("ALL");
 
   const [previewVideo, setPreviewVideo] = useState<string | null>(null);
+  const [approvingId, setApprovingId] = useState<string | null>(null);
 
   // お問い合わせステータス更新
   const handleUpdateStatus = (id: string, newStatus: "UNTOUCHED" | "IN_PROGRESS" | "RESOLVED") => {
     const updated = appStore.updateInquiryStatus(id, newStatus);
     setInquiries(updated);
+  };
+
+  // 企業の審査承認 ＆ アカウント発行メール送信
+  const handleApproveCompany = async (inq: StoredInquiry) => {
+    if (!confirm(`企業「${inq.senderName}」の審査を承認し、${inq.email} 宛てにログインアカウント（初期パスワード）発行メールを送信しますか？`)) {
+      return;
+    }
+
+    setApprovingId(inq.id);
+    try {
+      const res = await fetch("/api/admin/companies/approve", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          inquiryId: inq.id,
+          receiptNumber: inq.receiptNumber,
+          companyName: inq.senderName,
+          repName: inq.repName,
+          email: inq.email,
+          phone: inq.phone,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "アカウント発行処理に失敗しました。");
+      }
+
+      // ステータスを対応完了（RESOLVED）に更新
+      const updated = appStore.updateInquiryStatus(inq.id, "RESOLVED");
+      setInquiries(updated);
+
+      success(
+        "審査承認・アカウント発行完了",
+        `企業「${inq.senderName}」宛てにログイン案内メールを送信しました。（初期PW: ${data.user?.temporaryPassword || "設定済"}）`
+      );
+    } catch (err: any) {
+      error("承認エラー", err.message || "エラーが発生しました。");
+    } finally {
+      setApprovingId(null);
+    }
   };
 
   // Googleスプレッドシート用 CSVダウンロード
@@ -570,6 +612,45 @@ export default function AdminConsoleDashboardPage() {
                       {inq.message}
                     </p>
                   </div>
+
+                  {/* 企業利用申請に対する承認・アカウント発行アクション */}
+                  {inq.userType === "company" && (
+                    <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-blue-50/40 -mx-5 -mb-5 sm:-mx-6 sm:-mb-6 p-4 rounded-b-xl border-t">
+                      <div className="flex items-center gap-2 text-xs">
+                        <Building2 className="w-4 h-4 text-blue-700 flex-shrink-0" />
+                        <div>
+                          <span className="font-bold text-slate-900 block">企業アカウント審査・発行</span>
+                          <span className="text-[11px] text-slate-500">
+                            {inq.status === "RESOLVED"
+                              ? "審査承認・アカウント発行メール送信済み"
+                              : "承認すると初期仮パスワードを発行し、案内メールを自動送信します"}
+                          </span>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handleApproveCompany(inq)}
+                        disabled={approvingId === inq.id}
+                        className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-2xs cursor-pointer ${
+                          approvingId === inq.id
+                            ? "bg-slate-300 text-slate-600 cursor-not-allowed"
+                            : inq.status === "RESOLVED"
+                            ? "bg-white hover:bg-slate-50 text-slate-700 border border-slate-300"
+                            : "bg-blue-700 hover:bg-blue-600 text-white"
+                        }`}
+                      >
+                        <Send className="w-3.5 h-3.5" />
+                        <span>
+                          {approvingId === inq.id
+                            ? "アカウント発行中..."
+                            : inq.status === "RESOLVED"
+                            ? "アカウント再発行 ＆ メール再送"
+                            : "審査を承認してアカウント発行（メール送信）"}
+                        </span>
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))}
 
