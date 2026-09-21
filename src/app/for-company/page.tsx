@@ -211,9 +211,9 @@ export default function ForCompanyPage() {
               <span className="text-xs font-bold text-blue-700 uppercase tracking-widest block">
                 PAIN & SOLUTION
               </span>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
-                <span className="block sm:inline">新卒採用における</span>
-                <span className="block sm:inline">「構造的な課題」を解決</span>
+              <h2 className="text-xl min-[400px]:text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-snug sm:leading-tight">
+                <span className="block sm:inline whitespace-nowrap">新卒採用における</span>
+                <span className="block sm:inline whitespace-nowrap">「構造的な課題」を解決</span>
               </h2>
               <p className="text-sm sm:text-base text-slate-600 font-normal">
                 従来の文字選考・形骸化した書類選考のムダを、60秒動画が根本から解消します。
@@ -231,7 +231,8 @@ export default function ForCompanyPage() {
                     <span>採用課題 01</span>
                   </div>
                   <h3 className="text-sm sm:text-base font-bold text-slate-900 leading-snug">
-                    AI生成ESでは「素の対人力」が見えない
+                    <span className="inline-block">AI生成ESでは</span>
+                    <span className="inline-block">「素の対人力」が見えない</span>
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
                     文章作成テクニックに長けた候補者を書類通過させても、1次面接で落とす工数ロスが膨大に。
@@ -244,7 +245,8 @@ export default function ForCompanyPage() {
                     <span>JobSwipeの解決策</span>
                   </div>
                   <h4 className="text-sm sm:text-base font-bold text-slate-900 leading-snug">
-                    声のトーンや表情、60秒の構成力で事前に確信
+                    <span className="inline-block">声のトーンや表情、</span>
+                    <span className="inline-block">60秒の構成力で事前に確信</span>
                   </h4>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
                     会う前に人柄や対話力をチェックできるため、1次面接の通過率と選考精度が飛躍的に向上します。
@@ -262,7 +264,8 @@ export default function ForCompanyPage() {
                     <span>採用課題 02</span>
                   </div>
                   <h3 className="text-sm sm:text-base font-bold text-slate-900 leading-snug">
-                    書類選考と面接のギャップによる「選考辞退」
+                    <span className="inline-block">書類選考と面接の</span>
+                    <span className="inline-block">ギャップによる選考辞退</span>
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
                     「会ってみたら社風と違った」という理由で、選考終盤や内定直前での辞退が発生。
@@ -275,7 +278,8 @@ export default function ForCompanyPage() {
                     <span>JobSwipeの解決策</span>
                   </div>
                   <h4 className="text-sm sm:text-base font-bold text-slate-900 leading-snug">
-                    求める人物像との相性を事前に見極めてオファー
+                    <span className="inline-block">求める人物像との相性を</span>
+                    <span className="inline-block">事前に見極めてオファー</span>
                   </h4>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
                     相互のカルチャーフィットを前提にスカウトするため、面談合致率が高く内定承諾につながります。
@@ -293,7 +297,8 @@ export default function ForCompanyPage() {
                     <span>採用課題 03</span>
                   </div>
                   <h3 className="text-sm sm:text-base font-bold text-slate-900 leading-snug">
-                    長文スカウト作成の工数過多と低い返信率
+                    <span className="inline-block">長文スカウト作成の</span>
+                    <span className="inline-block">工数過多と低い返信率</span>
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
                     候補者ごとに長文メッセージを作成する負担が重く、採用担当者のコア業務が圧迫。
@@ -306,7 +311,8 @@ export default function ForCompanyPage() {
                     <span>JobSwipeの解決策</span>
                   </div>
                   <h4 className="text-sm sm:text-base font-bold text-slate-900 leading-snug">
-                    隙間時間に縦スワイプで即断アプローチ
+                    <span className="inline-block">隙間時間に縦スワイプで</span>
+                    <span className="inline-block">即断アプローチ</span>
                   </h4>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
                     移動中などに動画をサクサク確認し、直感的にオファー送信。スピード感ある日程調整が可能です。
@@ -328,9 +334,9 @@ export default function ForCompanyPage() {
               <span className="text-xs font-bold text-blue-700 uppercase tracking-widest block">
                 BENEFITS
               </span>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
-                <span className="block sm:inline">新世代の採用プラットフォームが</span>
-                <span className="block sm:inline">もたらす価値</span>
+              <h2 className="text-xl min-[400px]:text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-snug sm:leading-tight">
+                <span className="block sm:inline whitespace-nowrap">新世代の採用プラットフォームが</span>
+                <span className="block sm:inline whitespace-nowrap">もたらす価値</span>
               </h2>
               <p className="text-sm sm:text-base text-slate-600 font-normal">
                 書類選考工数の劇的な削減と、カルチャーマッチする優秀層のダイレクト採用を実現
@@ -346,8 +352,8 @@ export default function ForCompanyPage() {
                   FOR ENTERPRISE 01
                 </span>
                 <h3 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight leading-snug">
-                  書類選考と1次面接の歩留まりを劇的改善。<br className="hidden sm:inline" />
-                  採用工数を大幅削減。
+                  <span className="inline-block">書類選考と1次面接の歩留まりを改善。</span><br className="hidden sm:inline" />
+                  <span className="inline-block">採用工数を大幅削減。</span>
                 </h3>
                 <p className="text-xs sm:text-sm lg:text-base text-slate-700 leading-relaxed font-normal">
                   文字の履歴書では見抜けない「素の対人力・論理的思考力・熱量」を60秒動画で把握。会うべき候補者を事前に確信できるため、無駄な面接を根絶します。
@@ -373,7 +379,10 @@ export default function ForCompanyPage() {
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
                   FOR ENTERPRISE 02
                 </span>
-                <h3 className="font-bold text-slate-900 text-base sm:text-lg">移動中の隙間時間に縦スワイプで即断</h3>
+                <h3 className="font-bold text-slate-900 text-base sm:text-lg">
+                  <span className="inline-block">移動中の隙間時間に</span>
+                  <span className="inline-block">縦スワイプで即断</span>
+                </h3>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
                   スマホやPCで候補者動画をサクサク閲覧。自社のカルチャーに合う学生にその場でオファー送信。
                 </p>
@@ -383,7 +392,10 @@ export default function ForCompanyPage() {
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
                   FOR ENTERPRISE 03
                 </span>
-                <h3 className="font-bold text-slate-900 text-base sm:text-lg">MBTI準拠の4軸パーソナリティで分析</h3>
+                <h3 className="font-bold text-slate-900 text-base sm:text-lg">
+                  <span className="inline-block">MBTI準拠の4軸</span>
+                  <span className="inline-block">パーソナリティで分析</span>
+                </h3>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
                   発信力、論理性、推進力、カルチャーフィットなど、求める人物像に合致したタグで検索・スカウト。
                 </p>
@@ -403,9 +415,9 @@ export default function ForCompanyPage() {
               <span className="text-xs font-bold text-blue-700 uppercase tracking-widest block">
                 HOW TO START
               </span>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
-                <span className="block sm:inline">導入からスカウト送信までの</span>
-                <span className="block sm:inline">3ステップ</span>
+              <h2 className="text-xl min-[400px]:text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-snug sm:leading-tight">
+                <span className="block sm:inline whitespace-nowrap">導入からスカウト送信までの</span>
+                <span className="block sm:inline whitespace-nowrap">3ステップ</span>
               </h2>
               <p className="text-sm sm:text-base text-slate-600 font-normal">
                 最短1営業日でアカウント発行。すぐに学生の自己PR動画を閲覧し、スカウトを開始できます。
@@ -418,7 +430,10 @@ export default function ForCompanyPage() {
               <div className="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-6 sm:p-7 space-y-4 flex flex-col justify-between h-full">
                 <div className="space-y-3">
                   <span className="text-2xl font-black text-slate-300 font-mono tracking-tighter block">01</span>
-                  <h3 className="text-base sm:text-lg font-bold text-slate-900">Webフォームから利用申請</h3>
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900">
+                    <span className="inline-block">Webフォームから</span>
+                    <span className="inline-block">利用申請</span>
+                  </h3>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
                     会社名、ご担当者情報、ご連絡先を入力して送信（所要時間約1分）。利用申請・審査は完全無料です。
                   </p>
@@ -433,7 +448,10 @@ export default function ForCompanyPage() {
               <div className="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-6 sm:p-7 space-y-4 flex flex-col justify-between h-full">
                 <div className="space-y-3">
                   <span className="text-2xl font-black text-slate-300 font-mono tracking-tighter block">02</span>
-                  <h3 className="text-base sm:text-lg font-bold text-slate-900">掲載審査 ＆ アカウント発行</h3>
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900">
+                    <span className="inline-block">掲載審査 ＆</span>
+                    <span className="inline-block">アカウント発行</span>
+                  </h3>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
                     運営事務局による法人確認審査（通常1〜2営業日）完了後、専用ログイン情報をメールにてご案内します。
                   </p>
@@ -448,7 +466,10 @@ export default function ForCompanyPage() {
               <div className="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-6 sm:p-7 space-y-4 flex flex-col justify-between h-full">
                 <div className="space-y-3">
                   <span className="text-2xl font-black text-slate-300 font-mono tracking-tighter block">03</span>
-                  <h3 className="text-base sm:text-lg font-bold text-slate-900">スワイプ閲覧 ＆ スカウト送信</h3>
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900">
+                    <span className="inline-block">スワイプ閲覧 ＆</span>
+                    <span className="inline-block">スカウト送信</span>
+                  </h3>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
                     候補者のPR動画を縦スワイプで閲覧。気になる学生にオファーを送り、承諾後は個別チャットで日程調整へ。
                   </p>
@@ -474,9 +495,9 @@ export default function ForCompanyPage() {
                   <ShieldCheck className="w-6 h-6 stroke-[2.2]" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 leading-tight">
-                    <span className="block sm:inline">安心・安全の完全審査制 ＆</span>
-                    <span className="block sm:inline">非公開動画管理</span>
+                  <h3 className="text-xl min-[400px]:text-2xl sm:text-3xl font-black tracking-tight text-slate-900 leading-snug sm:leading-tight">
+                    <span className="block sm:inline whitespace-nowrap">安心・安全の完全審査制 ＆</span>
+                    <span className="block sm:inline whitespace-nowrap">非公開動画管理</span>
                   </h3>
                   <p className="text-xs sm:text-sm lg:text-base text-slate-600 leading-relaxed font-normal max-w-2xl mx-auto">
                     学生と参画企業双方の信頼とプライバシーを保護するための厳格なガバナンス体制
@@ -533,7 +554,7 @@ export default function ForCompanyPage() {
       {/* ========================================================================= */}
       {/* 6. 企業向けよくあるご質問（FAQ） */}
       {/* ========================================================================= */}
-      <section className="py-16 sm:py-24 bg-slate-50 border-b border-slate-200/80">
+      <section id="faq" className="py-16 sm:py-24 bg-slate-50 border-b border-slate-200/80">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <FadeInView>
             <div className="text-center space-y-3">
@@ -617,9 +638,9 @@ export default function ForCompanyPage() {
                   <Building2 className="w-4 h-4 text-blue-700" />
                   <span>企業利用お申し込み受付中</span>
                 </span>
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-slate-900 leading-tight">
-                  <span className="block sm:inline">60秒動画で、</span>
-                  <span className="block sm:inline">人柄マッチする優秀な人材と出会う。</span>
+                <h2 className="text-xl min-[400px]:text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-slate-900 leading-snug sm:leading-tight">
+                  <span className="block sm:inline whitespace-nowrap">60秒動画で、</span>
+                  <span className="block sm:inline whitespace-nowrap">人柄マッチする優秀な人材と出会う。</span>
                 </h2>
                 <p className="text-xs sm:text-sm lg:text-base text-slate-600 leading-relaxed max-w-lg mx-auto font-normal">
                   文字だけの書類選考を脱却し、熱量とポテンシャルを持った学生をスワイプで直感スカウト。まずは無料の企業利用申請からスタートしてください。
