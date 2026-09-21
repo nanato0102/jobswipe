@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { sanitizeString } from "@/lib/sanitizer";
+import { sendStudentWelcomeEmail } from "@/lib/mail";
 import { z } from "zod";
 
 const registerSchema = z.object({
@@ -67,6 +68,18 @@ export async function POST(req: Request) {
         },
       });
 
+      // 学生登録の場合、ウェルカム＆動画投稿促進メールを送信
+      if (userType === "STUDENT") {
+        sendStudentWelcomeEmail({
+          name: sanitizedName,
+          email,
+          university: sanitizedUniversity,
+          videoUrl: "https://jobswipe-app.vercel.app/student/video",
+        }).catch((mailErr) => {
+          console.warn("[Student Welcome Email Error]:", mailErr);
+        });
+      }
+
       return NextResponse.json({
         success: true,
         user: {
@@ -78,6 +91,16 @@ export async function POST(req: Request) {
       });
     } catch (dbError) {
       console.warn("DB operation warning:", dbError);
+
+      if (userType === "STUDENT") {
+        sendStudentWelcomeEmail({
+          name: sanitizedName,
+          email,
+          university: sanitizedUniversity,
+          videoUrl: "https://jobswipe-app.vercel.app/student/video",
+        }).catch(() => {});
+      }
+
       return NextResponse.json({
         success: true,
         demoMode: true,

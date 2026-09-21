@@ -289,3 +289,151 @@ export async function sendCompanyApprovalEmail(payload: CompanyApprovalEmailPayl
     return { success: true, mode: "mock" };
   }
 }
+
+export interface StudentWelcomeEmailPayload {
+  name: string;
+  email: string;
+  university?: string;
+  videoUrl?: string;
+}
+
+/**
+ * 学生向け登録完了（ウェルカム）メール送信
+ * 動画投稿のモチベーションを高める洗練されたデザインと構成案内
+ */
+export async function sendStudentWelcomeEmail(payload: StudentWelcomeEmailPayload) {
+  const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL || "jobswipe.info@gmail.com";
+  const resendApiKey = process.env.RESEND_API_KEY;
+  const fromEmail = process.env.RESEND_FROM_EMAIL || "JobSwipe <onboarding@resend.dev>";
+  const videoUploadUrl = payload.videoUrl || "https://jobswipe-app.vercel.app/student/video";
+  const profileUrl = "https://jobswipe-app.vercel.app/student/profile";
+
+  const timestamp = new Date().toLocaleString("ja-JP", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const subject = `【JobSwipe】会員登録完了のお知らせ（60秒動画で逆求人スカウトを受け取ろう）`;
+  const html = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 620px; margin: 0 auto; padding: 28px 24px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff; color: #1e293b; line-height: 1.7;">
+      
+      <!-- ブランドヘッダー -->
+      <div style="border-bottom: 2px solid #047857; padding-bottom: 16px; margin-bottom: 24px;">
+        <h1 style="color: #0f172a; margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">JobSwipe (ジョブスワイプ)</h1>
+        <p style="margin: 4px 0 0 0; font-size: 12px; color: #64748b; font-weight: 500;">短尺自己PR動画で人柄を可視化する新卒逆求人プラットフォーム</p>
+      </div>
+
+      <!-- ウェルカムメッセージ -->
+      <p style="font-size: 16px; color: #1e293b; margin: 0 0 12px 0;">
+        <strong>${payload.name} 様</strong>
+      </p>
+
+      <p style="font-size: 14px; color: #334155; margin: 0 0 24px 0;">
+        JobSwipeへの会員登録が完了いたしました！<br />
+        テンプレESや学歴のフィルターを超え、あなたの「素の人柄・熱量・対人力」を評価する優良企業から直接スカウトが届く「待ちの就活」をスタートしましょう。
+      </p>
+
+      <!-- メインCTA（動画投稿ボタン） -->
+      <div style="background-color: #ecfdf5; border: 1.5px solid #a7f3d0; border-radius: 10px; padding: 24px 20px; text-align: center; margin: 24px 0;">
+        <span style="display: inline-block; background-color: #065f46; color: #ffffff; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 4px; text-transform: uppercase; margin-bottom: 10px;">STEP 1 : 最重要アクション</span>
+        <h2 style="font-size: 18px; font-weight: 800; color: #064e3b; margin: 0 0 8px 0;">
+          まずは60秒の自己PR動画を投稿しよう
+        </h2>
+        <p style="font-size: 13px; color: #047857; margin: 0 0 18px 0;">
+          スマホのインカメラで自撮りするだけ（編集不要・撮り直し無制限）。動画を投稿すると企業のスワイプ画面に表示され、スカウト獲得率が大幅に向上します。
+        </p>
+        <a href="${videoUploadUrl}" style="display: inline-block; background-color: #047857; color: #ffffff; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 800; font-size: 15px; box-shadow: 0 2px 4px rgba(4, 120, 87, 0.2);">
+          スマホで自己PR動画を投稿する（約1分） ➔
+        </a>
+      </div>
+
+      <!-- 動画投稿の3大安心ポイント -->
+      <div style="margin: 28px 0;">
+        <h3 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0 0 14px 0; border-left: 3px solid #047857; padding-left: 8px;">
+          JobSwipeの安心＆メリット
+        </h3>
+        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+          <tr>
+            <td style="padding: 10px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; width: 33.3%; vertical-align: top;">
+              <strong style="color: #047857; display: block; margin-bottom: 4px;">✓ 完全無料</strong>
+              利用料やスカウト受信・チャット面談などすべて完全無料です。
+            </td>
+            <td style="padding: 10px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; width: 33.3%; vertical-align: top;">
+              <strong style="color: #047857; display: block; margin-bottom: 4px;">✓ 撮り直し何度でもOK</strong>
+              納得がいくまで何回でも撮り直して最新動画に差し替え可能です。
+            </td>
+            <td style="padding: 10px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; width: 33.3%; vertical-align: top;">
+              <strong style="color: #047857; display: block; margin-bottom: 4px;">✓ 承諾まで本名非公開</strong>
+              スワイプ時はイニシャル表示。オファーを承諾した企業にのみ公開されます。
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- 簡単60秒動画の構成テンプレート -->
+      <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px; margin: 24px 0; font-size: 13px;">
+        <h3 style="margin: 0 0 10px 0; font-size: 13px; font-weight: 700; color: #0f172a;">
+          🎬 何を話せばいい？ 60秒のおすすめ構成例
+        </h3>
+        <ul style="margin: 0; padding-left: 20px; color: #334155;">
+          <li style="margin-bottom: 6px;"><strong>【0〜15秒】挨拶 ＆ 自己紹介:</strong> 「〇〇大学の〇〇です。専攻は〜です」</li>
+          <li style="margin-bottom: 6px;"><strong>【15〜45秒】学生時代に力を入れたこと:</strong> 「部活動/研究/インターン/サークル等で〇〇に注力し、〇〇を学びました」</li>
+          <li><strong>【45〜60秒】強み ＆ 意気込み:</strong> 「私の強みは〇〇です。御社のような成長環境で貢献したいです！」</li>
+        </ul>
+      </div>
+
+      <!-- アカウント情報 -->
+      <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; margin: 24px 0; font-size: 13px; background-color: #ffffff;">
+        <p style="margin: 0 0 4px 0; color: #64748b;"><strong>ご登録メールアドレス:</strong> ${payload.email}</p>
+        ${payload.university ? `<p style="margin: 0 0 4px 0; color: #64748b;"><strong>学校名:</strong> ${payload.university}</p>` : ""}
+        <p style="margin: 0; color: #64748b;"><strong>マイページ:</strong> <a href="${profileUrl}" style="color: #047857; text-decoration: underline;">${profileUrl}</a></p>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 28px 0 16px 0;" />
+      <div style="font-size: 12px; color: #64748b; line-height: 1.6;">
+        <p style="margin: 0 0 4px 0;"><strong>JobSwipe 運営事務局</strong></p>
+        <p style="margin: 0 0 4px 0;">お問い合わせ: <a href="mailto:jobswipe.info@gmail.com" style="color: #047857;">jobswipe.info@gmail.com</a></p>
+        <p style="margin: 0;">登録日時: ${timestamp}</p>
+      </div>
+    </div>
+  `;
+
+  if (resendApiKey) {
+    let emailSent = false;
+    try {
+      const res = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${resendApiKey}`,
+        },
+        body: JSON.stringify({
+          from: fromEmail,
+          to: [payload.email],
+          bcc: [adminEmail],
+          reply_to: adminEmail,
+          subject,
+          html,
+        }),
+      });
+
+      const resData = await res.json();
+      if (res.ok) {
+        console.log(`[Resend Welcome Success] Welcome email sent to ${payload.email}, id: ${resData.id}`);
+        emailSent = true;
+      } else {
+        console.warn(`[Resend Welcome Warning]`, resData);
+      }
+    } catch (e) {
+      console.error("[Resend Welcome Exception]", e);
+    }
+    return { success: emailSent, mode: "live" };
+  } else {
+    console.log(`[Email Mock] Welcome email simulated for: ${payload.email}`);
+    return { success: true, mode: "mock" };
+  }
+}
