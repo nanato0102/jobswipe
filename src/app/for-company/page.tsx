@@ -75,7 +75,8 @@ export default function ForCompanyPage() {
               <FadeInView delay={100}>
                 <h1 className="text-3xl min-[400px]:text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.15] text-slate-900">
                   面接で、<br className="sm:hidden" />
-                  <span className="text-blue-700">「思っていた人と違った」</span>をゼロに。
+                  <span className="text-blue-700">「思っていた人と違った」</span><br className="sm:hidden" />
+                  をゼロに。
                 </h1>
               </FadeInView>
 
@@ -242,7 +243,7 @@ export default function ForCompanyPage() {
                     <span>JobSwipeの解決策</span>
                   </div>
                   <h4 className="text-sm sm:text-base font-bold text-slate-900 leading-snug">
-                    声のトーンや表情、<br className="sm:hidden" />60秒の構成力で事前に確信
+                    声のトーンや表情、<br className="sm:hidden" />60秒の動画で事前に確信
                   </h4>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
                     会う前に人柄や対話力をチェックできるため、1次面接の通過率と選考精度が飛躍的に向上します。
@@ -327,7 +328,7 @@ export default function ForCompanyPage() {
                 BENEFITS
               </span>
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-snug sm:leading-tight">
-                新世代の採用プラットフォームが<br className="sm:hidden" />もたらす価値
+                採用プラットフォームが<br className="sm:hidden" />もたらす新たな価値
               </h2>
               <p className="text-sm sm:text-base text-slate-600 font-normal">
                 書類選考工数の劇的な削減と、カルチャーマッチする優秀層のダイレクト採用を実現
@@ -343,7 +344,7 @@ export default function ForCompanyPage() {
                   FOR ENTERPRISE 01
                 </span>
                 <h3 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight leading-snug">
-                  書類選考と1次面接の歩留まりを改善。<br className="sm:hidden" />採用工数を大幅削減。
+                  選考の歩留まりを劇的に改善し、<br className="sm:hidden" />採用工数を大幅削減。
                 </h3>
                 <p className="text-xs sm:text-sm lg:text-base text-slate-700 leading-relaxed font-normal">
                   文字の履歴書では見抜けない「素の対人力・論理的思考力・熱量」を60秒動画で把握。会うべき候補者を事前に確信できるため、無駄な面接を根絶します。
@@ -479,7 +480,7 @@ export default function ForCompanyPage() {
                   <ShieldCheck className="w-6 h-6 stroke-[2.2]" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 leading-snug sm:leading-tight">
+                  <h3 className="text-xl min-[390px]:text-2xl sm:text-3xl font-black tracking-tight text-slate-900 leading-snug sm:leading-tight">
                     安心・安全の完全審査制 ＆<br className="sm:hidden" />非公開動画管理
                   </h3>
                   <p className="text-xs sm:text-sm lg:text-base text-slate-600 leading-relaxed font-normal max-w-2xl mx-auto">
@@ -623,7 +624,7 @@ export default function ForCompanyPage() {
                 </span>
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-slate-900 leading-snug sm:leading-tight">
                   60秒動画で、<br className="sm:hidden" />
-                  人柄マッチする優秀な人材と出会う。
+                  人柄重視の優秀層と出会う。
                 </h2>
                 <p className="text-xs sm:text-sm lg:text-base text-slate-600 leading-relaxed max-w-lg mx-auto font-normal">
                   文字だけの書類選考を脱却し、熱量とポテンシャルを持った学生をスワイプで直感スカウト。まずは無料の企業利用申請からスタートしてください。

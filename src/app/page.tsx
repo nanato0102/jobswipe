@@ -256,7 +256,7 @@ export default function HomePage() {
               <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest block">
                 PARADIGM SHIFT
               </span>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-snug sm:leading-tight">
+              <h2 className="text-[22px] min-[390px]:text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-snug sm:leading-tight">
                 文字に縛られた就活を、<br className="sm:hidden" />
                 動画で根本から変える
               </h2>
@@ -276,7 +276,7 @@ export default function HomePage() {
                     <span>従来の就活</span>
                   </div>
                   <p className="text-sm text-slate-600 leading-relaxed font-normal line-through decoration-slate-400/60">
-                    大学名や文章テクニックだけで足切りされ、<br className="sm:hidden" />本来の人柄を見てもらえない
+                    大学名やESテクニックで足切りされ、<br className="sm:hidden" />本来の人柄が伝わらない
                   </p>
                 </div>
 
@@ -286,7 +286,7 @@ export default function HomePage() {
                     <span>JobSwipeの変革</span>
                   </div>
                   <h3 className="text-base font-bold text-slate-900 leading-snug">
-                    声のトーンや素の笑顔、<br className="sm:hidden" />表情の熱量で直接評価される
+                    声のトーンや素の笑顔、<br className="sm:hidden" />表情の熱量で正当に評価
                   </h3>
                   <p className="text-sm text-slate-600 leading-relaxed font-normal">
                     文字の履歴書では絶対に伝わらない、あなたの魅力と対話力がファーストコンタクトで正当に届きます。
@@ -304,7 +304,7 @@ export default function HomePage() {
                     <span>従来の就活</span>
                   </div>
                   <p className="text-sm text-slate-600 leading-relaxed font-normal line-through decoration-slate-400/60">
-                    何十社も同じようなESを<br className="sm:hidden" />書き直す膨大な時間浪費
+                    何十社も同じESを書き直す、<br className="sm:hidden" />膨大な時間と労力の浪費
                   </p>
                 </div>
 
@@ -314,7 +314,7 @@ export default function HomePage() {
                     <span>JobSwipeの変革</span>
                   </div>
                   <h3 className="text-base font-bold text-slate-900 leading-snug">
-                    納得の60秒動画1本で、<br className="sm:hidden" />優良企業から直接逆指名
+                    納得の60秒動画1本で、<br className="sm:hidden" />優良企業から直接スカウト
                   </h3>
                   <p className="text-sm text-slate-600 leading-relaxed font-normal">
                     一度ベストな動画を撮影して登録すれば、あなたに魅力を感じた企業からスカウトが届く「待ちの就活」が可能に。
@@ -332,7 +332,7 @@ export default function HomePage() {
                     <span>従来の就活</span>
                   </div>
                   <p className="text-sm text-slate-600 leading-relaxed font-normal line-through decoration-slate-400/60">
-                    面接で緊張して素が出せず、<br className="sm:hidden" />カルチャー不一致で落とされる
+                    面接で緊張して素が出せず、<br className="sm:hidden" />相性が合わずに落とされる
                   </p>
                 </div>
 
@@ -342,7 +342,7 @@ export default function HomePage() {
                     <span>JobSwipeの変革</span>
                   </div>
                   <h3 className="text-base font-bold text-slate-900 leading-snug">
-                    あなたの雰囲気に惹かれた企業と、<br className="sm:hidden" />対等に対話できる
+                    あなたの雰囲気に共感する企業と、<br className="sm:hidden" />自然体で対話できる
                   </h3>
                   <p className="text-sm text-slate-600 leading-relaxed font-normal">
                     あらかじめ動画で人柄やテンポを理解した上でオファーされるため、面接時の緊張がほぐれ、高いマッチ率を誇ります。
@@ -415,8 +415,8 @@ export default function HomePage() {
                     FEATURE 01
                   </span>
                   <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug">
-                    ESや学歴の壁を突破。<br className="sm:hidden" />
-                    あなたの「人柄と熱量」が正当に届く。
+                    学歴やESの壁を超え、<br className="sm:hidden" />
+                    素の人柄と熱量が正当に届く。
                   </h3>
                   <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
                     文章のテクニックや大学名による書類足切りはありません。声のトーン、思考の深さ、普段のあなたの自然なコミュニケーション力が直接企業に届きます。
@@ -470,7 +470,7 @@ export default function HomePage() {
                   </span>
                   <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug">
                     面接前のミスマッチを根絶。<br className="sm:hidden" />
-                    会う前に「人柄・対人力」を確信。
+                    会う前に人柄・対人力を確信。
                   </h3>
                   <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
                     文字の履歴書では見抜けない候補者のリアルな雰囲気・論理的思考力・熱量を60秒で把握。「会ってみたら違った」という採用工数の無駄をゼロにします。
@@ -852,8 +852,8 @@ export default function HomePage() {
                   <span>完全無料で今日からスタート</span>
                 </span>
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-snug sm:leading-tight">
-                  60秒の動画で、<br className="sm:hidden" />
-                  あなたに惹かれる企業と出会う。
+                  60秒の自己PR動画で、<br className="sm:hidden" />
+                  相性抜群の企業と出会う。
                 </h2>
                 <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-lg mx-auto font-normal">
                   登録・動画投稿・オファー受信まですべて完全無料。スマホひとつで、あなたの熱量と人柄を評価する優良企業からのスカウトを受け取りましょう。
