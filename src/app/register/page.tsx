@@ -67,7 +67,14 @@ export default function RegisterPage() {
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, userType: "STUDENT", name }),
+        body: JSON.stringify({
+          email,
+          password,
+          userType: "STUDENT",
+          name,
+          university,
+          graduationYear,
+        }),
       });
 
       if (!res.ok) {
@@ -75,13 +82,14 @@ export default function RegisterPage() {
         throw new Error(data.message || "登録に失敗しました");
       }
 
-      const dummyUser = {
-        id: "u-" + Date.now(),
+      const resData = await res.json().catch(() => ({}));
+      const loggedInUser = {
+        id: resData?.user?.id || "u-" + Date.now(),
         email,
         userType: "STUDENT" as const,
         name,
       };
-      login(dummyUser);
+      login(loggedInUser);
 
       setSuccess(true);
       setTimeout(() => {

@@ -9,6 +9,8 @@ const registerSchema = z.object({
   password: z.string().min(6),
   userType: z.enum(["STUDENT", "COMPANY", "ADMIN"]),
   name: z.string().min(1),
+  university: z.string().optional(),
+  graduationYear: z.number().optional(),
 });
 
 export async function POST(req: Request) {
@@ -24,8 +26,9 @@ export async function POST(req: Request) {
     }
 
     const email = sanitizeString(result.data.email).toLowerCase();
-    const { password, userType, name } = result.data;
+    const { password, userType, name, university, graduationYear } = result.data;
     const sanitizedName = sanitizeString(name);
+    const sanitizedUniversity = university ? sanitizeString(university) : undefined;
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -48,6 +51,8 @@ export async function POST(req: Request) {
               ? {
                   create: {
                     fullName: sanitizedName,
+                    university: sanitizedUniversity,
+                    graduationYear: graduationYear || 2027,
                   },
                 }
               : undefined,
