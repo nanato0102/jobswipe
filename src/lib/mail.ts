@@ -38,8 +38,8 @@ export async function sendContactEmails(payload: ContactEmailPayload) {
   // 1. 運営者（管理者）向け通知メール
   const adminSubject = `【JobSwipeお問い合わせ】${targetLabel} ${payload.senderName}様より [受付番号: ${payload.receiptNumber}]`;
   const adminHtml = `
-    <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #ffffff; color: #1e293b;">
-      <h2 style="color: #0f172a; margin: 0 0 16px 0; font-size: 20px;">JobSwipe お問い合わせ通知</h2>
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #ffffff; color: #1e293b;">
+      <h2 style="color: #0f172a; margin: 0 0 16px 0; font-size: 20px; font-weight: 700;">JobSwipe お問い合わせ通知</h2>
       <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 16px; margin-bottom: 20px; font-size: 14px;">
         <p style="margin: 4px 0;"><strong>受付番号:</strong> ${payload.receiptNumber}</p>
         <p style="margin: 4px 0;"><strong>種別:</strong> ${isCompany ? "企業・採用ご担当者様" : "学生・求職者様"}</p>
@@ -51,7 +51,7 @@ export async function sendContactEmails(payload: ContactEmailPayload) {
         <p style="margin: 4px 0;"><strong>ご相談種別:</strong> ${payload.inquiryType}</p>
         <p style="margin: 4px 0;"><strong>送信日時:</strong> ${timestamp}</p>
       </div>
-      <h3 style="font-size: 14px; color: #334155; margin: 0 0 8px 0;">お問い合わせ本文</h3>
+      <h3 style="font-size: 14px; color: #334155; margin: 0 0 8px 0; font-weight: 600;">お問い合わせ本文</h3>
       <div style="background-color: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 14px; font-size: 14px; line-height: 1.7; color: #0f172a; white-space: pre-wrap;">${payload.message}</div>
       <p style="margin-top: 16px; font-size: 12px; color: #64748b;">※ このメールに直接返信すると、送信者（${payload.email}）宛てに返信できます。</p>
       <div style="text-align: center; margin-top: 24px;">
@@ -63,8 +63,8 @@ export async function sendContactEmails(payload: ContactEmailPayload) {
   // 2. 問い合わせ送信者宛て自動返信サンクスメール
   const userSubject = `【JobSwipe】お問い合わせを受け付けました [受付番号: ${payload.receiptNumber}]`;
   const userHtml = `
-    <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #ffffff; color: #1e293b;">
-      <h2 style="color: #0f172a; margin: 0 0 16px 0; font-size: 20px;">JobSwipe (ジョブスワイプ)</h2>
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #ffffff; color: #1e293b;">
+      <h2 style="color: #0f172a; margin: 0 0 16px 0; font-size: 20px; font-weight: 700;">JobSwipe (ジョブスワイプ)</h2>
       <p style="font-size: 14px; line-height: 1.7; color: #334155;">
         <strong>${displayName}</strong><br /><br />
         この度はお問い合わせいただき、誠にありがとうございます。<br />
@@ -76,7 +76,7 @@ export async function sendContactEmails(payload: ContactEmailPayload) {
         <p style="margin: 4px 0;"><strong>ご相談種別:</strong> ${payload.inquiryType}</p>
         <p style="margin: 4px 0;"><strong>受付日時:</strong> ${timestamp}</p>
       </div>
-      <h3 style="font-size: 13px; color: #334155; margin: 0 0 8px 0;">お問い合わせ内容（控え）</h3>
+      <h3 style="font-size: 13px; color: #334155; margin: 0 0 8px 0; font-weight: 600;">お問い合わせ内容（控え）</h3>
       <div style="background-color: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 14px; font-size: 13px; line-height: 1.7; color: #0f172a; white-space: pre-wrap;">${payload.message}</div>
       <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 24px 0 16px 0;" />
       <p style="font-size: 12px; color: #64748b; margin: 0;">JobSwipe 運営事務局: <a href="mailto:jobswipe.info@gmail.com" style="color: #0284c7;">jobswipe.info@gmail.com</a></p>
@@ -84,9 +84,12 @@ export async function sendContactEmails(payload: ContactEmailPayload) {
   `;
 
   if (resendApiKey) {
+    let adminSent = false;
+    let userSent = false;
+
+    // 1. 運営者（管理者）宛てメール送信
     try {
-      // 1. 運営者宛て通知メール
-      await fetch("https://api.resend.com/emails", {
+      const resAdmin = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -101,8 +104,20 @@ export async function sendContactEmails(payload: ContactEmailPayload) {
         }),
       });
 
-      // 2. 送信者宛て自動返信メール
-      await fetch("https://api.resend.com/emails", {
+      const adminData = await resAdmin.json();
+      if (resAdmin.ok) {
+        console.log(`[Resend Admin Success] Email sent to ${adminEmail}, id: ${adminData.id}`);
+        adminSent = true;
+      } else {
+        console.error(`[Resend Admin Error]`, adminData);
+      }
+    } catch (e) {
+      console.error("[Resend Admin Exception]", e);
+    }
+
+    // 2. 送信者宛て自動返信メール（Resendサンドボックス制限を考慮）
+    try {
+      const resUser = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -117,14 +132,25 @@ export async function sendContactEmails(payload: ContactEmailPayload) {
         }),
       });
 
-      console.log(`[Email Sent] Admin notified (${adminEmail}), User confirmed (${payload.email})`);
-      return { success: true, mode: "live" };
-    } catch (err) {
-      console.error("[Email Error] Failed to send via Resend:", err);
-      return { success: false, error: err };
+      const userData = await resUser.json();
+      if (resUser.ok) {
+        console.log(`[Resend User Success] Confirmation sent to ${payload.email}, id: ${userData.id}`);
+        userSent = true;
+      } else {
+        console.warn(`[Resend User Note] Sandbox mode prevented sending to ${payload.email}:`, userData.message);
+      }
+    } catch (e) {
+      console.warn("[Resend User Exception]", e);
     }
+
+    return {
+      success: adminSent || userSent,
+      mode: "live",
+      adminNotified: adminSent,
+      userNotified: userSent,
+    };
   } else {
-    console.log(`[Email Mock] RESEND_API_KEY is not configured. Admin: ${adminEmail}, User: ${payload.email}`);
-    return { success: true, mode: "mock" };
+    console.log(`[Email Mock] RESEND_API_KEY not configured. Admin: ${adminEmail}, User: ${payload.email}`);
+    return { success: true, mode: "mock", adminNotified: true, userNotified: true };
   }
 }

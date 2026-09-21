@@ -33,10 +33,16 @@ export default function SwipePage() {
           const data = await res.json();
           const list = Array.isArray(data) ? data : data.videos || [];
           if (list.length > 0) {
-            // ローカル投稿動画とサーバー動画を統合
+            // サーバー動画とローカル動画をID単位で重複排除してマージ
+            const map = new Map<string, VideoData>();
+            list.forEach((v: VideoData) => {
+              if (v && (v.id || v.videoUrl)) map.set(v.id || v.videoUrl, v);
+            });
             const localVideos = appStore.getVideos();
-            const merged = Array.from(new Set([...localVideos, ...list]));
-            setVideos(merged);
+            localVideos.forEach((v: VideoData) => {
+              if (v && (v.id || v.videoUrl)) map.set(v.id || v.videoUrl, v);
+            });
+            setVideos(Array.from(map.values()));
           }
         }
       } catch (err) {

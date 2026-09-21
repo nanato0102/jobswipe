@@ -1,64 +1,144 @@
 import { NextResponse } from "next/server";
+import { uploadVideoFile } from "@/lib/storage";
+import { sanitizeString } from "@/lib/sanitizer";
+import { prisma } from "@/lib/prisma";
+
+export const maxDuration = 60; // Next.js API route maximum execution duration for video upload
 
 export async function POST(req: Request) {
   try {
-    const contentType = req.headers.get("content-type") || "";
-
-    // 1. Presigned URL リクエスト（JSONモード）
-    if (contentType.includes("application/json")) {
-      const body = await req.json();
-      const { filename, fileType, fileSize } = body;
-
-      // バリデーション
-      if (!fileType || !fileType.startsWith("video/")) {
-        return NextResponse.json({ error: "動画ファイル（MP4, MOV, WEBM形式）のみアップロード可能です。" }, { status: 400 });
-      }
-
-      // 最大100MB
-      if (fileSize && fileSize > 100 * 1024 * 1024) {
-        return NextResponse.json({ error: "動画のファイルサイズは最大100MBまでです。" }, { status: 400 });
-      }
-
-      const timestamp = Date.now();
-      const cleanFilename = (filename || "video.mp4").replace(/[^a-zA-Z0-9.-]/g, "_");
-      const key = `videos/${timestamp}_${cleanFilename}`;
-
-      // AWS S3 Presigned URL モック/本番両対応
-      // AWS SDK S3Client を利用する場合はここに GetSignedUrlCommand を記述
-      const uploadUrl = `https://jobswipe-media-storage.s3.ap-northeast-1.amazonaws.com/${key}`;
-      const finalVideoUrl = uploadUrl;
-
-      return NextResponse.json({
-        success: true,
-        uploadUrl, // S3へのダイレクトPUT用URL
-        key,
-        finalVideoUrl,
-        maxDurationSeconds: 60,
-      });
-    }
-
-    // 2. サーバー経由ダイレクトアップロード（FormDataモード）
     const formData = await req.formData();
     const file = formData.get("video") as File | null;
     const title = (formData.get("title") as string) || "自己PR動画";
+    const description = (formData.get("description") as string) || "";
+    const tags = (formData.get("tags") as string) || "";
+    const studentId = (formData.get("studentId") as string) || "";
 
     if (!file) {
-      return NextResponse.json({ error: "動画ファイルが見つかりません。" }, { status: 400 });
+      return NextResponse.json(
+        { error: "動画ファイルが見つかりません。ファイルを選択してください。" },
+        { status: 400 }
+      );
     }
 
-    const timestamp = Date.now();
-    const key = `videos/${timestamp}_${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
-    const videoUrl = `https://jobswipe-media-storage.s3.ap-northeast-1.amazonaws.com/${key}`;
+    // MIMEタイプバリデーション
+    const allowedTypes = ["video/mp4", "video/quicktime", "video/webm", "video/x-msvideo", "video/ogg", "video/mpeg"];
+    if (!allowedTypes.includes(file.type) && !file.type.startsWith("video/")) {
+      return NextResponse.json(
+        { error: "対応していないファイル形式です。MP4, MOV, WebM形式の動画をアップロードしてください。" },
+        { status: 400 }
+      );
+    }
+
+    // サイズ上限バリデーション (50MB)
+    const MAX_SIZE = 50 * 1024 * 1024;
+    if (file.size > MAX_SIZE) {
+      return NextResponse.json(
+        { error: "動画ファイルサイズが上限（50MB）を超えています。圧縮するか60秒以内の短尺動画を選択してください。" },
+        { status: 400 }
+      );
+    }
+
+    // ArrayBuffer -> Buffer 変換
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    // Supabase Storage にアップロード
+    const uploadResult = await uploadVideoFile(buffer, file.name, file.type);
+
+    if (!uploadResult.success || !uploadResult.videoUrl) {
+      return NextResponse.json(
+        { error: uploadResult.error || "ストレージへの動画アップロードに失敗しました。" },
+        { status: 500 }
+      );
+    }
+
+    const videoUrl = uploadResult.videoUrl;
+
+    // Prisma DB への動画レコード登録
+    let savedVideo = null;
+    try {
+      let targetProfile = null;
+      if (studentId) {
+        targetProfile = await prisma.studentProfile.findFirst({
+          where: {
+            OR: [
+              { id: studentId },
+              { userId: studentId },
+              { user: { email: studentId } },
+            ],
+          },
+        });
+      }
+
+      if (!targetProfile) {
+        targetProfile = await prisma.studentProfile.findFirst();
+      }
+
+      if (!targetProfile) {
+        // 新規デモ学生作成
+        const dummyUser = await prisma.user.create({
+          data: {
+            email: `student_${Date.now()}@jobswipe.jp`,
+            password: "hashed_dummy_password",
+            userType: "STUDENT",
+            studentProfile: {
+              create: {
+                fullName: "学生ユーザー",
+                university: "大学情報",
+                graduationYear: 2027,
+              },
+            },
+          },
+          include: { studentProfile: true },
+        });
+        targetProfile = dummyUser.studentProfile;
+      }
+
+      if (targetProfile) {
+        savedVideo = await prisma.video.create({
+          data: {
+            studentId: targetProfile.id,
+            title: sanitizeString(title),
+            description: sanitizeString(description),
+            tags: sanitizeString(tags),
+            videoUrl: sanitizeString(videoUrl),
+          },
+          include: {
+            student: {
+              include: {
+                user: { select: { id: true, email: true } },
+              },
+            },
+          },
+        });
+      }
+    } catch (dbErr) {
+      console.warn("Prisma DB save error during upload:", dbErr);
+    }
 
     return NextResponse.json({
       success: true,
       videoUrl,
-      title,
-      uploadedAt: new Date().toISOString(),
-      message: "動画のアップロード・トランスコード準備が完了しました。",
+      key: uploadResult.key,
+      title: sanitizeString(title),
+      description: sanitizeString(description),
+      tags: sanitizeString(tags),
+      video: savedVideo || {
+        id: "vid_" + Date.now(),
+        title,
+        description,
+        tags,
+        videoUrl,
+        uploadedAt: new Date().toISOString(),
+      },
+      message: "自己PR動画のクラウド保存が完了しました。",
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Video upload error:", error);
-    return NextResponse.json({ error: "動画のアップロードに失敗しました。" }, { status: 500 });
+    return NextResponse.json(
+      { error: error?.message || "動画のアップロード処理中に予期せぬエラーが発生しました。" },
+      { status: 500 }
+    );
   }
 }

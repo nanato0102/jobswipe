@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
@@ -22,6 +24,7 @@ import {
   Flag,
   Lock,
   Compass,
+  FileText,
 } from "lucide-react";
 import type { VideoData } from "@/types";
 import ReportModal from "@/components/ReportModal";
@@ -46,6 +49,25 @@ export function getMaskedStudentName(fullName?: string | null): string {
   return `${fullName[0]}..さん`;
 }
 
+// スカウトオファーの定型文テンプレート
+const OFFER_TEMPLATES = [
+  {
+    id: "casual",
+    title: "カジュアル面談",
+    text: "自己PR動画を拝見いたしました。動画から伝わる明るく前向きな雰囲気に非常に惹かれました。まずは選考ではなく、弊社の事業やカルチャーについてカジュアルにお話ししませんか？",
+  },
+  {
+    id: "special",
+    title: "特別選考（面接確約）",
+    text: "自己PR動画で語られていた課題解決力・推進力に大変魅力を感じました。ぜひ弊社の幹部候補・新卒採用ポジションとしてお迎えしたく、書類選考免除の特別面談をご案内いたします。",
+  },
+  {
+    id: "intern",
+    title: "インターン相談",
+    text: "動画を拝見し、実践的なスキルと意欲の高さに感銘を受けました。もしご興味があれば、弊社のプロジェクトに参加できる実践型インターンシップについて一度お話しさせてください。",
+  },
+];
+
 interface SwipeCardProps {
   videos: VideoData[];
   onLike?: (video: VideoData) => void;
@@ -61,25 +83,30 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [offerMessage, setOfferMessage] = useState("");
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
   // スワイプフィードバックスタンプ（LIKE / SKIP）
   const [swipeFeedback, setSwipeFeedback] = useState<"LIKE" | "SKIP" | null>(null);
 
-  // 動画再生・音声状態
+  // ドラッグ＆スワイプ物理アニメーション状態
+  const [dragOffsetY, setDragOffsetY] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartY = useRef<number | null>(null);
+
+  // 動画再生・音声・進行度
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
   const [playbackRate, setPlaybackRate] = useState<number>(1.0);
+  const [progressPercent, setProgressPercent] = useState<number>(0);
   const [likedMap, setLikedMap] = useState<Record<string, boolean>>({});
 
   const videoRef = useRef<HTMLVideoElement>(null);
-  const touchStartY = useRef<number | null>(null);
-  const touchEndY = useRef<number | null>(null);
 
   const currentVideo = videos && videos.length > 0 ? videos[currentIndex % videos.length] : null;
   const isLiked = currentVideo ? !!likedMap[currentVideo.id] : false;
 
-  // appStore から学生の4軸詳細を取得
+  // 学生の4軸詳細を取得
   const currentStudentId = currentVideo?.student?.id || currentVideo?.studentId || "s1";
   const studentDetail = appStore.getStudentDetails(currentStudentId);
 
@@ -105,6 +132,9 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
       setStatusMessage(null);
       if (action) triggerFeedback(action);
       setHistoryStack((prev) => [...prev, currentIndex]);
+      setDragOffsetY(0);
+      setIsDragging(false);
+      setProgressPercent(0);
       setCurrentIndex((prev) => (prev + 1) % videos.length);
     },
     [currentIndex, videos.length]
@@ -112,6 +142,9 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
 
   const handlePrev = useCallback(() => {
     setStatusMessage(null);
+    setDragOffsetY(0);
+    setIsDragging(false);
+    setProgressPercent(0);
     setCurrentIndex((prev) => (prev - 1 + videos.length) % videos.length);
   }, [videos.length]);
 
@@ -120,6 +153,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
     if (historyStack.length === 0) return;
     const prevIdx = historyStack[historyStack.length - 1];
     setHistoryStack((prev) => prev.slice(0, prev.length - 1));
+    setProgressPercent(0);
     setCurrentIndex(prevIdx);
     info("前の動画に戻りました");
   };
@@ -133,7 +167,16 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
         videoRef.current.play().catch(() => {});
       }
     }
-  }, [currentIndex, playbackRate]);
+  }, [currentIndex, playbackRate, isPlaying]);
+
+  // 動画再生プログレスバー更新
+  const handleTimeUpdate = () => {
+    if (videoRef.current && videoRef.current.duration) {
+      const current = videoRef.current.currentTime;
+      const total = videoRef.current.duration;
+      setProgressPercent((current / total) * 100);
+    }
+  };
 
   // キーボードショートカット（PC操作性向上: ↑↓, J/K, Space, L）
   useEffect(() => {
@@ -179,28 +222,34 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
     );
   }
 
-  // タッチスワイプ（フリック）制御
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartY.current = e.targetTouches[0].clientY;
+  // タッチ & マウス ドラッグ（物理スワイプ）制御
+  const onPointerDown = (clientY: number) => {
+    dragStartY.current = clientY;
+    setIsDragging(true);
   };
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    touchEndY.current = e.targetTouches[0].clientY;
+  const onPointerMove = (clientY: number) => {
+    if (dragStartY.current === null || !isDragging) return;
+    const delta = clientY - dragStartY.current;
+    // 抵抗感を持たせた移動
+    setDragOffsetY(delta * 0.7);
   };
 
-  const handleTouchEnd = () => {
-    if (!touchStartY.current || !touchEndY.current) return;
-    const distance = touchStartY.current - touchEndY.current;
-    const minSwipeDistance = 50;
+  const onPointerUp = () => {
+    if (dragStartY.current === null) return;
+    const threshold = 60; // 60px以上でスワイプ実行
 
-    if (distance > minSwipeDistance) {
+    if (dragOffsetY < -threshold) {
       handleNext();
-    } else if (distance < -minSwipeDistance) {
+    } else if (dragOffsetY > threshold) {
       handlePrev();
+    } else {
+      // 元の位置に戻す
+      setDragOffsetY(0);
     }
 
-    touchStartY.current = null;
-    touchEndY.current = null;
+    dragStartY.current = null;
+    setIsDragging(false);
   };
 
   // タップで再生 / 一時停止
@@ -222,6 +271,9 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
     const newMuted = !isMuted;
     videoRef.current.muted = newMuted;
     setIsMuted(newMuted);
+    if (!newMuted) {
+      success("音声をONにしました", "スピーカー音量にご注意ください。");
+    }
   };
 
   // 倍速再生切り替え
@@ -284,6 +336,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
 
       setIsOfferModalOpen(false);
       setOfferMessage("");
+      setSelectedTemplateId(null);
       success("スカウトオファーを送信しました！", `${studentName} さんに届きました。`);
       setTimeout(() => {
         handleNext();
@@ -292,6 +345,11 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
       setIsOfferModalOpen(false);
       alert("【オファー上限到達】\n" + (err.message || "今月のオファー上限枠に達しています。利用状況ページより枠を追加してください。"));
     }
+  };
+
+  const applyTemplate = (template: typeof OFFER_TEMPLATES[0]) => {
+    setSelectedTemplateId(template.id);
+    setOfferMessage(template.text);
   };
 
   return (
@@ -308,10 +366,14 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
       <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* 左側：縦型ショート動画プレーヤー（7カラム） */}
         <div
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          className="lg:col-span-7 w-full max-w-full sm:max-w-md mx-auto bg-black text-white rounded-xl overflow-hidden shadow-xl border border-slate-800 flex flex-col h-[70dvh] sm:h-[74vh] min-h-[480px] sm:min-h-[580px] max-h-[720px] relative touch-pan-y select-none"
+          onTouchStart={(e) => onPointerDown(e.touches[0].clientY)}
+          onTouchMove={(e) => onPointerMove(e.touches[0].clientY)}
+          onTouchEnd={onPointerUp}
+          style={{
+            transform: `translateY(${dragOffsetY}px) scale(${1 - Math.abs(dragOffsetY) / 3000})`,
+            transition: isDragging ? "none" : "transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1)",
+          }}
+          className="lg:col-span-7 w-full max-w-full sm:max-w-md mx-auto bg-black text-white rounded-xl overflow-hidden shadow-2xl border border-slate-800 flex flex-col h-[70dvh] sm:h-[74vh] min-h-[490px] sm:min-h-[580px] max-h-[720px] relative select-none will-change-transform"
         >
           {/* 動画表示エリア */}
           <div
@@ -321,7 +383,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
             {/* スワイプフィードバックスタンプ（LIKE / SKIP） */}
             {swipeFeedback === "LIKE" && (
               <div className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none animate-scale-up">
-                <div className="px-5 py-2.5 rounded-lg bg-rose-500/95 text-white font-black text-2xl tracking-wider border-2 border-white shadow-2xl flex items-center gap-2 rotate-[-8deg]">
+                <div className="px-5 py-2.5 rounded-lg bg-rose-600 text-white font-black text-2xl tracking-wider border-2 border-white shadow-2xl flex items-center gap-2 rotate-[-8deg]">
                   <Heart className="w-7 h-7 fill-white" />
                   <span>LIKE!</span>
                 </div>
@@ -342,11 +404,12 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                 ref={videoRef}
                 key={currentVideo.id}
                 src={currentVideo.videoUrl}
-                className="w-full h-full object-cover select-none"
+                className="w-full h-full object-cover select-none pointer-events-none"
                 playsInline
                 loop
                 autoPlay
                 muted={isMuted}
+                onTimeUpdate={handleTimeUpdate}
                 controlsList="nodownload"
                 disablePictureInPicture
                 onContextMenu={(e) => e.preventDefault()}
@@ -532,18 +595,26 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
                 ))}
               </div>
             </div>
+
+            {/* 動画再生プログレスバー（最下部 2px） */}
+            <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20 z-30">
+              <div
+                className="h-full bg-emerald-400 transition-all duration-100"
+                style={{ width: `${progressPercent}%` }}
+              />
+            </div>
           </div>
 
-          {/* 上下送りナビゲーションバー（キーボード案内付き） */}
-          <div className="bg-slate-900 border-t border-slate-800 p-3 flex items-center justify-between px-4">
+          {/* 上下送りナビゲーションバー */}
+          <div className="bg-slate-900 border-t border-slate-800 p-3 flex items-center justify-between px-4 z-20">
             <span className="text-xs text-slate-400 hidden sm:inline">
               キーボードの <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-xs text-slate-200 font-mono">↑</kbd> <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-xs text-slate-200 font-mono">↓</kbd> またはスワイプで移動
             </span>
-            <span className="text-xs text-slate-400 sm:hidden">上下スワイプで移動</span>
+            <span className="text-xs text-slate-400 sm:hidden">上下スワイプで切り替え</span>
             <div className="flex items-center gap-2">
               <button
                 onClick={handlePrev}
-                className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-md text-xs flex items-center gap-1 border border-slate-700 cursor-pointer"
+                className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-md text-xs flex items-center gap-1 border border-slate-700 cursor-pointer transition-colors"
                 title="前の動画 (↑)"
               >
                 <ChevronUp className="w-4 h-4" />
@@ -552,7 +623,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
               <button
                 type="button"
                 onClick={() => handleNext()}
-                className="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-md text-xs font-semibold flex items-center gap-1 shadow-xs cursor-pointer"
+                className="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-md text-xs font-semibold flex items-center gap-1 shadow-xs cursor-pointer transition-colors"
                 title="次の動画 (↓)"
               >
                 <span>次へ</span>
@@ -686,7 +757,7 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
               onClick={() => setIsOfferModalOpen(true)}
               className="flex-1 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold rounded-md flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer"
             >
-              <Send className="w-4 h-4 text-blue-400" />
+              <Send className="w-4 h-4 text-emerald-400" />
               <span>オファーを送る</span>
             </button>
           </div>
@@ -777,11 +848,11 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
         </div>
       )}
 
-      {/* スカウトオファー送信モーダル */}
+      {/* スカウトオファー送信モーダル（定型文テンプレート付き） */}
       {isOfferModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl p-6 max-w-md w-full shadow-2xl border border-slate-200">
-            <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+          <div className="bg-white rounded-xl p-6 max-w-lg w-full shadow-2xl border border-slate-200 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
                 <span>{getMaskedStudentName(currentVideo.student?.fullName)} へオファーを送信</span>
               </h3>
@@ -793,19 +864,43 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
               </button>
             </div>
 
-            <p className="text-sm text-slate-600 mb-3">
-              動画を見て興味を持った理由や、オファーしたいポジション・面談メッセージを入力してください。
-            </p>
+            {/* ワンタップ定型文テンプレート */}
+            <div>
+              <span className="text-xs font-bold text-slate-700 flex items-center gap-1 mb-1.5">
+                <FileText className="w-3.5 h-3.5 text-emerald-700" />
+                <span>定型文テンプレートを選択（ワンタップで入力）:</span>
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                {OFFER_TEMPLATES.map((tmpl) => (
+                  <button
+                    key={tmpl.id}
+                    type="button"
+                    onClick={() => applyTemplate(tmpl)}
+                    className={`p-2.5 rounded-lg border text-left text-xs transition-all cursor-pointer ${
+                      selectedTemplateId === tmpl.id
+                        ? "bg-emerald-50 border-emerald-300 text-emerald-950 font-bold"
+                        : "bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100"
+                    }`}
+                  >
+                    <p className="font-bold">{tmpl.title}</p>
+                    <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">{tmpl.text}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
 
-            <textarea
-              value={offerMessage}
-              onChange={(e) => setOfferMessage(e.target.value)}
-              placeholder="例: 自己PR動画を拝見し、明るく主体的な人柄に非常に惹かれました。ぜひ一度オンラインでお話ししませんか？"
-              rows={4}
-              className="w-full text-sm border border-slate-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900 text-slate-900"
-            />
+            <div className="space-y-1.5">
+              <label className="block text-xs font-semibold text-slate-700">スカウトメッセージ本文</label>
+              <textarea
+                value={offerMessage}
+                onChange={(e) => setOfferMessage(e.target.value)}
+                placeholder="動画を見て興味を持った理由や、オファーしたいポジション・面談日程の候補などを入力してください。"
+                rows={4}
+                className="w-full text-sm border border-slate-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900 text-slate-900 leading-relaxed"
+              />
+            </div>
 
-            <div className="mt-4 flex gap-2.5 justify-end">
+            <div className="pt-2 flex gap-2.5 justify-end">
               <button
                 onClick={() => setIsOfferModalOpen(false)}
                 className="px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 rounded-md cursor-pointer"
@@ -815,10 +910,10 @@ export default function SwipeCard({ videos, onLike, onOffer }: SwipeCardProps) {
               <button
                 onClick={handleSendOffer}
                 disabled={!offerMessage.trim()}
-                className="px-4 py-2 text-sm font-semibold bg-emerald-700 text-white rounded-md hover:bg-emerald-600 disabled:opacity-50 flex items-center gap-1.5 shadow-xs cursor-pointer"
+                className="px-5 py-2.5 text-sm font-semibold bg-emerald-700 text-white rounded-md hover:bg-emerald-600 disabled:opacity-50 flex items-center gap-1.5 shadow-xs cursor-pointer transition-colors"
               >
-                <Send className="w-3.5 h-3.5" />
-                <span>送信する</span>
+                <Send className="w-4 h-4" />
+                <span>オファーを送信する</span>
               </button>
             </div>
           </div>

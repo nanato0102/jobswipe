@@ -53,13 +53,47 @@ export default function StudentVideoUploadPage() {
   // 投稿済み動画リスト
   const [uploadedVideos, setUploadedVideos] = useState<UploadedVideoItem[]>([]);
 
-  const loadData = () => {
+  const loadData = async () => {
     setStats(appStore.getStudentVideoStats());
     const detail = appStore.getStudentDetails(currentStudentId);
-    const studentVideos = appStore.getStudentVideos(currentStudentId);
-    if (studentVideos.length > 0) {
+    const localVideos = appStore.getStudentVideos(currentStudentId);
+
+    try {
+      const res = await fetch("/api/videos");
+      if (res.ok) {
+        const dbVideos = await res.json();
+        // 現在の学生に該当する動画、または初期動画
+        const matched = dbVideos.filter(
+          (v: any) =>
+            v.studentId === currentStudentId ||
+            v.student?.user?.email === session?.email ||
+            (v.student?.id && v.student.id === currentStudentId)
+        );
+
+        if (matched.length > 0) {
+          setUploadedVideos(
+            matched.map((v: any) => ({
+              id: v.id,
+              title: v.title,
+              description: v.description || "",
+              tags: v.tags ? v.tags.split(",").map((t: string) => t.trim()).filter(Boolean) : [],
+              videoUrl: v.videoUrl,
+              uploadedAt: new Date(v.uploadedAt || Date.now()).toLocaleDateString("ja-JP"),
+              viewsCount: 142,
+              likesCount: 18,
+              offersCount: 3,
+            }))
+          );
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn("Fetch videos error:", e);
+    }
+
+    if (localVideos.length > 0) {
       setUploadedVideos(
-        studentVideos.map((v) => ({
+        localVideos.map((v) => ({
           id: v.id,
           title: v.title,
           description: v.description || "",
@@ -131,8 +165,8 @@ export default function StudentVideoUploadPage() {
       return;
     }
 
-    if (file.size > 100 * 1024 * 1024) {
-      toastError("ファイルサイズ超過", "動画サイズは100MB以下にしてください。");
+    if (file.size > 50 * 1024 * 1024) {
+      toastError("ファイルサイズ超過", "動画サイズは50MB以下にしてください。");
       return;
     }
 
@@ -156,9 +190,32 @@ export default function StudentVideoUploadPage() {
 
     try {
       const detail = appStore.getStudentDetails(currentStudentId);
-      const finalVideoUrl = videoPreview || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
       const combinedTags = Array.from(new Set([...(detail?.personalityTags || []), ...tags]));
       const tagsString = combinedTags.join(",");
+
+      let uploadedPublicUrl = videoPreview || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
+
+      // 実際のファイルがある場合は Supabase Storage へアップロード
+      if (videoFile) {
+        const formData = new FormData();
+        formData.append("video", videoFile);
+        formData.append("title", title.trim());
+        formData.append("description", description.trim());
+        formData.append("tags", tagsString);
+        formData.append("studentId", currentStudentId);
+
+        const uploadRes = await fetch("/api/videos/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        const uploadData = await uploadRes.json();
+        if (!uploadRes.ok) {
+          throw new Error(uploadData.error || "動画のアップロードに失敗しました。");
+        }
+
+        uploadedPublicUrl = uploadData.videoUrl;
+      }
 
       // appStore に動画を登録（企業スワイプ画面へ即座に反映）
       const newVideo = appStore.addVideo({
@@ -166,7 +223,7 @@ export default function StudentVideoUploadPage() {
         title: title.trim(),
         description: description.trim(),
         tags: tagsString,
-        videoUrl: finalVideoUrl,
+        videoUrl: uploadedPublicUrl,
         thumbnailUrl: null,
         student: {
           id: currentStudentId,
@@ -179,19 +236,6 @@ export default function StudentVideoUploadPage() {
           user: { id: `u-${currentStudentId}`, email: session?.email || "student@example.com" },
         },
       });
-
-      // バックエンドAPIへも非同期登録
-      fetch("/api/videos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          studentId: currentStudentId,
-          title: title.trim(),
-          description: description.trim(),
-          tags: tagsString,
-          videoUrl: finalVideoUrl,
-        }),
-      }).catch(() => {});
 
       const newItem: UploadedVideoItem = {
         id: newVideo.id,
@@ -211,7 +255,7 @@ export default function StudentVideoUploadPage() {
       setTags([]);
       setVideoFile(null);
       setVideoPreview(null);
-      success("自己PR動画を公開しました！", "企業の動画スワイプ一覧（/swipe）の先頭に即時反映されました。");
+      success("自己PR動画を公開しました！", "クラウドストレージ（Supabase）に保存され、企業の動画スワイプ一覧（/swipe）の先頭に即時反映されました。");
     } catch (err: any) {
       toastError("投稿エラー", err.message || "動画の公開に失敗しました。");
     } finally {

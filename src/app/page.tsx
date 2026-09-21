@@ -256,8 +256,9 @@ export default function HomePage() {
               <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest block">
                 PARADIGM SHIFT
               </span>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
-                文字に縛られた就活を、動画で根本から変える
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+                <span className="block sm:inline">文字に縛られた就活を、</span>
+                <span className="block sm:inline">動画で根本から変える</span>
               </h2>
               <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
                 これまでの就活で感じていた理不尽や徒労感を、60秒の自己PR動画が解消します。
@@ -363,8 +364,9 @@ export default function HomePage() {
               <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest block">
                 WHY JOBSWIPE
               </span>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
-                なぜ、今「動画逆求人」なのか？
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+                <span className="block sm:inline">なぜ、今</span>
+                <span className="block sm:inline">「動画逆求人」なのか？</span>
               </h2>
               <p className="text-sm sm:text-base text-slate-600 font-normal">
                 学生と企業、双方のミスマッチと工数を最小化する次世代マッチングの仕組み
@@ -517,8 +519,9 @@ export default function HomePage() {
               <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest block">
                 HOW IT WORKS
               </span>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
-                オファー獲得までの3ステップ
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+                <span className="block sm:inline">オファー獲得までの</span>
+                <span className="block sm:inline">3ステップ</span>
               </h2>
               <p className="text-sm sm:text-base text-slate-600 font-normal">
                 スマートフォンひとつで完結。初めて動画を撮る方でも安心してスタートできます。
@@ -627,8 +630,9 @@ export default function HomePage() {
               <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest block">
                 EVALUATION CRITERIA
               </span>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
-                外見ではなく「内面と熱量」を正当に評価
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+                <span className="block sm:inline">外見ではなく</span>
+                <span className="block sm:inline">「内面と熱量」を正当に評価</span>
               </h2>
               <p className="text-sm sm:text-base text-slate-600 font-normal">
                 単なる容姿の選別ではありません。動画だからこそ伝わる論理性や熱量、カルチャーフィットを判定します。
@@ -698,8 +702,9 @@ export default function HomePage() {
               <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest block">
                 TARGET INDUSTRIES
               </span>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
-                人柄と熱量を重視する多彩な業界が参画中
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+                <span className="block sm:inline">人柄と熱量を重視する</span>
+                <span className="block sm:inline">多彩な業界が参画中</span>
               </h2>
               <p className="text-sm sm:text-base text-slate-600 font-normal">
                 急成長ベンチャーから大手グループまで、あなたのポテンシャルを求める企業がオファーを送っています。
@@ -828,7 +833,8 @@ export default function HomePage() {
                   <span>完全無料で今日からスタート</span>
                 </span>
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
-                  60秒の動画で、あなたに惹かれる企業と出会う。
+                  <span className="block sm:inline">60秒の動画で、</span>
+                  <span className="block sm:inline">あなたに惹かれる企業と出会う。</span>
                 </h2>
                 <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-lg mx-auto font-normal">
                   登録・動画投稿・オファー受信まですべて完全無料。スマホひとつで、あなたの熱量と人柄を評価する優良企業からのスカウトを受け取りましょう。

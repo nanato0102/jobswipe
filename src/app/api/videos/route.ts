@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sanitizeString } from "@/lib/sanitizer";
 
+export const dynamic = "force-dynamic";
+
 const DEMO_FALLBACK_VIDEOS = [
   {
     id: "v-s1",
@@ -164,33 +166,43 @@ export async function POST(req: Request) {
 
     try {
       // 登録処理
-      let targetStudentId = studentId;
+      let targetProfile = null;
+      if (studentId) {
+        targetProfile = await prisma.studentProfile.findFirst({
+          where: {
+            OR: [
+              { id: studentId },
+              { userId: studentId },
+              { user: { email: studentId } },
+            ],
+          },
+        });
+      }
 
-      if (!targetStudentId) {
-        // 先頭のStudentProfileをフォールバックとして検索
-        const firstStudent = await prisma.studentProfile.findFirst();
-        if (firstStudent) {
-          targetStudentId = firstStudent.id;
-        } else {
-          // デモ用学生作成
-          const dummyUser = await prisma.user.create({
-            data: {
-              email: `student_${Date.now()}@jobswipe.jp`,
-              password: "hashed_dummy_password",
-              userType: "STUDENT",
-              studentProfile: {
-                create: {
-                  fullName: "デモ学生",
-                  university: "サンプル大学",
-                  graduationYear: 2026,
-                },
+      if (!targetProfile) {
+        targetProfile = await prisma.studentProfile.findFirst();
+      }
+
+      if (!targetProfile) {
+        const dummyUser = await prisma.user.create({
+          data: {
+            email: `student_${Date.now()}@jobswipe.jp`,
+            password: "hashed_dummy_password",
+            userType: "STUDENT",
+            studentProfile: {
+              create: {
+                fullName: "デモ学生",
+                university: "サンプル大学",
+                graduationYear: 2026,
               },
             },
-            include: { studentProfile: true },
-          });
-          targetStudentId = dummyUser.studentProfile?.id;
-        }
+          },
+          include: { studentProfile: true },
+        });
+        targetProfile = dummyUser.studentProfile;
       }
+
+      const targetStudentId = targetProfile ? targetProfile.id : "";
 
       const newVideo = await prisma.video.create({
         data: {
