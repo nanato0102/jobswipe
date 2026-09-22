@@ -414,115 +414,171 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Bento Grid レイアウト */}
+          {/* 3カラム均等カードレイアウト */}
           {activeTab === "student" ? (
-            <div className="grid md:grid-cols-12 gap-6 animate-fade-in">
-              {/* メインフィーチャーカード（7カラム） */}
-              <div className="md:col-span-7 bg-slate-900 text-white rounded-xl p-8 sm:p-10 flex flex-col justify-between relative overflow-hidden shadow-lg border border-slate-800">
-                <div className="space-y-4 relative z-10">
-                  <span className="px-2.5 py-1 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/30 text-xs font-bold uppercase tracking-wider">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 animate-fade-in">
+              {/* カード 01 */}
+              <div className="bg-white rounded-xl border border-slate-200/90 p-7 sm:p-8 flex flex-col justify-between space-y-6 shadow-2xs hover:shadow-xs hover:border-slate-300 transition-all h-full">
+                <div className="space-y-4">
+                  <span className="px-2.5 py-1 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold uppercase tracking-wider inline-flex items-center w-fit">
                     FEATURE 01
                   </span>
-                  <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug">
-                    <span className="block">学歴やESの壁を超え、</span>
-                    <span className="block">素の人柄と熱量が正当に届く。</span>
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-snug">
+                    <span className="block">素の人柄と熱量を</span>
+                    <span className="block">ダイレクトに評価</span>
                   </h3>
-                  <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
-                    文章のテクニックや大学名による書類足切りはありません。声のトーン、思考の深さ、普段のあなたの自然なコミュニケーション力が直接企業に届きます。
+                  <p className="text-sm sm:text-[15px] text-slate-600 leading-relaxed font-normal">
+                    文章のテクニックや大学名による書類足切りはありません。声のトーン、思考の深さ、普段の自然なコミュニケーション力が直接企業に届きます。
                   </p>
                 </div>
 
-                <div className="pt-8 relative z-10 flex items-center gap-4 text-xs text-slate-400">
-                  <span className="flex items-center gap-1.5 font-semibold text-slate-200">
-                    <Check className="w-4 h-4 text-emerald-400" /> 完全無料
+                <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-600">
+                  <span className="flex items-center gap-1.5 font-semibold">
+                    <Check className="w-4 h-4 text-emerald-600 stroke-[2.5]" />
+                    <span>学歴フィルター不要</span>
                   </span>
-                  <span className="flex items-center gap-1.5 font-semibold text-slate-200">
-                    <Check className="w-4 h-4 text-emerald-400" /> 撮り直し無制限
+                  <span className="flex items-center gap-1.5 font-semibold">
+                    <Check className="w-4 h-4 text-emerald-600 stroke-[2.5]" />
+                    <span>素の魅力を評価</span>
                   </span>
                 </div>
               </div>
 
-              {/* サイドカード2枚（5カラム） */}
-              <div className="md:col-span-5 flex flex-col gap-6">
-                <div className="bg-white rounded-xl border border-slate-200 p-6 sm:p-7 space-y-3 shadow-2xs flex-1">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
+              {/* カード 02 */}
+              <div className="bg-white rounded-xl border border-slate-200/90 p-7 sm:p-8 flex flex-col justify-between space-y-6 shadow-2xs hover:shadow-xs hover:border-slate-300 transition-all h-full">
+                <div className="space-y-4">
+                  <span className="px-2.5 py-1 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold uppercase tracking-wider inline-flex items-center w-fit">
                     FEATURE 02
                   </span>
-                  <h3 className="font-bold text-slate-900 text-base sm:text-lg">
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-snug">
                     <span className="block">動画1本を投稿して</span>
-                    <span className="block">待つだけ</span>
+                    <span className="block">スカウトを待つだけ</span>
                   </h3>
-                  <p className="text-sm text-slate-600 leading-relaxed font-normal">
-                    何十社もエントリーシートを書き直す労力は不要。納得の60秒動画を1本登録すれば、優良企業からスカウトが届きます。
+                  <p className="text-sm sm:text-[15px] text-slate-600 leading-relaxed font-normal">
+                    何十社もエントリーシートを書き直す労力は不要。納得の60秒動画を1本登録すれば、あなたに関心を持った優良企業から直接オファーが届きます。
                   </p>
                 </div>
 
-                <div className="bg-white rounded-xl border border-slate-200 p-6 sm:p-7 space-y-3 shadow-2xs flex-1">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
+                <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-600">
+                  <span className="flex items-center gap-1.5 font-semibold">
+                    <Check className="w-4 h-4 text-emerald-600 stroke-[2.5]" />
+                    <span>撮り直し何度でもOK</span>
+                  </span>
+                  <span className="flex items-center gap-1.5 font-semibold">
+                    <Check className="w-4 h-4 text-emerald-600 stroke-[2.5]" />
+                    <span>効率的な待ちの就活</span>
+                  </span>
+                </div>
+              </div>
+
+              {/* カード 03 */}
+              <div className="bg-white rounded-xl border border-slate-200/90 p-7 sm:p-8 flex flex-col justify-between space-y-6 shadow-2xs hover:shadow-xs hover:border-slate-300 transition-all h-full">
+                <div className="space-y-4">
+                  <span className="px-2.5 py-1 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold uppercase tracking-wider inline-flex items-center w-fit">
                     FEATURE 03
                   </span>
-                  <h3 className="font-bold text-slate-900 text-base sm:text-lg">
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-snug">
                     <span className="block">社風に合う企業から</span>
-                    <span className="block">直接オファー</span>
+                    <span className="block">直接オファーが届く</span>
                   </h3>
-                  <p className="text-sm text-slate-600 leading-relaxed font-normal">
-                    あなたの価値観や雰囲気に惹かれた企業から届くため、面接時のミスマッチや選考辞退が大幅に減少します。
+                  <p className="text-sm sm:text-[15px] text-slate-600 leading-relaxed font-normal">
+                    あなたの雰囲気や価値観に共感した企業からスカウトが届くため、面接時の違和感や選考辞退が劇的に減少。自然体で面談に臨めます。
                   </p>
+                </div>
+
+                <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-600">
+                  <span className="flex items-center gap-1.5 font-semibold">
+                    <Check className="w-4 h-4 text-emerald-600 stroke-[2.5]" />
+                    <span>承諾まで本名非公開</span>
+                  </span>
+                  <span className="flex items-center gap-1.5 font-semibold">
+                    <Check className="w-4 h-4 text-emerald-600 stroke-[2.5]" />
+                    <span>完全無料</span>
+                  </span>
                 </div>
               </div>
             </div>
           ) : (
-            /* 企業向けBento Grid */
-            <div className="grid md:grid-cols-12 gap-6 animate-fade-in">
-              <div className="md:col-span-7 bg-slate-900 text-white rounded-xl p-8 sm:p-10 flex flex-col justify-between relative overflow-hidden shadow-lg border border-slate-800">
-                <div className="space-y-4 relative z-10">
-                  <span className="px-2.5 py-1 rounded bg-blue-950 text-blue-400 border border-blue-500/30 text-xs font-bold uppercase tracking-wider">
+            /* 企業向け 3カラム均等カードレイアウト */
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 animate-fade-in">
+              {/* カード 01 */}
+              <div className="bg-white rounded-xl border border-slate-200/90 p-7 sm:p-8 flex flex-col justify-between space-y-6 shadow-2xs hover:shadow-xs hover:border-slate-300 transition-all h-full">
+                <div className="space-y-4">
+                  <span className="px-2.5 py-1 rounded bg-blue-50 text-blue-800 border border-blue-200 text-xs font-bold uppercase tracking-wider inline-flex items-center w-fit">
                     FOR RECRUITER 01
                   </span>
-                  <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug">
-                    <span className="block">面接前のミスマッチを根絶。</span>
-                    <span className="block">会う前に人柄・対人力を確信。</span>
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-snug">
+                    <span className="block">面接前のミスマッチ根絶</span>
+                    <span className="block">会う前に人柄・熱量を確信</span>
                   </h3>
-                  <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
+                  <p className="text-sm sm:text-[15px] text-slate-600 leading-relaxed font-normal">
                     文字の履歴書では見抜けない候補者のリアルな雰囲気・論理的思考力・熱量を60秒で把握。「会ってみたら違った」という採用工数の無駄をゼロにします。
                   </p>
                 </div>
 
-                <div className="pt-8 relative z-10 flex items-center gap-4 text-xs text-slate-400">
-                  <span className="flex items-center gap-1.5 font-semibold text-slate-200">
-                    <Check className="w-4 h-4 text-blue-400" /> 最短1営業日導入
+                <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-600">
+                  <span className="flex items-center gap-1.5 font-semibold">
+                    <Check className="w-4 h-4 text-blue-600 stroke-[2.5]" />
+                    <span>書類選考の工数削減</span>
                   </span>
-                  <span className="flex items-center gap-1.5 font-semibold text-slate-200">
-                    <Check className="w-4 h-4 text-blue-400" /> 完全審査制
+                  <span className="flex items-center gap-1.5 font-semibold">
+                    <Check className="w-4 h-4 text-blue-600 stroke-[2.5]" />
+                    <span>人柄を事前把握</span>
                   </span>
                 </div>
               </div>
 
-              <div className="md:col-span-5 flex flex-col gap-6">
-                <div className="bg-white rounded-xl border border-slate-200 p-6 sm:p-7 space-y-3 shadow-2xs flex-1">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
+              {/* カード 02 */}
+              <div className="bg-white rounded-xl border border-slate-200/90 p-7 sm:p-8 flex flex-col justify-between space-y-6 shadow-2xs hover:shadow-xs hover:border-slate-300 transition-all h-full">
+                <div className="space-y-4">
+                  <span className="px-2.5 py-1 rounded bg-blue-50 text-blue-800 border border-blue-200 text-xs font-bold uppercase tracking-wider inline-flex items-center w-fit">
                     FOR RECRUITER 02
                   </span>
-                  <h3 className="font-bold text-slate-900 text-base sm:text-lg">
-                    <span className="block">縦スワイプで</span>
-                    <span className="block">隙間時間に即断</span>
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-snug">
+                    <span className="block">縦スワイプで効率選考</span>
+                    <span className="block">隙間時間に即断即決</span>
                   </h3>
-                  <p className="text-sm text-slate-600 leading-relaxed font-normal">
-                    移動時間や面接の合間に候補者動画をサクサク閲覧。カルチャーマッチする優秀層へその場でオファーを送信。
+                  <p className="text-sm sm:text-[15px] text-slate-600 leading-relaxed font-normal">
+                    移動時間や面接の合間に候補者動画をサクサク閲覧。カルチャーマッチする優秀層へその場でワンタップでスカウトオファーを送信できます。
                   </p>
                 </div>
 
-                <div className="bg-white rounded-xl border border-slate-200 p-6 sm:p-7 space-y-3 shadow-2xs flex-1">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
+                <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-600">
+                  <span className="flex items-center gap-1.5 font-semibold">
+                    <Check className="w-4 h-4 text-blue-600 stroke-[2.5]" />
+                    <span>スマホ・PC両対応</span>
+                  </span>
+                  <span className="flex items-center gap-1.5 font-semibold">
+                    <Check className="w-4 h-4 text-blue-600 stroke-[2.5]" />
+                    <span>即断即オファー</span>
+                  </span>
+                </div>
+              </div>
+
+              {/* カード 03 */}
+              <div className="bg-white rounded-xl border border-slate-200/90 p-7 sm:p-8 flex flex-col justify-between space-y-6 shadow-2xs hover:shadow-xs hover:border-slate-300 transition-all h-full">
+                <div className="space-y-4">
+                  <span className="px-2.5 py-1 rounded bg-blue-50 text-blue-800 border border-blue-200 text-xs font-bold uppercase tracking-wider inline-flex items-center w-fit">
                     FOR RECRUITER 03
                   </span>
-                  <h3 className="font-bold text-slate-900 text-base sm:text-lg">
-                    <span className="block">長文スカウト</span>
-                    <span className="block">作成工数の削減</span>
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-snug">
+                    <span className="block">長文スカウト作成が不要</span>
+                    <span className="block">スピード感ある選考へ</span>
                   </h3>
-                  <p className="text-sm text-slate-600 leading-relaxed font-normal">
-                    個別メッセージの作成負担を最小化し、本当に自社に合うポテンシャル層とスピーディーに面談日程を設定。
+                  <p className="text-sm sm:text-[15px] text-slate-600 leading-relaxed font-normal">
+                    テンプレートESの読解や長文スカウト作成の負担を最小化。本当に自社に合うポテンシャル層とスピーディーに面談日程を設定できます。
                   </p>
+                </div>
+
+                <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-600">
+                  <span className="flex items-center gap-1.5 font-semibold">
+                    <Check className="w-4 h-4 text-blue-600 stroke-[2.5]" />
+                    <span>初期費用・掲載無料</span>
+                  </span>
+                  <span className="flex items-center gap-1.5 font-semibold">
+                    <Check className="w-4 h-4 text-blue-600 stroke-[2.5]" />
+                    <span>完全審査制</span>
+                  </span>
                 </div>
               </div>
             </div>
