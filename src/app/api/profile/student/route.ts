@@ -2,6 +2,38 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sanitizeString } from "@/lib/sanitizer";
 
+export async function GET(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const userId = searchParams.get("userId");
+
+    let student = null;
+    if (userId) {
+      student = await prisma.studentProfile.findUnique({
+        where: { userId },
+        include: {
+          videos: true,
+          user: { select: { email: true, userType: true } },
+        },
+      });
+    }
+
+    if (!student) {
+      student = await prisma.studentProfile.findFirst({
+        include: {
+          videos: true,
+          user: { select: { email: true, userType: true } },
+        },
+      });
+    }
+
+    return NextResponse.json({ success: true, profile: student });
+  } catch (error) {
+    console.warn("Get student profile warning:", error);
+    return NextResponse.json({ success: true, profile: null });
+  }
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();

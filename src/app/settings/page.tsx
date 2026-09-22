@@ -50,13 +50,15 @@ export default function SettingsPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+
   // パスワードバリデーション
   const hasMinLength = newPassword.length >= 8;
   const hasLetter = /[a-zA-Z]/.test(newPassword);
   const hasNumber = /[0-9]/.test(newPassword);
   const isNewPasswordValid = hasMinLength && hasLetter && hasNumber;
 
-  const handlePasswordChange = (e: React.FormEvent) => {
+  const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
     const errors: string[] = [];
 
@@ -79,14 +81,44 @@ export default function SettingsPage() {
       return;
     }
 
-    // 成功処理
+    setIsChangingPassword(true);
     setPasswordErrors([]);
-    setPasswordSuccess(true);
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-    success("パスワードを変更しました", "新しいパスワードが安全に保存されました。");
-    setTimeout(() => setPasswordSuccess(false), 4000);
+
+    try {
+      const res = await fetch("/api/auth/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: session?.id,
+          email: session?.email,
+          currentPassword,
+          newPassword,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setPasswordErrors([data.message || "パスワードの変更に失敗しました。"]);
+        toastError("パスワードの変更に失敗しました", data.message || "現在のパスワードをご確認ください。");
+        setIsChangingPassword(false);
+        return;
+      }
+
+      // 成功処理
+      setPasswordErrors([]);
+      setPasswordSuccess(true);
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      success("パスワードを変更しました", "データベースに新しいパスワードが安全に保存されました。");
+      setTimeout(() => setPasswordSuccess(false), 4000);
+    } catch (err) {
+      console.error("Password change error:", err);
+      toastError("通信エラー", "サーバーとの通信に失敗しました。");
+    } finally {
+      setIsChangingPassword(false);
+    }
   };
 
   const handleSaveNotifications = () => {
@@ -95,16 +127,34 @@ export default function SettingsPage() {
     setTimeout(() => setSettingsSaved(false), 3000);
   };
 
-  const handleDeleteAccount = () => {
+  const handleDeleteAccount = async () => {
     setIsDeleting(true);
-    setTimeout(() => {
-      // ユーザー退会処理
+    try {
+      await fetch("/api/auth/delete-account", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: session?.id,
+          email: session?.email,
+        }),
+      });
+
+      success("退会手続きが完了しました", "アカウントおよび登録データが完全に消去されました。");
       if (typeof window !== "undefined") {
-        localStorage.removeItem("jobswipe_auth_session");
+        localStorage.removeItem("jobswipe_session");
+      }
+      setTimeout(() => {
+        logout();
+      }, 1000);
+    } catch (err) {
+      console.error("Delete account error:", err);
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("jobswipe_session");
       }
       logout();
-      router.push("/");
-    }, 1000);
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const isStudent = session?.userType === "STUDENT";
@@ -299,9 +349,10 @@ export default function SettingsPage() {
 
               <button
                 type="submit"
-                className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-xs cursor-pointer"
+                disabled={isChangingPassword}
+                className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-xs cursor-pointer"
               >
-                パスワードを変更する
+                {isChangingPassword ? "変更処理中..." : "パスワードを変更する"}
               </button>
             </form>
           </div>

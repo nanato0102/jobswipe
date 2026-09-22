@@ -89,6 +89,19 @@ export default function CompanyProfilePage() {
         logoUrl: logoUrl || undefined,
       });
 
+      // APIへの非同期保存（データベースへの即時同期）
+      fetch("/api/profile/company", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: session?.id,
+          companyName,
+          industry,
+          websiteUrl,
+          description,
+        }),
+      }).catch((err) => console.warn("API company profile save note:", err));
+
       setLoading(false);
       setSaved(true);
       setTimeout(() => setSaved(false), 4000);

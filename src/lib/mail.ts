@@ -437,3 +437,199 @@ export async function sendStudentWelcomeEmail(payload: StudentWelcomeEmailPayloa
     return { success: true, mode: "mock" };
   }
 }
+
+export interface AccountDeletionEmailPayload {
+  name: string;
+  email: string;
+  userType?: string;
+}
+
+/**
+ * 退会手続き完了通知メール送信
+ */
+export async function sendAccountDeletionEmail(payload: AccountDeletionEmailPayload) {
+  const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL || "jobswipe.info@gmail.com";
+  const resendApiKey = process.env.RESEND_API_KEY;
+  const fromEmail = process.env.RESEND_FROM_EMAIL || "JobSwipe <onboarding@resend.dev>";
+
+  const timestamp = new Date().toLocaleString("ja-JP", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const subject = `【JobSwipe】退会手続き完了のお知らせ`;
+  const html = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 620px; margin: 0 auto; padding: 28px 24px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff; color: #1e293b; line-height: 1.7;">
+      <div style="border-bottom: 2px solid #64748b; padding-bottom: 16px; margin-bottom: 24px;">
+        <h1 style="color: #0f172a; margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">JobSwipe (ジョブスワイプ)</h1>
+        <p style="margin: 4px 0 0 0; font-size: 12px; color: #64748b; font-weight: 500;">短尺自己PR動画で人柄を可視化する新卒逆求人プラットフォーム</p>
+      </div>
+
+      <p style="font-size: 15px; color: #1e293b; margin: 0 0 16px 0;">
+        <strong>${payload.name} 様</strong>
+      </p>
+
+      <p style="font-size: 14px; color: #334155; margin: 0 0 20px 0;">
+        平素よりJobSwipeをご利用いただき、誠にありがとうございました。<br />
+        アカウントの退会手続きが正常に完了いたしましたのでお知らせいたします。
+      </p>
+
+      <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px; margin: 20px 0; font-size: 13px; color: #475569;">
+        <h3 style="margin: 0 0 10px 0; font-size: 13px; font-weight: 700; color: #1e293b;">
+          ■ 削除されたデータ内容
+        </h3>
+        <ul style="margin: 0; padding-left: 20px; line-height: 1.8;">
+          <li>ご登録いただいたプロフィール情報（氏名、大学・職歴、自己PRなど）</li>
+          <li>投稿された自己PR動画およびサムネイルデータ</li>
+          <li>送受信したスカウトオファーおよびチャットメッセージ履歴</li>
+          <li>気になる（Like）およびマッチング履歴</li>
+        </ul>
+        <p style="margin: 12px 0 0 0; font-size: 12px; color: #64748b;">
+          ※ 上記の情報はデータベース上から完全に抹消されており、復元することはできません。
+        </p>
+      </div>
+
+      <p style="font-size: 13px; color: #334155; margin: 20px 0;">
+        これまでJobSwipeをご愛顧いただき、心より御礼申し上げます。<br />
+        またの機会がございましたら、いつでも再登録・ご利用をお待ち申し上げております。
+      </p>
+
+      <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 28px 0 16px 0;" />
+      <div style="font-size: 12px; color: #64748b; line-height: 1.6;">
+        <p style="margin: 0 0 4px 0;"><strong>JobSwipe 運営事務局</strong></p>
+        <p style="margin: 0 0 4px 0;">お問い合わせ: <a href="mailto:jobswipe.info@gmail.com" style="color: #2563eb;">jobswipe.info@gmail.com</a></p>
+        <p style="margin: 0;">手続き完了日時: ${timestamp}</p>
+      </div>
+    </div>
+  `;
+
+  if (resendApiKey) {
+    let emailSent = false;
+    try {
+      const res = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${resendApiKey}`,
+        },
+        body: JSON.stringify({
+          from: fromEmail,
+          to: [payload.email],
+          bcc: [adminEmail],
+          reply_to: adminEmail,
+          subject,
+          html,
+        }),
+      });
+
+      const resData = await res.json();
+      if (res.ok) {
+        console.log(`[Resend Deletion Success] Deletion email sent to ${payload.email}, id: ${resData.id}`);
+        emailSent = true;
+      } else {
+        console.warn(`[Resend Deletion Warning]`, resData);
+      }
+    } catch (e) {
+      console.error("[Resend Deletion Exception]", e);
+    }
+    return { success: emailSent, mode: "live" };
+  } else {
+    console.log(`[Email Mock] Deletion email simulated for: ${payload.email}`);
+    return { success: true, mode: "mock" };
+  }
+}
+
+export interface PasswordChangedEmailPayload {
+  name: string;
+  email: string;
+}
+
+/**
+ * パスワード変更完了通知メール送信
+ */
+export async function sendPasswordChangedEmail(payload: PasswordChangedEmailPayload) {
+  const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL || "jobswipe.info@gmail.com";
+  const resendApiKey = process.env.RESEND_API_KEY;
+  const fromEmail = process.env.RESEND_FROM_EMAIL || "JobSwipe <onboarding@resend.dev>";
+
+  const timestamp = new Date().toLocaleString("ja-JP", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const subject = `【JobSwipe】パスワード変更完了のお知らせ`;
+  const html = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 620px; margin: 0 auto; padding: 28px 24px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff; color: #1e293b; line-height: 1.7;">
+      <div style="border-bottom: 2px solid #0f172a; padding-bottom: 16px; margin-bottom: 24px;">
+        <h1 style="color: #0f172a; margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">JobSwipe (ジョブスワイプ)</h1>
+        <p style="margin: 4px 0 0 0; font-size: 12px; color: #64748b; font-weight: 500;">短尺自己PR動画で人柄を可視化する新卒逆求人プラットフォーム</p>
+      </div>
+
+      <p style="font-size: 15px; color: #1e293b; margin: 0 0 16px 0;">
+        <strong>${payload.name} 様</strong>
+      </p>
+
+      <p style="font-size: 14px; color: #334155; margin: 0 0 20px 0;">
+        JobSwipeアカウントのログインパスワードが変更されました。<br />
+        次回以降のログイン時は、新しく設定されたパスワードをご利用ください。
+      </p>
+
+      <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin: 20px 0; font-size: 13px; color: #475569;">
+        <p style="margin: 4px 0;"><strong>対象メールアドレス:</strong> ${payload.email}</p>
+        <p style="margin: 4px 0;"><strong>変更日時:</strong> ${timestamp}</p>
+      </div>
+
+      <div style="background-color: #fff1f2; border: 1px solid #fecdd3; border-radius: 8px; padding: 14px; margin: 20px 0; font-size: 12px; color: #9f1239;">
+        <strong>※ お心当たりがない場合:</strong><br />
+        もし本変更に心当たりがない場合は、第三者による不正アクセスの可能性がございます。至急運営事務局（jobswipe.info@gmail.com）までご連絡ください。
+      </div>
+
+      <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 28px 0 16px 0;" />
+      <div style="font-size: 12px; color: #64748b; line-height: 1.6;">
+        <p style="margin: 0 0 4px 0;"><strong>JobSwipe 運営事務局</strong></p>
+        <p style="margin: 0 0 4px 0;">お問い合わせ: <a href="mailto:jobswipe.info@gmail.com" style="color: #2563eb;">jobswipe.info@gmail.com</a></p>
+      </div>
+    </div>
+  `;
+
+  if (resendApiKey) {
+    let emailSent = false;
+    try {
+      const res = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${resendApiKey}`,
+        },
+        body: JSON.stringify({
+          from: fromEmail,
+          to: [payload.email],
+          bcc: [adminEmail],
+          reply_to: adminEmail,
+          subject,
+          html,
+        }),
+      });
+
+      const resData = await res.json();
+      if (res.ok) {
+        console.log(`[Resend Password Changed Success] Email sent to ${payload.email}, id: ${resData.id}`);
+        emailSent = true;
+      }
+    } catch (e) {
+      console.error("[Resend Password Changed Exception]", e);
+    }
+    return { success: emailSent, mode: "live" };
+  } else {
+    console.log(`[Email Mock] Password changed email simulated for: ${payload.email}`);
+    return { success: true, mode: "mock" };
+  }
+}

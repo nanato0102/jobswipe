@@ -164,11 +164,12 @@ export default function StudentProfilePage() {
         desiredIndustries: targetIndustries,
       });
 
-      // APIへの非同期保存
+      // APIへの非同期保存（データベースへの即時同期）
       fetch("/api/profile/student", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          userId: session?.id,
           fullName,
           university,
           graduationYear: Number(graduationYear),
