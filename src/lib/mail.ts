@@ -633,3 +633,204 @@ export async function sendPasswordChangedEmail(payload: PasswordChangedEmailPayl
     return { success: true, mode: "mock" };
   }
 }
+
+export interface OfferReceivedEmailPayload {
+  studentName: string;
+  studentEmail: string;
+  companyName: string;
+  offerMessage: string;
+}
+
+/**
+ * 学生宛てスカウト（オファー）受信通知メール送信
+ */
+export async function sendOfferReceivedEmail(payload: OfferReceivedEmailPayload) {
+  const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL || "jobswipe.info@gmail.com";
+  const resendApiKey = process.env.RESEND_API_KEY;
+  const fromEmail = process.env.RESEND_FROM_EMAIL || "JobSwipe <onboarding@resend.dev>";
+  const offersUrl = "https://jobswipe-app.vercel.app/student/offers";
+
+  const timestamp = new Date().toLocaleString("ja-JP", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const subject = `【JobSwipe】${payload.companyName}様からスカウト（オファー）が届きました`;
+  const html = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 620px; margin: 0 auto; padding: 28px 24px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff; color: #1e293b; line-height: 1.7;">
+      <div style="border-bottom: 2px solid #047857; padding-bottom: 16px; margin-bottom: 24px;">
+        <h1 style="color: #0f172a; margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">JobSwipe (ジョブスワイプ)</h1>
+        <p style="margin: 4px 0 0 0; font-size: 12px; color: #64748b; font-weight: 500;">短尺自己PR動画で人柄を可視化する新卒逆求人プラットフォーム</p>
+      </div>
+
+      <p style="font-size: 15px; color: #1e293b; margin: 0 0 16px 0;">
+        <strong>${payload.studentName} 様</strong>
+      </p>
+
+      <p style="font-size: 14px; color: #334155; margin: 0 0 20px 0;">
+        あなたの自己PR動画に関心を持った企業より、特別なスカウト（オファー）が届きました！<br />
+        オファー内容を確認し、興味があれば承諾してチャット面談に進みましょう。
+      </p>
+
+      <div style="background-color: #ecfdf5; border: 1.5px solid #a7f3d0; border-radius: 10px; padding: 20px; margin: 24px 0;">
+        <div style="font-size: 12px; font-weight: 700; color: #047857; text-transform: uppercase; margin-bottom: 6px;">オファー送信元企業</div>
+        <div style="font-size: 18px; font-weight: 800; color: #064e3b; margin-bottom: 12px;">${payload.companyName}</div>
+        
+        <div style="font-size: 12px; font-weight: 700; color: #065f46; margin-bottom: 6px;">スカウトメッセージ:</div>
+        <div style="background-color: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 12px 14px; font-size: 13px; color: #0f172a; line-height: 1.6; white-space: pre-wrap;">${payload.offerMessage}</div>
+      </div>
+
+      <div style="text-align: center; margin: 28px 0;">
+        <a href="${offersUrl}" style="display: inline-block; background-color: #047857; color: #ffffff; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 800; font-size: 15px; box-shadow: 0 2px 4px rgba(4, 120, 87, 0.2);">
+          オファーを確認・返信する ➔
+        </a>
+      </div>
+
+      <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; margin: 20px 0; font-size: 12px; color: #64748b;">
+        <p style="margin: 0 0 4px 0;">※ オファーを承諾するまで、氏名などの詳細個人情報は相手企業には公開されません。</p>
+        <p style="margin: 0;">※ 辞退する場合も相手企業に失礼なく通知されますのでご安心ください。</p>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 28px 0 16px 0;" />
+      <div style="font-size: 12px; color: #64748b; line-height: 1.6;">
+        <p style="margin: 0 0 4px 0;"><strong>JobSwipe 運営事務局</strong></p>
+        <p style="margin: 0 0 4px 0;">お問い合わせ: <a href="mailto:jobswipe.info@gmail.com" style="color: #047857;">jobswipe.info@gmail.com</a></p>
+        <p style="margin: 0;">受信日時: ${timestamp}</p>
+      </div>
+    </div>
+  `;
+
+  if (resendApiKey) {
+    let emailSent = false;
+    try {
+      const res = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${resendApiKey}`,
+        },
+        body: JSON.stringify({
+          from: fromEmail,
+          to: [payload.studentEmail],
+          bcc: [adminEmail],
+          reply_to: adminEmail,
+          subject,
+          html,
+        }),
+      });
+
+      const resData = await res.json();
+      if (res.ok) {
+        console.log(`[Resend Offer Received Success] Email sent to ${payload.studentEmail}, id: ${resData.id}`);
+        emailSent = true;
+      }
+    } catch (e) {
+      console.error("[Resend Offer Received Exception]", e);
+    }
+    return { success: emailSent, mode: "live" };
+  } else {
+    console.log(`[Email Mock] Offer received email simulated for: ${payload.studentEmail}`);
+    return { success: true, mode: "mock" };
+  }
+}
+
+export interface OfferAcceptedEmailPayload {
+  companyName: string;
+  companyEmail: string;
+  studentName: string;
+  studentUniversity?: string;
+}
+
+/**
+ * 企業宛てオファー承諾通知メール送信
+ */
+export async function sendOfferAcceptedEmail(payload: OfferAcceptedEmailPayload) {
+  const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL || "jobswipe.info@gmail.com";
+  const resendApiKey = process.env.RESEND_API_KEY;
+  const fromEmail = process.env.RESEND_FROM_EMAIL || "JobSwipe <onboarding@resend.dev>";
+  const chatUrl = "https://jobswipe-app.vercel.app/company/chat";
+
+  const timestamp = new Date().toLocaleString("ja-JP", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const subject = `【JobSwipe】${payload.studentName}様がオファーを承諾しました（個別チャット開始）`;
+  const html = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 620px; margin: 0 auto; padding: 28px 24px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff; color: #1e293b; line-height: 1.7;">
+      <div style="border-bottom: 2px solid #2563eb; padding-bottom: 16px; margin-bottom: 24px;">
+        <h1 style="color: #0f172a; margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">JobSwipe (ジョブスワイプ)</h1>
+        <p style="margin: 4px 0 0 0; font-size: 12px; color: #64748b; font-weight: 500;">短尺自己PR動画で人柄を可視化する新卒逆求人プラットフォーム</p>
+      </div>
+
+      <p style="font-size: 15px; color: #1e293b; margin: 0 0 16px 0;">
+        <strong>${payload.companyName} 採用ご担当者様</strong>
+      </p>
+
+      <p style="font-size: 14px; color: #334155; margin: 0 0 20px 0;">
+        貴社が送信されたスカウトオファーを候補者が承諾いたしました！<br />
+        これより個別チャットにて面談日程の調整やメッセージのやり取りが可能となります。
+      </p>
+
+      <div style="background-color: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 10px; padding: 20px; margin: 24px 0;">
+        <div style="font-size: 12px; font-weight: 700; color: #1d4ed8; text-transform: uppercase; margin-bottom: 6px;">オファー承諾者</div>
+        <div style="font-size: 18px; font-weight: 800; color: #1e3a8a; margin-bottom: 6px;">${payload.studentName} 様</div>
+        ${payload.studentUniversity ? `<div style="font-size: 13px; color: #3b82f6; font-weight: 600;">所属: ${payload.studentUniversity}</div>` : ""}
+      </div>
+
+      <div style="text-align: center; margin: 28px 0;">
+        <a href="${chatUrl}" style="display: inline-block; background-color: #2563eb; color: #ffffff; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 800; font-size: 15px; box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);">
+          個別チャットを開く ➔
+        </a>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 28px 0 16px 0;" />
+      <div style="font-size: 12px; color: #64748b; line-height: 1.6;">
+        <p style="margin: 0 0 4px 0;"><strong>JobSwipe 運営事務局</strong></p>
+        <p style="margin: 0 0 4px 0;">お問い合わせ: <a href="mailto:jobswipe.info@gmail.com" style="color: #2563eb;">jobswipe.info@gmail.com</a></p>
+        <p style="margin: 0;">承諾日時: ${timestamp}</p>
+      </div>
+    </div>
+  `;
+
+  if (resendApiKey) {
+    let emailSent = false;
+    try {
+      const res = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${resendApiKey}`,
+        },
+        body: JSON.stringify({
+          from: fromEmail,
+          to: [payload.companyEmail],
+          bcc: [adminEmail],
+          reply_to: adminEmail,
+          subject,
+          html,
+        }),
+      });
+
+      const resData = await res.json();
+      if (res.ok) {
+        console.log(`[Resend Offer Accepted Success] Email sent to ${payload.companyEmail}, id: ${resData.id}`);
+        emailSent = true;
+      }
+    } catch (e) {
+      console.error("[Resend Offer Accepted Exception]", e);
+    }
+    return { success: emailSent, mode: "live" };
+  } else {
+    console.log(`[Email Mock] Offer accepted email simulated for: ${payload.companyEmail}`);
+    return { success: true, mode: "mock" };
+  }
+}

@@ -89,6 +89,21 @@ export default function AdminConsoleDashboardPage() {
   useEffect(() => {
     setInquiries(appStore.getInquiries());
     loadReports();
+
+    // データベースからのリアルタイムKPI集計値の取得
+    fetch("/api/admin/stats")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.stats) {
+          setStats({
+            studentsCount: data.stats.studentsCount,
+            companiesCount: data.stats.companiesCount,
+            offersCount: data.stats.offersCount,
+            acceptedCount: data.stats.acceptedCount,
+          });
+        }
+      })
+      .catch((err) => console.warn("Failed to load real-time admin stats:", err));
   }, []);
 
   const handleUpdateReportStatus = (reportId: string, status: StoredReport["status"], actionText?: string) => {

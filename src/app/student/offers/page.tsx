@@ -45,6 +45,16 @@ export default function StudentOffersPage() {
 
     const targetOffer = updated.find((o) => o.id === id);
 
+    // バックエンドDBおよびメール通知への非同期同期
+    fetch("/api/offers", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        offerId: id,
+        status: newStatus,
+      }),
+    }).catch((err) => console.warn("API offer status patch error:", err));
+
     if (newStatus === "ACCEPTED" && targetOffer) {
       success("オファーを承諾しました！", `${targetOffer.companyName} とのチャットを開始できます。`);
       setAcceptedModalOffer(targetOffer);
