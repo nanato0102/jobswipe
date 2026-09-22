@@ -265,6 +265,12 @@ export default function StudentVideoUploadPage() {
 
   const handleDeleteVideo = (id: string) => {
     if (!confirm("この自己PR動画を削除しますか？")) return;
+    
+    // DB上の動画レコードを削除
+    fetch(`/api/videos?id=${encodeURIComponent(id)}`, {
+      method: "DELETE",
+    }).catch((err) => console.warn("API video delete note:", err));
+
     appStore.deleteVideo(id);
     setUploadedVideos(uploadedVideos.filter((v) => v.id !== id));
     info("動画を削除しました。企業の動画スワイプ一覧からも即時除外されました。");

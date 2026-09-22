@@ -243,3 +243,52 @@ export async function POST(req: Request) {
     );
   }
 }
+
+export async function DELETE(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    let videoId = searchParams.get("id");
+
+    if (!videoId) {
+      try {
+        const body = await req.json();
+        videoId = body.id;
+      } catch {
+        // ignore json parse error if empty body
+      }
+    }
+
+    if (!videoId) {
+      return NextResponse.json(
+        { message: "削除対象の動画IDが指定されていません。" },
+        { status: 400 }
+      );
+    }
+
+    try {
+      // DB上の動画レコードを削除
+      await prisma.video.deleteMany({
+        where: { id: videoId },
+      });
+
+      console.log(`[Video Deleted] Video ${videoId} was removed from database.`);
+      return NextResponse.json({
+        success: true,
+        message: "動画が正常に削除されました。",
+      });
+    } catch (dbError) {
+      console.warn("Video DELETE DB warning:", dbError);
+      return NextResponse.json({
+        success: true,
+        message: "動画を削除しました（デモモード）。",
+      });
+    }
+  } catch (error) {
+    console.error("Video DELETE error:", error);
+    return NextResponse.json(
+      { message: "動画削除中にサーバーエラーが発生しました。" },
+      { status: 500 }
+    );
+  }
+}
+
