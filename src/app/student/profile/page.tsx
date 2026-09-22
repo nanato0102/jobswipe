@@ -30,7 +30,7 @@ import {
 import { JOB_CATEGORIES } from "@/lib/jobCategories";
 
 export default function StudentProfilePage() {
-  const { session } = useAuth();
+  const { session, login } = useAuth();
 
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -39,17 +39,15 @@ export default function StudentProfilePage() {
   const [isCropperOpen, setIsCropperOpen] = useState(false);
   const [rawImageForCrop, setRawImageForCrop] = useState<string | null>(null);
 
-  // フォームステート
-  const [fullName, setFullName] = useState("佐藤 健太");
+  // フォームステート（セッション情報で初期化）
+  const [fullName, setFullName] = useState(session?.name || "");
   const [gender, setGender] = useState<"MALE" | "FEMALE" | "OTHER">("MALE");
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>(undefined);
-  const [university, setUniversity] = useState("早稲田大学");
-  const [faculty, setFaculty] = useState("商学部 3年");
+  const [university, setUniversity] = useState("");
+  const [faculty, setFaculty] = useState("");
   const [graduationYear, setGraduationYear] = useState("2027");
-  const [catchphrase, setCatchphrase] = useState("体育会サッカー部主将。チームを巻き込む推進力と愚直な行動力が武器です！");
-  const [bio, setBio] = useState(
-    "体育会サッカー部で100名規模の組織主将を務めています。「誰よりも声を出し、背中で引っ張る」を行動指針に、部員一人ひとりと対話を重ねながらリーグ昇格を果たしました。ビジネスの現場でも、失敗を恐れず主体的に行動し、周囲をポジティブに巻き込めるリーダーを目指しています。"
-  );
+  const [catchphrase, setCatchphrase] = useState("");
+  const [bio, setBio] = useState("");
 
   // 志望職種ステート
   const [targetRoles, setTargetRoles] = useState<string[]>([
@@ -76,35 +74,70 @@ export default function StudentProfilePage() {
     "総合営業・セールス",
   ]);
 
-  const studentId = session?.userType === "STUDENT" ? "s1" : "s1";
+  const studentId = session?.id || "s1";
 
-  // 初期値ロード
+  // 初期値ロード（DBおよびセッションからの動的読み込み）
   useEffect(() => {
-    const s = appStore.getStudentDetails(studentId);
-    if (s) {
-      setFullName(s.name || "佐藤 健太");
-      setGender(s.gender || "MALE");
-      setAvatarUrl(s.avatarUrl);
-      setUniversity(s.university || "早稲田大学");
-      setFaculty(s.faculty || "商学部 3年");
-      setGraduationYear(String(s.graduationYear || "2027"));
-      setCatchphrase(s.catchphrase || "");
-      setBio(s.bio || "");
-      if (s.desiredRoles && s.desiredRoles.length > 0) {
-        setTargetRoles(s.desiredRoles);
-      }
-      setTargetIndustries(s.desiredIndustries || []);
+    if (session?.name) {
+      setFullName(session.name);
+    }
 
-      if (s.personalityCode && s.personalityCode.length === 4) {
-        setPersonalitySelections({
-          EI: s.personalityCode[0] as "E" | "I",
-          SN: s.personalityCode[1] as "S" | "N",
-          TF: s.personalityCode[2] as "T" | "F",
-          JP: s.personalityCode[3] as "J" | "P",
-        });
+    // 1. ローカルキャッシュの確認
+    if (typeof window !== "undefined" && session?.id) {
+      try {
+        const cached = localStorage.getItem(`jobswipe_profile_${session.id}`);
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (parsed.name) setFullName(parsed.name);
+          if (parsed.gender) setGender(parsed.gender);
+          if (parsed.avatarUrl) setAvatarUrl(parsed.avatarUrl);
+          if (parsed.university) setUniversity(parsed.university);
+          if (parsed.faculty) setFaculty(parsed.faculty);
+          if (parsed.graduationYear) setGraduationYear(String(parsed.graduationYear));
+          if (parsed.catchphrase) setCatchphrase(parsed.catchphrase);
+          if (parsed.bio) setBio(parsed.bio);
+          if (parsed.targetRoles && parsed.targetRoles.length > 0) setTargetRoles(parsed.targetRoles);
+          if (parsed.targetIndustries && parsed.targetIndustries.length > 0) setTargetIndustries(parsed.targetIndustries);
+        }
+      } catch (e) {
+        console.warn("Cached profile parse error:", e);
       }
     }
-  }, [studentId]);
+
+    // 2. データベース（Prisma/Supabase）からのプロファイル取得
+    if (session?.id) {
+      fetch(`/api/profile/student?userId=${encodeURIComponent(session.id)}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success && data.profile) {
+            const p = data.profile;
+            if (p.fullName) setFullName(p.fullName);
+            if (p.university) setUniversity(p.university);
+            if (p.graduationYear) setGraduationYear(String(p.graduationYear));
+            if (p.experience) setFaculty(p.experience);
+            if (p.bio) setBio(p.bio);
+            if (p.desiredRoles) {
+              const roles = p.desiredRoles.split(",").map((r: string) => r.trim()).filter(Boolean);
+              if (roles.length > 0) setTargetRoles(roles);
+            }
+          }
+        })
+        .catch((err) => console.warn("Fetch DB profile note:", err));
+    } else {
+      // デモ用アカウント時のフォールバック
+      const s = appStore.getStudentDetails("s1");
+      if (s && !session?.name) {
+        setFullName(s.name || "佐藤 健太");
+        setGender(s.gender || "MALE");
+        setAvatarUrl(s.avatarUrl);
+        setUniversity(s.university || "早稲田大学");
+        setFaculty(s.faculty || "商学部 3年");
+        setGraduationYear(String(s.graduationYear || "2027"));
+        setCatchphrase(s.catchphrase || "");
+        setBio(s.bio || "");
+      }
+    }
+  }, [session]);
 
   const toggleRole = (role: string) => {
     setTargetRoles((prev) =>
@@ -148,6 +181,35 @@ export default function StudentProfilePage() {
     setLoading(true);
 
     setTimeout(() => {
+      // セッション内の名前を更新（NavbarやSettings等に即時反映）
+      if (session) {
+        login({
+          ...session,
+          name: fullName,
+        });
+      }
+
+      // ローカルストレージに個別保存
+      if (typeof window !== "undefined" && session?.id) {
+        localStorage.setItem(
+          `jobswipe_profile_${session.id}`,
+          JSON.stringify({
+            name: fullName,
+            gender,
+            avatarUrl,
+            university,
+            faculty,
+            graduationYear: Number(graduationYear),
+            catchphrase,
+            bio,
+            personalityCode: currentCode,
+            personalityTags: currentTags,
+            targetRoles,
+            targetIndustries,
+          })
+        );
+      }
+
       appStore.saveStudentProfile({
         id: studentId,
         name: fullName,

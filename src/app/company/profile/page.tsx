@@ -15,7 +15,7 @@ import {
 import ImageCropperModal from "@/components/ImageCropperModal";
 
 export default function CompanyProfilePage() {
-  const { session } = useAuth();
+  const { session, login } = useAuth();
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
 
   // 画像切り抜きモーダル用ステート
@@ -44,13 +44,29 @@ export default function CompanyProfilePage() {
     if (session?.name) {
       setCompanyName(session.name);
     }
-    const currentCompany = appStore.getCompanyDetails("c1");
-    if (currentCompany) {
-      if (currentCompany.logoUrl) setLogoUrl(currentCompany.logoUrl);
-      if (currentCompany.name) setCompanyName(currentCompany.name);
-      if (currentCompany.industry) setIndustry(currentCompany.industry);
-      if (currentCompany.location) setLocation(currentCompany.location);
-      if (currentCompany.description) setDescription(currentCompany.description);
+
+    if (session?.id) {
+      fetch(`/api/profile/company?userId=${encodeURIComponent(session.id)}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success && data.profile) {
+            const p = data.profile;
+            if (p.companyName) setCompanyName(p.companyName);
+            if (p.industry) setIndustry(p.industry);
+            if (p.websiteUrl) setWebsiteUrl(p.websiteUrl);
+            if (p.description) setDescription(p.description);
+          }
+        })
+        .catch((err) => console.warn("Fetch company profile note:", err));
+    } else {
+      const currentCompany = appStore.getCompanyDetails("c1");
+      if (currentCompany && !session?.name) {
+        if (currentCompany.logoUrl) setLogoUrl(currentCompany.logoUrl);
+        if (currentCompany.name) setCompanyName(currentCompany.name);
+        if (currentCompany.industry) setIndustry(currentCompany.industry);
+        if (currentCompany.location) setLocation(currentCompany.location);
+        if (currentCompany.description) setDescription(currentCompany.description);
+      }
     }
   }, [session]);
 
@@ -77,8 +93,15 @@ export default function CompanyProfilePage() {
     setLoading(true);
 
     setTimeout(() => {
+      if (session) {
+        login({
+          ...session,
+          name: companyName,
+        });
+      }
+
       appStore.saveCompanyProfile({
-        id: "c1",
+        id: session?.id || "c1",
         name: companyName,
         industry,
         established: establishedYear,

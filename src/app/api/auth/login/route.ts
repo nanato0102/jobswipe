@@ -38,7 +38,7 @@ export async function POST(req: Request) {
       const name =
         user.studentProfile?.fullName ||
         user.companyProfile?.companyName ||
-        (user.userType === "STUDENT" ? "佐藤 健太" : user.userType === "COMPANY" ? "テックイノベーション株式会社" : "管理者");
+        (user.userType === "STUDENT" ? cleanEmail.split("@")[0] : user.userType === "COMPANY" ? "企業ご担当者" : "管理者");
 
       return NextResponse.json({
         success: true,
@@ -66,10 +66,10 @@ export async function POST(req: Request) {
         success: true,
         demoMode: true,
         user: {
-          id: resolvedRole === "STUDENT" ? "s1" : "c1",
+          id: resolvedRole === "STUDENT" ? (cleanEmail === "sato@example.com" ? "s1" : "u-" + Date.now()) : "c1",
           email: cleanEmail,
           userType: resolvedRole,
-          name: resolvedRole === "STUDENT" ? "佐藤 健太" : "テックイノベーション株式会社",
+          name: resolvedRole === "STUDENT" ? (cleanEmail === "sato@example.com" ? "佐藤 健太" : cleanEmail.split("@")[0]) : "テックイノベーション株式会社",
         },
       });
     }
