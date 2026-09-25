@@ -9,6 +9,7 @@ export async function POST(req: Request) {
   try {
     const formData = await req.formData();
     const file = formData.get("video") as File | null;
+    const thumbnailFile = formData.get("thumbnail") as File | null;
     const title = (formData.get("title") as string) || "自己PR動画";
     const description = (formData.get("description") as string) || "";
     const tags = (formData.get("tags") as string) || "";
@@ -22,7 +23,15 @@ export async function POST(req: Request) {
     }
 
     // MIMEタイプバリデーション
-    const allowedTypes = ["video/mp4", "video/quicktime", "video/webm", "video/x-msvideo", "video/ogg", "video/mpeg"];
+    const allowedTypes = [
+      "video/mp4",
+      "video/quicktime",
+      "video/webm",
+      "video/x-msvideo",
+      "video/ogg",
+      "video/mpeg",
+      "video/3gpp",
+    ];
     if (!allowedTypes.includes(file.type) && !file.type.startsWith("video/")) {
       return NextResponse.json(
         { error: "対応していないファイル形式です。MP4, MOV, WebM形式の動画をアップロードしてください。" },
@@ -43,7 +52,7 @@ export async function POST(req: Request) {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    // Supabase Storage にアップロード
+    // Supabase Storage に動画アップロード
     const uploadResult = await uploadVideoFile(buffer, file.name, file.type);
 
     if (!uploadResult.success || !uploadResult.videoUrl) {
@@ -54,6 +63,20 @@ export async function POST(req: Request) {
     }
 
     const videoUrl = uploadResult.videoUrl;
+
+    // サムネイル画像がある場合はSupabase Storageにアップロード
+    let thumbnailUrl: string | null = null;
+    if (thumbnailFile) {
+      try {
+        const thumbBuffer = Buffer.from(await thumbnailFile.arrayBuffer());
+        const thumbUpload = await uploadVideoFile(thumbBuffer, `thumb_${thumbnailFile.name}`, thumbnailFile.type || "image/jpeg");
+        if (thumbUpload.success && thumbUpload.videoUrl) {
+          thumbnailUrl = thumbUpload.videoUrl;
+        }
+      } catch (thumbErr) {
+        console.warn("Thumbnail upload warning:", thumbErr);
+      }
+    }
 
     // Prisma DB への動画レコード登録
     let savedVideo = null;
@@ -103,6 +126,7 @@ export async function POST(req: Request) {
             description: sanitizeString(description),
             tags: sanitizeString(tags),
             videoUrl: sanitizeString(videoUrl),
+            thumbnailUrl: thumbnailUrl ? sanitizeString(thumbnailUrl) : null,
           },
           include: {
             student: {
@@ -120,6 +144,7 @@ export async function POST(req: Request) {
     return NextResponse.json({
       success: true,
       videoUrl,
+      thumbnailUrl,
       key: uploadResult.key,
       title: sanitizeString(title),
       description: sanitizeString(description),
@@ -130,6 +155,7 @@ export async function POST(req: Request) {
         description,
         tags,
         videoUrl,
+        thumbnailUrl,
         uploadedAt: new Date().toISOString(),
       },
       message: "自己PR動画のクラウド保存が完了しました。",

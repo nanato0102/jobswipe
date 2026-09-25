@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { appStore, ChatThread, StoredMessage, MessageAttachment } from "@/lib/appStore";
+import { appStore, StoredMessage, MessageAttachment } from "@/lib/appStore";
 import {
   Send,
   User,
@@ -17,62 +17,131 @@ import {
   Flag,
   Zap,
   ShieldCheck,
+  Building2,
 } from "lucide-react";
 import ReportModal from "@/components/ReportModal";
+
+interface ThreadItem {
+  id: string;
+  offerId: string;
+  partnerId: string;
+  partnerName: string;
+  partnerSub: string;
+  partnerType: "student" | "company";
+  avatarUrl?: string;
+  tags?: string[];
+  lastMessage: string;
+  lastMessageTime: string;
+  unreadCount: number;
+  status: string;
+}
 
 function ChatInner() {
   const { session, isStudent, isCompany } = useAuth();
   const searchParams = useSearchParams();
   const initialThreadId = searchParams.get("threadId");
 
-  const [threads, setThreads] = useState<ChatThread[]>([]);
+  const [threads, setThreads] = useState<ThreadItem[]>([]);
   const [selectedThreadId, setSelectedThreadId] = useState<string>("");
   const [messages, setMessages] = useState<StoredMessage[]>([]);
   const [inputText, setInputText] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFile, setSelectedFile] = useState<MessageAttachment | null>(null);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
-  // 初期スレッド読み込み
-  useEffect(() => {
-    const list = appStore.getThreads(isStudent);
-    setThreads(list);
+  const currentUserId = session?.id || (isStudent ? "student-demo-id" : "company-demo-id");
 
-    if (initialThreadId && list.some((t) => t.id === initialThreadId)) {
-      setSelectedThreadId(initialThreadId);
-    } else {
-      if (typeof window !== "undefined" && window.innerWidth >= 768 && list.length > 0) {
-        setSelectedThreadId(list[0].id);
-      } else {
-        setSelectedThreadId("");
+  // スレッド一覧の取得関数
+  const fetchThreads = async () => {
+    try {
+      const role = isStudent ? "STUDENT" : "COMPANY";
+      const res = await fetch(`/api/chat/threads?userId=${currentUserId}&role=${role}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.threads && Array.isArray(data.threads) && data.threads.length > 0) {
+          setThreads(data.threads);
+          return data.threads;
+        }
       }
+    } catch (err) {
+      console.warn("API threads fetch failed, fallback to local:", err);
     }
-  }, [isStudent, initialThreadId]);
 
-  // メッセージ読み込み & 同期
-  useEffect(() => {
-    const refreshData = () => {
-      const updatedThreads = appStore.getThreads(isStudent);
-      setThreads(updatedThreads);
+    // APIが空またはエラー時のローカルフォールバック
+    const localThreads = appStore.getThreads(isStudent).map((t) => ({
+      id: t.id,
+      offerId: t.id,
+      partnerId: t.partnerId,
+      partnerName: t.partnerName,
+      partnerSub: t.partnerSub,
+      partnerType: t.role === "COMPANY" ? ("company" as const) : ("student" as const),
+      lastMessage: t.lastMessage,
+      lastMessageTime: t.lastTime,
+      unreadCount: t.unread,
+      status: "ACCEPTED",
+    }));
+    setThreads(localThreads);
+    return localThreads;
+  };
 
-      if (selectedThreadId) {
-        const latestMsgs = appStore.getMessages(selectedThreadId);
-        setMessages((prev) => {
-          if (JSON.stringify(prev) !== JSON.stringify(latestMsgs)) {
-            return latestMsgs;
-          }
-          return prev;
-        });
+  // メッセージ一覧の取得関数
+  const fetchMessages = async (threadId: string) => {
+    try {
+      const res = await fetch(`/api/messages?offerId=${threadId}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.messages && Array.isArray(data.messages)) {
+          const formatted: StoredMessage[] = data.messages.map((m: any) => ({
+            id: m.id,
+            threadId: m.offerId,
+            senderRole: m.senderId === currentUserId ? (isStudent ? "STUDENT" : "COMPANY") : (isStudent ? "COMPANY" : "STUDENT"),
+            senderName: m.senderId === currentUserId ? session?.name || "自分" : "相手",
+            content: m.content,
+            sentAt: m.sentAt,
+            isRead: true,
+          }));
+          setMessages(formatted);
+          return;
+        }
       }
-    };
+    } catch (err) {
+      console.warn("API messages fetch failed, fallback to local:", err);
+    }
 
-    refreshData();
-    const interval = setInterval(refreshData, 3000);
+    // フォールバック
+    const localMsgs = appStore.getMessages(threadId);
+    setMessages(localMsgs);
+  };
+
+  // 初期化ロード
+  useEffect(() => {
+    fetchThreads().then((loadedThreads) => {
+      if (initialThreadId && loadedThreads?.some((t: ThreadItem) => t.id === initialThreadId)) {
+        setSelectedThreadId(initialThreadId);
+      } else if (typeof window !== "undefined" && window.innerWidth >= 768 && loadedThreads?.length > 0) {
+        setSelectedThreadId(loadedThreads[0].id);
+      }
+    });
+  }, [isStudent, initialThreadId, currentUserId]);
+
+  // 定期ポーリング（3秒間隔でメッセージとスレッドを同期）
+  useEffect(() => {
+    if (!selectedThreadId) return;
+
+    fetchMessages(selectedThreadId);
+
+    const interval = setInterval(() => {
+      fetchMessages(selectedThreadId);
+      fetchThreads();
+    }, 3000);
+
     return () => clearInterval(interval);
-  }, [isStudent, selectedThreadId]);
+  }, [selectedThreadId, currentUserId]);
 
+  // 自動スクロール
   useEffect(() => {
     if (messagesContainerRef.current) {
       messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
@@ -83,7 +152,7 @@ function ChatInner() {
 
   const handleSelectThread = (threadId: string) => {
     setSelectedThreadId(threadId);
-    setThreads(appStore.getThreads(isStudent));
+    fetchMessages(threadId);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,25 +172,50 @@ function ChatInner() {
     reader.readAsDataURL(file);
   };
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if ((!inputText.trim() && !selectedFile) || !selectedThreadId || !currentThread) return;
+    if ((!inputText.trim() && !selectedFile) || !selectedThreadId || !currentThread || isSending) return;
 
-    const senderRole = isStudent ? "STUDENT" : "COMPANY";
-    const senderName = isStudent ? session?.name || "佐藤 健太" : session?.name || "自社採用担当";
-
-    appStore.sendMessage(
-      selectedThreadId,
-      senderRole,
-      senderName,
-      inputText.trim(),
-      selectedFile || undefined
-    );
+    const textToSend = inputText.trim();
+    const fileToSend = selectedFile;
 
     setInputText("");
     setSelectedFile(null);
-    setMessages(appStore.getMessages(selectedThreadId));
-    setThreads(appStore.getThreads(isStudent));
+    setIsSending(true);
+
+    try {
+      const res = await fetch("/api/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          offerId: selectedThreadId,
+          senderId: currentUserId,
+          receiverId: currentThread.partnerId,
+          content: textToSend,
+          attachment: fileToSend,
+        }),
+      });
+
+      if (res.ok) {
+        await fetchMessages(selectedThreadId);
+        await fetchThreads();
+      } else {
+        // フォールバック
+        const senderRole = isStudent ? "STUDENT" : "COMPANY";
+        const senderName = isStudent ? session?.name || "佐藤 健太" : session?.name || "自社採用担当";
+        appStore.sendMessage(selectedThreadId, senderRole, senderName, textToSend, fileToSend || undefined);
+        setMessages(appStore.getMessages(selectedThreadId));
+      }
+    } catch (err) {
+      console.error("Message send error:", err);
+      // フォールバック
+      const senderRole = isStudent ? "STUDENT" : "COMPANY";
+      const senderName = isStudent ? session?.name || "佐藤 健太" : session?.name || "自社採用担当";
+      appStore.sendMessage(selectedThreadId, senderRole, senderName, textToSend, fileToSend || undefined);
+      setMessages(appStore.getMessages(selectedThreadId));
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const filteredThreads = threads.filter(
@@ -130,56 +224,21 @@ function ChatInner() {
       t.partnerSub.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const renderAvatar = (thread: ChatThread, sizeClass = "w-10 h-10") => {
-    if (thread.role === "COMPANY") {
-      const comp = appStore.getCompanyDetails(thread.partnerId);
-      if (comp?.logoUrl) {
-        return (
-          <div className={`${sizeClass} rounded-lg overflow-hidden border border-slate-200 bg-white flex items-center justify-center p-1 shadow-2xs flex-shrink-0`}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={comp.logoUrl} alt={thread.partnerName} className="max-w-full max-h-full object-contain" />
-          </div>
-        );
-      }
+  const renderAvatar = (thread: ThreadItem, sizeClass = "w-10 h-10") => {
+    if (thread.partnerType === "company") {
       return (
-        <div className={`${sizeClass} rounded-lg bg-slate-900 text-emerald-400 font-bold text-xs sm:text-sm flex items-center justify-center shadow-2xs flex-shrink-0`}>
-          <span>{thread.partnerName.slice(0, 1) || "企"}</span>
+        <div className={`${sizeClass} rounded-lg bg-slate-900 text-white font-bold text-xs sm:text-sm flex items-center justify-center shadow-2xs flex-shrink-0`}>
+          <Building2 className="w-5 h-5 text-slate-200 stroke-[2]" />
         </div>
       );
     } else {
-      const student = appStore.getStudentDetails(thread.partnerId);
-      const gender = student?.gender || "MALE";
-      const avatarUrl = student?.avatarUrl;
-
-      if (avatarUrl) {
-        return (
-          <div className={`${sizeClass} rounded-lg overflow-hidden border border-slate-200 shadow-2xs bg-slate-100 flex-shrink-0`}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={avatarUrl} alt={thread.partnerName} className="w-full h-full object-cover" />
-          </div>
-        );
-      }
-
       return (
-        <div
-          className={`${sizeClass} rounded-lg flex flex-col items-center justify-center shadow-2xs text-white flex-shrink-0 border border-white/40 ${
-            gender === "FEMALE" ? "bg-rose-500" : "bg-blue-600"
-          }`}
-        >
-          <User className="w-5 h-5 stroke-[2.2]" />
+        <div className={`${sizeClass} rounded-lg flex flex-col items-center justify-center shadow-2xs text-white flex-shrink-0 bg-slate-800 border border-slate-700`}>
+          <User className="w-5 h-5 text-slate-200 stroke-[2.2]" />
         </div>
       );
     }
   };
-
-  const offers = appStore.getOffers();
-  const currentOffer = currentThread
-    ? offers.find(
-        (o) =>
-          (o.companyId === currentThread.partnerId || o.studentId === currentThread.partnerId) &&
-          o.status === "ACCEPTED"
-      )
-    : null;
 
   return (
     <div className="max-w-5xl mx-auto px-0 sm:px-4 py-0 sm:py-6 w-full flex-1 flex flex-col min-h-0 h-[calc(100dvh-4.5rem)] md:h-[calc(100vh-7.5rem)]">
@@ -227,8 +286,8 @@ function ChatInner() {
                 >
                   <div className="relative flex-shrink-0">
                     {renderAvatar(thread, "w-11 h-11")}
-                    {thread.unread > 0 && (
-                      <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-rose-500 ring-2 ring-white" />
+                    {thread.unreadCount > 0 && (
+                      <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-600 ring-2 ring-white" />
                     )}
                   </div>
 
@@ -237,10 +296,15 @@ function ChatInner() {
                       <span className="font-bold text-slate-900 text-xs sm:text-sm truncate">
                         {thread.partnerName}
                       </span>
-                      <span className="text-xs text-slate-400 whitespace-nowrap">{thread.lastTime}</span>
+                      <span className="text-xs text-slate-400 whitespace-nowrap">
+                        {new Date(thread.lastMessageTime).toLocaleTimeString("ja-JP", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
                     </div>
                     <span className="text-xs text-slate-400 block truncate">{thread.partnerSub}</span>
-                    <p className={`text-xs sm:text-sm truncate ${thread.unread > 0 ? "font-bold text-slate-900" : "text-slate-500"}`}>
+                    <p className={`text-xs sm:text-sm truncate ${thread.unreadCount > 0 ? "font-bold text-slate-900" : "text-slate-500"}`}>
                       {thread.lastMessage}
                     </p>
                   </div>
@@ -250,7 +314,7 @@ function ChatInner() {
 
             {filteredThreads.length === 0 && (
               <div className="p-8 text-center text-xs text-slate-400 space-y-2">
-                <p>該当するチャットはありません</p>
+                <p>現在アクティブなチャットはありません</p>
               </div>
             )}
           </div>
@@ -276,249 +340,217 @@ function ChatInner() {
                     <ArrowLeft className="w-5 h-5" />
                   </button>
 
-                  <Link
-                    href={
-                      currentThread.role === "COMPANY"
-                        ? `/companies/${currentThread.partnerId}`
-                        : `/students/${currentThread.partnerId}`
-                    }
-                    className="flex items-center gap-2.5 sm:gap-3 min-w-0 group hover:opacity-90 transition-opacity"
-                  >
+                  <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
                     {renderAvatar(currentThread, "w-9 h-9 sm:w-10 sm:h-10")}
                     <div className="min-w-0">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <h2 className="text-xs sm:text-sm font-bold text-slate-900 truncate group-hover:text-blue-700 flex items-center gap-1">
-                          <span>{currentThread.partnerName}</span>
-                          <span className="text-xs font-normal text-blue-700 hidden sm:inline">(詳細 →)</span>
+                        <h2 className="text-xs sm:text-sm font-bold text-slate-900 truncate">
+                          {currentThread.partnerName}
                         </h2>
-                        {currentThread.role !== "COMPANY" && (
-                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold">
-                            <ShieldCheck className="w-3 h-3 text-emerald-700 stroke-[2.5]" />
-                            <span>承諾済・本名開示</span>
-                          </span>
-                        )}
+                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold">
+                          <ShieldCheck className="w-3 h-3 text-emerald-700 stroke-[2.5]" />
+                          <span>オファー承諾済・公式チャット</span>
+                        </span>
                       </div>
                       <p className="text-xs text-slate-500 truncate">{currentThread.partnerSub}</p>
                     </div>
-                  </Link>
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
-                  <Link
-                    href={
-                      currentThread.role === "COMPANY"
-                        ? `/companies/${currentThread.partnerId}`
-                        : `/students/${currentThread.partnerId}`
-                    }
-                    className="hidden sm:inline-flex px-3 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors"
-                  >
-                    {currentThread.role === "COMPANY" ? "企業詳細" : "学生詳細"}
-                  </Link>
-
+                <div className="flex items-center gap-2 flex-shrink-0">
                   <button
                     type="button"
                     onClick={() => setIsReportModalOpen(true)}
-                    className="p-1.5 sm:p-2 rounded-md text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
-                    title="通報する"
+                    className="p-1.5 text-slate-400 hover:text-rose-600 rounded-md hover:bg-slate-100 transition-colors cursor-pointer"
+                    title="不適切な内容を通報"
                   >
                     <Flag className="w-4 h-4" />
                   </button>
                 </div>
               </div>
 
-              {/* メッセージタイムライン（ここだけスクロール可能） */}
+              {/* メッセージ表示エリア */}
               <div
                 ref={messagesContainerRef}
-                className="flex-1 p-3.5 sm:p-6 overflow-y-auto overscroll-contain space-y-3.5 sm:space-y-4 min-h-0"
+                className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4 overscroll-contain"
               >
-                {/* オファー固定カード */}
-                {currentOffer && (
-                  <div className="p-3.5 sm:p-4 bg-white rounded-lg border border-slate-200 shadow-xs space-y-1.5">
-                    <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                      <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                        <span>届いたオファー内容</span>
-                      </span>
-                      <span className="text-xs text-slate-400">{currentOffer.createdAt}</span>
-                    </div>
-                    <p className="text-xs sm:text-sm text-slate-700 whitespace-pre-wrap leading-relaxed">
-                      {currentOffer.message}
-                    </p>
-                  </div>
-                )}
+                {/* 承諾済みバナー */}
+                <div className="max-w-md mx-auto p-3 bg-white rounded-lg border border-slate-200 text-center space-y-1 shadow-2xs">
+                  <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700">
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    <span>マッチングが成立しました</span>
+                  </span>
+                  <p className="text-xs text-slate-500">
+                    企業からのオファーが承諾され、個別メッセージが可能になりました。日程調整やカジュアル面談をご相談ください。
+                  </p>
+                </div>
 
-                {/* メッセージ吹き出し */}
-                {messages.map((m) => {
-                  const isMe =
-                    (isStudent && m.senderRole === "STUDENT") ||
-                    (isCompany && m.senderRole === "COMPANY") ||
-                    (!isStudent && !isCompany && m.senderRole === "COMPANY");
+                {messages.map((msg) => {
+                  const isMine =
+                    (isStudent && msg.senderRole === "STUDENT") ||
+                    (isCompany && msg.senderRole === "COMPANY");
+
+                  const formattedTime = msg.sentAt
+                    ? new Date(msg.sentAt).toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" })
+                    : "";
 
                   return (
-                    <div key={m.id} className={`flex flex-col ${isMe ? "items-end" : "items-start"}`}>
-                      <span className="text-xs text-slate-400 mb-1 px-1">{m.sentAt}</span>
-                      <div
-                        className={`max-w-[85%] sm:max-w-md p-3 sm:p-3.5 rounded-lg text-xs sm:text-sm leading-relaxed shadow-2xs ${
-                          isMe
-                            ? "bg-slate-900 text-white rounded-br-xs"
-                            : "bg-white text-slate-900 border border-slate-200 rounded-bl-xs"
-                        }`}
-                      >
-                        {m.attachment && (
-                          <div className="mb-2">
-                            {m.attachment.type === "image" ? (
-                              <div className="rounded-md overflow-hidden border border-white/20">
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
-                                  src={m.attachment.url}
-                                  alt={m.attachment.name}
-                                  className="max-w-full max-h-60 object-cover"
-                                />
-                              </div>
-                            ) : (
-                              <a
-                                href={m.attachment.url}
-                                download={m.attachment.name}
-                                className={`flex items-center gap-2 p-2 rounded-md text-xs font-semibold ${
-                                  isMe ? "bg-slate-800 text-white" : "bg-slate-100 text-slate-800"
-                                }`}
-                              >
-                                <Paperclip className="w-4 h-4 flex-shrink-0" />
-                                <span className="truncate">{m.attachment.name}</span>
-                              </a>
-                            )}
-                          </div>
+                    <div
+                      key={msg.id}
+                      className={`flex flex-col ${isMine ? "items-end" : "items-start"}`}
+                    >
+                      <div className="flex items-end gap-1.5 max-w-[85%] sm:max-w-[75%]">
+                        {isMine && (
+                          <span className="text-[11px] text-slate-400 mb-1 font-mono flex-shrink-0">
+                            {formattedTime}
+                          </span>
                         )}
-                        <p className="whitespace-pre-wrap break-words">{m.content}</p>
+
+                        <div
+                          className={`rounded-xl px-4 py-2.5 text-xs sm:text-sm leading-relaxed break-words shadow-2xs ${
+                            isMine
+                              ? "bg-slate-900 text-white rounded-br-xs"
+                              : "bg-white text-slate-800 border border-slate-200/90 rounded-bl-xs"
+                          }`}
+                        >
+                          <p className="whitespace-pre-wrap font-normal">{msg.content}</p>
+                        </div>
+
+                        {!isMine && (
+                          <span className="text-[11px] text-slate-400 mb-1 font-mono flex-shrink-0">
+                            {formattedTime}
+                          </span>
+                        )}
                       </div>
                     </div>
                   );
                 })}
               </div>
 
-              {/* メッセージ入力フォーム（固定） */}
-              <form onSubmit={handleSendMessage} className="p-2.5 sm:p-4 bg-white border-t border-slate-200 space-y-2.5 flex-shrink-0 z-10">
-                {/* 定型文テンプレートピル */}
-                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs no-scrollbar">
-                  <span className="text-xs font-semibold text-slate-400 whitespace-nowrap flex items-center gap-1">
-                    <Zap className="w-3 h-3 text-amber-500" />
-                    <span>定型文:</span>
-                  </span>
-                  {(isStudent
-                    ? [
-                        {
-                          label: "お礼と挨拶",
-                          text: "オファーをいただき誠にありがとうございます！自己PR動画をご覧いただき大変光栄です。ぜひ一度オンラインでお話しさせていただけますと幸いです。",
-                        },
-                        {
-                          label: "日程承諾",
-                          text: "ご提示いただいた日程のうち、【〇月〇日（〇）〇:〇〜】で参加可能です。当日はどうぞよろしくお願いいたします。",
-                        },
-                        {
-                          label: "日程再調整",
-                          text: "ご連絡ありがとうございます。大変恐縮ながらご提示いただいた日程のご都合が難しく、恐れ入りますが以下候補日でのご調整は可能でしょうか？\n・〇月〇日（〇）〇:〇〜\n・〇月〇日（〇）〇:〇〜",
-                        },
-                      ]
-                    : [
-                        {
-                          label: "面談のお誘い",
-                          text: "オファーをご承諾いただきありがとうございます！ぜひ一度、カジュアルなオンライン面談（30分程度）でお話しできればと考えております。差し支えなければ、直近のご都合の良い日時を2〜3候補ほどご教示いただけますでしょうか？",
-                        },
-                        {
-                          label: "日程確定",
-                          text: "日程調整にご協力いただきありがとうございます！それでは【〇月〇日（〇）〇:〇〜〇:〇】にてオンライン面談を設定いたしました。接続URLは追ってご案内いたします。当日お話しできることを楽しみにしております。",
-                        },
-                        {
-                          label: "次回選考案内",
-                          text: "先日はお忙しい中カジュアル面談にご参加いただきありがとうございました！ぜひ次のステップとして本選考（一次面接）に進んでいただきたく存じます。選考詳細についてご案内いたします。",
-                        },
-                      ]
-                  ).map((tmpl, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => setInputText(tmpl.text)}
-                      className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md text-xs font-medium whitespace-nowrap transition-colors cursor-pointer border border-slate-200"
-                    >
-                      + {tmpl.label}
-                    </button>
-                  ))}
-                </div>
-
-                {selectedFile && (
-                  <div className="flex items-center justify-between p-2 bg-slate-50 border border-slate-200 rounded-md text-xs text-slate-700">
-                    <span className="truncate max-w-xs font-medium">📎 {selectedFile.name}</span>
-                    <button type="button" onClick={() => setSelectedFile(null)} className="text-slate-400 hover:text-rose-600 cursor-pointer">
-                      <X className="w-4 h-4" />
-                    </button>
+              {/* 添付ファイルプレビュー */}
+              {selectedFile && (
+                <div className="px-4 py-2 bg-slate-100 border-t border-slate-200 flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-xs text-slate-700">
+                    <Paperclip className="w-4 h-4 text-slate-500" />
+                    <span className="font-medium truncate max-w-xs">{selectedFile.name}</span>
+                    <span className="text-slate-400">({selectedFile.size})</span>
                   </div>
-                )}
-
-                <div className="flex items-center gap-2">
                   <button
                     type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-md transition-colors cursor-pointer flex-shrink-0"
-                    title="ファイルを添付"
+                    onClick={() => setSelectedFile(null)}
+                    className="p-1 hover:bg-slate-200 rounded text-slate-500 hover:text-slate-800"
                   >
-                    <Paperclip className="w-5 h-5" />
-                  </button>
-                  <input ref={fileInputRef} type="file" onChange={handleFileChange} className="hidden" />
-
-                  <textarea
-                    rows={1}
-                    value={inputText}
-                    onChange={(e) => setInputText(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
-                        e.preventDefault();
-                        handleSendMessage(e);
-                      }
-                    }}
-                    placeholder="メッセージを入力... (Enterで改行)"
-                    className="flex-1 p-2 sm:p-2.5 bg-slate-50 border border-slate-200 rounded-md text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900 resize-none min-h-[40px] max-h-[120px] leading-relaxed"
-                  />
-
-                  <button
-                    type="submit"
-                    disabled={!inputText.trim() && !selectedFile}
-                    className="px-3.5 sm:px-4 py-2 sm:py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-md text-xs font-semibold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer disabled:opacity-40 self-end mb-0.5 flex-shrink-0"
-                  >
-                    <Send className="w-4 h-4" />
-                    <span className="hidden sm:inline">送信</span>
+                    <X className="w-3.5 h-3.5" />
                   </button>
                 </div>
+              )}
+
+              {/* 定型文ボタン */}
+              <div className="px-3 sm:px-4 pt-2 bg-white flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+                <span className="text-xs text-slate-400 flex items-center gap-1 font-medium flex-shrink-0">
+                  <Zap className="w-3 h-3 text-slate-500" />
+                  <span>定型文:</span>
+                </span>
+                {(isStudent
+                  ? [
+                      "オファーありがとうございます！ぜひお話をお聞きしたいです。",
+                      "以下の日程でカジュアル面談は可能でしょうか？",
+                      "本日は貴重なお時間をいただきありがとうございました。",
+                    ]
+                  : [
+                      "オファーのご承諾ありがとうございます！まずはカジュアルにお話ししませんか？",
+                      "以下の日程候補はいかがでしょうか？",
+                      "本日は面談のお時間をいただきありがとうございました！",
+                    ]
+                ).map((tpl, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setInputText(tpl)}
+                    className="text-xs px-2.5 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-md whitespace-nowrap transition-colors cursor-pointer"
+                  >
+                    {tpl.slice(0, 16)}...
+                  </button>
+                ))}
+              </div>
+
+              {/* 入力フォーム */}
+              <form
+                onSubmit={handleSendMessage}
+                className="p-3 sm:p-4 bg-white border-t border-slate-200 flex items-end gap-2"
+              >
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  accept="image/*,application/pdf"
+                  className="hidden"
+                />
+
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer flex-shrink-0"
+                  title="画像・PDFを添付"
+                >
+                  <Paperclip className="w-5 h-5" />
+                </button>
+
+                <textarea
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSendMessage(e);
+                    }
+                  }}
+                  placeholder="メッセージを入力... (Shift+Enterで改行)"
+                  rows={2}
+                  className="flex-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900 resize-none min-h-[42px] max-h-32"
+                />
+
+                <button
+                  type="submit"
+                  disabled={(!inputText.trim() && !selectedFile) || isSending}
+                  className="p-2.5 bg-slate-900 text-white rounded-lg hover:bg-slate-800 disabled:opacity-40 disabled:hover:bg-slate-900 transition-colors shadow-xs cursor-pointer flex-shrink-0"
+                  title="送信"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
               </form>
             </>
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-slate-400 space-y-3">
-              <div className="w-12 h-12 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-300 shadow-xs">
+              <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
                 <MessageSquare className="w-6 h-6" />
               </div>
-              <p className="text-sm">左の一覧からチャットを選択してください</p>
+              <div className="space-y-1">
+                <p className="font-bold text-sm text-slate-700">チャットを選択してください</p>
+                <p className="text-xs text-slate-400">
+                  左のスレッドリストから会話したい相手を選択すると、メッセージ履歴が表示されます。
+                </p>
+              </div>
             </div>
           )}
         </div>
       </div>
 
       {/* 通報モーダル */}
-      {currentThread && (
-        <ReportModal
-          isOpen={isReportModalOpen}
-          onClose={() => setIsReportModalOpen(false)}
-          targetId={currentThread.partnerId}
-          targetTitle={`${currentThread.partnerName} (${currentThread.partnerSub}) とのチャット`}
-          targetType="CHAT"
-          targetPreview={messages.slice(-1)[0]?.content}
-        />
-      )}
+      <ReportModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        targetId={currentThread?.partnerId || ""}
+        targetTitle={currentThread?.partnerName || ""}
+        targetType="USER"
+      />
     </div>
   );
 }
 
 export default function ChatView() {
   return (
-    <Suspense fallback={<div className="p-8 text-center text-xs text-slate-400">チャットを読み込み中...</div>}>
+    <Suspense fallback={<div className="p-8 text-center text-slate-500">読み込み中...</div>}>
       <ChatInner />
     </Suspense>
   );

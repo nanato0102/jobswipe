@@ -834,3 +834,88 @@ export async function sendOfferAcceptedEmail(payload: OfferAcceptedEmailPayload)
     return { success: true, mode: "mock" };
   }
 }
+
+export interface PasswordResetEmailPayload {
+  email: string;
+  resetUrl: string;
+  userName?: string;
+}
+
+export async function sendPasswordResetEmail(payload: PasswordResetEmailPayload) {
+  const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL || "jobswipe.info@gmail.com";
+  const resendApiKey = process.env.RESEND_API_KEY;
+  const fromEmail = process.env.RESEND_FROM_EMAIL || "JobSwipe <onboarding@resend.dev>";
+
+  const subject = "【JobSwipe】パスワード再設定のご案内";
+  const timestamp = new Date().toLocaleString("ja-JP", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const html = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 28px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff; color: #1e293b;">
+      <div style="margin-bottom: 20px; border-bottom: 2px solid #0f172a; padding-bottom: 12px;">
+        <h1 style="color: #0f172a; margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.5px;">JobSwipe (ジョブスワイプ)</h1>
+      </div>
+
+      <p style="font-size: 14px; line-height: 1.7; color: #334155; margin-bottom: 16px;">
+        ${payload.userName ? `<strong>${payload.userName} 様</strong><br /><br />` : ""}
+        いつもJobSwipeをご利用いただきありがとうございます。<br />
+        パスワード再設定のリクエストを受け付けました。
+      </p>
+
+      <p style="font-size: 14px; line-height: 1.7; color: #334155; margin-bottom: 24px;">
+        以下のボタンをクリックして、新しいパスワードを設定してください。<br />
+        ※このリンクは<strong>30分間のみ有効</strong>です。
+      </p>
+
+      <div style="text-align: center; margin: 32px 0;">
+        <a href="${payload.resetUrl}" style="display: inline-block; background-color: #047857; color: #ffffff; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 800; font-size: 15px; box-shadow: 0 2px 4px rgba(4, 120, 87, 0.2);">
+          パスワードを再設定する ➔
+        </a>
+      </div>
+
+      <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; margin: 24px 0; font-size: 12px; color: #64748b; line-height: 1.6;">
+        <p style="margin: 0 0 6px 0;"><strong>※心当たりがない場合:</strong></p>
+        <p style="margin: 0;">第三者が誤ってメールアドレスを入力した可能性があります。このメールを破棄してください。パスワードは変更されません。</p>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 28px 0 16px 0;" />
+      <div style="font-size: 12px; color: #64748b; line-height: 1.6;">
+        <p style="margin: 0 0 4px 0;"><strong>JobSwipe 運営事務局</strong></p>
+        <p style="margin: 0 0 4px 0;">お問い合わせ: <a href="mailto:jobswipe.info@gmail.com" style="color: #047857;">jobswipe.info@gmail.com</a></p>
+        <p style="margin: 0;">発行日時: ${timestamp}</p>
+      </div>
+    </div>
+  `;
+
+  if (resendApiKey) {
+    try {
+      const res = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${resendApiKey}`,
+        },
+        body: JSON.stringify({
+          from: fromEmail,
+          to: [payload.email],
+          reply_to: adminEmail,
+          subject,
+          html,
+        }),
+      });
+      return { success: res.ok, mode: "live" };
+    } catch (e) {
+      console.error("[Resend Password Reset Exception]", e);
+      return { success: false, mode: "error" };
+    }
+  } else {
+    console.log(`[Email Mock] Password reset link for ${payload.email}: ${payload.resetUrl}`);
+    return { success: true, mode: "mock" };
+  }
+}

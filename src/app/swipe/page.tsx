@@ -7,10 +7,12 @@ import CompanyMobileTabs from "@/components/CompanyMobileTabs";
 import { PERSONALITY_AXES } from "@/lib/personalityModel";
 import { appStore } from "@/lib/appStore";
 import { SWIPE_JOB_FILTERS } from "@/lib/jobCategories";
-import { SlidersHorizontal, Check, RefreshCw, Briefcase } from "lucide-react";
+import { SlidersHorizontal, Check, RefreshCw, Briefcase, ShieldCheck, Clock } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 import type { VideoData } from "@/types";
 
 export default function SwipePage() {
+  const { session, isCompany } = useAuth();
   const [videos, setVideos] = useState<VideoData[]>(() => appStore.getVideos());
   const [loading, setLoading] = useState(false);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
@@ -126,9 +128,13 @@ export default function SwipePage() {
       <CompanyMobileTabs>
         <div className="flex-1 flex flex-col justify-center items-center p-3 sm:p-6 w-full max-w-5xl mx-auto">
           {/* 画面ヘッダー */}
-          <div className="text-center mb-4 max-w-2xl">
+          <div className="text-center mb-4 max-w-2xl space-y-1.5">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-700 stroke-[2.5]" />
+              <span>審査承認済 企業アカウント専用</span>
+            </div>
             <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">自己PR動画スワイプ</h1>
-            <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+            <p className="text-xs sm:text-sm text-slate-500">
               学生の志望職種や人柄・行動特性（4軸MECE）をもとに、求める人物像に合致する候補者を直感的にスカウトできます。
             </p>
           </div>

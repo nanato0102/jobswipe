@@ -175,9 +175,18 @@ export default function CompanyLoginPage() {
               </div>
             ) : (
               <form
-                onSubmit={(e) => {
+                onSubmit={async (e) => {
                   e.preventDefault();
                   if (resetEmail.trim()) {
+                    try {
+                      await fetch("/api/auth/forgot-password", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email: resetEmail.trim() }),
+                      });
+                    } catch (err) {
+                      console.warn("Company forgot password request note:", err);
+                    }
                     setResetSent(true);
                   }
                 }}

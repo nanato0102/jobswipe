@@ -46,6 +46,9 @@ export default function StudentVideoUploadPage() {
 
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
+  const [thumbnailBlob, setThumbnailBlob] = useState<Blob | null>(null);
+  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
+  const [videoDuration, setVideoDuration] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
 
   const currentStudentId = session?.id || "s1";
@@ -170,8 +173,60 @@ export default function StudentVideoUploadPage() {
       return;
     }
 
-    setVideoFile(file);
     const objectUrl = URL.createObjectURL(file);
+
+    // 動画尺チェック & 自動サムネイル生成
+    const tempVideo = document.createElement("video");
+    tempVideo.preload = "metadata";
+    tempVideo.src = objectUrl;
+    tempVideo.muted = true;
+    tempVideo.playsInline = true;
+
+    tempVideo.onloadedmetadata = () => {
+      const dur = Math.round(tempVideo.duration);
+      setVideoDuration(dur);
+
+      if (dur > 65) {
+        toastError(
+          "動画時間オーバー",
+          `自己PR動画は60秒以内に収めてください。（選択された動画: 約${dur}秒）`
+        );
+        setVideoFile(null);
+        setVideoPreview(null);
+        setThumbnailBlob(null);
+        setThumbnailPreview(null);
+        return;
+      }
+
+      // 1秒目のフレームにシークしてサムネイル生成
+      tempVideo.currentTime = Math.min(1.0, dur / 2);
+    };
+
+    tempVideo.onseeked = () => {
+      try {
+        const canvas = document.createElement("canvas");
+        canvas.width = tempVideo.videoWidth || 640;
+        canvas.height = tempVideo.videoHeight || 360;
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.drawImage(tempVideo, 0, 0, canvas.width, canvas.height);
+          canvas.toBlob(
+            (blob) => {
+              if (blob) {
+                setThumbnailBlob(blob);
+                setThumbnailPreview(URL.createObjectURL(blob));
+              }
+            },
+            "image/jpeg",
+            0.85
+          );
+        }
+      } catch (canvasErr) {
+        console.warn("Canvas thumbnail generation note:", canvasErr);
+      }
+    };
+
+    setVideoFile(file);
     setVideoPreview(objectUrl);
   };
 
@@ -186,6 +241,11 @@ export default function StudentVideoUploadPage() {
       return;
     }
 
+    if (videoDuration && videoDuration > 65) {
+      toastError("動画時間オーバー", "自己PR動画は60秒以内に収めてください。");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -194,11 +254,15 @@ export default function StudentVideoUploadPage() {
       const tagsString = combinedTags.join(",");
 
       let uploadedPublicUrl = videoPreview || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
+      let uploadedThumbnailUrl: string | null = thumbnailPreview;
 
       // 実際のファイルがある場合は Supabase Storage へアップロード
       if (videoFile) {
         const formData = new FormData();
         formData.append("video", videoFile);
+        if (thumbnailBlob) {
+          formData.append("thumbnail", thumbnailBlob, "thumbnail.jpg");
+        }
         formData.append("title", title.trim());
         formData.append("description", description.trim());
         formData.append("tags", tagsString);
@@ -215,6 +279,9 @@ export default function StudentVideoUploadPage() {
         }
 
         uploadedPublicUrl = uploadData.videoUrl;
+        if (uploadData.thumbnailUrl) {
+          uploadedThumbnailUrl = uploadData.thumbnailUrl;
+        }
       }
 
       // appStore に動画を登録（企業スワイプ画面へ即座に反映）
@@ -224,7 +291,7 @@ export default function StudentVideoUploadPage() {
         description: description.trim(),
         tags: tagsString,
         videoUrl: uploadedPublicUrl,
-        thumbnailUrl: null,
+        thumbnailUrl: uploadedThumbnailUrl,
         student: {
           id: currentStudentId,
           fullName: session?.name || detail?.name || "学生ユーザー",
@@ -516,17 +583,38 @@ export default function StudentVideoUploadPage() {
 
                 {videoPreview ? (
                   <div className="space-y-3">
-                    <div className="w-24 h-36 rounded-lg bg-slate-900 overflow-hidden mx-auto shadow-md">
-                      <video
-                        src={videoPreview}
-                        className="w-full h-full object-cover select-none"
-                        controls
-                        controlsList="nodownload"
-                        disablePictureInPicture
-                        onContextMenu={(e) => e.preventDefault()}
-                      />
+                    <div className="flex items-center justify-center gap-4">
+                      {/* 動画プレビュー */}
+                      <div className="w-24 h-36 rounded-lg bg-slate-900 overflow-hidden shadow-md relative">
+                        <video
+                          src={videoPreview}
+                          className="w-full h-full object-cover select-none"
+                          controls
+                          playsInline
+                          controlsList="nodownload"
+                          disablePictureInPicture
+                          onContextMenu={(e) => e.preventDefault()}
+                        />
+                      </div>
+
+                      {/* 自動生成サムネイルプレビュー */}
+                      {thumbnailPreview && (
+                        <div className="space-y-1 text-center">
+                          <div className="w-24 h-36 rounded-lg bg-slate-100 overflow-hidden shadow-md border border-slate-200">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={thumbnailPreview} alt="自動生成サムネイル" className="w-full h-full object-cover" />
+                          </div>
+                          <span className="text-[11px] text-slate-500 font-semibold block">自動生成サムネイル</span>
+                        </div>
+                      )}
                     </div>
-                    <p className="text-sm font-semibold text-emerald-800">動画が選択されました（クリックで変更）</p>
+
+                    <div className="flex items-center justify-center gap-2">
+                      <span className="text-xs font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-200">
+                        ✓ 尺チェック合格 {videoDuration ? `(${videoDuration}秒 / 上限60秒)` : ""}
+                      </span>
+                      <span className="text-xs text-slate-500">（クリックで再選択）</span>
+                    </div>
                   </div>
                 ) : (
                   <div className="space-y-2">
@@ -535,7 +623,7 @@ export default function StudentVideoUploadPage() {
                     </div>
                     <div>
                       <p className="text-sm font-bold text-slate-800">動画ファイルを選択またはドラッグ＆ドロップ</p>
-                      <p className="text-xs text-slate-400 mt-0.5">MP4, MOV, WebM形式 (最大100MB / 60秒推奨)</p>
+                      <p className="text-xs text-slate-400 mt-0.5">MP4, MOV, WebM形式 (最大50MB / 60秒以内)</p>
                     </div>
                   </div>
                 )}
