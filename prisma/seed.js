@@ -19,7 +19,7 @@ async function main() {
       studentProfile: {
         create: {
           fullName: "佐藤 健太",
-          university: "早稲田大学 商学部",
+          university: "早稲田大学",
           graduationYear: 2026,
           bio: "体育会サッカー部主将。組織づくりと目標達成に向けた推進力に自信があります。",
           skills: "リーダーシップ, 組織マネジメント, 課題解決力, 英語日常会話",
@@ -47,7 +47,7 @@ async function main() {
       studentProfile: {
         create: {
           fullName: "高橋 美咲",
-          university: "上智大学 外国語学部",
+          university: "上智大学",
           graduationYear: 2026,
           bio: "カナダ留学経験者。TOEIC 920点。異文化コミュニケーションと明るい接客が得意です。",
           skills: "ビジネス英語, 異文化理解, ファシリテーション",
