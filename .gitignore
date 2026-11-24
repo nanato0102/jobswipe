@@ -13,3 +13,4 @@ test-results/
 public/uploads/
 
 .vercel
+.env*

@@ -58,7 +58,8 @@ function ChatInner() {
   const fetchThreads = async () => {
     try {
       const role = isStudent ? "STUDENT" : "COMPANY";
-      const res = await fetch(`/api/chat/threads?userId=${currentUserId}&role=${role}`);
+      const emailParam = session?.email ? `&email=${encodeURIComponent(session.email)}` : "";
+      const res = await fetch(`/api/chat/threads?userId=${encodeURIComponent(currentUserId)}&role=${role}${emailParam}`);
       if (res.ok) {
         const data = await res.json();
         if (data.threads && Array.isArray(data.threads) && data.threads.length > 0) {
@@ -90,19 +91,33 @@ function ChatInner() {
   // メッセージ一覧の取得関数
   const fetchMessages = async (threadId: string) => {
     try {
-      const res = await fetch(`/api/messages?offerId=${threadId}`);
+      const res = await fetch(`/api/messages?offerId=${encodeURIComponent(threadId)}`);
       if (res.ok) {
         const data = await res.json();
-        if (data.messages && Array.isArray(data.messages)) {
-          const formatted: StoredMessage[] = data.messages.map((m: any) => ({
-            id: m.id,
-            threadId: m.offerId,
-            senderRole: m.senderId === currentUserId ? (isStudent ? "STUDENT" : "COMPANY") : (isStudent ? "COMPANY" : "STUDENT"),
-            senderName: m.senderId === currentUserId ? session?.name || "自分" : "相手",
-            content: m.content,
-            sentAt: m.sentAt,
-            isRead: true,
-          }));
+        if (data.messages && Array.isArray(data.messages) && data.messages.length > 0) {
+          const formatted: StoredMessage[] = data.messages.map((m: any) => {
+            const role: "STUDENT" | "COMPANY" =
+              m.senderRole === "COMPANY" || m.senderRole === "STUDENT"
+                ? m.senderRole
+                : m.senderId === currentUserId
+                ? isStudent
+                  ? "STUDENT"
+                  : "COMPANY"
+                : isStudent
+                ? "COMPANY"
+                : "STUDENT";
+
+            const isMyMsg = (isStudent && role === "STUDENT") || (isCompany && role === "COMPANY");
+            return {
+              id: m.id,
+              threadId: m.offerId,
+              senderRole: role,
+              senderName: isMyMsg ? session?.name || "自分" : "相手",
+              content: m.content,
+              sentAt: m.sentAt,
+              isRead: true,
+            };
+          });
           setMessages(formatted);
           return;
         }
@@ -111,7 +126,7 @@ function ChatInner() {
       console.warn("API messages fetch failed, fallback to local:", err);
     }
 
-    // フォールバック
+    // フォールバック（ローカルのメッセージ履歴を表示）
     const localMsgs = appStore.getMessages(threadId);
     setMessages(localMsgs);
   };
@@ -121,11 +136,11 @@ function ChatInner() {
     fetchThreads().then((loadedThreads) => {
       if (initialThreadId && loadedThreads?.some((t: ThreadItem) => t.id === initialThreadId)) {
         setSelectedThreadId(initialThreadId);
-      } else if (typeof window !== "undefined" && window.innerWidth >= 768 && loadedThreads?.length > 0) {
+      } else if (loadedThreads?.length > 0) {
         setSelectedThreadId(loadedThreads[0].id);
       }
     });
-  }, [isStudent, initialThreadId, currentUserId]);
+  }, [isStudent, initialThreadId, currentUserId, session?.email]);
 
   // 定期ポーリング（3秒間隔でメッセージとスレッドを同期）
   useEffect(() => {
@@ -178,6 +193,7 @@ function ChatInner() {
 
     const textToSend = inputText.trim();
     const fileToSend = selectedFile;
+    const senderRole = isStudent ? "STUDENT" : "COMPANY";
 
     setInputText("");
     setSelectedFile(null);
@@ -190,6 +206,7 @@ function ChatInner() {
         body: JSON.stringify({
           offerId: selectedThreadId,
           senderId: currentUserId,
+          senderRole,
           receiverId: currentThread.partnerId,
           content: textToSend,
           attachment: fileToSend,
@@ -201,7 +218,6 @@ function ChatInner() {
         await fetchThreads();
       } else {
         // フォールバック
-        const senderRole = isStudent ? "STUDENT" : "COMPANY";
         const senderName = isStudent ? session?.name || "佐藤 健太" : session?.name || "自社採用担当";
         appStore.sendMessage(selectedThreadId, senderRole, senderName, textToSend, fileToSend || undefined);
         setMessages(appStore.getMessages(selectedThreadId));
@@ -209,7 +225,6 @@ function ChatInner() {
     } catch (err) {
       console.error("Message send error:", err);
       // フォールバック
-      const senderRole = isStudent ? "STUDENT" : "COMPANY";
       const senderName = isStudent ? session?.name || "佐藤 健太" : session?.name || "自社採用担当";
       appStore.sendMessage(selectedThreadId, senderRole, senderName, textToSend, fileToSend || undefined);
       setMessages(appStore.getMessages(selectedThreadId));
@@ -297,10 +312,12 @@ function ChatInner() {
                         {thread.partnerName}
                       </span>
                       <span className="text-xs text-slate-400 whitespace-nowrap">
-                        {new Date(thread.lastMessageTime).toLocaleTimeString("ja-JP", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
+                        {thread.lastMessageTime && !isNaN(Date.parse(thread.lastMessageTime))
+                          ? new Date(thread.lastMessageTime).toLocaleTimeString("ja-JP", {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })
+                          : thread.lastMessageTime || ""}
                       </span>
                     </div>
                     <span className="text-xs text-slate-400 block truncate">{thread.partnerSub}</span>
@@ -390,9 +407,10 @@ function ChatInner() {
                     (isStudent && msg.senderRole === "STUDENT") ||
                     (isCompany && msg.senderRole === "COMPANY");
 
-                  const formattedTime = msg.sentAt
-                    ? new Date(msg.sentAt).toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" })
-                    : "";
+                  const formattedTime =
+                    msg.sentAt && !isNaN(Date.parse(msg.sentAt))
+                      ? new Date(msg.sentAt).toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" })
+                      : msg.sentAt || "";
 
                   return (
                     <div

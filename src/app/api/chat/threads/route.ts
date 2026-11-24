@@ -4,20 +4,37 @@ import { prisma } from "@/lib/prisma";
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
-    const userId = searchParams.get("userId");
+    const userIdParam = searchParams.get("userId");
+    const emailParam = searchParams.get("email");
     const role = searchParams.get("role"); // "STUDENT" | "COMPANY"
 
-    if (!userId) {
+    let resolvedUserId = userIdParam || "";
+
+    // IDがデモ用（"s1", "c1", "student-demo-id" 等）またはメールアドレス指定の場合、DBから実ユーザーのIDを解決
+    if (emailParam || !resolvedUserId || resolvedUserId.length < 10) {
+      const targetEmail =
+        emailParam ||
+        (role === "STUDENT" ? "sato@example.com" : role === "COMPANY" ? "hr@tech-innovations.jp" : undefined);
+
+      if (targetEmail) {
+        const foundUser = await prisma.user.findUnique({ where: { email: targetEmail } });
+        if (foundUser) {
+          resolvedUserId = foundUser.id;
+        }
+      }
+    }
+
+    if (!resolvedUserId) {
       return NextResponse.json({ threads: [] });
     }
 
     const whereClause =
       role === "STUDENT"
-        ? { studentId: userId, status: { in: ["ACCEPTED" as const, "SENT" as const] } }
+        ? { studentId: resolvedUserId, status: { in: ["ACCEPTED" as const, "SENT" as const] } }
         : role === "COMPANY"
-        ? { companyId: userId, status: { in: ["ACCEPTED" as const, "SENT" as const] } }
+        ? { companyId: resolvedUserId, status: { in: ["ACCEPTED" as const, "SENT" as const] } }
         : {
-            OR: [{ studentId: userId }, { companyId: userId }],
+            OR: [{ studentId: resolvedUserId }, { companyId: resolvedUserId }],
             status: { in: ["ACCEPTED" as const, "SENT" as const] },
           };
 

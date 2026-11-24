@@ -30,6 +30,7 @@ export async function GET(req: Request) {
       offerId: m.offerId,
       senderId: m.senderId,
       receiverId: m.receiverId,
+      senderRole: m.senderId === offer.companyId ? "COMPANY" : "STUDENT",
       content: m.content,
       sentAt: m.sentAt.toISOString(),
       timestamp: m.sentAt.toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" }),
@@ -42,6 +43,7 @@ export async function GET(req: Request) {
           offerId: offer.id,
           senderId: offer.companyId,
           receiverId: offer.studentId,
+          senderRole: "COMPANY",
           content: offer.message,
           sentAt: offer.createdAt.toISOString(),
           timestamp: offer.createdAt.toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" }),
@@ -59,15 +61,15 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { offerId, senderId, receiverId, content, attachment } = body;
+    const { offerId, senderId, senderRole, receiverId, content, attachment } = body;
 
-    if (!offerId || !content || !senderId) {
+    if (!offerId || !content) {
       return NextResponse.json({ error: "必須項目が不足しています。" }, { status: 400 });
     }
 
     const sanitizedContent = sanitizeString(content);
 
-    // オファーの存在確認とreceiverIdの解決
+    // オファーの存在確認とsenderId / receiverIdの解決
     const offer = await prisma.offer.findUnique({
       where: { id: offerId },
     });
@@ -76,8 +78,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "該当するオファーが見つかりません。" }, { status: 404 });
     }
 
+    const resolvedSenderId =
+      senderId && (senderId === offer.companyId || senderId === offer.studentId)
+        ? senderId
+        : senderRole === "COMPANY"
+        ? offer.companyId
+        : offer.studentId;
+
     const resolvedReceiverId =
-      receiverId || (senderId === offer.companyId ? offer.studentId : offer.companyId);
+      resolvedSenderId === offer.companyId ? offer.studentId : offer.companyId;
 
     // 添付ファイルがある場合はコンテンツに付加または整形
     let finalContent = sanitizedContent;
@@ -88,7 +97,7 @@ export async function POST(req: Request) {
     const newMessage = await prisma.message.create({
       data: {
         offerId,
-        senderId,
+        senderId: resolvedSenderId,
         receiverId: resolvedReceiverId,
         content: finalContent,
       },

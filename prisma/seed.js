@@ -97,6 +97,75 @@ async function main() {
     },
   });
 
+  // 4. 初期オファー & チャット履歴データの作成
+  const existingOffers = await prisma.offer.count();
+  if (existingOffers === 0) {
+    // 佐藤健太への承諾済みオファーとチャット履歴
+    const offer1 = await prisma.offer.create({
+      data: {
+        companyId: companyUser1.id,
+        studentId: studentUser1.id,
+        message: "佐藤さんの自己PR動画を拝見しました！体育会サッカー部主将として100名規模の組織を牽引された行動力と熱量に大変魅力を感じました。ぜひ一度カジュアル面談でお話しさせてください。",
+        status: "ACCEPTED",
+      },
+    });
+
+    await prisma.message.createMany({
+      data: [
+        {
+          offerId: offer1.id,
+          senderId: companyUser1.id,
+          receiverId: studentUser1.id,
+          content: "佐藤さん、オファーのご承諾ありがとうございます！テックイノベーション株式会社 採用担当の山田です。動画でのハキハキとした話し方がとても印象的でした。",
+          sentAt: new Date(Date.now() - 1000 * 60 * 60 * 24),
+        },
+        {
+          offerId: offer1.id,
+          senderId: studentUser1.id,
+          receiverId: companyUser1.id,
+          content: "山田様、温かいオファーをいただきありがとうございます！早稲田大学の佐藤健太です。御社のプロダクト開発と営業組織の連携にとても興味があります。ぜひ一度お話しさせてください！",
+          sentAt: new Date(Date.now() - 1000 * 60 * 60 * 20),
+        },
+        {
+          offerId: offer1.id,
+          senderId: companyUser1.id,
+          receiverId: studentUser1.id,
+          content: "ご返信ありがとうございます！ぜひ来週あたりオンライン（30分程度）でカジュアル面談を実施できればと思いますが、ご都合のよい日時はございますでしょうか？",
+          sentAt: new Date(Date.now() - 1000 * 60 * 60 * 2),
+        },
+      ],
+    });
+
+    // 高橋美咲への承諾済みオファーとチャット履歴
+    const offer2 = await prisma.offer.create({
+      data: {
+        companyId: companyUser1.id,
+        studentId: studentUser2.id,
+        message: "高橋さんのプレゼンテーション動画、素晴らしい表現力でした！カナダ留学で培われた異文化コミュニケーション力を当社のマーケティング部門で活かしていただきたくご連絡いたしました。",
+        status: "ACCEPTED",
+      },
+    });
+
+    await prisma.message.createMany({
+      data: [
+        {
+          offerId: offer2.id,
+          senderId: companyUser1.id,
+          receiverId: studentUser2.id,
+          content: "高橋さん、マッチングありがとうございます！当社のグローバルマーケティングチームについてぜひご紹介させてください。",
+          sentAt: new Date(Date.now() - 1000 * 60 * 60 * 12),
+        },
+        {
+          offerId: offer2.id,
+          senderId: studentUser2.id,
+          receiverId: companyUser1.id,
+          content: "オファーありがとうございます！上智大学の高橋美咲です。ぜひ詳しくお話をお聞きしたいです。よろしくお願いいたします！",
+          sentAt: new Date(Date.now() - 1000 * 60 * 60 * 5),
+        },
+      ],
+    });
+  }
+
   console.log("Database seeded successfully!");
 }
 
